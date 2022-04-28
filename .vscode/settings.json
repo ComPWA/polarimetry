@@ -1,0 +1,8 @@
+{
+  "cSpell.enabled": true,
+  "editor.formatOnSave": true,
+  "python.analysis.autoImportCompletions": false,
+  "python.analysis.diagnosticMode": "workspace",
+  "python.formatting.provider": "black",
+  "telemetry.telemetryLevel": "off"
+}

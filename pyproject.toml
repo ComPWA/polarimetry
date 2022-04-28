@@ -1,0 +1,39 @@
+[build-system]
+requires = [
+    "setuptools>=36.2.1",  # environment markers
+    "setuptools_scm",
+    "wheel",
+]
+
+[tool.setuptools_scm]
+write_to = "src/polarization/version.py"
+
+[tool.black]
+exclude = '''
+/(
+    .*\.egg-info
+    | .*build
+    | \.eggs
+    | \.git
+    | \.pytest_cache
+    | \.tox
+    | \.venv
+    | \.vscode
+    | dist
+)/
+'''
+include = '\.pyi?$'
+preview = true
+target-version = [
+    "py37",
+    "py38",
+    "py39",
+    "py310",
+]
+
+[tool.isort]
+profile = "black"
+src_paths = [
+    "src",
+]
+known_third_party = "THIRDPARTY,sympy"

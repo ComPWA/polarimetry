@@ -1,0 +1,27 @@
+{
+  "version": "0.2",
+  "flagWords": [
+    "analyse",
+    "colour",
+    "comparision",
+    "favour",
+    "flavour",
+    "hte",
+    "optimise",
+    "paramater",
+    "parmater",
+    "transision",
+    "transisions"
+  ],
+  "ignorePaths": [
+    "**/.cspell.json",
+    ".pre-commit-config.yaml"
+  ],
+  "language": "en-GB",
+  "words": [
+    "ComPWA",
+    "Conda",
+    "Dalitz"
+  ],
+  "ignoreWords": []
+}
