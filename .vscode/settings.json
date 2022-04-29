@@ -18,6 +18,9 @@
   },
   "cSpell.enabled": true,
   "editor.formatOnSave": true,
+  "files.associations": {
+    ".cspell/*.txt": "plaintext"
+  },
   "python.analysis.autoImportCompletions": false,
   "python.analysis.diagnosticMode": "workspace",
   "python.formatting.provider": "black",

@@ -1,5 +1,29 @@
 {
-  "version": "0.2",
+  "allowCompoundWords": false,
+  "dictionaries": [
+    "physics",
+    "this-project"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "addWords": true,
+      "name": "julia",
+      "path": "./.cspell/julia.txt"
+    },
+    {
+      "addWords": true,
+      "name": "physics",
+      "path": "./.cspell/physics.txt"
+    },
+    {
+      "addWords": true,
+      "name": "this-project",
+      "path": "./.cspell/this-project.txt"
+    }
+  ],
+  "enableFiletypes": [
+    "julia"
+  ],
   "flagWords": [
     "analyse",
     "colour",
@@ -15,6 +39,7 @@
   ],
   "ignorePaths": [
     "**/.cspell.json",
+    ".cspell/*.txt",
     ".gitignore",
     ".pre-commit-config.yaml",
     ".prettierignore",
@@ -26,11 +51,16 @@
     "pyproject.toml",
     "setup.cfg"
   ],
-  "language": "en-GB",
-  "words": [
-    "ComPWA",
-    "Conda",
-    "Dalitz"
+  "language": "en-US",
+  "overrides": [
+    {
+      "allowCompoundWords": true,
+      "dictionaries": [
+        "julia"
+      ],
+      "filename": "**/*.jl",
+      "languageId": "julia"
+    }
   ],
-  "ignoreWords": []
+  "version": "0.2"
 }

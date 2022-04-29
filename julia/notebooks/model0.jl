@@ -1,6 +1,8 @@
 ### A Pluto.jl notebook ###
 # v0.19.3
 
+# cspell:ignore onlyls Xlineshape
+
 using Markdown
 using InteractiveUtils
 
@@ -188,7 +190,7 @@ function buildchain(key, dict)
 		jp(tbs.two_js[i] // 2, parities[i]),
 		jp(tbs.two_js[j] // 2, parities[j]);
 		jp=jp(two_j // 2, parity))
-	length(ls) != 1 && error("wierd")
+	length(ls) != 1 && error("weird")
 	onlyls = first(ls)
 	minLS = first(sort(vcat(LS...); by=x->x[1]))
 	#

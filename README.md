@@ -1,5 +1,7 @@
 # Polarization sensitivity in Λc → pπK
 
+<!-- cspell:ignore Flatte modelparameters modelstudies -->
+
 [![GPLv3+ license](https://img.shields.io/badge/License-GPLv3+-blue.svg)](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
 
 This repository originates from [ComPWA/compwa-org#129](https://github.com/ComPWA/compwa-org/pull/129). It formulates a symbolic amplitude model for the decay Λc → pπK that is aligned with [Dalitz-plot decomposition](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033) and computes
@@ -23,18 +25,18 @@ For more information about local Python set-up, see [here](https://compwa-org.re
 
 ## Data
 
-The parameters of the LHCb fit are storred in the json files in the folder [`data/`](data/)
+The parameters of the LHCb fit are stored in the json files in the folder [`data/`](data/)
 
 ### Content of the [`data/isobars.json`](data/isobars.json)
 
-The file proveds the description of the characteristics and parameters of the resonances in the decay chains.
+The file provides the description of the characteristics and parameters of the resonances in the decay chains.
 The resonances are named by `L(XXXX)`, `D(XXXX)`, and `K(XXXX)` for the Lambda**, Delta**, and K\*\* states.
-The data stucture has the fieds `jp`, `mass`, `width`, and `lineshape`.
+The data structure has the fields `jp`, `mass`, `width`, and `lineshape`.
 
 There are three lineshape types used:
 
 - "BreitWignerMinL": the standard parametrization with isobar spectator orbital momentum set to its minimal value
-- "BuggBreitWignerMinL": the mass-dependent width incorporates Adler zero and exponential formfactor
+- "BuggBreitWignerMinL": the mass-dependent width incorporates Adler zero and exponential form factor
 - "Flatte1405": the mass-dependent width includes two terms, pK and Sigma pi with the same Gamma0
 
 For most of the resonances, the width field gives a fixed value.
@@ -43,10 +45,10 @@ Its exact value is to be found in the list of parameters
 
 ### Content of the [`data/modelparameters.json`](data/modelparameters.json)
 
-The fit results is storred in the `first(file["modelstudies"])`. The dictionary contains the list of all floating parameters.
+The fit results is stored in the `first(file["modelstudies"])`. The dictionary contains the list of all floating parameters.
 `ArF(XXXX)N` and `AiF(XXXX)N` are the real and imaginary part of the coupling `K^{Lc->Fx}`, where
 
-- the `F` stends for `D`,`L`, or `K`.
+- the `F` stands for `D`,`L`, or `K`.
 - the `N` numbers the helicity indices with the following mapping
 
 ```
@@ -66,4 +68,4 @@ K(XXXX)3 -> K^{Lc->Lpi}_{+1,-1/2}
 K(XXXX)4 -> K^{Lc->Lpi}_{ 0,-1/2}
 ```
 
-The default-fit result is storred in as the first item, `first(file["modelstudies"])`.
+The default-fit result is stored in as the first item, `first(file["modelstudies"])`.
