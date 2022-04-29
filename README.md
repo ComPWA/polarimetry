@@ -23,6 +23,19 @@ pre-commit install
 
 For more information about local Python set-up, see [here](https://compwa-org.readthedocs.io/develop.html#local-set-up).
 
+Conda also installs [Julia](https://julialang.org). In VSCode, you'll need to point to Julia's executable path and it's best to do this by [defining an overarching workspace](https://compwa-org.readthedocs.io/develop.html#visual-studio-code). An example:
+
+<!-- cspell:ignore miniconda -->
+
+```json
+{
+  "julia.executablePath": "/home/${env:USER}/miniconda3/envs/polarization/bin/julia",
+  "python.terminal.activateEnvironment": false // optional
+}
+```
+
+The second option is to avoid that the Conda environment is activated when launching the Julia REPL.
+
 ## Data
 
 The parameters of the LHCb fit are stored in the json files in the folder [`data/`](data/)
