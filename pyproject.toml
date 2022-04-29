@@ -37,3 +37,16 @@ src_paths = [
     "src",
 ]
 known_third_party = "THIRDPARTY,sympy"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--color=yes",
+]
+filterwarnings = [
+  "error",
+  "ignore:The .* argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
+]
+norecursedirs = [
+  ".ipynb_checkpoints",
+  "_build",
+]

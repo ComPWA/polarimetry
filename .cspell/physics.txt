@@ -1,9 +1,13 @@
+Blatt
 Breit
 Bugg
 Dalitz
 Flatté
+helicities
 helicity
 Kállën
+Källén
 lineshape
 lineshapes
 ls
+Weisskopf
