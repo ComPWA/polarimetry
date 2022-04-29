@@ -1,3 +1,4 @@
 ComPWA
 Conda
 ifhyphenaverage
+nbformat

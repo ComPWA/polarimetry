@@ -58,7 +58,7 @@
       "dictionaries": [
         "julia"
       ],
-      "filename": "**/*.jl",
+      "filename": "**/*.{ipynb,jl}",
       "languageId": "julia"
     }
   ],
