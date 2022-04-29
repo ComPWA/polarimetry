@@ -22,17 +22,20 @@ pre-commit install
 For more information about local Python set-up, see [here](https://compwa-org.readthedocs.io/develop.html#local-set-up).
 
 ## Data
+
 The parameters of the LHCb fit are storred in the json files in the folder [`data/`](data/)
 
 ### Content of the [`data/isobars.json`](data/isobars.json)
+
 The file proveds the description of the characteristics and parameters of the resonances in the decay chains.
-The resonances are named by `L(XXXX)`, `D(XXXX)`, and `K(XXXX)` for the Lambda**, Delta**, and K** states.
+The resonances are named by `L(XXXX)`, `D(XXXX)`, and `K(XXXX)` for the Lambda**, Delta**, and K\*\* states.
 The data stucture has the fieds `jp`, `mass`, `width`, and `lineshape`.
 
 There are three lineshape types used:
- * "BreitWignerMinL": the standard parametrization with isobar spectator orbital momentum set to its minimal value
- * "BuggBreitWignerMinL": the mass-dependent width incorporates Adler zero and exponential formfactor
- * "Flatte1405": the mass-dependent width includes two terms, pK and Sigma pi with the same Gamma0
+
+- "BreitWignerMinL": the standard parametrization with isobar spectator orbital momentum set to its minimal value
+- "BuggBreitWignerMinL": the mass-dependent width incorporates Adler zero and exponential formfactor
+- "Flatte1405": the mass-dependent width includes two terms, pK and Sigma pi with the same Gamma0
 
 For most of the resonances, the width field gives a fixed value.
 However, for a few, an interval is provided. In that case, the width was a parameter of the fit.
@@ -42,8 +45,10 @@ Its exact value is to be found in the list of parameters
 
 The fit results is storred in the `first(file["modelstudies"])`. The dictionary contains the list of all floating parameters.
 `ArF(XXXX)N` and `AiF(XXXX)N` are the real and imaginary part of the coupling `K^{Lc->Fx}`, where
- * the `F` stends for `D`,`L`, or `K`.
- * the `N` numbers the helicity indices with the following mapping
+
+- the `F` stends for `D`,`L`, or `K`.
+- the `N` numbers the helicity indices with the following mapping
+
 ```
 # Lambda**
 L(XXXX)1 -> K^{Lc->Lambda pi}_{+1/2,0}

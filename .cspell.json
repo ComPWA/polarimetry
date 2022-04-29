@@ -15,7 +15,16 @@
   ],
   "ignorePaths": [
     "**/.cspell.json",
-    ".pre-commit-config.yaml"
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    ".prettierignore",
+    ".vscode/*",
+    "LICENSE",
+    "Manifest.toml",
+    "Project.toml",
+    "data/**.json",
+    "pyproject.toml",
+    "setup.cfg"
   ],
   "language": "en-GB",
   "words": [

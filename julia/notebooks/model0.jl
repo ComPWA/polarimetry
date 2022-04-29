@@ -14,16 +14,16 @@ begin
 	using JSON
 	using Plots
 	using RecipesBase
-	# 
+	#
 	using LinearAlgebra
 	using Parameters
-	# 
+	#
 	using ThreeBodyDecay
 	using ThreeBodyDecay.PartialWaveFunctions
 end
 
 # ╔═╡ e04157cc-7697-41e5-8e4e-3556332929ef
-theme(:wong2, frame=:box, grid=false, minorticks=true, 
+theme(:wong2, frame=:box, grid=false, minorticks=true,
     guidefontvalign=:top, guidefonthalign=:right,
     xlim=(:auto,:auto), ylim=(:auto,:auto),
     lw=1, lab="", colorbar=false)
@@ -71,9 +71,9 @@ begin
 		pars::T
 		l::Int
 		minL::Int
-		# 
+		#
 		name::String
-		# 
+		#
 		m1::Float64
 		m2::Float64
 		mk::Float64
@@ -102,9 +102,9 @@ begin
 		pars::T
 		l::Int
 		minL::Int
-		# 
+		#
 		name::String
-		# 
+		#
 		m1::Float64
 		m2::Float64
 		mk::Float64
@@ -113,7 +113,7 @@ begin
 	BuggBreitWignerMinL(pars::T; kw...) where
 		T <: NamedTuple{X, Tuple{Float64, Float64}} where X =
 			BuggBreitWignerMinL(; pars=merge(pars, (γ=1.1,)), kw...)
-	# 
+	#
 	function (BW::BuggBreitWignerMinL)(s,σ)
 		σA = mK^2-mπ^2/2
 		m, Γ₀, γ = BW.pars
@@ -135,7 +135,7 @@ begin
 		minL::Int
 		#
 		name::String
-		# 
+		#
 		m1::Float64
 		m2::Float64
 		mk::Float64
@@ -171,7 +171,7 @@ function buildchain(key, dict)
 	@unpack mass, width, lineshape = dict
 	#
 	k = Dict('K'=>1,'D'=>3,'L'=>2)[first(key)]
-	# 
+	#
 	parity = dict["jp"][end]
 	two_j = Int(2*eval(Meta.parse(dict["jp"][1:end-2])))
 	#
@@ -191,7 +191,7 @@ function buildchain(key, dict)
 	length(ls) != 1 && error("wierd")
 	onlyls = first(ls)
 	minLS = first(sort(vcat(LS...); by=x->x[1]))
-	# 
+	#
 	code = quote
 		decay_chain(
 			k=$k,
@@ -201,7 +201,7 @@ function buildchain(key, dict)
 				l = $(onlyls[1]),
 				minL = $(minLS[1]),
 				m1=$(ms[i]), m2=$(ms[j]), mk=$(ms[k]), m0=$(ms[0])),
-			two_LS = $(minLS .|> x2), 
+			two_LS = $(minLS .|> x2),
 			two_ls = $(onlyls .|> x2),
 			two_s=$two_j, tbs=$tbs,
 			)
