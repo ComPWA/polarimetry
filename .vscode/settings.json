@@ -28,6 +28,9 @@
   "python.analysis.diagnosticMode": "workspace",
   "python.formatting.provider": "black",
   "python.linting.enabled": true,
+  "python.testing.pytestArgs": ["--color=no"],
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
   "rewrap.wrappingColumn": 88,
   "telemetry.telemetryLevel": "off"
 }
