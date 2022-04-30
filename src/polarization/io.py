@@ -23,12 +23,18 @@ from typing import Iterable, Mapping
 
 import sympy as sp
 
+from polarization.decay import IsobarNode, Particle
+
 
 @singledispatch
 def as_latex(obj) -> str:
     """Render objects as a LaTeX `str`.
 
     The resulting `str` can for instance be given to `IPython.display.Math`.
+
+    Optional keywords:
+
+    - `render_jp`: Render a `Particle` as :math:`J^P` (spin-parity).
     """
     return str(obj)
 
@@ -73,3 +79,25 @@ def _(obj: Iterable) -> str:
         latex += Rf"  {item} \\" + "\n"
     latex += R"\end{array}"
     return latex
+
+
+@as_latex.register(IsobarNode)
+def _(obj: IsobarNode, render_jp: bool = False) -> str:
+    def render_arrow(node: IsobarNode) -> str:
+        if node.interaction is None:
+            return R"\to"
+        return Rf"\xrightarrow[S={node.interaction.S}]{{L={node.interaction.L}}}"
+
+    parent = as_latex(obj.parent, render_jp)
+    to = render_arrow(obj)
+    child1 = as_latex(obj.child1, render_jp)
+    child2 = as_latex(obj.child2, render_jp)
+    return Rf"{parent} {to} {child1} {child2}"
+
+
+@as_latex.register(Particle)
+def _(obj: Particle, render_jp: bool = False) -> str:
+    if render_jp:
+        parity = "-1" if obj.parity < 0 else "+1"
+        return f"{{{obj.spin}}}^{{{parity}}}"
+    return obj.name
