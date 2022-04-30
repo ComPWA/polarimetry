@@ -1,0 +1,15 @@
+{
+  "include": ["src", "tests"],
+  "reportGeneralTypeIssues": false,
+  "reportMissingParameterType": false,
+  "reportMissingTypeArgument": false,
+  "reportUnknownArgumentType": false,
+  "reportUnknownParameterType": false,
+  "reportUnknownVariableType": false,
+  "reportUnnecessaryIsInstance": false,
+  "reportUnusedClass": true,
+  "reportUnusedFunction": true,
+  "reportUnusedImport": true,
+  "reportUnusedVariable": true,
+  "typeCheckingMode": "strict"
+}
