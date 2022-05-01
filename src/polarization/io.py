@@ -17,6 +17,7 @@ This code originates from `ComPWA/ampform#280
 """
 from __future__ import annotations
 
+import sys
 from collections import abc
 from functools import singledispatch
 from typing import Iterable, Mapping
@@ -24,6 +25,12 @@ from typing import Iterable, Mapping
 import sympy as sp
 
 from polarization.decay import IsobarNode, Particle
+from polarization.dynamics import Resonance
+
+if sys.version_info < (3, 8):
+    from typing_extensions import Literal, TypedDict
+else:
+    from typing import Literal, TypedDict
 
 
 @singledispatch
@@ -101,3 +108,52 @@ def _(obj: Particle, render_jp: bool = False) -> str:
         parity = "-1" if obj.parity < 0 else "+1"
         return f"{{{obj.spin}}}^{{{parity}}}"
     return obj.name
+
+
+def to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Resonance]:
+    return {
+        name: to_resonance(name, resonance_def)
+        for name, resonance_def in definition.items()
+    }
+
+
+def to_resonance(name: str, definition: ResonanceJSON) -> Resonance:
+    spin, parity = _to_jp_pair(definition["jp"])
+    return Resonance(
+        Particle(name, spin, parity),
+        mass_range=_to_float_range(definition["mass"]),
+        width_range=_to_float_range(definition["width"]),
+        lineshape=definition["lineshape"],
+    )
+
+
+def _to_float_range(input_str: str) -> tuple[float, float]:
+    """
+    >>> _convert_mass_string("1405.1")
+    (1405.1, 1405.1)
+    >>> _convert_mass_string("1900-2100")
+    (1900.0, 2100.0)
+    """
+    if "-" in input_str:
+        _min, _max, *_ = map(float, input_str.split("-"))
+    else:
+        _min = _max = float(input_str)
+    return _min, _max
+
+
+def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
+    """
+    >>> _convert_jp_string("3/2^-")
+    (3/2, -1)
+    >>> _convert_jp_string("0^+")
+    (0, 1)
+    """
+    spin, parity_sign = input_str.split("^")
+    return sp.Rational(spin), int(f"{parity_sign}1")
+
+
+class ResonanceJSON(TypedDict):
+    jp: str
+    mass: str
+    width: str
+    lineshape: Literal["BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"]

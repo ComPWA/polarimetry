@@ -1,4 +1,8 @@
 # pyright: reportPrivateUsage=false
+from __future__ import annotations
+
+import sys
+
 import sympy as sp
 from ampform.sympy import (
     UnevaluatedExpression,
@@ -6,6 +10,14 @@ from ampform.sympy import (
     implement_doit_method,
     make_commutative,
 )
+from attrs import frozen
+
+from polarization.decay import Particle
+
+if sys.version_info < (3, 8):
+    from typing_extensions import Literal
+else:
+    from typing import Literal
 
 
 @make_commutative
@@ -125,3 +137,24 @@ class BlattWeisskopf(UnevaluatedExpression):
     def _latex(self, printer, *args):
         z, L = map(printer._print, self.args)
         return Rf"F_{{{L}}}\left({z}\right)"
+
+
+@frozen
+class Resonance:
+    particle: Particle
+    mass_range: tuple[float, float]
+    width_range: tuple[float, float]
+    lineshape: Literal["BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"]
+
+    @property
+    def mass(self) -> float:
+        return _compute_average(self.mass_range)
+
+    @property
+    def width(self) -> float:
+        return _compute_average(self.width_range)
+
+
+def _compute_average(range_def: float | tuple[float, float]) -> float:
+    _min, _max = range_def
+    return (_max + _min) / 2
