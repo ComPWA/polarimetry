@@ -37,3 +37,26 @@ src_paths = [
     "src",
 ]
 known_third_party = "THIRDPARTY,sympy"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--color=yes",
+    "--doctest-modules",
+    "--durations=3",
+    "-m not slow",
+]
+filterwarnings = [
+  "error",
+  "ignore:The .* argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
+]
+markers = [
+    "slow: marks tests as slow (select with '-m slow')",
+]
+norecursedirs = [
+  ".ipynb_checkpoints",
+  "_build",
+]
+testpaths = [
+    "src",
+    "tests",
+]

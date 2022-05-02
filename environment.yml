@@ -1,7 +1,9 @@
 name: polarization
 channels:
   - defaults
+  - conda-forge
 dependencies:
+  - julia==1.7.2
   - python==3.8.*
   - pip
   - pip:

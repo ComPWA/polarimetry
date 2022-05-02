@@ -1,5 +1,39 @@
 {
-  "version": "0.2",
+  "allowCompoundWords": false,
+  "dictionaries": [
+    "physics",
+    "this-project"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "addWords": true,
+      "name": "julia",
+      "path": "./.cspell/julia.txt"
+    },
+    {
+      "addWords": true,
+      "name": "latex",
+      "path": "./.cspell/latex.txt"
+    },
+    {
+      "addWords": true,
+      "name": "physics",
+      "path": "./.cspell/physics.txt"
+    },
+    {
+      "addWords": true,
+      "name": "python",
+      "path": "./.cspell/python.txt"
+    },
+    {
+      "addWords": true,
+      "name": "this-project",
+      "path": "./.cspell/this-project.txt"
+    }
+  ],
+  "enableFiletypes": [
+    "julia"
+  ],
   "flagWords": [
     "analyse",
     "colour",
@@ -15,13 +49,40 @@
   ],
   "ignorePaths": [
     "**/.cspell.json",
-    ".pre-commit-config.yaml"
+    ".cspell/*.txt",
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    ".prettierignore",
+    ".vscode/*",
+    "LICENSE",
+    "Manifest.toml",
+    "Project.toml",
+    "data/**.json",
+    "pyproject.toml",
+    "pytest.ini",
+    "setup.cfg",
+    "tox.ini"
   ],
-  "language": "en-GB",
-  "words": [
-    "ComPWA",
-    "Conda",
-    "Dalitz"
+  "language": "en-US",
+  "overrides": [
+    {
+      "allowCompoundWords": true,
+      "dictionaries": [
+        "julia",
+        "latex"
+      ],
+      "filename": "**/*.jl",
+      "languageId": "julia"
+    },
+    {
+      "allowCompoundWords": true,
+      "dictionaries": [
+        "julia",
+        "latex",
+        "python"
+      ],
+      "filename": "**/*.ipynb"
+    }
   ],
-  "ignoreWords": []
+  "version": "0.2"
 }

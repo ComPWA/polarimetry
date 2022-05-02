@@ -3,7 +3,6 @@ root = true
 [*]
 end_of_line = lf
 indent_style = space
-indent_size = 2
 insert_final_newline = true
 trim_trailing_whitespace = true
 
@@ -11,4 +10,7 @@ trim_trailing_whitespace = true
 indent_style = tab
 
 [*.{py,toml}]
+indent_size = 4
+
+[setup.cfg]
 indent_size = 4
