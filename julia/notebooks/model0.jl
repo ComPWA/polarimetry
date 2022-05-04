@@ -40,11 +40,11 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
 
 # ╔═╡ 24d2ac10-b474-472d-827b-c353f44d9e8c
 begin
-	const mK = 0.493
-	const mπ = 0.140
-	const mp = 0.938
-	const mΣ = 1.18925
-	const mΛc = 2.28
+	const mK = 0.493677
+	const mπ = 0.13957018
+	const mp = 0.938272046
+	const mΣ = 1.18937
+	const mΛc = 2.28646
 end
 
 # ╔═╡ cfe26457-a531-4fc4-8eee-34d7f1a904ba
