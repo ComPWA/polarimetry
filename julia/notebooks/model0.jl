@@ -522,10 +522,46 @@ let
 		xticks=(1:nchains, labels), xrotation = 90,
 		yticks=(1:nchains, labels), aspectratio=1,
 		size=(600,600), c=:delta, colorbar=true,
-		title="rate matrix", clim)
+		title="Rate matrix for chains", clim)
 	for i in 1:nchains, j in i+1:nchains
 		annotate!((i,j,text(
 			grouppedratematrix[i,j] ≥ 0 ? "+" : "-",4)))
+	end
+	plot!()
+end
+
+# ╔═╡ 2faffd58-3fb8-4afe-ad04-b2c84afc0d60
+group(ratematrix, sectors) =
+	[sum(getindex(ratematrix, iv, jv))
+	for iv in sectors,
+		jv in sectors]
+
+# ╔═╡ a9e20455-2180-4e63-a0af-bab800fa0616
+let
+	isobarnames = collect(Set(modelterms.isobarname))
+	sort!(isobarnames, by=x->findfirst(x[1],"LDK"))
+	# 
+	sectors = [couplingsmap = collect(1:nchains)[(modelterms.isobarname .== s)]
+		for s in isobarnames]
+	# 
+	grouppedratematrix = group(ratematrix, sectors)
+	nisobars = length(isobarnames)
+	for i in 1:nisobars, j in i+1:nisobars
+		grouppedratematrix[j,i] *= 2
+		grouppedratematrix[i,j] = 0
+	end
+	@assert sum(grouppedratematrix) ≈ 100
+	
+	clim = maximum(grouppedratematrix) .* (-1.2, 1.2)
+	heatmap(grouppedratematrix;
+		xticks=(1:nchains, isobarnames), xrotation = 90,
+		yticks=(1:nchains, isobarnames), aspectratio=1,
+		size=(600,600), c=:delta, colorbar=true,
+		title="Rate matrix for isobars", clim)
+	for i in 1:nisobars, j in i:nisobars
+		annotate!((i,j,text(
+			round(grouppedratematrix[j,i],digits=2), 6,
+			i==j ? :red : :black)))
 	end
 	plot!()
 end
@@ -585,3 +621,5 @@ end
 # ╠═d8477cb9-30c1-4aa5-808f-d90ec520b51f
 # ╠═64cdff72-fb69-413c-b4f3-d5629969c7b8
 # ╠═c1387ca0-59c6-44c8-99b3-bb53e44d638e
+# ╠═2faffd58-3fb8-4afe-ad04-b2c84afc0d60
+# ╠═a9e20455-2180-4e63-a0af-bab800fa0616
