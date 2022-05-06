@@ -6,7 +6,7 @@ using InteractiveUtils
 
 # ╔═╡ b56fc9a7-fa03-47d6-b22e-0097be7155d3
 begin
-	cd(@__DIR__)
+	cd(joinpath(@__DIR__,".."))
 	using Pkg
 	Pkg.activate(".")
 	Pkg.instantiate()
@@ -23,8 +23,16 @@ end
 # ╔═╡ 4f00e2b5-6097-4577-b669-eafe4cbf1852
 using PlutoUI
 
+# ╔═╡ d5d6b8bf-1321-464d-80bb-be1cc1b1ed8d
+with_terminal() do
+	Pkg.status()
+end
+
 # ╔═╡ d65ed080-9654-11ec-0a8e-e530b9164a8c
 Rz(p,θ) = [p[1]*cos(θ)-p[2]*sin(θ), p[2]*cos(θ)+p[1]*sin(θ), p[3]]
+
+# ╔═╡ 9beb287e-91ee-4a01-b803-5686576cf087
+Ry(p,cθ,sθ) = [p[1]*cθ+p[3]*sθ, p[2], p[3]*cθ-p[1]*sθ]
 
 # ╔═╡ 55cf2a64-dd00-461a-ab93-cad2ef71fbb0
 Ry(p,θ) = [p[1]*cos(θ)+p[3]*sin(θ), p[2], p[3]*cos(θ)-p[1]*sin(θ)]
@@ -36,34 +44,20 @@ begin
 end
 
 # ╔═╡ 4a5e2b92-37fc-494b-8c00-d8a339ce7bcb
-const ms = ThreeBodyMasses(m1=0.938, m2=0.140, m3=0.493, m0=2.28)
+const ms = ThreeBodyMasses(m1=0.938272046, m2=0.13957018, m3=0.493677, m0=2.28646)
 
 # ╔═╡ 570f8ee0-7c75-4c93-bc3a-debab0b81874
 const ms² = ms^2
 
-# ╔═╡ f56e88d9-9d91-4275-884c-1c104a3ba016
-σ1=1.3
-
-# ╔═╡ 15a58427-99d0-4c4f-80ec-8a83bec659f6
-σ2=2.2
-
-# ╔═╡ 973041e0-41ec-4cc8-84c3-ebd500c4ab64
-σs = Invariants(ms; σ1, σ2)
-
 # ╔═╡ 1a0a3c20-0990-4a7d-8395-941bf34ac9e3
 function constructinvariants(σs)
-	E₁ = (ms.m0^2+ms[1]^2-σs[1]) / (2ms.m0)
-	p₁ = sqrt(λ(ms.m0^2,ms[1]^2,σs[1])) / (2ms.m0)
-	# 
-	E₂ = (ms.m0^2+ms[2]^2-σs[2]) / (2ms.m0)
-	p₂ = sqrt(λ(ms.m0^2,ms[2]^2,σs[2])) / (2ms.m0)
-	# 
-	E₃ = (ms.m0^2+ms[3]^2-σs[3]) / (2ms.m0)
-	p₃ = sqrt(λ(ms.m0^2,ms[3]^2,σs[3])) / (2ms.m0)
+	p₁ = sqrt(Kallen(ms.m0^2,ms[1]^2,σs[1])) / (2ms.m0)
+	p₂ = sqrt(Kallen(ms.m0^2,ms[2]^2,σs[2])) / (2ms.m0)
+	p₃ = sqrt(Kallen(ms.m0^2,ms[3]^2,σs[3])) / (2ms.m0)
 	# 
 	p1 = [0,0,p₁]
-	p2 = Ry([0,0,p₂], -acos(cosθhat12(σs,ms²)))
-	p3 = Ry([0,0,p₃], acos(cosθhat31(σs,ms²)))
+	p2 = (c=cosζ(wr(1,2,0),σs,ms²); Ry([0,0,p₂], c, -sqrt(1-c^2)))
+	p3 = (c=cosζ(wr(3,1,0),σs,ms²); Ry([0,0,p₃], c, sqrt(1-c^2)))
 	return (; p1, p2, p3)
 end
 
@@ -80,35 +74,6 @@ function alteulerangles(p1′,p2′,p3′)
 	# 
 	(; ϕp, θp, χ)
 end
-
-# ╔═╡ 988777d9-d778-40ab-b1e7-e28cb005793c
-md"""
-## Example
-"""
-
-# ╔═╡ ca76380d-2c28-41b4-86d1-dac42a3385d7
-(; p1, p2, p3) = constructinvariants(σs)
-
-# ╔═╡ 381b35a0-4cef-4022-bb2e-97d895e12823
-ϕ1, θ1, ϕ23 = 0.3, 1.4, 1.8
-
-# ╔═╡ 08180a31-b8be-4126-8379-b02d0086f238
-p1′ = p1 |> Rz(ϕ23) |> Ry(θ1) |> Rz(ϕ1)
-
-# ╔═╡ bd2ab021-8ee3-4f98-8521-03afadb2b31b
-p2′ = p2 |> Rz(ϕ23) |> Ry(θ1) |> Rz(ϕ1)
-
-# ╔═╡ a05c4a13-228d-4a93-aba1-dd13070f2da5
-p3′ = p3 |> Rz(ϕ23) |> Ry(θ1) |> Rz(ϕ1)
-
-# ╔═╡ c6a307e8-5545-4e09-9028-30ad59c01640
-ϕp = atan(p1′[2],p1′[1])
-
-# ╔═╡ c666cb79-6488-407a-a9ee-a1e913ae0188
-θp = acos(p1′[3]/norm(p1))
-
-# ╔═╡ 6e9ce703-c346-4d70-a402-4f563bd5914c
-χ = atan((p1′ × p3′)[3], -(p1′ × p3′ × p1′)[3] / norm(p1′))
 
 # ╔═╡ 89d46224-82a3-4b53-b17e-4fb7ba702202
 md"""
@@ -147,38 +112,65 @@ function rotatedfv(σs; ϕ1, θ1, ϕ23)
 end
 
 # ╔═╡ ec44a76a-0079-4e76-b9f0-b60b649445c9
-σs0 = Invariants(
+σs0 = Invariants(ms,
 	σ1 = 0.7980703453578917,
-	σ2 = 3.6486261122281745,
-	σ3 = 1.894196542413933)
+	σ2 = 3.6486261122281745)
 
 # ╔═╡ b017b80b-44f0-4cb7-bf9c-c8511fd976cf
 with_terminal() do
 	println.(rotatedfv(σs0; ϕ1=-0.3, θ1=π-0.1, ϕ23=-0.4))
 end
 
+# ╔═╡ 30b38727-cf5b-46f5-8aaf-7b5b7dc0d3a9
+p1,p2,p3 = constructinvariants(σs0)
+
+# ╔═╡ 47f54ed9-5f87-4e21-a309-62eddfaeb2e6
+begin
+	p4p =  [0.        , 0.        , 0.68416827, 1.16122377]
+	p4pi =  [-0.28022697,  0.        , -0.1556354 ,  0.34961317]
+	p4k =  [ 0.28022697,  0.        , -0.52853287,  0.77562306]
+end
+
+# ╔═╡ 0485c5fd-1ee2-4d57-a222-ca31044b1b63
+begin
+	# Lambda
+	pk_theta_r=  1.06382395
+	pk_theta_p=  -1.33775751
+	
+	# Delta
+	ppi_theta_r=  -0.487513
+	ppi_theta_p=  1.11390452
+	#
+	kpi_theta_k=  1.82134117
+	#
+	# m2ppi:  1.92475412
+	# m2pk:  3.64862611
+	# m2kpi:  0.79807035
+end
+
+# ╔═╡ a588bcfd-fe75-44f7-ac58-88f7039e7584
+begin
+	kpi_theta_k ≈ acos(cosθ23(σs0,ms²)), 
+	# 
+	pk_theta_p ≈ -(π-acos(cosθ31(σs0,ms²))),
+	pk_theta_r ≈ π-acos(cosζ(wr(1,2,0),σs0,ms²)),
+	# 
+	ppi_theta_p ≈ acos(cosθ12(σs0,ms²)),
+	ppi_theta_r ≈ -(π-acos(cosζ(wr(3,1,0),σs0,ms²)))
+end
+
 # ╔═╡ Cell order:
 # ╠═b56fc9a7-fa03-47d6-b22e-0097be7155d3
+# ╠═d5d6b8bf-1321-464d-80bb-be1cc1b1ed8d
 # ╠═d65ed080-9654-11ec-0a8e-e530b9164a8c
+# ╠═9beb287e-91ee-4a01-b803-5686576cf087
 # ╠═55cf2a64-dd00-461a-ab93-cad2ef71fbb0
 # ╠═f341c6fd-4b7a-4497-acf8-f343a95e9521
 # ╠═4a5e2b92-37fc-494b-8c00-d8a339ce7bcb
 # ╠═570f8ee0-7c75-4c93-bc3a-debab0b81874
-# ╠═f56e88d9-9d91-4275-884c-1c104a3ba016
-# ╠═15a58427-99d0-4c4f-80ec-8a83bec659f6
-# ╠═973041e0-41ec-4cc8-84c3-ebd500c4ab64
 # ╠═1a0a3c20-0990-4a7d-8395-941bf34ac9e3
 # ╟─34de7c63-83db-4247-b904-1eaa5822af18
 # ╠═9a793648-ae8f-465d-9a55-0735a16fd1db
-# ╟─988777d9-d778-40ab-b1e7-e28cb005793c
-# ╠═ca76380d-2c28-41b4-86d1-dac42a3385d7
-# ╠═381b35a0-4cef-4022-bb2e-97d895e12823
-# ╠═08180a31-b8be-4126-8379-b02d0086f238
-# ╠═bd2ab021-8ee3-4f98-8521-03afadb2b31b
-# ╠═a05c4a13-228d-4a93-aba1-dd13070f2da5
-# ╠═c6a307e8-5545-4e09-9028-30ad59c01640
-# ╠═c666cb79-6488-407a-a9ee-a1e913ae0188
-# ╠═6e9ce703-c346-4d70-a402-4f563bd5914c
 # ╟─89d46224-82a3-4b53-b17e-4fb7ba702202
 # ╠═6fbb3423-090b-4e11-912c-902ccb6ab43a
 # ╠═f66d17ab-3022-4fe4-83de-8604cf8f69fb
@@ -188,3 +180,7 @@ end
 # ╠═ec44a76a-0079-4e76-b9f0-b60b649445c9
 # ╠═4f00e2b5-6097-4577-b669-eafe4cbf1852
 # ╠═b017b80b-44f0-4cb7-bf9c-c8511fd976cf
+# ╠═30b38727-cf5b-46f5-8aaf-7b5b7dc0d3a9
+# ╠═47f54ed9-5f87-4e21-a309-62eddfaeb2e6
+# ╠═0485c5fd-1ee2-4d57-a222-ca31044b1b63
+# ╠═a588bcfd-fe75-44f7-ac58-88f7039e7584
