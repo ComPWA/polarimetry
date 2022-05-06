@@ -78,7 +78,7 @@ function F²(l,p,p0,d)
 	l==0 && return 1.0
 	l==1 && return (1+p0R^2)/(1+pR^2)
 	l!=2 && error("l>2 cannot be")
-	return (9+3p0R^2+3p0R^4)/(9+3pR^2+3pR^4)
+	return (9+3p0R^2+p0R^4)/(9+3pR^2+pR^4)
 end
 
 # ╔═╡ fe3e1d61-1ad0-4509-92c7-dbac6a81343f
@@ -130,9 +130,8 @@ begin
 		σA = mK^2-mπ^2/2
 		m, Γ₀, γ = BW.pars
 		@unpack m1,m2 = BW
-		ρ = 2*breakup(σ,m1^2,m2^2)/sqrt(σ)
-		mΓ = (σ-σA) / (m^2-σA) * Γ₀*exp(-γ*σ) * ρ
-		1/(m^2-σ-1im*mΓ)
+		Γ = (σ-σA) / (m^2-σA) * Γ₀*exp(-γ*σ)
+		1/(m^2-σ-1im*m*Γ)
 	end
 
 	# Flatte1405
@@ -329,74 +328,163 @@ md"""
 ### Coupligns
 """
 
-# ╔═╡ 468884de-530f-4903-acfa-72946e330866
-couplingindexmap = Dict(
-	r"[L|D].*" => Dict(
-			'1' => (1, 0),
-			'2' => (-1, 0)),
-	r"K\(892\)" => Dict(
-			'1' => (0,  1),
-			'2' => (-2, 1),
-			'3' => (2, -1),
-			'4' => (0, -1)),
-	r"K\(700|1430\)" => Dict(
-			'1' => (0, -1),
-			'2' => (0, 1)))
-
-# ╔═╡ f3e20fe4-1e26-47e0-9a2d-a794ece9e0d9
-begin
-	modelterms = DataFrame()
+# ╔═╡ 58800d91-9cd9-4a9e-95a9-6b285157385d
+function selectindexmap(isobarname)
 	# 
-	couplingkeys = filter(x->x[1:2]=="Ar", keys(defaultparameters))
-	for c in couplingkeys
-		isobarname = c[3:end-1]
-		couplingindex = c[end]
-		c_re_key = c
-		c_im_key = "Ai" * c[3:end]
-		value_re = eval(Meta.parse(defaultparameters[c_re_key])).val
-		value_im = eval(Meta.parse(defaultparameters[c_im_key])).val
-		value = value_re + 1im*value_im
-		# 
-		r = filter(keys(couplingindexmap)) do k
-			match(k, isobarname) !== nothing
-		end
-		(two_λR,two_λk) = couplingindexmap[first(r)][couplingindex]
-		# 
-		push!(modelterms, (; isobarname, two_λR, two_λk, c=value, ))
+	couplingindexmap = Dict(
+		r"[L|D].*" => Dict(
+				'1' => (1, 0),
+				'2' => (-1, 0)),
+		r"K\(892\)" => Dict(
+				'1' => (0,  1),
+				'2' => (-2, 1),
+				'3' => (2, -1),
+				'4' => (0, -1)),
+		r"K\(700|1430\)" => Dict(
+				'1' => (0, -1),
+				'2' => (0, 1)))
+	# 
+	m = filter(keys(couplingindexmap)) do k
+		match(k, isobarname) !== nothing
 	end
-	modelterms
+	return couplingindexmap[first(m)]
 end
 
 # ╔═╡ 5f8973a8-faa7-4663-b896-e7f4ff9600a2
-function convertLHCb2DPD(two_λR, two_λk, c; k, parity, two_j)
+function couplingLHCb2DPD(two_λR, two_λk; k, parity, two_j)
 	if k == 2
 		@assert two_λk == 0
-		c′ = - (2*(parity == '+')-1) * c
+		c′ = - (2*(parity == '+')-1) / sqrt(two_j+1)
 		return (-two_λR, two_λk, c′)
 	elseif k == 3
-		c′ = - (2*(parity == '+')-1) * minusone()^(two_j//2-1//2) * c
+		c′ = - (2*(parity == '+')-1) * minusone()^(two_j//2-1//2) / sqrt(two_j+1)
 		return (-two_λR, two_λk, c′)
 	end
 	k!=1 && error("cannot be!")
-	c′ = minusone()^(two_j//2) * c
+	c′ = 1.0 / sqrt(two_j+1)
 	return (two_λR, -two_λk, c′)
 end
 
-# ╔═╡ fe72915f-51c7-48bd-8745-9bc97d05162c
-const terms = [
-	begin
-		@unpack k, Hij, two_s, Xlineshape, parity = isobars[t.isobarname]
-		two_λR, two_λk, c =
-			convertLHCb2DPD(t.two_λR, t.two_λk, t.c; k, two_j=two_s, parity)
-		HRk = NoRecoupling(two_λR, two_λk)
-		(c, DecayChain(; k, Xlineshape, Hij, HRk, two_s, tbs))
-	end for t in eachrow(modelterms)] ;
+# ╔═╡ e9610bef-edca-43ac-96af-ad118c6879c7
+"""
+The relation is
+```math
+A^{DPD}_{λ₀,λ₁} = (-1)^{½-λ₁} A^{LHCb}_{λ₀,-λ₁}
+```
+"""
+amplitudeLHCb2DPD(A) =
+	[A[1,2] -A[1,1]
+	 A[2,2] -A[2,1]]
+
+# ╔═╡ 64a1d1f5-da82-4ce6-8731-ccc7439bd881
+couplingkeys = collect(filter(x->x[1:2]=="Ar", keys(defaultparameters)))
+
+# ╔═╡ 78dba088-6d5b-4e4b-a664-f176f9e2d673
+isobarnames = map(x->x[3:end-1], couplingkeys)
+
+# ╔═╡ 28aceaed-9143-4b26-89d7-6763b2fdbc28
+function parname2decaychain(parname)
+	isobarname = parname[3:end-1]
+	# 
+	@unpack k, Hij, two_s, Xlineshape, parity = isobars[isobarname]
+	# 
+	couplingindex = parname[end]
+	two_λR, two_λk = selectindexmap(isobarname)[couplingindex]
+	two_λR′, two_λk′, c′ =
+		couplingLHCb2DPD(two_λR, two_λk; k, two_j=two_s, parity)
+	HRk = NoRecoupling(two_λR′, two_λk′)
+	(c′, DecayChain(; k, Xlineshape, Hij, HRk, two_s, tbs))
+end
+
+# ╔═╡ 168707da-d42c-4b2f-94b6-f7bc15cb29cb
+const terms = [let
+	# 
+	c_re_key = "Ar" * parname[3:end] # = parname
+	c_im_key = "Ai" * parname[3:end]
+	value_re = eval(Meta.parse(defaultparameters[c_re_key])).val
+	value_im = eval(Meta.parse(defaultparameters[c_im_key])).val
+	value = value_re + 1im*value_im
+	#
+	c0, d = parname2decaychain(parname)
+	# 
+	(c0*value, d)
+end for parname in couplingkeys]
 
 # ╔═╡ 8d8824e8-7809-4368-840c-b8f6d38ad7c2
 begin
 	const chains = getindex.(terms,2)
 	const couplings = getindex.(terms,1)
-end ;
+end;
+
+# ╔═╡ 40a85984-0588-4e72-bb99-ab555d82c020
+md"""
+### Cross check with the LHCb code
+"""
+
+# ╔═╡ 38234e92-aa91-4728-b8d8-8f7dd9f25552
+crosscheckresult = readjson(joinpath("..","data","crosscheck.json")) ;
+
+# ╔═╡ 0867cb8e-58b4-4d23-9b1a-e18063848252
+parsepythoncomplex(s::String) = eval(Meta.parse(replace(s,"j"=>"im")))
+
+# ╔═╡ 96b0a235-e4cf-406d-a72b-124fec4e6ba7
+Adict2matrix(d::Dict) = parsepythoncomplex.(
+	[d["A++"] d["A+-"]
+	 d["A-+"] d["A--"]])
+
+# ╔═╡ 210740f1-769a-456c-b075-7fab2728bda6
+σs0 = Invariants(ms,
+	σ1 = 0.7980703453578917,
+	σ2 = 3.6486261122281745)
+
+# ╔═╡ f2570431-067f-424c-822d-9c7a8d6764f1
+begin
+	myK892BW0 = parname2decaychain("ArK(892)1")[2].Xlineshape(σs0[1])
+	tfK892BW0 = 2.1687201455088894+23.58225917009096im
+	myK892BW0 ≈ tfK892BW0
+end
+
+# ╔═╡ e972aeb7-2724-4f7b-b00e-744e2ee7ef8f
+begin
+	myL1405BW0 = parname2decaychain("ArL(1405)1")[2].Xlineshape(σs0[2])
+	tfL1405BW0 = -0.5636481410171861+0.13763637759224928im
+	tfL1405BW0 ≈ myL1405BW0
+end
+
+# ╔═╡ bb8588a5-b439-4dc5-a15c-da894c20fbb3
+begin
+	comparison = DataFrame()
+	for parname in couplingkeys
+		c, d = parname2decaychain(parname)
+		M_DPD = [c * amplitude(σs0,[two_λ1,0,0,two_λ0], d)
+			for (two_λ0,two_λ1) in [(1, 1) ( 1,-1)
+								    (-1,1) (-1,-1)]]
+		M_LHCb′ = amplitudeLHCb2DPD(Adict2matrix(crosscheckresult[parname]))
+		#
+		r = filter(x->!(isnan(x)), vcat(M_DPD ./ M_LHCb′))
+		push!(comparison, (; parname=parname[3:end], r, M_DPD, M_LHCb′))
+	end
+	sort!(comparison, order(:parname, by=x->x[3:6]))
+	sort!(comparison,
+		order(:parname, by=x->findfirst(x[1],"LDK")))
+end
+
+# ╔═╡ 849cf226-f85f-4672-8e10-30bb0de4ad93
+extrema(real(vcat(comparison.r...))) .- 1, 
+extrema(imag(vcat(comparison.r...)))
+
+# ╔═╡ 7c09ae7b-f57d-44c3-a69b-aaf9ebd129fd
+select(
+	transform(
+		transform(comparison,
+			:parname => ByRow(x->isobars[x[1:end-1]].Xlineshape.l) => :l),	
+	:parname => ByRow(x->isobars[x[1:end-1]].Xlineshape.minL) => :Lmin),
+[:parname,:r,:l,:Lmin])
+
+# ╔═╡ d547fc89-3756-49d3-8b49-ad0c56c5c3a3
+md"""
+### Plotting the distributions
+"""
 
 # ╔═╡ abdeb1ac-19dc-45b2-94dd-5e64fb3d8f14
 A(σs,two_λs) = sum(c*amplitude(σs,two_λs,d) for (c,d) in zip(couplings,chains))
@@ -447,8 +535,8 @@ begin
 		stephist(getproperty.(pdata, :σ3), weights=Iv; bins,
 			xlab=L"m^2(p\pi^-)\,(\mathrm{GeV}^2)"),
 	bottom_margin=7mm)
-	for s in Set(modelterms.isobarname)
-		couplingsmap = (modelterms.isobarname .== s)
+	for s in Set(isobarnames)
+		couplingsmap = (isobarnames .== s)
 		Iξv = intensity.(Aiv, Ref(couplings .* couplingsmap));
 		#
 		stephist!(sp=1, getproperty.(pdata, :σ2), weights=Iξv; bins, lab="")
@@ -458,14 +546,17 @@ begin
 	plot!()
 end
 
+# ╔═╡ c945a6b3-e597-4409-840b-d806cc2958ad
+
+
 # ╔═╡ 4de4f76f-e0b9-4f1e-a166-8c0ae5397334
 two_Δλ(HRk) = HRk.two_λa-HRk.two_λb
 
 # ╔═╡ 0a976167-b074-4694-ab97-aecfcd67cc25
 begin
 	rates = DataFrame()
-	for s in Set(modelterms.isobarname)
-		couplingsmap = (modelterms.isobarname .== s)
+	for s in Set(isobarnames)
+		couplingsmap = (isobarnames .== s)
 		Iξv = intensity.(Aiv, Ref(couplings .* couplingsmap));
 		# 
 		weights = two_Δλ.(getproperty.(chains[couplingsmap], :HRk))
@@ -474,7 +565,10 @@ begin
 		#
 		push!(rates, (isobarname=s, rate = sum(Iξv) / I0 * 100, α))
 	end
-	sort(rates,
+	sort(
+		sort(
+			transform(rates, :rate=>ByRow(x->round(x; digits=2)); renamecols=false),
+			order(:isobarname, by=x->eval(Meta.parse(x[3:end-1])))),
 		order(:isobarname, by=x->findfirst(x[1],"LDK")))
 end
 
@@ -503,9 +597,9 @@ end
 
 # ╔═╡ 64cdff72-fb69-413c-b4f3-d5629969c7b8
 grouppedchains = getindex.(
-	sort(sort(collect(enumerate(modelterms.isobarname)),
+	sort(sort(collect(enumerate(isobarnames)),
 		by=x->x[2]),
-		by=x->findfirst(x[2][1],"LDK")),1)
+		by=x->findfirst(x[2][1],"LDK")),1) ;
 
 # ╔═╡ c1387ca0-59c6-44c8-99b3-bb53e44d638e
 let
@@ -514,8 +608,9 @@ let
 	s(two_λ) = iseven(two_λ) ?
 		string(div(two_λ,2)) :
 		("-","")[1+div((sign(two_λ)+1),2)]*"½"
-	labelchian(row) = row.isobarname*" "*s(row.two_λR)*","*s(row.two_λk)
-	labels = labelchian.(eachrow(modelterms[grouppedchains,:]))
+	labelchain(chain) = chain.Xlineshape.name * " "*
+		s(chain.HRk.two_λa)*","*s(chain.HRk.two_λb)
+	labels = labelchain.(chains)
 	# 
 	clim = maximum(ratematrix) .* (-1, 1)
 	heatmap(grouppedratematrix;
@@ -538,14 +633,14 @@ group(ratematrix, sectors) =
 
 # ╔═╡ a9e20455-2180-4e63-a0af-bab800fa0616
 let
-	isobarnames = collect(Set(modelterms.isobarname))
-	sort!(isobarnames, by=x->findfirst(x[1],"LDK"))
+	isobarnameset = collect(Set(isobarnames))
+	sort!(isobarnameset, by=x->findfirst(x[1],"LDK"))
 	# 
-	sectors = [couplingsmap = collect(1:nchains)[(modelterms.isobarname .== s)]
-		for s in isobarnames]
+	sectors = [couplingsmap = collect(1:nchains)[(isobarnames .== s)]
+		for s in isobarnameset]
 	# 
 	grouppedratematrix = group(ratematrix, sectors)
-	nisobars = length(isobarnames)
+	nisobars = length(isobarnameset)
 	for i in 1:nisobars, j in i+1:nisobars
 		grouppedratematrix[j,i] *= 2
 		grouppedratematrix[i,j] = 0
@@ -554,8 +649,8 @@ let
 	
 	clim = maximum(grouppedratematrix) .* (-1.2, 1.2)
 	heatmap(grouppedratematrix;
-		xticks=(1:nchains, isobarnames), xrotation = 90,
-		yticks=(1:nchains, isobarnames), aspectratio=1,
+		xticks=(1:nchains, isobarnameset), xrotation = 90,
+		yticks=(1:nchains, isobarnameset), aspectratio=1,
 		size=(600,600), c=:delta, colorbar=true,
 		title="Rate matrix for isobars", clim)
 	for i in 1:nisobars, j in i:nisobars
@@ -598,11 +693,25 @@ end
 # ╠═f8d9463f-2150-4631-84c1-9afdb32626be
 # ╠═1f6dc202-8734-4232-9f48-a88ebf17ff93
 # ╟─21c125fc-e218-4676-9846-822d951f4f1b
-# ╠═468884de-530f-4903-acfa-72946e330866
-# ╠═f3e20fe4-1e26-47e0-9a2d-a794ece9e0d9
+# ╠═58800d91-9cd9-4a9e-95a9-6b285157385d
 # ╠═5f8973a8-faa7-4663-b896-e7f4ff9600a2
-# ╠═fe72915f-51c7-48bd-8745-9bc97d05162c
+# ╠═e9610bef-edca-43ac-96af-ad118c6879c7
+# ╠═64a1d1f5-da82-4ce6-8731-ccc7439bd881
+# ╠═78dba088-6d5b-4e4b-a664-f176f9e2d673
+# ╠═28aceaed-9143-4b26-89d7-6763b2fdbc28
+# ╠═168707da-d42c-4b2f-94b6-f7bc15cb29cb
 # ╠═8d8824e8-7809-4368-840c-b8f6d38ad7c2
+# ╟─40a85984-0588-4e72-bb99-ab555d82c020
+# ╠═f2570431-067f-424c-822d-9c7a8d6764f1
+# ╠═e972aeb7-2724-4f7b-b00e-744e2ee7ef8f
+# ╠═38234e92-aa91-4728-b8d8-8f7dd9f25552
+# ╠═0867cb8e-58b4-4d23-9b1a-e18063848252
+# ╠═96b0a235-e4cf-406d-a72b-124fec4e6ba7
+# ╠═210740f1-769a-456c-b075-7fab2728bda6
+# ╠═bb8588a5-b439-4dc5-a15c-da894c20fbb3
+# ╠═849cf226-f85f-4672-8e10-30bb0de4ad93
+# ╠═7c09ae7b-f57d-44c3-a69b-aaf9ebd129fd
+# ╟─d547fc89-3756-49d3-8b49-ad0c56c5c3a3
 # ╠═abdeb1ac-19dc-45b2-94dd-5e64fb3d8f14
 # ╠═e50afc73-d0a6-4a8d-ae06-c95c9946998d
 # ╠═b833843f-c8b6-44c6-847c-efce0ed989d4
@@ -615,6 +724,7 @@ end
 # ╠═50d4a601-3f14-4034-9e6f-08eae9ca7d7c
 # ╠═8e06d5ec-4b98-441d-919b-7b90071e6674
 # ╠═fc62283e-8bcb-4fd1-8809-b7abeb991030
+# ╠═c945a6b3-e597-4409-840b-d806cc2958ad
 # ╠═4de4f76f-e0b9-4f1e-a166-8c0ae5397334
 # ╠═0a976167-b074-4694-ab97-aecfcd67cc25
 # ╠═cecc3975-ede0-4f00-8259-8e2b3e69022c
