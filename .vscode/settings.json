@@ -25,6 +25,7 @@
     ".cspell/*.txt": "plaintext"
   },
   "files.eol": "\n",
+  "julia.environmentPath": "./julia",
   "python.analysis.autoImportCompletions": false,
   "python.analysis.diagnosticMode": "workspace",
   "python.formatting.provider": "black",
