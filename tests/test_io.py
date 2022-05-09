@@ -1,8 +1,7 @@
-import json
 from pathlib import Path
 
 from polarization.decay import IsobarNode, Particle
-from polarization.io import as_latex, to_resonance_dict
+from polarization.io import as_latex, load_resonance_definitions
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
 Λc = Particle("Λc", latex=R"\Lambda_c^+", spin=0.5, parity=+1)
@@ -36,13 +35,9 @@ def test_as_latex_isobar_node():
     assert latex == R"\Lambda(1520) \xrightarrow[S=1]{L=2} p K^-"
 
 
-def test_import_isobar_definitions():
+def test_load_isobar_definitions():
     pwd = Path(__file__).absolute().parent
-    data_dir = pwd.parent / "data"
-    with open(data_dir / "isobars.json") as stream:
-        data = json.load(stream)
-    isobar_definitions = data["isobars"]
-    resonances = to_resonance_dict(isobar_definitions)
+    resonances = load_resonance_definitions(pwd.parent / "data" / "isobars.json")
     assert len(resonances) == 12
     Λ2000 = resonances["L(2000)"]
     assert Λ2000.name == "L(2000)"

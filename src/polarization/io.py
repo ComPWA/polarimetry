@@ -17,9 +17,11 @@ This code originates from `ComPWA/ampform#280
 """
 from __future__ import annotations
 
+import json
 import sys
 from collections import abc
 from functools import singledispatch
+from pathlib import Path
 from typing import Iterable, Mapping
 
 import qrules
@@ -121,6 +123,14 @@ def _render_jp(particle: Particle) -> str:
     else:
         spin = Rf"\frac{{{particle.spin.numerator}}}{{{particle.spin.denominator}}}"
     return f"{spin}^{{{parity}}}"
+
+
+def load_resonance_definitions(filename: Path | str) -> dict[str, Resonance]:
+    """Load `Resonance` definitions from a JSON file."""
+    with open(filename) as stream:
+        data = json.load(stream)
+    isobar_definitions = data["isobars"]
+    return to_resonance_dict(isobar_definitions)
 
 
 def to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Resonance]:
