@@ -84,6 +84,13 @@
         "python"
       ],
       "filename": "**/*.ipynb"
+    },
+    {
+      "dictionaries": [
+        "latex",
+        "python"
+      ],
+      "filename": "**/*.pyi"
     }
   ],
   "version": "0.2"

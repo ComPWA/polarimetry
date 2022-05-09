@@ -22,6 +22,7 @@ from collections import abc
 from functools import singledispatch
 from typing import Iterable, Mapping
 
+import qrules
 import sympy as sp
 
 from polarization.decay import IsobarNode, Particle
@@ -127,6 +128,28 @@ def to_resonance(name: str, definition: ResonanceJSON) -> Resonance:
         mass_range=_to_float_range(definition["mass"]),
         width_range=_to_float_range(definition["width"]),
         lineshape=definition["lineshape"],
+    )
+
+
+@singledispatch
+def from_qrules(obj):
+    raise NotImplementedError(
+        f"Cannot import QRules object of type {type(obj).__name__}"
+    )
+
+
+@from_qrules.register(qrules.particle.Particle)
+def _(obj: qrules.particle.Particle) -> Resonance:
+    if obj.parity is None:
+        raise ValueError(f"Particle {obj.name} as no parity")
+    return Resonance(
+        name=obj.name,
+        latex=obj.latex,
+        spin=obj.spin,
+        parity=obj.parity,
+        mass_range=(obj.mass, obj.mass),
+        width_range=(obj.width, obj.width),
+        lineshape="BreitWignerMinL",
     )
 
 
