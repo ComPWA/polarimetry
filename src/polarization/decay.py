@@ -5,7 +5,6 @@ import sys
 
 import sympy as sp
 from attrs import field, frozen
-from attrs.validators import instance_of
 
 from polarization._attrs import assert_spin_value, to_ls, to_rational
 
@@ -62,9 +61,9 @@ def _compute_average(range_def: float | tuple[float, float]) -> float:
 
 @frozen
 class IsobarNode:
-    parent: Particle = field(validator=instance_of(Particle))
-    child1: Particle = field(validator=instance_of(Particle))
-    child2: Particle = field(validator=instance_of(Particle))
+    parent: Resonance
+    child1: Resonance | IsobarNode
+    child2: Resonance | IsobarNode
     interaction: LSCoupling | None = field(default=None, converter=to_ls)
 
     @property
