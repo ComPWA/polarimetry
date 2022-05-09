@@ -5,16 +5,16 @@ from polarization.decay import IsobarNode, Particle
 from polarization.io import as_latex, to_resonance_dict
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
-Λc = Particle(R"\Lambda_c^+", spin=0.5, parity=+1)
-p = Particle("p", spin=0.5, parity=+1)
-π = Particle(R"\pi^+", spin=0, parity=-1)
-K = Particle("K^-", spin=0, parity=-1)
-Λ1520 = Particle(R"\Lambda(1520)", spin=1.5, parity=-1)
+Λc = Particle("Λc", latex=R"\Lambda_c^+", spin=0.5, parity=+1)
+p = Particle("p", latex="p", spin=0.5, parity=+1)
+π = Particle("π+", latex=R"\pi^+", spin=0, parity=-1)
+K = Particle("K-", latex="K^-", spin=0, parity=-1)
+Λ1520 = Particle("Λ(1520)", latex=R"\Lambda(1520)", spin=1.5, parity=-1)
 
 
 def test_as_latex_particle():
     latex = as_latex(Λ1520)
-    assert latex == Λ1520.name
+    assert latex == Λ1520.latex
     latex = as_latex(Λ1520, render_jp=True)
     assert latex == R"{3/2}^{-1}"
 
@@ -41,6 +41,7 @@ def test_import_isobar_definitions():
     assert len(resonances) == 12
     Λ2000 = resonances["L(2000)"]
     assert Λ2000.name == "L(2000)"
+    assert Λ2000.latex == "L(2000)"
     assert Λ2000.spin == 0.5
     assert Λ2000.parity == -1
     assert Λ2000.mass_range == (1900, 2100)

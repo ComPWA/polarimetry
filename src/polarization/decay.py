@@ -28,6 +28,7 @@ class ThreeBodyDecay:
 @frozen
 class Particle:
     name: str
+    latex: str
     spin: sp.Rational = field(converter=to_rational, validator=assert_spin_value)
     parity: int
 

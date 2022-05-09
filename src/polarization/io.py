@@ -107,7 +107,7 @@ def _(obj: Particle, render_jp: bool = False) -> str:
     if render_jp:
         parity = "-1" if obj.parity < 0 else "+1"
         return f"{{{obj.spin}}}^{{{parity}}}"
-    return obj.name
+    return obj.latex
 
 
 def to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Resonance]:
@@ -120,6 +120,7 @@ def to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Resonan
 def to_resonance(name: str, definition: ResonanceJSON) -> Resonance:
     spin, parity = _to_jp_pair(definition["jp"])
     return Resonance(
+        name,
         name,
         spin,
         parity,
