@@ -10,13 +10,13 @@ begin
 	using Pkg
 	Pkg.activate(".")
 	Pkg.instantiate()
-	# 
+	#
 	using Plots
 	using RecipesBase
-	# 
+	#
 	using LinearAlgebra
 	using Parameters
-	# 
+	#
 	using ThreeBodyDecay
 	using PartialWaveFunctions
 end
@@ -88,7 +88,7 @@ function ξΔ(σs)
 end
 
 # ╔═╡ 78a8e0dc-255f-4dc8-8001-90725a3c7b72
-plot(layout=grid(1,2), 
+plot(layout=grid(1,2),
 	plot(ms, σs->acos(cosζ13_for1(σs,ms²))/ξΔ(σs) - 1,
 		colorbar=true, title="ξΔ = ζ13_for1"),
 	plot(ms, σs->-acos(cosζ21_for1(σs,ms²))/ξΛ(σs) - 1,

@@ -24,6 +24,7 @@
   "files.associations": {
     ".cspell/*.txt": "plaintext"
   },
+  "files.eol": "\n",
   "python.analysis.autoImportCompletions": false,
   "python.analysis.diagnosticMode": "workspace",
   "python.formatting.provider": "black",
