@@ -140,8 +140,7 @@ class BlattWeisskopf(UnevaluatedExpression):
 
 
 @frozen
-class Resonance:
-    particle: Particle
+class Resonance(Particle):
     mass_range: tuple[float, float]
     width_range: tuple[float, float]
     lineshape: Literal["BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"]
