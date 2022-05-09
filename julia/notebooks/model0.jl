@@ -16,13 +16,13 @@ begin
 	using LaTeXStrings
 	import Plots.PlotMeasures.mm
 	using RecipesBase
-	# 
+	#
 	using LinearAlgebra
 	using Parameters
 	using Measurements
 	using DataFrames
 	using ThreadsX
-	# 
+	#
 	using ThreeBodyDecay
 	using ThreeBodyDecay.PartialWaveFunctions
 end
@@ -33,7 +33,7 @@ md"""
 """
 
 # ╔═╡ e04157cc-7697-41e5-8e4e-3556332929ef
-theme(:wong2, frame=:box, grid=false, minorticks=true, 
+theme(:wong2, frame=:box, grid=false, minorticks=true,
     guidefontvalign=:top, guidefonthalign=:right,
     xlim=(:auto,:auto), ylim=(:auto,:auto),
     lw=1, lab="", colorbar=false)
@@ -88,9 +88,9 @@ begin
 		pars::T
 		l::Int
 		minL::Int
-		# 
+		#
 		name::String
-		# 
+		#
 		m1::Float64
 		m2::Float64
 		mk::Float64
@@ -108,15 +108,15 @@ begin
 		1/(m^2-σ-1im*m*Γ) * (p/p0)^l * (q/q0)^minL *
 			sqrt(F²(l,p,p0,dR) * F²(minL,q,q0,dΛc))
 	end
-	
+
 	# BuggBreitWignerMinL
 	@with_kw struct BuggBreitWignerMinL{T} <: Lineshape
 		pars::T
 		l::Int
 		minL::Int
-		# 
+		#
 		name::String
-		# 
+		#
 		m1::Float64
 		m2::Float64
 		mk::Float64
@@ -125,7 +125,7 @@ begin
 	BuggBreitWignerMinL(pars::T; kw...) where
 		T <: NamedTuple{X, Tuple{Float64, Float64}} where X =
 			BuggBreitWignerMinL(; pars=merge(pars, (γ=1.1,)), kw...)
-	# 
+	#
 	function (BW::BuggBreitWignerMinL)(σ)
 		σA = mK^2-mπ^2/2
 		m, Γ₀, γ = BW.pars
@@ -141,7 +141,7 @@ begin
 		minL::Int
 		#
 		name::String
-		# 
+		#
 		m1::Float64
 		m2::Float64
 		mk::Float64
@@ -171,7 +171,7 @@ end
 # ╔═╡ cadbfb87-8774-428d-a2ef-337bd7465563
 @recipe function f(BW::Lineshape)
 	xv = range((BW.m1+BW.m2)^2, (BW.m0-BW.mk)^2, length=300)
-	intensity(σ) = abs2(BW(σ)) * 
+	intensity(σ) = abs2(BW(σ)) *
 		breakup(σ, BW.m1^2, BW.m2^2) *
 		breakup(BW.m0^2, σ, BW.mk^2) / sqrt(σ)
 	yv = intensity.(xv)
@@ -202,22 +202,22 @@ function buildchain(key, dict)
 	massval, widthval = ifhyphenaverage.((mass,width)) ./ 1e3
 	#
 	i,j = ij_from_k(k)
-	# 
+	#
 	@unpack two_js = tbs
-	# 
+	#
 	reaction_ij = jp_R => (jp(two_js[i]//2,parities[i]), jp(two_js[j]//2,parities[j]))
 	reaction_Rk(P0) = jp(two_js[0]//2,P0) => (jp_R, jp(two_js[k]//2,parities[k]))
-	# 
+	#
 	LS = vcat(possible_ls.(reaction_Rk.(('+','-')))...)
 	minLS = first(sort(vcat(LS...); by=x->x[1]))
-	# 
+	#
 	ls = possible_ls(reaction_ij)
 	length(ls) != 1 && error("expected the only ls: $(ls)")
 	onlyls = first(ls)
 	#
 	Hij = ParityRecoupling(two_js[i],two_js[j],reaction_ij)
 	Xlineshape = eval(
-		quote 
+		quote
 		$(Symbol(lineshape))(
 				(; m=$massval, Γ=$widthval);
 				name = $key,
@@ -330,7 +330,7 @@ md"""
 
 # ╔═╡ 58800d91-9cd9-4a9e-95a9-6b285157385d
 function selectindexmap(isobarname)
-	# 
+	#
 	couplingindexmap = Dict(
 		r"[L|D].*" => Dict(
 				'1' => (1, 0),
@@ -343,7 +343,7 @@ function selectindexmap(isobarname)
 		r"K\(700|1430\)" => Dict(
 				'1' => (0, -1),
 				'2' => (0, 1)))
-	# 
+	#
 	m = filter(keys(couplingindexmap)) do k
 		match(k, isobarname) !== nothing
 	end
@@ -385,9 +385,9 @@ isobarnames = map(x->x[3:end-1], couplingkeys)
 # ╔═╡ 28aceaed-9143-4b26-89d7-6763b2fdbc28
 function parname2decaychain(parname)
 	isobarname = parname[3:end-1]
-	# 
+	#
 	@unpack k, Hij, two_s, Xlineshape, parity = isobars[isobarname]
-	# 
+	#
 	couplingindex = parname[end]
 	two_λR, two_λk = selectindexmap(isobarname)[couplingindex]
 	two_λR′, two_λk′, c′ =
@@ -398,7 +398,7 @@ end
 
 # ╔═╡ 168707da-d42c-4b2f-94b6-f7bc15cb29cb
 const terms = [let
-	# 
+	#
 	c_re_key = "Ar" * parname[3:end] # = parname
 	c_im_key = "Ai" * parname[3:end]
 	value_re = eval(Meta.parse(defaultparameters[c_re_key])).val
@@ -406,7 +406,7 @@ const terms = [let
 	value = value_re + 1im*value_im
 	#
 	c0, d = parname2decaychain(parname)
-	# 
+	#
 	(c0*value, d)
 end for parname in couplingkeys]
 
@@ -470,14 +470,14 @@ begin
 end
 
 # ╔═╡ 849cf226-f85f-4672-8e10-30bb0de4ad93
-extrema(real(vcat(comparison.r...))) .- 1, 
+extrema(real(vcat(comparison.r...))) .- 1,
 extrema(imag(vcat(comparison.r...)))
 
 # ╔═╡ 7c09ae7b-f57d-44c3-a69b-aaf9ebd129fd
 select(
 	transform(
 		transform(comparison,
-			:parname => ByRow(x->isobars[x[1:end-1]].Xlineshape.l) => :l),	
+			:parname => ByRow(x->isobars[x[1:end-1]].Xlineshape.l) => :l),
 	:parname => ByRow(x->isobars[x[1:end-1]].Xlineshape.minL) => :Lmin),
 [:parname,:r,:l,:Lmin])
 
@@ -558,9 +558,9 @@ begin
 	for s in Set(isobarnames)
 		couplingsmap = (isobarnames .== s)
 		Iξv = intensity.(Aiv, Ref(couplings .* couplingsmap));
-		# 
+		#
 		weights = two_Δλ.(getproperty.(chains[couplingsmap], :HRk))
-		α = sum(abs2.(couplings[couplingsmap]) .* weights) / 
+		α = sum(abs2.(couplings[couplingsmap]) .* weights) /
 			sum(abs2, couplings[couplingsmap])
 		#
 		push!(rates, (isobarname=s, rate = sum(Iξv) / I0 * 100, α))
@@ -574,7 +574,7 @@ end
 
 # ╔═╡ cecc3975-ede0-4f00-8259-8e2b3e69022c
 begin
-	# 
+	#
 	delta_i(n,iv...) = (v=zeros(n); v[[iv...]] .= 1.0; v)
 	nchains = length(couplings)
 	ratematrix = zeros(nchains,nchains)
@@ -604,14 +604,14 @@ grouppedchains = getindex.(
 # ╔═╡ c1387ca0-59c6-44c8-99b3-bb53e44d638e
 let
 	grouppedratematrix = ratematrix[grouppedchains,grouppedchains]
-	# 
+	#
 	s(two_λ) = iseven(two_λ) ?
 		string(div(two_λ,2)) :
 		("-","")[1+div((sign(two_λ)+1),2)]*"½"
 	labelchain(chain) = chain.Xlineshape.name * " "*
 		s(chain.HRk.two_λa)*","*s(chain.HRk.two_λb)
 	labels = labelchain.(chains)
-	# 
+	#
 	clim = maximum(ratematrix) .* (-1, 1)
 	heatmap(grouppedratematrix;
 		xticks=(1:nchains, labels), xrotation = 90,
@@ -635,10 +635,10 @@ group(ratematrix, sectors) =
 let
 	isobarnameset = collect(Set(isobarnames))
 	sort!(isobarnameset, by=x->findfirst(x[1],"LDK"))
-	# 
+	#
 	sectors = [couplingsmap = collect(1:nchains)[(isobarnames .== s)]
 		for s in isobarnameset]
-	# 
+	#
 	grouppedratematrix = group(ratematrix, sectors)
 	nisobars = length(isobarnameset)
 	for i in 1:nisobars, j in i+1:nisobars
@@ -646,7 +646,7 @@ let
 		grouppedratematrix[i,j] = 0
 	end
 	@assert sum(grouppedratematrix) ≈ 100
-	
+
 	clim = maximum(grouppedratematrix) .* (-1.2, 1.2)
 	heatmap(grouppedratematrix;
 		xticks=(1:nchains, isobarnameset), xrotation = 90,

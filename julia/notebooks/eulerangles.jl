@@ -10,13 +10,13 @@ begin
 	using Pkg
 	Pkg.activate(".")
 	Pkg.instantiate()
-	# 
+	#
 	using Plots
 	using RecipesBase
-	# 
+	#
 	using LinearAlgebra
 	using Parameters
-	# 
+	#
 	using ThreeBodyDecay
 end
 
@@ -54,7 +54,7 @@ function constructinvariants(σs)
 	p₁ = sqrt(Kallen(ms.m0^2,ms[1]^2,σs[1])) / (2ms.m0)
 	p₂ = sqrt(Kallen(ms.m0^2,ms[2]^2,σs[2])) / (2ms.m0)
 	p₃ = sqrt(Kallen(ms.m0^2,ms[3]^2,σs[3])) / (2ms.m0)
-	# 
+	#
 	p1 = [0,0,p₁]
 	p2 = (c=cosζ(wr(1,2,0),σs,ms²); Ry([0,0,p₂], c, -sqrt(1-c^2)))
 	p3 = (c=cosζ(wr(3,1,0),σs,ms²); Ry([0,0,p₃], c, sqrt(1-c^2)))
@@ -71,7 +71,7 @@ function alteulerangles(p1′,p2′,p3′)
 	ϕp = atan(p1′[2],p1′[1])
 	θp = acos(p1′[3]/norm(p1′))
 	χ = atan((p1′ × p3′)[3], -(p1′ × p3′ × p1′)[3] / norm(p1′))
-	# 
+	#
 	(; ϕp, θp, χ)
 end
 
@@ -136,7 +136,7 @@ begin
 	# Lambda
 	pk_theta_r=  1.06382395
 	pk_theta_p=  -1.33775751
-	
+
 	# Delta
 	ppi_theta_r=  -0.487513
 	ppi_theta_p=  1.11390452
@@ -150,11 +150,11 @@ end
 
 # ╔═╡ a588bcfd-fe75-44f7-ac58-88f7039e7584
 begin
-	kpi_theta_k ≈ acos(cosθ23(σs0,ms²)), 
-	# 
+	kpi_theta_k ≈ acos(cosθ23(σs0,ms²)),
+	#
 	pk_theta_p ≈ -(π-acos(cosθ31(σs0,ms²))),
 	pk_theta_r ≈ π-acos(cosζ(wr(1,2,0),σs0,ms²)),
-	# 
+	#
 	ppi_theta_p ≈ acos(cosθ12(σs0,ms²)),
 	ppi_theta_r ≈ -(π-acos(cosζ(wr(3,1,0),σs0,ms²)))
 end
