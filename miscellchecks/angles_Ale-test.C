@@ -33,11 +33,11 @@ void lambdac_covariant_only_angles(int num = 1, TString filename = "default.root
 	double ampl2_00, ampl2_01, ampl2_02, ampl2_11, ampl2_12, ampl2_22;
 	double hel_00, hel_01, hel_02, hel_11, hel_12, hel_22;
 	TGenPhaseSpace ev_Lc;
-	
+
 //	TLorentzVector pB(0., 0., 0., 5.2793);
 	TLorentzVector pLc(0., 0., 0., mLc);
 	TLorentzVector pK, pP, pPi; //, *pMup, *pMum;
-	ev_Lc.SetDecay(pLc, 3, masses_Lc);	
+	ev_Lc.SetDecay(pLc, 3, masses_Lc);
 
 	TTree *tt = new TTree("ntuple", "ntuple");
 	tt->Branch("weight", &weight);
@@ -100,7 +100,7 @@ void lambdac_covariant_only_angles(int num = 1, TString filename = "default.root
 		// pPsi.Print();
 		// pP.Print();
 		// pPbar.Print();
-		
+
 		// ev_Psi.SetDecay(*pPsi, 2, masses_Psi);
 		// weight *= ev_Psi.Generate();
 		// pMup = ev_Psi.GetDecay(0);
@@ -116,10 +116,10 @@ void lambdac_covariant_only_angles(int num = 1, TString filename = "default.root
 		// printf("{%.10lf,%.10lf,%.10lf,%.10lf}\n", p_Px, p_Py, p_Pz, p_E);
 		// printf("{%.10lf,%.10lf,%.10lf,%.10lf}\n", pbar_Px, pbar_Py, pbar_Pz, pbar_E);
 
-		TLorentzVector pLambda = pP + pK; 
-		TLorentzVector pDelta = pPi + pP; 
-		TLorentzVector pKst = pK + pPi; 
-	
+		TLorentzVector pLambda = pP + pK;
+		TLorentzVector pDelta = pPi + pP;
+		TLorentzVector pKst = pK + pPi;
+
 
 		s = pLambda.M2(); t = pDelta.M2(); u = pKst.M2();
 
@@ -132,7 +132,7 @@ void lambdac_covariant_only_angles(int num = 1, TString filename = "default.root
 		TLorentzVector pK_Lambda = pK; pK_Lambda.Boost(-pLambda.BoostVector());
 		TLorentzVector pLc_Lambda = pLc; pLc_Lambda.Boost(-pLambda.BoostVector());
 		double theta_Lambda = pP_Lambda.Angle(-pPi_Lambda.BoostVector());
-		
+
 		TLorentzVector pK_Delta = pK; pK_Delta.Boost(-pDelta.BoostVector());
 		TLorentzVector pPi_Delta = pPi; pPi_Delta.Boost(-pDelta.BoostVector());
 		TLorentzVector pP_Delta = pP; pP_Delta.Boost(-pDelta.BoostVector());
@@ -171,7 +171,7 @@ void lambdac_covariant_only_angles(int num = 1, TString filename = "default.root
 
 	//Wigner angles Eq.(A7)
 	Double_t zetaLambda_p_DPD = -acos((2.*mp*mp*(t-mLc*mLc-mK*mK) + (mLc*mLc+mp*mp-u)*(s-mp*mp-mK*mK))/lambda1hlf(mLc*mLc,mp*mp,u)/lambda1hlf(s,mp*mp,mK*mK));
-        
+
 	Double_t zetaDelta_p_DPD = acos((2.*mp*mp*(s-mLc*mLc-mpi*mpi) + (mLc*mLc+mp*mp-u)*(t-mp*mp-mpi*mpi))/lambda1hlf(mLc*mLc,mp*mp,u)/lambda1hlf(t,mp*mp,mpi*mpi));
 
 	//DM method angles
@@ -186,15 +186,15 @@ void lambdac_covariant_only_angles(int num = 1, TString filename = "default.root
 	//Computation of Wigner angles rewritten, but was already fine before
         Double_t gam1 = pP.Gamma();
 	Double_t gam2 = pLambda.Gamma();
-	Double_t gam3 = pP_Lambda.Gamma(); 
+	Double_t gam3 = pP_Lambda.Gamma();
 	Double_t wigner_angle = acos(pow(1. + gam1 + gam2 + gam3, 2)/(1. + gam1)/(1. + gam2)/(1. + gam3) - 1.);
         double maran =              acos(pow(1. + gam1 + gam2 + gam3, 2)/(1. + gam1)/(1. + gam2)/(1. + gam3) - 1.);
         double zetaLambda_p_DM = thetahat_Lambda_DM+theta_Lambda_DM-wigner_angle;
 
 	gam2 = pDelta.Gamma();
-	gam3 = pP_Delta.Gamma(); 
+	gam3 = pP_Delta.Gamma();
 	wigner_angle = acos(pow(1. + gam1 + gam2 + gam3, 2)/(1. + gam1)/(1. + gam2)/(1. + gam3) - 1.);
-	cout << "wigner" << wigner_angle <<endl<<endl; 
+	cout << "wigner" << wigner_angle <<endl<<endl;
         double zetaDelta_p_DM = thetahat_Delta_DM+theta_Delta_DM+wigner_angle;
 
 	//Output

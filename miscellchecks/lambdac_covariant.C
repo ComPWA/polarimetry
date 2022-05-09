@@ -31,7 +31,7 @@ const TComplex dgamma[6][4][4] = {
         { { 0., 0., 1., 0. }, { 0., 0., 0., 1. }, { 1., 0., 0., 0. }, { 0., 1., 0., 0. } }
 };
 
-double g0(int i, int j) 
+double g0(int i, int j)
 {
 	if (i < 0 || i > 3 || j < 0 || j > 3) return 0.;
 	if (i < 2 && j >= 2) return -1.;
@@ -74,11 +74,11 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 	double ampl2_00, ampl2_01, ampl2_02, ampl2_11, ampl2_12, ampl2_22;
 	double hel_00, hel_01, hel_02, hel_11, hel_12, hel_22;
 	TGenPhaseSpace ev_Lc;
-	
+
 //	TLorentzVector pB(0., 0., 0., 5.2793);
 	TLorentzVector pLc(0., 0., 0., mLc);
 	TLorentzVector pK, pP, pPi; //, *pMup, *pMum;
-	ev_Lc.SetDecay(pLc, 3, masses_Lc);	
+	ev_Lc.SetDecay(pLc, 3, masses_Lc);
 
 	TTree *tt = new TTree("ntuple", "ntuple");
 	tt->Branch("weight", &weight);
@@ -135,8 +135,8 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 #if PLANE == 1
 		double a = -pP.Phi(), b = TMath::Pi() - pP.Theta();
 		pP.RotateZ(a); pP.RotateY(b);
-		pK.RotateZ(a); pK.RotateY(b); 
-		pPi.RotateZ(a); pPi.RotateY(b); 
+		pK.RotateZ(a); pK.RotateY(b);
+		pPi.RotateZ(a); pPi.RotateY(b);
 		double c = -pK.Phi();
 		pK.RotateZ(c); pPi.RotateZ(c);
 		pP.Print(); pK.Print(); pPi.Print();
@@ -145,12 +145,12 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 		pK = TLorentzVector(0.36037199, -0.        ,  0.5737196 ,  0.83829537);
 		pPi = TLorentzVector(-0.36037199, -0.        , -0.11149701,  0.40221809);
 
-#endif	
+#endif
 
 		// pPsi.Print();
 		// pP.Print();
 		// pPbar.Print();
-		
+
 		// ev_Psi.SetDecay(*pPsi, 2, masses_Psi);
 		// weight *= ev_Psi.Generate();
 		// pMup = ev_Psi.GetDecay(0);
@@ -166,10 +166,10 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 		// printf("{%.10lf,%.10lf,%.10lf,%.10lf}\n", p_Px, p_Py, p_Pz, p_E);
 		// printf("{%.10lf,%.10lf,%.10lf,%.10lf}\n", pbar_Px, pbar_Py, pbar_Pz, pbar_E);
 
-		TLorentzVector pLambda = pP + pK; 
-		TLorentzVector pDelta = pPi + pP; 
-		TLorentzVector pKst = pK + pPi; 
-	
+		TLorentzVector pLambda = pP + pK;
+		TLorentzVector pDelta = pPi + pP;
+		TLorentzVector pKst = pK + pPi;
+
 
 		s = pLambda.M2(); t = pDelta.M2(); u = pKst.M2();
 
@@ -182,7 +182,7 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 		TLorentzVector pK_Lambda = pK; pK_Lambda.Boost(-pLambda.BoostVector());
 		TLorentzVector pLc_Lambda = pLc; pLc_Lambda.Boost(-pLambda.BoostVector());
 		double theta_Lambda = pP_Lambda.Angle(-pPi_Lambda.BoostVector());
-		
+
 		TLorentzVector pK_Delta = pK; pK_Delta.Boost(-pDelta.BoostVector());
 		TLorentzVector pPi_Delta = pPi; pPi_Delta.Boost(-pDelta.BoostVector());
 		TLorentzVector pP_Delta = pP; pP_Delta.Boost(-pDelta.BoostVector());
@@ -201,19 +201,19 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 		// double zetaKst_p = pKst_p.Angle(pLambda_p.BoostVector());
         double zetaLambda_p = pLambda_p.Angle(pKst_p.BoostVector());
 
-        
+
         TLorentzVector marP_Lc  = TLorentzVector(-pP.Vect(), pP.E());
         TLorentzVector marLambda_Lc  = TLorentzVector(-pLambda.Vect(), pLambda.E());
         TLorentzVector marP_Lambda = pP; marP_Lambda.Boost(marLambda_Lc.BoostVector());
 
 
         marP_Lc.Print(); marP_Lc.BoostVector().Print(); printf("mp %lf\n", marP_Lc.M());
-        double gam1 = pP.E() / mp, gam2 = pLambda.E() / pLambda.M(), gam3 = pP_Lambda.E() / mp;  
+        double gam1 = pP.E() / mp, gam2 = pLambda.E() / pLambda.M(), gam3 = pP_Lambda.E() / mp;
         printf("%lf %lf %lf\n", gam1, gam2, gam3);
-        gam1 = 1./sqrt(1. - marP_Lc.BoostVector().Mag2()); gam2 = 1./sqrt(1. - marLambda_Lc.BoostVector().Mag2()); gam3 = 1./sqrt(1. - marP_Lambda.BoostVector().Mag2()); 
+        gam1 = 1./sqrt(1. - marP_Lc.BoostVector().Mag2()); gam2 = 1./sqrt(1. - marLambda_Lc.BoostVector().Mag2()); gam3 = 1./sqrt(1. - marP_Lambda.BoostVector().Mag2());
         printf("%lf %lf %lf\n", gam1, gam2, gam3);
 
-        gam1 = (mp*mp + mLc*mLc - u)/(2.*mp*mLc); gam2 = (mLc*mLc - mpi*mpi + s)/(2.*mLc *sqrt(s)); gam3 = (s - mK*mK + mp*mp)/(2.*mp*sqrt(s)); 
+        gam1 = (mp*mp + mLc*mLc - u)/(2.*mp*mLc); gam2 = (mLc*mLc - mpi*mpi + s)/(2.*mLc *sqrt(s)); gam3 = (s - mK*mK + mp*mp)/(2.*mp*sqrt(s));
         printf("%lf %lf %lf\n", gam1, gam2, gam3);
         double maran = acos(pow(1. + gam1 + gam2 + gam3, 2)/(1. + gam1)/(1. + gam2)/(1. + gam3) - 1.);
 
@@ -221,12 +221,12 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
         printf("zeta %lf marantotal %lf -zeta + marantotal - pi %lf\n", zetaLambda_p, -maran + thetahat_Lambda + theta_Lambda, -zetaLambda_p - maran + thetahat_Lambda + theta_Lambda - TMath::Pi());
 
     	marP_Lc.Print(); marP_Lc.BoostVector().Print(); printf("mp %lf\n", marP_Lc.M());
-        gam1 = pP.E() / mp; gam2 = pDelta.E() / pDelta.M(); gam3 = pP_Delta.E() / mp;  
+        gam1 = pP.E() / mp; gam2 = pDelta.E() / pDelta.M(); gam3 = pP_Delta.E() / mp;
         // printf("%lf %lf %lf\n", gam1, gam2, gam3);
-        // gam1 = 1./sqrt(1. - marP_Lc.BoostVector().Mag2()); gam2 = 1./sqrt(1. - marLambda_Lc.BoostVector().Mag2()); gam3 = 1./sqrt(1. - marP_Lambda.BoostVector().Mag2()); 
+        // gam1 = 1./sqrt(1. - marP_Lc.BoostVector().Mag2()); gam2 = 1./sqrt(1. - marLambda_Lc.BoostVector().Mag2()); gam3 = 1./sqrt(1. - marP_Lambda.BoostVector().Mag2());
         // printf("%lf %lf %lf\n", gam1, gam2, gam3);
 
-        // gam1 = (mp*mp + mLc*mLc - u)/(2.*mp*mLc); gam2 = (mLc*mLc - mpi*mpi + s)/(2.*mLc *sqrt(s)); gam3 = (s - mK*mK + mp*mp)/(2.*mp*sqrt(s)); 
+        // gam1 = (mp*mp + mLc*mLc - u)/(2.*mp*mLc); gam2 = (mLc*mLc - mpi*mpi + s)/(2.*mLc *sqrt(s)); gam3 = (s - mK*mK + mp*mp)/(2.*mp*sqrt(s));
         // printf("%lf %lf %lf\n", gam1, gam2, gam3);
         maran = acos(pow(1. + gam1 + gam2 + gam3, 2)/(1. + gam1)/(1. + gam2)/(1. + gam3) - 1.);
 
@@ -244,7 +244,7 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 		// TLorentzVector pLambda_pi = pB; pLambda_pi.Boost(-pPi.BoostVector());
 		// double zetaDelta_pi = -pDelta_pi.Angle(pLambda_pi.BoostVector());
 		// double zetaKst_pi = pKst_pi.Angle(pLambda_pi.BoostVector());
-        
+
 		return;
 
 
@@ -254,7 +254,7 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 		// for(int lambda_p = 1, lambda_p >= -1, lambda_p-=2)
 		// for(int lambda_pbar = 1, lambda_pbar >= -1, lambda_pbar-=2)
 		// {
-		
+
 		TComplex pLcpm[4][4], pppm[4][4], prLambda[4][4], amplLambda[4][4], amplKst[4][4];
 
 		for (int i=0; i<4; i++)
@@ -266,7 +266,7 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
             amplKst[i][j] = (i == j) ? 1. : 0.;
 			for (int mu=0; mu<4; mu++)
 			{
-	
+
 				pLcpm[i][j] += dgamma[mu][i][j] * cov(pLc,mu) * .5 / mLc;
 				pppm[i][j] += dgamma[mu][i][j] * cov(pP,mu) * .5 / mp;
 				prLambda[i][j] += dgamma[mu][i][j] * cov(pLambda,mu) * .5 / sqrt(s);
@@ -279,7 +279,7 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 
 		TComplex aXX[3][3];
 		for (int i=0; i<3; i++) for (int j=0; j<3; j++) aXX[i][j] = 0.;
-		
+
 		for (int i=0; i<4; i++) for (int j=0; j<4; j++) for (int k=0; k<4; k++) for (int l=0; l<4; l++)
 		{
 			aXX[0][0] += pppm[i][j]*amplLambda[j][k]*pLcpm[k][l]*(TComplex::Conjugate(amplLambda[i][l]) * g0(i,l));
@@ -310,9 +310,9 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 		ampl2_11 = aXX[1][1];
 		ampl2_12 = aXX[1][2] + aXX[2][1];
 		ampl2_22 = aXX[2][2];
-		
-		
-		
+
+
+
 		for (int i=0; i<3; i++) for (int j=0; j<3; j++) aXX[i][j] = 0.;
 		for (int lambda_p = 1; lambda_p >= -1; lambda_p -= 2) for (int lambda_Lc = 1; lambda_Lc >= -1; lambda_Lc -= 2)
 		{
@@ -344,22 +344,22 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
                 }
                 else
                 {
-                
+
                 aLambda += bLambda * SpecialFunc::WignerD(1, lambda_Lc, mu_Lc, cos(thetahat_Lambda)) * SpecialFunc::WignerD(1, mu_p, lambda_p, cos(maran + thetahat_Lambda + theta_Lambda))*
 				           ((mu_p - lambda_p) % 4 == 0 ? 1. : -1.);
-	
+
                     /* code */
                 }
 
 			}
-			
+
 			//printf("%d %lf\n", lambda_psi, aPc.Rho2());
 
-			
+
 			// aPc /= TComplex(17. - t, -sqrt(17.)*.07);
 			// aPcbar /= TComplex(17. - u, -sqrt(17.)*.07);
-			
-			
+
+
 			aXX[0][0] += aLambda.Rho2();
 			aXX[0][1] += (aLambda * TComplex::Conjugate(aKst)).Re();
 			aXX[1][0] += (aKst * TComplex::Conjugate(aLambda)).Re();
@@ -391,6 +391,6 @@ void lambdac_covariant(int num = 1, TString filename = "default.root")
 	}
 
 	tt->Write();
-	
+
 
 }
