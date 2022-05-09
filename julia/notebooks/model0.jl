@@ -130,7 +130,7 @@ begin
 		σA = mK^2-mπ^2/2
 		m, Γ₀, γ = BW.pars
 		@unpack m1,m2 = BW
-		Γ = (σ-σA) / (m^2-σA) * Γ₀*exp(-γ*σ)
+		Γ = (σ-σA) / (m^2-σA) * Γ₀*exp(-γ*σ)# * breakup(σ,m1^2,m2^2)/(2*sqrt(σ))
 		1/(m^2-σ-1im*m*Γ)
 	end
 
@@ -245,6 +245,14 @@ begin
 	end
 	isobars
 end ;
+
+# ╔═╡ c71bd0a0-80db-473a-b7b4-8018a8d86580
+ let
+ 	BW = isobars["K(700)"].Xlineshape
+	@unpack m1,m2 = BW
+	m,Γ = BW.pars
+ 	breakup(m^2,m1^2,m2^2)/(2*sqrt(m^2))
+ end
 
 # ╔═╡ 98cca824-73db-4e1c-95ae-68c3bc8574fe
 md"""
@@ -425,7 +433,11 @@ md"""
 crosscheckresult = readjson(joinpath("..","data","crosscheck.json")) ;
 
 # ╔═╡ 0867cb8e-58b4-4d23-9b1a-e18063848252
-parsepythoncomplex(s::String) = eval(Meta.parse(replace(s,"j"=>"im")))
+parsepythoncomplex(s::String) = eval(Meta.parse(
+	replace(s,
+			"("=>"",
+			")"=>"",
+		"j"=>"im")))
 
 # ╔═╡ 96b0a235-e4cf-406d-a72b-124fec4e6ba7
 Adict2matrix(d::Dict) = parsepythoncomplex.(
@@ -459,7 +471,8 @@ begin
 		M_DPD = [c * amplitude(σs0,[two_λ1,0,0,two_λ0], d)
 			for (two_λ0,two_λ1) in [(1, 1) ( 1,-1)
 								    (-1,1) (-1,-1)]]
-		M_LHCb′ = amplitudeLHCb2DPD(Adict2matrix(crosscheckresult[parname]))
+		chainamps = crosscheckresult["chains"]
+		M_LHCb′ = amplitudeLHCb2DPD(Adict2matrix(chainamps[parname]))
 		#
 		r = filter(x->!(isnan(x)), vcat(M_DPD ./ M_LHCb′))
 		push!(comparison, (; parname=parname[3:end], r, M_DPD, M_LHCb′))
@@ -472,6 +485,9 @@ end
 # ╔═╡ 849cf226-f85f-4672-8e10-30bb0de4ad93
 extrema(real(vcat(comparison.r...))) .- 1, 
 extrema(imag(vcat(comparison.r...)))
+
+# ╔═╡ c39e1b06-642a-4f8f-a01a-814d00f98977
+isobars["K(1430)"].Xlineshape.pars
 
 # ╔═╡ 7c09ae7b-f57d-44c3-a69b-aaf9ebd129fd
 select(
@@ -674,6 +690,7 @@ end
 # ╠═8c091c8c-f550-4ea6-b4ad-11aa4027468c
 # ╠═9f936b78-9235-40ef-8e34-e6ce1d88734e
 # ╠═fe3e1d61-1ad0-4509-92c7-dbac6a81343f
+# ╠═c71bd0a0-80db-473a-b7b4-8018a8d86580
 # ╠═68dbd288-7c0b-430a-9e6e-591532089c27
 # ╠═cadbfb87-8774-428d-a2ef-337bd7465563
 # ╟─877f6aab-d0ff-44d7-9ce0-e43d895be297
@@ -695,7 +712,7 @@ end
 # ╟─21c125fc-e218-4676-9846-822d951f4f1b
 # ╠═58800d91-9cd9-4a9e-95a9-6b285157385d
 # ╠═5f8973a8-faa7-4663-b896-e7f4ff9600a2
-# ╠═e9610bef-edca-43ac-96af-ad118c6879c7
+# ╟─e9610bef-edca-43ac-96af-ad118c6879c7
 # ╠═64a1d1f5-da82-4ce6-8731-ccc7439bd881
 # ╠═78dba088-6d5b-4e4b-a664-f176f9e2d673
 # ╠═28aceaed-9143-4b26-89d7-6763b2fdbc28
@@ -710,6 +727,7 @@ end
 # ╠═210740f1-769a-456c-b075-7fab2728bda6
 # ╠═bb8588a5-b439-4dc5-a15c-da894c20fbb3
 # ╠═849cf226-f85f-4672-8e10-30bb0de4ad93
+# ╠═c39e1b06-642a-4f8f-a01a-814d00f98977
 # ╠═7c09ae7b-f57d-44c3-a69b-aaf9ebd129fd
 # ╟─d547fc89-3756-49d3-8b49-ad0c56c5c3a3
 # ╠═abdeb1ac-19dc-45b2-94dd-5e64fb3d8f14
