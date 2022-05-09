@@ -25,8 +25,7 @@ from typing import Iterable, Mapping
 import qrules
 import sympy as sp
 
-from polarization.decay import IsobarNode, Particle
-from polarization.dynamics import Resonance
+from polarization.decay import IsobarNode, Particle, Resonance
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal, TypedDict
