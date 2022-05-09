@@ -15,16 +15,21 @@ K = Particle("K-", latex="K^-", spin=0, parity=-1)
 def test_as_latex_particle():
     latex = as_latex(Λ1520)
     assert latex == Λ1520.latex
-    latex = as_latex(Λ1520, render_jp=True)
-    assert latex == R"{3/2}^{-1}"
+    latex = as_latex(Λ1520, only_jp=True)
+    assert latex == R"\frac{3}{2}^{-1}"
+    latex = as_latex(Λ1520, with_jp=True)
+    assert latex == Λ1520.latex + R"\left[\frac{3}{2}^{-1}\right]"
 
 
 def test_as_latex_isobar_node():
     node = IsobarNode(Λ1520, p, K)
     latex = as_latex(node)
     assert latex == R"\Lambda(1520) \to p K^-"
-    latex = as_latex(node, render_jp=True)
-    assert latex == R"{3/2}^{-1} \to {1/2}^{+1} {0}^{-1}"
+    latex = as_latex(node, with_jp=True)
+    assert (
+        latex == R"\Lambda(1520)\left[\frac{3}{2}^{-1}\right] \to"
+        R" p\left[\frac{1}{2}^{+1}\right] K^-\left[0^{-1}\right]"
+    )
 
     node = IsobarNode(Λ1520, p, K, interaction=(2, 1))
     latex = as_latex(node)

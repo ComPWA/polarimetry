@@ -34,20 +34,21 @@ else:
 
 
 @singledispatch
-def as_latex(obj) -> str:
+def as_latex(obj, **kwargs) -> str:
     """Render objects as a LaTeX `str`.
 
     The resulting `str` can for instance be given to `IPython.display.Math`.
 
     Optional keywords:
 
-    - `render_jp`: Render a `Particle` as :math:`J^P` (spin-parity).
+    - `only_jp`: Render a `Particle` as :math:`J^P` value (spin-parity) only.
+    - `with_jp`: Render a `Particle` with value :math:`J^P` value.
     """
-    return str(obj)
+    return str(obj, **kwargs)
 
 
 @as_latex.register(complex)
-def _(obj: complex) -> str:
+def _(obj: complex, **kwargs) -> str:
     real = __downcast(obj.real)
     imag = __downcast(obj.imag)
     plus = "+" if imag >= 0 else ""
@@ -61,53 +62,65 @@ def __downcast(obj: float) -> float | int:
 
 
 @as_latex.register(sp.Basic)
-def _(obj: sp.Basic) -> str:
+def _(obj: sp.Basic, **kwargs) -> str:
     return sp.latex(obj)
 
 
 @as_latex.register(abc.Mapping)
-def _(obj: Mapping) -> str:
+def _(obj: Mapping, **kwargs) -> str:
     if len(obj) == 0:
         raise ValueError("Need at least one dictionary item")
     latex = R"\begin{array}{rcl}" + "\n"
     for lhs, rhs in obj.items():
-        latex += Rf"  {as_latex(lhs)} &=& {as_latex(rhs)} \\" + "\n"
+        latex += Rf"  {as_latex(lhs, **kwargs)} &=& {as_latex(rhs, **kwargs)} \\" + "\n"
     latex += R"\end{array}"
     return latex
 
 
 @as_latex.register(abc.Iterable)
-def _(obj: Iterable) -> str:
+def _(obj: Iterable, **kwargs) -> str:
     obj = list(obj)
     if len(obj) == 0:
         raise ValueError("Need at least one item to render as LaTeX")
     latex = R"\begin{array}{c}" + "\n"
-    for item in map(as_latex, obj):
-        latex += Rf"  {item} \\" + "\n"
+    for item in obj:
+        item_latex = as_latex(item, **kwargs)
+        latex += Rf"  {item_latex} \\" + "\n"
     latex += R"\end{array}"
     return latex
 
 
 @as_latex.register(IsobarNode)
-def _(obj: IsobarNode, render_jp: bool = False) -> str:
+def _(obj: IsobarNode, **kwargs) -> str:
     def render_arrow(node: IsobarNode) -> str:
         if node.interaction is None:
             return R"\to"
         return Rf"\xrightarrow[S={node.interaction.S}]{{L={node.interaction.L}}}"
 
-    parent = as_latex(obj.parent, render_jp)
+    parent = as_latex(obj.parent, **kwargs)
     to = render_arrow(obj)
-    child1 = as_latex(obj.child1, render_jp)
-    child2 = as_latex(obj.child2, render_jp)
+    child1 = as_latex(obj.child1, **kwargs)
+    child2 = as_latex(obj.child2, **kwargs)
     return Rf"{parent} {to} {child1} {child2}"
 
 
 @as_latex.register(Particle)
-def _(obj: Particle, render_jp: bool = False) -> str:
-    if render_jp:
-        parity = "-1" if obj.parity < 0 else "+1"
-        return f"{{{obj.spin}}}^{{{parity}}}"
+def _(obj: Particle, with_jp: bool = False, only_jp: bool = False, **kwargs) -> str:
+    if only_jp:
+        return _render_jp(obj)
+    if with_jp:
+        jp = _render_jp(obj)
+        return Rf"{obj.latex}\left[{jp}\right]"
     return obj.latex
+
+
+def _render_jp(particle: Particle) -> str:
+    parity = "-1" if particle.parity < 0 else "+1"
+    if particle.spin.denominator == 1:
+        spin = sp.latex(particle.spin)
+    else:
+        spin = Rf"\frac{{{particle.spin.numerator}}}{{{particle.spin.denominator}}}"
+    return f"{spin}^{{{parity}}}"
 
 
 def to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Resonance]:
