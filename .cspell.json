@@ -58,7 +58,7 @@
     "Manifest.toml",
     "Project.toml",
     "data/**.json",
-    "julia/notebooks/model0.jl",
+    "julia/**",
     "miscellchecks/**.C",
     "pyproject.toml",
     "pytest.ini",
