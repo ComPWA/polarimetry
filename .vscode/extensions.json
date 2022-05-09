@@ -8,6 +8,7 @@
     "julialang.language-julia",
     "ms-python.python",
     "ms-python.vscode-pylance",
+    "ms-vscode.cpptools",
     "ms-vsliveshare.vsliveshare",
     "oijaz.unicode-latex",
     "redhat.vscode-yaml",
