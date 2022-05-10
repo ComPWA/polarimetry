@@ -147,8 +147,8 @@ def to_resonance(name: str, definition: ResonanceJSON) -> Resonance:
         name,
         spin,
         parity,
-        mass_range=_to_float_range(definition["mass"]),
-        width_range=_to_float_range(definition["width"]),
+        mass_range=_to_float_range(definition["mass"], factor=1e-3),  # MeV to GeV
+        width_range=_to_float_range(definition["width"], factor=1e-3),  # MeV to GeV
         lineshape=definition["lineshape"],
     )
 
@@ -175,7 +175,7 @@ def _(obj: qrules.particle.Particle) -> Resonance:
     )
 
 
-def _to_float_range(input_str: str) -> tuple[float, float]:
+def _to_float_range(input_str: str, factor: float = 1) -> tuple[float, float]:
     """
     >>> _to_float_range("1405.1")
     (1405.1, 1405.1)
@@ -186,7 +186,10 @@ def _to_float_range(input_str: str) -> tuple[float, float]:
         _min, _max, *_ = map(float, input_str.split("-"))
     else:
         _min = _max = float(input_str)
-    return _min, _max
+    return (
+        _min * factor,
+        _max * factor,
+    )
 
 
 def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
