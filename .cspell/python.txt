@@ -22,6 +22,7 @@ qrules
 sharey
 sympify
 sympy
+tqdm
 vmax
 vmin
 xlabel
