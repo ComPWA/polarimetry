@@ -1,0 +1,15 @@
+title: Polarization sensitivity
+author: Mikhail Mikhasenko, Remco de Boer
+
+execute:
+  execute_notebooks: auto
+  timeout: -1
+
+html:
+  use_issues_button: true
+  use_repository_button: true
+
+repository:
+  url: https://github.com/redeboer/polarization-sensitivity
+  path_to_book: docs
+  branch: main
