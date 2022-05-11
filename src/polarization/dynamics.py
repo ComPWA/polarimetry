@@ -84,6 +84,28 @@ class RelativisticBreitWigner(UnevaluatedExpression):
 
 @make_commutative
 @implement_doit_method
+class BuggBreitWigner(UnevaluatedExpression):
+    def __new__(cls, s, m0, Γ0, m1, m2, γ):
+        return create_expression(cls, s, m0, Γ0, m1, m2, γ)
+
+    def evaluate(self):
+        s, m0, Γ0, m1, m2, γ = self.args
+        s_A = m1**2 - m2**2
+        g_squared = sp.Mul(
+            (s - s_A) / (m0**2 - s_A),
+            Γ0 * sp.exp(-γ * s),
+            evaluate=False,
+        )
+        rho = 2 * P(s, m1, m2) / s
+        return 1 / (m0**2 - s - sp.I * g_squared * rho)
+
+    def _latex(self, printer, *args) -> str:
+        s = printer._print(self.args[0], *args)
+        return Rf"\mathcal{{R}}_\mathrm{{Bugg}}\left({s}\right)"
+
+
+@make_commutative
+@implement_doit_method
 class EnergyDependentWidth(UnevaluatedExpression):
     def __new__(cls, s, m0, Γ0, m1, m2, L, R):
         return create_expression(cls, s, m0, Γ0, m1, m2, L, R)

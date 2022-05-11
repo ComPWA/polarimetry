@@ -90,6 +90,13 @@
         "latex",
         "python"
       ],
+      "filename": "**/*.py"
+    },
+    {
+      "dictionaries": [
+        "latex",
+        "python"
+      ],
       "filename": "**/*.pyi"
     }
   ],
