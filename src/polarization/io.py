@@ -27,7 +27,7 @@ from typing import Iterable, Mapping
 import qrules
 import sympy as sp
 
-from polarization.decay import IsobarNode, Particle, Resonance
+from polarization.decay import IsobarNode, Particle, Resonance, ThreeBodyDecay
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal, TypedDict
@@ -104,6 +104,11 @@ def _(obj: IsobarNode, **kwargs) -> str:
     child1 = as_latex(obj.child1, **kwargs)
     child2 = as_latex(obj.child2, **kwargs)
     return Rf"{parent} {to} {child1} {child2}"
+
+
+@as_latex.register(ThreeBodyDecay)
+def _(obj: ThreeBodyDecay, **kwargs) -> str:
+    return as_latex(obj.decay)
 
 
 @as_latex.register(Particle)
