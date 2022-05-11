@@ -51,7 +51,7 @@ class Q(UnevaluatedExpression):
         return sp.sqrt(Källén(s, m0**2, mk**2)) / (2 * m0)  # <-- not s!
 
     def _latex(self, printer, *args):
-        s = printer._print(self.args[0])
+        s = printer._print(self.args[0], *args)
         return Rf"q_{{{s}}}"
 
 
@@ -102,6 +102,29 @@ class BuggBreitWigner(UnevaluatedExpression):
     def _latex(self, printer, *args) -> str:
         s = printer._print(self.args[0], *args)
         return Rf"\mathcal{{R}}_\mathrm{{Bugg}}\left({s}\right)"
+
+
+@make_commutative
+@implement_doit_method
+class FlattéSWave(UnevaluatedExpression):
+    # https://github.com/redeboer/polarization-sensitivity/blob/34f5330/julia/notebooks/model0.jl#L151-L161
+    def __new__(cls, s, m0, Γ0, masses1, masses2):
+        return create_expression(cls, s, m0, Γ0, masses1, masses2)
+
+    def evaluate(self):
+        s, m0, Γ0, (ma1, mb1), (ma2, mb2) = self.args
+        p = P(s, ma1, mb1)
+        p0 = P(m0**2, ma2, mb2)
+        q = P(s, ma2, mb2)
+        q0 = P(m0**2, ma2, mb2)
+        Γ1 = Γ0 * (p / p0) * m0 / sp.sqrt(s)
+        Γ2 = Γ0 * (q / q0) * m0 / sp.sqrt(s)
+        Γ = Γ1 + Γ2
+        return 1 / (m0**2 - s - sp.I * m0 * Γ)
+
+    def _latex(self, printer, *args) -> str:
+        s = printer._print(self.args[0])
+        return Rf"\mathcal{{R}}_\mathrm{{Flatté}}\left({s}\right)"
 
 
 @make_commutative
