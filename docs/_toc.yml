@@ -1,4 +1,5 @@
 root: index
 subtrees:
   - entries:
-      - file: lambda-decay
+      - file: dynamics
+      - file: polarization
