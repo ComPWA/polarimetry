@@ -57,6 +57,7 @@
     "LICENSE",
     "Manifest.toml",
     "Project.toml",
+    "conf.py",
     "data/**.json",
     "julia/**",
     "miscellchecks/**.C",
