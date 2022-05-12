@@ -26,6 +26,8 @@ from typing import Iterable, Mapping
 
 import qrules
 import sympy as sp
+from ampform.sympy import UnevaluatedExpression
+from IPython.display import Math, display
 
 from polarization.decay import IsobarNode, Particle, Resonance, ThreeBodyDecay
 
@@ -128,6 +130,26 @@ def _render_jp(particle: Particle) -> str:
     else:
         spin = Rf"\frac{{{particle.spin.numerator}}}{{{particle.spin.denominator}}}"
     return f"{spin}^{{{parity}}}"
+
+
+def display_latex(obj) -> None:
+    latex = as_latex(obj)
+    display(Math(latex))
+
+
+def display_doit(
+    expr: UnevaluatedExpression, deep=False, terms_per_line: int | None = None
+) -> None:
+    if terms_per_line is None:
+        latex = as_latex({expr: expr.doit(deep=deep)})
+    else:
+        latex = sp.multiline_latex(
+            lhs=expr,
+            rhs=expr.doit(deep=deep),
+            terms_per_line=terms_per_line,
+            environment="eqnarray",
+        )
+    display(Math(latex))
 
 
 def load_resonance_definitions(filename: Path | str) -> dict[str, Resonance]:
