@@ -5,7 +5,9 @@ version = "0.1.0"
 
 [deps]
 Corpuscles = "e78a0372-c628-4773-9c8d-eb17d149bf93"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
 Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
