@@ -17,11 +17,8 @@ This code originates from `ComPWA/ampform#280
 """
 from __future__ import annotations
 
-import json
-import sys
 from collections import abc
 from functools import singledispatch
-from pathlib import Path
 from typing import Iterable, Mapping
 
 import qrules
@@ -30,11 +27,6 @@ from ampform.sympy import UnevaluatedExpression
 from IPython.display import Math, display
 
 from polarization.decay import IsobarNode, Particle, Resonance, ThreeBodyDecay
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal, TypedDict
-else:
-    from typing import Literal, TypedDict
 
 
 @singledispatch
@@ -152,34 +144,6 @@ def display_doit(
     display(Math(latex))
 
 
-def load_resonance_definitions(filename: Path | str) -> dict[str, Resonance]:
-    """Load `Resonance` definitions from a JSON file."""
-    with open(filename) as stream:
-        data = json.load(stream)
-    isobar_definitions = data["isobars"]
-    return to_resonance_dict(isobar_definitions)
-
-
-def to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Resonance]:
-    return {
-        name: to_resonance(name, resonance_def)
-        for name, resonance_def in definition.items()
-    }
-
-
-def to_resonance(name: str, definition: ResonanceJSON) -> Resonance:
-    spin, parity = _to_jp_pair(definition["jp"])
-    return Resonance(
-        name,
-        name,
-        spin,
-        parity,
-        mass_range=_to_float_range(definition["mass"], factor=1e-3),  # MeV to GeV
-        width_range=_to_float_range(definition["width"], factor=1e-3),  # MeV to GeV
-        lineshape=definition["lineshape"],
-    )
-
-
 @singledispatch
 def from_qrules(obj):
     raise NotImplementedError(
@@ -200,38 +164,3 @@ def _(obj: qrules.particle.Particle) -> Resonance:
         width_range=(obj.width, obj.width),
         lineshape="BreitWignerMinL",
     )
-
-
-def _to_float_range(input_str: str, factor: float = 1) -> tuple[float, float]:
-    """
-    >>> _to_float_range("1405.1")
-    (1405.1, 1405.1)
-    >>> _to_float_range("1900-2100")
-    (1900.0, 2100.0)
-    """
-    if "-" in input_str:
-        _min, _max, *_ = map(float, input_str.split("-"))
-    else:
-        _min = _max = float(input_str)
-    return (
-        _min * factor,
-        _max * factor,
-    )
-
-
-def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
-    """
-    >>> _to_jp_pair("3/2^-")
-    (3/2, -1)
-    >>> _to_jp_pair("0^+")
-    (0, 1)
-    """
-    spin, parity_sign = input_str.split("^")
-    return sp.Rational(spin), int(f"{parity_sign}1")
-
-
-class ResonanceJSON(TypedDict):
-    jp: str
-    mass: str
-    width: str
-    lineshape: Literal["BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"]

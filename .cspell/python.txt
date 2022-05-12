@@ -10,6 +10,7 @@ ipywidgets
 isinstance
 itertools
 kwargs
+lhcb
 nbconvert
 ncols
 nrows
