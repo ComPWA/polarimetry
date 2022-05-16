@@ -93,11 +93,10 @@ class BuggBreitWigner(UnevaluatedExpression):
         s_A = m1**2 - m2**2
         g_squared = sp.Mul(
             (s - s_A) / (m0**2 - s_A),
-            Γ0 * sp.exp(-γ * s),
+            m0 * Γ0 * sp.exp(-γ * s),
             evaluate=False,
         )
-        rho = 2 * P(s, m1, m2) / s
-        return 1 / (m0**2 - s - sp.I * g_squared * rho)
+        return 1 / (m0**2 - s - sp.I * g_squared)
 
     def _latex(self, printer, *args) -> str:
         s = printer._print(self.args[0], *args)
