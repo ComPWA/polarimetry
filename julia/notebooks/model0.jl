@@ -562,9 +562,6 @@ begin
 	plot!()
 end
 
-# ╔═╡ c945a6b3-e597-4409-840b-d806cc2958ad
-
-
 # ╔═╡ 4de4f76f-e0b9-4f1e-a166-8c0ae5397334
 two_Δλ(HRk) = HRk.two_λa-HRk.two_λb
 
@@ -574,12 +571,27 @@ begin
 	for s in Set(isobarnames)
 		couplingsmap = (isobarnames .== s)
 		Iξv = intensity.(Aiv, Ref(couplings .* couplingsmap));
+		# 
+		cs = couplings[couplingsmap]
+		Hs = getproperty.(chains[couplingsmap], :HRk)
 		#
-		weights = two_Δλ.(getproperty.(chains[couplingsmap], :HRk))
-		α = sum(abs2.(couplings[couplingsmap]) .* weights) /
-			sum(abs2, couplings[couplingsmap])
+		twoλ2ind(twoλ) = 2-div(twoλ+1,2)
+		expect(pauli) = sum(
+			conj(ci)*cj*pauli[twoλ2ind(two_Δλ(Hi)),twoλ2ind(two_Δλ(Hj))] *
+				(Hi.two_λb == Hj.two_λb) * (Hi.two_λa == Hj.two_λa)
+				for (ci,Hi) in zip(cs,Hs),
+				    (cj,Hj) in zip(cs,Hs)) |> real
+		σP = [
+			[0 1;1 0],
+			[0 -1im;1im 0],
+			[1 0;0 -1],
+			[1 0;0 1]
+		]
+		ex, ey, ez, e0 = expect.(σP)
 		#
-		push!(rates, (isobarname=s, rate = sum(Iξv) / I0 * 100, α))
+		αx, αy, αz = (ex,ey,ez) ./ e0
+		push!(rates, (isobarname=s, rate = sum(Iξv) / I0 * 100,
+			αz, αy, αx, α_abs = sqrt(αz^2+αy^2+αx^2)))
 	end
 	sort(
 		sort(
@@ -742,7 +754,6 @@ end
 # ╠═50d4a601-3f14-4034-9e6f-08eae9ca7d7c
 # ╠═8e06d5ec-4b98-441d-919b-7b90071e6674
 # ╠═fc62283e-8bcb-4fd1-8809-b7abeb991030
-# ╠═c945a6b3-e597-4409-840b-d806cc2958ad
 # ╠═4de4f76f-e0b9-4f1e-a166-8c0ae5397334
 # ╠═0a976167-b074-4694-ab97-aecfcd67cc25
 # ╠═cecc3975-ede0-4f00-8259-8e2b3e69022c
