@@ -58,6 +58,8 @@
     "Manifest.toml",
     "Project.toml",
     "data/**.json",
+    "julia/**",
+    "miscellchecks/**.C",
     "pyproject.toml",
     "pytest.ini",
     "setup.cfg",

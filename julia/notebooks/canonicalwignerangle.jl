@@ -94,9 +94,6 @@ plot(layout=grid(1, 2),
     plot(ms, σs -> -acos(cosζ21_for1(σs, ms²)) / ξΛ(σs) - 1,
         colorbar=true, title="ξΛ = - ζ21_for1"))
 
-# ╔═╡ f8223960-3d3f-4ceb-a1a7-da480a58aa84
-
-
 # ╔═╡ Cell order:
 # ╠═82366e00-987a-11ec-2631-455a8bb3ff96
 # ╠═fd9ea193-f54b-4ef4-98a5-e00279f48002
@@ -111,4 +108,3 @@ plot(layout=grid(1, 2),
 # ╠═a1c68d06-5d52-4357-b37f-8651a60950da
 # ╠═e142916e-b305-46c6-8ba3-44c7caeccff8
 # ╠═78a8e0dc-255f-4dc8-8001-90725a3c7b72
-# ╠═f8223960-3d3f-4ceb-a1a7-da480a58aa84

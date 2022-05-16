@@ -120,7 +120,9 @@ def to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Resonan
 def to_resonance(name: str, definition: ResonanceJSON) -> Resonance:
     spin, parity = _to_jp_pair(definition["jp"])
     return Resonance(
-        Particle(name, spin, parity),
+        name,
+        spin,
+        parity,
         mass_range=_to_float_range(definition["mass"]),
         width_range=_to_float_range(definition["width"]),
         lineshape=definition["lineshape"],
@@ -129,9 +131,9 @@ def to_resonance(name: str, definition: ResonanceJSON) -> Resonance:
 
 def _to_float_range(input_str: str) -> tuple[float, float]:
     """
-    >>> _convert_mass_string("1405.1")
+    >>> _to_float_range("1405.1")
     (1405.1, 1405.1)
-    >>> _convert_mass_string("1900-2100")
+    >>> _to_float_range("1900-2100")
     (1900.0, 2100.0)
     """
     if "-" in input_str:
@@ -143,9 +145,9 @@ def _to_float_range(input_str: str) -> tuple[float, float]:
 
 def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
     """
-    >>> _convert_jp_string("3/2^-")
+    >>> _to_jp_pair("3/2^-")
     (3/2, -1)
-    >>> _convert_jp_string("0^+")
+    >>> _to_jp_pair("0^+")
     (0, 1)
     """
     spin, parity_sign = input_str.split("^")
