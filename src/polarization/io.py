@@ -19,9 +19,8 @@ from __future__ import annotations
 
 from collections import abc
 from functools import singledispatch
-from typing import Iterable, Mapping
+from typing import Iterable, Mapping, Sequence
 
-import qrules
 import sympy as sp
 from ampform.sympy import UnevaluatedExpression
 from IPython.display import Math, display
@@ -124,6 +123,57 @@ def _render_jp(particle: Particle) -> str:
     return f"{spin}^{{{parity}}}"
 
 
+def as_markdown_table(obj: Sequence) -> str:
+    """Render objects a `str` suitable for generating a table."""
+    item_type = _determine_item_type(obj)
+    if item_type is Resonance:
+        return _as_resonance_markdown_table(obj)
+    raise NotImplementedError(
+        f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
+    )
+
+
+def _determine_item_type(obj: Sequence) -> type:
+    if len(obj) < 1:
+        raise ValueError(f"Need at least one entry to render a table")
+    item_type = type(obj[0])
+    if not all(map(lambda i: isinstance(i, item_type), obj)):
+        raise ValueError(f"Not all items are of type {item_type.__name__}")
+    return item_type
+
+
+def _as_resonance_markdown_table(items: Sequence[Resonance]) -> str:
+    have_lineshapes = any(map(lambda p: p.lineshape is not None, items))
+    column_names = [
+        "name",
+        "LaTeX",
+        "$j^P$",
+        "mass (MeV)",
+        "width (MeV)",
+    ]
+    if have_lineshapes:
+        column_names.append("lineshape")
+    src = _create_markdown_table_row(column_names)
+    src += _create_markdown_table_row(["---" for _ in column_names])
+    for particle in items:
+        row_items = [
+            particle.name,
+            f"${particle.latex}$",
+            Rf"${as_latex(particle, only_jp=True)}$",
+            f"{int(1e3 * particle.mass):,.0f}",
+            f"{int(1e3 * particle.width):,.0f}",
+        ]
+        if have_lineshapes:
+            row_items.append(particle.lineshape)
+        src += _create_markdown_table_row(row_items)
+    return src
+
+
+def _create_markdown_table_row(items: Iterable):
+    items = map(lambda i: f"{i}", items)
+    return "| " + " | ".join(items) + " |\n"
+
+
 def display_latex(obj) -> None:
     latex = as_latex(obj)
     display(Math(latex))
@@ -142,25 +192,3 @@ def display_doit(
             environment="eqnarray",
         )
     display(Math(latex))
-
-
-@singledispatch
-def from_qrules(obj):
-    raise NotImplementedError(
-        f"Cannot import QRules object of type {type(obj).__name__}"
-    )
-
-
-@from_qrules.register(qrules.particle.Particle)
-def _(obj: qrules.particle.Particle) -> Resonance:
-    if obj.parity is None:
-        raise ValueError(f"Particle {obj.name} as no parity")
-    return Resonance(
-        name=obj.name,
-        latex=obj.latex,
-        spin=obj.spin,
-        parity=obj.parity,
-        mass_range=(obj.mass, obj.mass),
-        width_range=(obj.width, obj.width),
-        lineshape="BreitWignerMinL",
-    )

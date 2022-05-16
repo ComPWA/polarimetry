@@ -1,6 +1,7 @@
 """Helper functions for constructing `attrs` decorated classes."""
 from __future__ import annotations
 
+from collections import abc
 from typing import TYPE_CHECKING, SupportsFloat
 
 import sympy as sp
@@ -28,6 +29,19 @@ def to_ls(obj: LSCoupling | tuple[int, SupportsFloat] | None) -> LSCoupling:
         L, S = obj
         return LSCoupling(L, S)
     raise TypeError(f"Cannot convert {type(obj).__name__} to {LSCoupling.__name__}")
+
+
+def to_range_tuple(
+    obj: SupportsFloat | tuple[SupportsFloat, SupportsFloat]
+) -> tuple[float, float]:
+    if isinstance(obj, abc.Iterable):
+        obj = tuple(obj)
+        if len(obj) != 2:
+            raise ValueError(f"Need two items for a range tuple, not {len(obj)}")
+        return obj
+    if isinstance(obj, SupportsFloat):
+        return float(obj), float(obj)
+    raise TypeError(f"Cannot convert {type(obj).__name__} to a range tuple")
 
 
 def to_rational(obj: SupportsFloat) -> sp.Rational:

@@ -7,7 +7,7 @@ import sympy as sp
 from attrs import field, frozen
 from attrs.validators import instance_of
 
-from polarization._attrs import assert_spin_value, to_ls, to_rational
+from polarization._attrs import assert_spin_value, to_ls, to_range_tuple, to_rational
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal
@@ -25,9 +25,11 @@ class Particle:
 
 @frozen
 class Resonance(Particle):
-    mass_range: tuple[float, float]
-    width_range: tuple[float, float]
-    lineshape: Literal["BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"]
+    mass_range: tuple[float, float] = field(converter=to_range_tuple)
+    width_range: tuple[float, float] = field(converter=to_range_tuple)
+    lineshape: Literal[
+        "BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"
+    ] | None = None
 
     @property
     def mass(self) -> float:

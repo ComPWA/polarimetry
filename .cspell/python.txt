@@ -19,7 +19,6 @@ pcolormesh
 pygments
 pyplot
 pyright
-qrules
 sharey
 sympify
 sympy
