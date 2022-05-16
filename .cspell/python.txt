@@ -22,8 +22,13 @@ pyright
 sharey
 sympify
 sympy
+tqdm
 vmax
 vmin
 xlabel
 xreplace
+xticklabels
+xticks
 ylabel
+yticklabels
+yticks
