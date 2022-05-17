@@ -46,6 +46,9 @@ myst_enable_extensions = [
     "substitution",
 ]
 nb_execution_allow_errors = False
+nb_execution_excludepatterns = [
+    "polarization.ipynb",
+]
 nb_execution_mode = get_execution_mode()
 nb_execution_timeout = -1
 nb_output_stderr = "show"
