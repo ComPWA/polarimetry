@@ -57,7 +57,7 @@ class Q(UnevaluatedExpression):
 
 @make_commutative
 @implement_doit_method
-class RelativisticBreitWigner(UnevaluatedExpression):
+class BreitWignerMinL(UnevaluatedExpression):
     def __new__(cls, s, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod):
         return create_expression(cls, s, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod)
 
