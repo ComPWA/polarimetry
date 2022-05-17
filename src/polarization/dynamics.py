@@ -58,22 +58,22 @@ class Q(UnevaluatedExpression):
 @make_commutative
 @implement_doit_method
 class RelativisticBreitWigner(UnevaluatedExpression):
-    def __new__(cls, s, m0, Γ0, m1, m2, l_R, l_Λc, R):
-        return create_expression(cls, s, m0, Γ0, m1, m2, l_R, l_Λc, R)
+    def __new__(cls, s, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod):
+        return create_expression(cls, s, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod)
 
     def evaluate(self):
-        s, m0, Γ0, m1, m2, l_R, l_Λc, R = self.args
+        s, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
         q = Q(s, m1, m2)
         q0 = Q(m0**2, m1, m2)
         p = P(s, m1, m2)
         p0 = P(m0**2, m1, m2)
-        width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_R, R)
+        width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec)
         return sp.Mul(
-            (q / q0) ** l_Λc,
-            BlattWeisskopf(q * R, l_Λc) / BlattWeisskopf(q0 * R, l_Λc),
+            (q / q0) ** l_prod,
+            BlattWeisskopf(q * R_prod, l_prod) / BlattWeisskopf(q0 * R_prod, l_prod),
             1 / (m0**2 - s - sp.I * m0 * width),
-            (p / p0) ** l_R,
-            BlattWeisskopf(p * R, l_R) / BlattWeisskopf(p0 * R, l_R),
+            (p / p0) ** l_dec,
+            BlattWeisskopf(p * R_dec, l_dec) / BlattWeisskopf(p0 * R_dec, l_dec),
             evaluate=False,
         )
 
