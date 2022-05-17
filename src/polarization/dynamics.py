@@ -58,13 +58,39 @@ class Q(UnevaluatedExpression):
 @make_commutative
 @implement_doit_method
 class BreitWignerMinL(UnevaluatedExpression):
-    def __new__(cls, s, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod):
-        return create_expression(cls, s, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod)
+    def __new__(
+        cls,
+        s,
+        decaying_mass,
+        spectator_mass,
+        resonance_mass,
+        resonance_width,
+        child2_mass,
+        child1_mass,
+        l_dec,
+        l_prod,
+        R_dec,
+        R_prod,
+    ):
+        return create_expression(
+            cls,
+            s,
+            decaying_mass,
+            spectator_mass,
+            resonance_mass,
+            resonance_width,
+            child2_mass,
+            child1_mass,
+            l_dec,
+            l_prod,
+            R_dec,
+            R_prod,
+        )
 
     def evaluate(self):
-        s, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
-        q = Q(s, m1, m2)
-        q0 = Q(m0**2, m1, m2)
+        s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
+        q = Q(s, m_top, m_spec)
+        q0 = Q(m0**2, m_top, m_spec)
         p = P(s, m1, m2)
         p0 = P(m0**2, m1, m2)
         width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec)
