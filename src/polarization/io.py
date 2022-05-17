@@ -101,7 +101,7 @@ def _(obj: IsobarNode, **kwargs) -> str:
 
 @as_latex.register(ThreeBodyDecay)
 def _(obj: ThreeBodyDecay, **kwargs) -> str:
-    return as_latex(obj.decay)
+    return as_latex(obj.decay, **kwargs)
 
 
 @as_latex.register(Particle)
