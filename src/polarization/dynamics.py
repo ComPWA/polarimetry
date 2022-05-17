@@ -90,7 +90,7 @@ class BuggBreitWigner(UnevaluatedExpression):
 
     def evaluate(self):
         s, m0, Γ0, m1, m2, γ = self.args
-        s_A = m1**2 - m2**2
+        s_A = m1**2 - m2**2 / 2  # Adler zero
         g_squared = sp.Mul(
             (s - s_A) / (m0**2 - s_A),
             m0 * Γ0 * sp.exp(-γ * s),
