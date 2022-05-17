@@ -65,7 +65,7 @@ def load_three_body_decays(filename: str) -> ThreeBodyDecay:
         if resonance.name.startswith("K"):
             child1, child2, sibling = π, K, p
         elif resonance.name.startswith("L"):
-            child1, child2, sibling = p, K, π
+            child1, child2, sibling = K, p, π
         elif resonance.name.startswith("D"):
             child1, child2, sibling = p, π, K
         else:
