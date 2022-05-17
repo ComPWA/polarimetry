@@ -78,10 +78,10 @@ def load_three_body_decays(filename: str) -> ThreeBodyDecay:
                 child1=child1,
                 child2=child2,
                 interaction=generate_L_min(
-                    resonance, child1, child2, conserve_parity=False
+                    resonance, child1, child2, conserve_parity=True
                 ),
             ),
-            interaction=generate_L_min(Λc, sibling, resonance, conserve_parity=True),
+            interaction=generate_L_min(Λc, sibling, resonance, conserve_parity=False),
         )
         return ThreeBodyDecay(decay)
 
