@@ -1,7 +1,8 @@
 from pathlib import Path
 
 from polarization.decay import IsobarNode, Particle
-from polarization.io import as_latex, load_resonance_definitions
+from polarization.io import as_latex
+from polarization.lhcb import load_resonance_definitions
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
 Λc = Particle("Λc", latex=R"\Lambda_c^+", spin=0.5, parity=+1)
@@ -15,9 +16,9 @@ def test_as_latex_particle():
     latex = as_latex(Λ1520)
     assert latex == Λ1520.latex
     latex = as_latex(Λ1520, only_jp=True)
-    assert latex == R"\frac{3}{2}^{-1}"
+    assert latex == R"\frac{3}{2}^-"
     latex = as_latex(Λ1520, with_jp=True)
-    assert latex == Λ1520.latex + R"\left[\frac{3}{2}^{-1}\right]"
+    assert latex == Λ1520.latex + R"\left[\frac{3}{2}^-\right]"
 
 
 def test_as_latex_isobar_node():
@@ -26,8 +27,8 @@ def test_as_latex_isobar_node():
     assert latex == R"\Lambda(1520) \to p K^-"
     latex = as_latex(node, with_jp=True)
     assert (
-        latex == R"\Lambda(1520)\left[\frac{3}{2}^{-1}\right] \to"
-        R" p\left[\frac{1}{2}^{+1}\right] K^-\left[0^{-1}\right]"
+        latex == R"\Lambda(1520)\left[\frac{3}{2}^-\right] \to"
+        R" p\left[\frac{1}{2}^+\right] K^-\left[0^-\right]"
     )
 
     node = IsobarNode(Λ1520, p, K, interaction=(2, 1))
