@@ -121,13 +121,13 @@ def to_resonance(name: str, definition: ResonanceJSON) -> Resonance:
         name,
         spin,
         parity,
-        mass=_average_float(definition["mass"], factor=1e-3),  # MeV to GeV
-        width=_average_float(definition["width"], factor=1e-3),  # MeV to GeV
+        mass=_average_float(definition["mass"]) * 1e-3,  # MeV to GeV
+        width=_average_float(definition["width"]) * 1e-3,  # MeV to GeV
         lineshape=definition["lineshape"],
     )
 
 
-def _average_float(input_str: str, factor: float = 1) -> tuple[float, float]:
+def _average_float(input_str: str) -> tuple[float, float]:
     """
     >>> _average_float("1405.1")
     1405.1
