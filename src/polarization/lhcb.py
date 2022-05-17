@@ -21,32 +21,32 @@ else:
     latex=R"\Lambda_c^+",
     spin=0.5,
     parity=+1,
-    mass_range=2.28646,
-    width_range=3.25e-12,
+    mass=2.28646,
+    width=3.25e-12,
 )
 p = Resonance(
     name="p",
     latex="p",
     spin=0.5,
     parity=+1,
-    mass_range=0.938272046,
-    width_range=0.0,
+    mass=0.938272046,
+    width=0.0,
 )
 K = Resonance(
     name="K⁻",
     latex="K^-",
     spin=0,
     parity=-1,
-    mass_range=0.493677,
-    width_range=5.317e-17,
+    mass=0.493677,
+    width=5.317e-17,
 )
 π = Resonance(
     name="π⁺",
     latex=R"\pi^+",
     spin=0,
     parity=-1,
-    mass_range=0.13957018,
-    width_range=2.5284e-17,
+    mass=0.13957018,
+    width=2.5284e-17,
 )
 
 # https://github.com/redeboer/polarization-sensitivity/blob/34f5330/julia/notebooks/model0.jl#L43-L47
@@ -55,8 +55,8 @@ K = Resonance(
     latex=R"\Sigma^-",
     spin=0.5,
     parity=+1,
-    mass_range=1.18937,
-    width_range=4.45e-15,
+    mass=1.18937,
+    width=4.45e-15,
 )
 
 
@@ -121,27 +121,23 @@ def to_resonance(name: str, definition: ResonanceJSON) -> Resonance:
         name,
         spin,
         parity,
-        mass_range=_to_float_range(definition["mass"], factor=1e-3),  # MeV to GeV
-        width_range=_to_float_range(definition["width"], factor=1e-3),  # MeV to GeV
+        mass=_average_float(definition["mass"], factor=1e-3),  # MeV to GeV
+        width=_average_float(definition["width"], factor=1e-3),  # MeV to GeV
         lineshape=definition["lineshape"],
     )
 
 
-def _to_float_range(input_str: str, factor: float = 1) -> tuple[float, float]:
+def _average_float(input_str: str, factor: float = 1) -> tuple[float, float]:
     """
-    >>> _to_float_range("1405.1")
-    (1405.1, 1405.1)
-    >>> _to_float_range("1900-2100")
-    (1900.0, 2100.0)
+    >>> _average_float("1405.1")
+    1405.1
+    >>> _average_float("1900-2100")
+    2000.0
     """
     if "-" in input_str:
         _min, _max, *_ = map(float, input_str.split("-"))
-    else:
-        _min = _max = float(input_str)
-    return (
-        _min * factor,
-        _max * factor,
-    )
+        return (_max + _min) / 2
+    return float(input_str)
 
 
 def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
