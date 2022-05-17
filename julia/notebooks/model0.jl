@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.18.0
+# v0.19.4
 
 using Markdown
 using InteractiveUtils
@@ -432,6 +432,16 @@ md"""
 # ╔═╡ 38234e92-aa91-4728-b8d8-8f7dd9f25552
 crosscheckresult = readjson(joinpath("..","data","crosscheck.json")) ;
 
+# ╔═╡ 210740f1-769a-456c-b075-7fab2728bda6
+σs0 = Invariants(ms,
+	σ1 = crosscheckresult["chainvars"]["m2kpi"],
+	σ2 = crosscheckresult["chainvars"]["m2pk"])
+
+# ╔═╡ 0eefeac7-53cb-49be-9be0-bad500e28c1b
+md"""
+#### Check isobar lineshapes
+"""
+
 # ╔═╡ 0867cb8e-58b4-4d23-9b1a-e18063848252
 parsepythoncomplex(s::String) = eval(Meta.parse(
 	replace(s,
@@ -439,29 +449,39 @@ parsepythoncomplex(s::String) = eval(Meta.parse(
 			")"=>"",
 		"j"=>"im")))
 
-# ╔═╡ 96b0a235-e4cf-406d-a72b-124fec4e6ba7
-Adict2matrix(d::Dict) = parsepythoncomplex.(
-	[d["A++"] d["A+-"]
-	 d["A-+"] d["A--"]])
-
-# ╔═╡ 210740f1-769a-456c-b075-7fab2728bda6
-σs0 = Invariants(ms,
-	σ1 = 0.7980703453578917,
-	σ2 = 3.6486261122281745)
-
 # ╔═╡ f2570431-067f-424c-822d-9c7a8d6764f1
 begin
+	tfK892BW0 = crosscheckresult["lineshapes"]["BW_K(892)_p^1_q^0"] |> 
+		parsepythoncomplex
 	myK892BW0 = parname2decaychain("ArK(892)1")[2].Xlineshape(σs0[1])
-	tfK892BW0 = 2.1687201455088894+23.58225917009096im
-	myK892BW0 ≈ tfK892BW0
+	@assert myK892BW0 ≈ tfK892BW0
 end
 
 # ╔═╡ e972aeb7-2724-4f7b-b00e-744e2ee7ef8f
 begin
 	myL1405BW0 = parname2decaychain("ArL(1405)1")[2].Xlineshape(σs0[2])
-	tfL1405BW0 = -0.5636481410171861+0.13763637759224928im
-	tfL1405BW0 ≈ myL1405BW0
+	tfL1405BW0 = crosscheckresult["lineshapes"]["BW_L(1405)_p^0_q^0"] |> 
+		parsepythoncomplex
+	@assert tfL1405BW0 ≈ myL1405BW0
 end
+
+# ╔═╡ 5d1d652f-6cb1-4e68-94d5-1f7fd2b2103f
+begin
+	myL1690BW0 = parname2decaychain("ArL(1690)1")[2].Xlineshape(σs0[2])
+	tfL1690BW0 = crosscheckresult["lineshapes"]["BW_L(1690)_p^2_q^1"] |> 
+		parsepythoncomplex
+	@assert tfL1690BW0 ≈ myL1690BW0
+end
+
+# ╔═╡ 8f43afd3-077f-423b-8d2b-68cb533870ad
+md"""
+#### Amplitudes matrices
+"""
+
+# ╔═╡ 96b0a235-e4cf-406d-a72b-124fec4e6ba7
+Adict2matrix(d::Dict) = parsepythoncomplex.(
+	[d["A++"] d["A+-"]
+	 d["A-+"] d["A--"]])
 
 # ╔═╡ bb8588a5-b439-4dc5-a15c-da894c20fbb3
 begin
@@ -485,9 +505,6 @@ end
 # ╔═╡ 849cf226-f85f-4672-8e10-30bb0de4ad93
 extrema(real(vcat(comparison.r...))) .- 1,
 extrema(imag(vcat(comparison.r...)))
-
-# ╔═╡ c39e1b06-642a-4f8f-a01a-814d00f98977
-isobars["K(1430)"].Xlineshape.pars
 
 # ╔═╡ 7c09ae7b-f57d-44c3-a69b-aaf9ebd129fd
 select(
@@ -602,7 +619,6 @@ end
 
 # ╔═╡ cecc3975-ede0-4f00-8259-8e2b3e69022c
 begin
-	#
 	delta_i(n,iv...) = (v=zeros(n); v[[iv...]] .= 1.0; v)
 	nchains = length(couplings)
 	ratematrix = zeros(nchains,nchains)
@@ -731,15 +747,17 @@ end
 # ╠═168707da-d42c-4b2f-94b6-f7bc15cb29cb
 # ╠═8d8824e8-7809-4368-840c-b8f6d38ad7c2
 # ╟─40a85984-0588-4e72-bb99-ab555d82c020
+# ╠═38234e92-aa91-4728-b8d8-8f7dd9f25552
+# ╠═210740f1-769a-456c-b075-7fab2728bda6
+# ╟─0eefeac7-53cb-49be-9be0-bad500e28c1b
+# ╠═0867cb8e-58b4-4d23-9b1a-e18063848252
 # ╠═f2570431-067f-424c-822d-9c7a8d6764f1
 # ╠═e972aeb7-2724-4f7b-b00e-744e2ee7ef8f
-# ╠═38234e92-aa91-4728-b8d8-8f7dd9f25552
-# ╠═0867cb8e-58b4-4d23-9b1a-e18063848252
+# ╠═5d1d652f-6cb1-4e68-94d5-1f7fd2b2103f
+# ╟─8f43afd3-077f-423b-8d2b-68cb533870ad
 # ╠═96b0a235-e4cf-406d-a72b-124fec4e6ba7
-# ╠═210740f1-769a-456c-b075-7fab2728bda6
 # ╠═bb8588a5-b439-4dc5-a15c-da894c20fbb3
 # ╠═849cf226-f85f-4672-8e10-30bb0de4ad93
-# ╠═c39e1b06-642a-4f8f-a01a-814d00f98977
 # ╠═7c09ae7b-f57d-44c3-a69b-aaf9ebd129fd
 # ╟─d547fc89-3756-49d3-8b49-ad0c56c5c3a3
 # ╠═abdeb1ac-19dc-45b2-94dd-5e64fb3d8f14
