@@ -77,15 +77,22 @@ def load_three_body_decays(filename: str) -> ThreeBodyDecay:
                 parent=resonance,
                 child1=child1,
                 child2=child2,
-                interaction=generate_L_min(resonance, child1, child2),
+                interaction=generate_L_min(
+                    resonance, child1, child2, conserve_parity=False
+                ),
             ),
-            interaction=generate_L_min(Λc, sibling, resonance),
+            interaction=generate_L_min(Λc, sibling, resonance, conserve_parity=True),
         )
         return ThreeBodyDecay(decay)
 
-    def generate_L_min(parent: Resonance, child1: Resonance, child2: Resonance) -> int:
+    def generate_L_min(
+        parent: Resonance, child1: Resonance, child2: Resonance, conserve_parity: bool
+    ) -> int:
         ls = generate_ls_couplings(parent.spin, child1.spin, child2.spin)
-        ls = filter_parity_violating_ls(ls, parent.parity, child1.parity, child2.parity)
+        if conserve_parity:
+            ls = filter_parity_violating_ls(
+                ls, parent.parity, child1.parity, child2.parity
+            )
         return min(ls)
 
     resonances = load_resonance_definitions(filename)
