@@ -62,8 +62,8 @@ D(XXXX)2 -> K^{Lc->Delta K}_{-1/2,0}
 K(XXXX)1 -> K^{Lc->Delta K}_{0,-1/2}
 K(XXXX)2 -> K^{Lc->Delta K}_{0,+1/2}
 # other K: K(892)
-K(XXXX)1 -> K^{Lc->Lpi}_{ +,1/2}
-K(XXXX)2 -> K^{Lc->Lpi}_{-1,1/2}
+K(XXXX)1 -> K^{Lc->Lpi}_{ 0,+1/2}
+K(XXXX)2 -> K^{Lc->Lpi}_{-1,+1/2}
 K(XXXX)3 -> K^{Lc->Lpi}_{+1,-1/2}
 K(XXXX)4 -> K^{Lc->Lpi}_{ 0,-1/2}
 ```
