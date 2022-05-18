@@ -128,6 +128,8 @@ def as_markdown_table(obj: Sequence) -> str:
     item_type = _determine_item_type(obj)
     if item_type is Resonance:
         return _as_resonance_markdown_table(obj)
+    if item_type is ThreeBodyDecay:
+        return _as_decay_markdown_table(obj)
     raise NotImplementedError(
         f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
     )
@@ -147,14 +149,13 @@ def _as_resonance_markdown_table(items: Sequence[Resonance]) -> str:
     column_names = [
         "name",
         "LaTeX",
-        "$j^P$",
+        "$J^P$",
         "mass (MeV)",
         "width (MeV)",
     ]
     if have_lineshapes:
         column_names.append("lineshape")
-    src = _create_markdown_table_row(column_names)
-    src += _create_markdown_table_row(["---" for _ in column_names])
+    src = _create_markdown_table_header(column_names)
     for particle in items:
         row_items = [
             particle.name,
@@ -166,6 +167,38 @@ def _as_resonance_markdown_table(items: Sequence[Resonance]) -> str:
         if have_lineshapes:
             row_items.append(particle.lineshape)
         src += _create_markdown_table_row(row_items)
+    return src
+
+
+def _as_decay_markdown_table(decays: Sequence[ThreeBodyDecay]) -> str:
+    column_names = [
+        "resonance",
+        R"$J^P$",
+        R"mass (MeV)",
+        R"width (MeV)",
+        R"$L_\mathrm{dec}^\mathrm{min}$",
+        R"$L_\mathrm{prod}^\mathrm{min}$",
+        "lineshape",
+    ]
+    src = _create_markdown_table_header(column_names)
+    for decay in decays:
+        child1, child2 = map(as_latex, decay.decay_products)
+        row_items = [
+            Rf"${decay.resonance.latex} \to" Rf" {child1} {child2}$",
+            Rf"${as_latex(decay.resonance, only_jp=True)}$",
+            f"{int(1e3 * decay.resonance.mass):,.0f}",
+            f"{int(1e3 * decay.resonance.width):,.0f}",
+            decay.outgoing_ls.L,
+            decay.incoming_ls.L,
+            decay.resonance.lineshape,
+        ]
+        src += _create_markdown_table_row(row_items)
+    return src
+
+
+def _create_markdown_table_header(column_names: list[str]):
+    src = _create_markdown_table_row(column_names)
+    src += _create_markdown_table_row(["---" for _ in column_names])
     return src
 
 
