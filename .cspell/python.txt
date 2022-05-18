@@ -2,9 +2,11 @@ arange
 clim
 cmap
 elif
+funcs
 functools
 imag
 ipykernel
+ipynb
 ipython
 ipywidgets
 isinstance

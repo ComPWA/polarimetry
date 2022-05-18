@@ -4,6 +4,10 @@
 
 ```
 
+:::{dropdown} Notebook execution times
+
 ```{nb-exec-table}
 
 ```
+
+:::
