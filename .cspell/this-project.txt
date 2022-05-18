@@ -7,3 +7,4 @@ msigma
 nbformat
 phsp
 Remco
+toctree

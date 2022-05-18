@@ -1,3 +1,8 @@
+"""Functions for dynamics lineshapes and kinematics.
+
+.. seealso:: :doc:`/dynamics`
+"""
+
 # pyright: reportPrivateUsage=false
 from __future__ import annotations
 

@@ -1,4 +1,7 @@
-"""Import functions that are specifically for this LHCb analysis."""
+"""Import functions that are specifically for this LHCb analysis.
+
+.. seealso:: :doc:`/cross-check`
+"""
 from __future__ import annotations
 
 import json

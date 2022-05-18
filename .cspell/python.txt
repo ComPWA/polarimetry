@@ -1,3 +1,4 @@
+ampform
 arange
 clim
 cmap
@@ -18,10 +19,12 @@ nbconvert
 ncols
 nrows
 numpy
+pathlib
 pcolormesh
 pygments
 pyplot
 pyright
+seealso
 sharey
 sympify
 sympy

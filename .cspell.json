@@ -59,6 +59,7 @@
     "Project.toml",
     "conf.py",
     "data/**.json",
+    "docs/_templates/*",
     "julia/**",
     "miscellchecks/**.C",
     "pyproject.toml",
