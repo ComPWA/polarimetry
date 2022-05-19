@@ -102,6 +102,7 @@ myst_enable_extensions = [
     "dollarmath",
     "substitution",
 ]
+myst_render_markdown_format = "myst"
 nb_execution_allow_errors = False
 nb_execution_mode = get_execution_mode()
 nb_execution_timeout = -1
