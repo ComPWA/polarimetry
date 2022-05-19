@@ -3,8 +3,8 @@
 ```{toctree}
 dynamics
 amplitude-model
-phase-space
 cross-check
+phase-space
 intensity-distribution
 polarization
 API <api/polarization>
