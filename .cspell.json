@@ -57,7 +57,9 @@
     "LICENSE",
     "Manifest.toml",
     "Project.toml",
+    "conf.py",
     "data/**.json",
+    "docs/_templates/*",
     "julia/**",
     "miscellchecks/**.C",
     "pyproject.toml",
@@ -84,7 +86,24 @@
         "python"
       ],
       "filename": "**/*.ipynb"
+    },
+    {
+      "dictionaries": [
+        "latex",
+        "python"
+      ],
+      "filename": "**/*.py"
+    },
+    {
+      "dictionaries": [
+        "latex",
+        "python"
+      ],
+      "filename": "**/*.pyi"
     }
   ],
-  "version": "0.2"
+  "version": "0.2",
+  "ignoreWords": [
+    "tableofcontents"
+  ]
 }

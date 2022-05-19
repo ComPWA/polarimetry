@@ -1,7 +1,10 @@
+"""Functions for dynamics lineshapes and kinematics.
+
+.. seealso:: :doc:`/dynamics`
+"""
+
 # pyright: reportPrivateUsage=false
 from __future__ import annotations
-
-import sys
 
 import sympy as sp
 from ampform.sympy import (
@@ -10,14 +13,6 @@ from ampform.sympy import (
     implement_doit_method,
     make_commutative,
 )
-from attrs import frozen
-
-from polarization.decay import Particle
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal
-else:
-    from typing import Literal
 
 
 @make_commutative
@@ -61,35 +56,105 @@ class Q(UnevaluatedExpression):
         return sp.sqrt(Källén(s, m0**2, mk**2)) / (2 * m0)  # <-- not s!
 
     def _latex(self, printer, *args):
-        s = printer._print(self.args[0])
+        s = printer._print(self.args[0], *args)
         return Rf"q_{{{s}}}"
 
 
 @make_commutative
 @implement_doit_method
-class RelativisticBreitWigner(UnevaluatedExpression):
-    def __new__(cls, s, m0, Γ0, m1, m2, l_R, l_Λc, R):
-        return create_expression(cls, s, m0, Γ0, m1, m2, l_R, l_Λc, R)
+class BreitWignerMinL(UnevaluatedExpression):
+    def __new__(
+        cls,
+        s,
+        decaying_mass,
+        spectator_mass,
+        resonance_mass,
+        resonance_width,
+        child2_mass,
+        child1_mass,
+        l_dec,
+        l_prod,
+        R_dec,
+        R_prod,
+    ):
+        return create_expression(
+            cls,
+            s,
+            decaying_mass,
+            spectator_mass,
+            resonance_mass,
+            resonance_width,
+            child2_mass,
+            child1_mass,
+            l_dec,
+            l_prod,
+            R_dec,
+            R_prod,
+        )
 
     def evaluate(self):
-        s, m0, Γ0, m1, m2, l_R, l_Λc, R = self.args
-        q = Q(s, m1, m2)
-        q0 = Q(m0**2, m1, m2)
+        s, m_top, m_spec, m0, Γ0, m1, m2, l_dec, l_prod, R_dec, R_prod = self.args
+        q = Q(s, m_top, m_spec)
+        q0 = Q(m0**2, m_top, m_spec)
         p = P(s, m1, m2)
         p0 = P(m0**2, m1, m2)
-        width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_R, R)
+        width = EnergyDependentWidth(s, m0, Γ0, m1, m2, l_dec, R_dec)
         return sp.Mul(
-            (q / q0) ** l_Λc,
-            BlattWeisskopf(q * R, l_Λc) / BlattWeisskopf(q0 * R, l_Λc),
+            (q / q0) ** l_prod,
+            BlattWeisskopf(q * R_prod, l_prod) / BlattWeisskopf(q0 * R_prod, l_prod),
             1 / (m0**2 - s - sp.I * m0 * width),
-            (p / p0) ** l_R,
-            BlattWeisskopf(p * R, l_R) / BlattWeisskopf(p0 * R, l_R),
+            (p / p0) ** l_dec,
+            BlattWeisskopf(p * R_dec, l_dec) / BlattWeisskopf(p0 * R_dec, l_dec),
             evaluate=False,
         )
 
     def _latex(self, printer, *args) -> str:
         s = printer._print(self.args[0])
         return Rf"\mathcal{{R}}\left({s}\right)"
+
+
+@make_commutative
+@implement_doit_method
+class BuggBreitWigner(UnevaluatedExpression):
+    def __new__(cls, s, m0, Γ0, m1, m2, γ):
+        return create_expression(cls, s, m0, Γ0, m1, m2, γ)
+
+    def evaluate(self):
+        s, m0, Γ0, m1, m2, γ = self.args
+        s_A = m1**2 - m2**2 / 2  # Adler zero
+        g_squared = sp.Mul(
+            (s - s_A) / (m0**2 - s_A),
+            m0 * Γ0 * sp.exp(-γ * s),
+            evaluate=False,
+        )
+        return 1 / (m0**2 - s - sp.I * g_squared)
+
+    def _latex(self, printer, *args) -> str:
+        s = printer._print(self.args[0], *args)
+        return Rf"\mathcal{{R}}_\mathrm{{Bugg}}\left({s}\right)"
+
+
+@make_commutative
+@implement_doit_method
+class FlattéSWave(UnevaluatedExpression):
+    # https://github.com/redeboer/polarization-sensitivity/blob/34f5330/julia/notebooks/model0.jl#L151-L161
+    def __new__(cls, s, m0, Γ0, masses1, masses2):
+        return create_expression(cls, s, m0, Γ0, masses1, masses2)
+
+    def evaluate(self):
+        s, m0, Γ0, (ma1, mb1), (ma2, mb2) = self.args
+        p = P(s, ma1, mb1)
+        p0 = P(m0**2, ma2, mb2)
+        q = P(s, ma2, mb2)
+        q0 = P(m0**2, ma2, mb2)
+        Γ1 = Γ0 * (p / p0) * m0 / sp.sqrt(s)
+        Γ2 = Γ0 * (q / q0) * m0 / sp.sqrt(s)
+        Γ = Γ1 + Γ2
+        return 1 / (m0**2 - s - sp.I * m0 * Γ)
+
+    def _latex(self, printer, *args) -> str:
+        s = printer._print(self.args[0])
+        return Rf"\mathcal{{R}}_\mathrm{{Flatté}}\left({s}\right)"
 
 
 @make_commutative
@@ -137,23 +202,3 @@ class BlattWeisskopf(UnevaluatedExpression):
     def _latex(self, printer, *args):
         z, L = map(printer._print, self.args)
         return Rf"F_{{{L}}}\left({z}\right)"
-
-
-@frozen
-class Resonance(Particle):
-    mass_range: tuple[float, float]
-    width_range: tuple[float, float]
-    lineshape: Literal["BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"]
-
-    @property
-    def mass(self) -> float:
-        return _compute_average(self.mass_range)
-
-    @property
-    def width(self) -> float:
-        return _compute_average(self.width_range)
-
-
-def _compute_average(range_def: float | tuple[float, float]) -> float:
-    _min, _max = range_def
-    return (_max + _min) / 2

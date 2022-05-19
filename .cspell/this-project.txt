@@ -2,6 +2,9 @@ ComPWA
 Conda
 heli
 ifhyphenaverage
+Mikhasenko
 msigma
 nbformat
 phsp
+Remco
+toctree
