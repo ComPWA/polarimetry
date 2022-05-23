@@ -1,3 +1,4 @@
+# cspell:ignore modelparameters modelstudies
 """Import functions that are specifically for this LHCb analysis.
 
 .. seealso:: :doc:`/cross-check`
@@ -9,8 +10,9 @@ import sys
 from pathlib import Path
 
 import sympy as sp
+from sympy.core.symbol import Str
 
-from polarization.decay import IsobarNode, Resonance, ThreeBodyDecay
+from polarization.decay import IsobarNode, Particle, Resonance, ThreeBodyDecay
 from polarization.spin import filter_parity_violating_ls, generate_ls_couplings
 
 if sys.version_info < (3, 8):
@@ -63,7 +65,7 @@ K = Resonance(
 )
 
 
-def load_three_body_decays(filename: str) -> ThreeBodyDecay:
+def load_three_body_decays(filename: str) -> list[ThreeBodyDecay]:
     def create_isobar(resonance: Resonance) -> ThreeBodyDecay:
         if resonance.name.startswith("K"):
             child1, child2, sibling = π, K, p
@@ -108,6 +110,17 @@ def load_resonance_definitions(filename: Path | str) -> dict[str, Resonance]:
         data = json.load(stream)
     isobar_definitions = data["isobars"]
     return to_resonance_dict(isobar_definitions)
+
+
+def load_model_parameters(
+    filename: Path | str, model_number: int = 0
+) -> dict[sp.Indexed | sp.Symbol, complex | float]:
+    with open("../data/modelparameters.json") as stream:
+        json_data = json.load(stream)
+    json_parameters = json_data["modelstudies"][model_number]["parameters"]
+    json_parameters["ArK(892)1"] = "1.0 ± 0.0"
+    json_parameters["AiK(892)1"] = "0.0 ± 0.0"
+    return to_symbol_definitions(json_parameters)
 
 
 def to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Resonance]:
@@ -159,3 +172,77 @@ class ResonanceJSON(TypedDict):
     mass: str
     width: str
     lineshape: Literal["BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"]
+
+
+def to_symbol_definitions(
+    parameter_dict: dict[str, str]
+) -> dict[sp.Basic, complex | float]:
+    key_to_val: dict[str, complex | float] = {}
+    for key, str_value in parameter_dict.items():
+        if key.startswith("Ar"):
+            identifier = key[2:]
+            str_imag = parameter_dict[f"Ai{identifier}"]
+            real = to_float(str_value)
+            imag = to_float(str_imag)
+            key_to_val[f"A{identifier}"] = complex(real, imag)
+        elif key.startswith("Ai"):
+            continue
+        else:
+            key_to_val[key] = to_float(str_value)
+    return {to_symbol(key): value for key, value in key_to_val.items()}
+
+
+def to_float(str_value: str) -> float:
+    value, _ = map(float, str_value.split(" ± "))
+    return value
+
+
+def to_symbol(key: str) -> sp.Indexed | sp.Symbol:
+    H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
+    half: sp.Rational = sp.S.Half
+    if key.startswith("A"):
+        res = stringify(key[1:-1])
+        i = int(key[-1])
+        if str(res).startswith("L"):
+            if i == 1:
+                return H_prod[res, +half, 0]
+            if i == 2:
+                return H_prod[res, -half, 0]
+        if str(res).startswith("D"):
+            if i == 1:
+                return H_prod[res, +half, 0]
+            if i == 2:
+                return H_prod[res, -half, 0]
+        if str(res).startswith("K"):
+            if str(res) in {"K(700)", "K(1430)"}:
+                if i == 1:
+                    return H_prod[res, 0, -half]
+                if i == 2:
+                    return H_prod[res, 0, +half]
+            else:
+                if i == 1:
+                    return H_prod[res, 0, +half]
+                if i == 2:
+                    return H_prod[res, -1, +half]
+                if i == 3:
+                    return H_prod[res, +1, -half]
+                if i == 4:
+                    return H_prod[res, 0, -half]
+    if key.startswith("gamma"):
+        res = stringify(key[5:])
+        return sp.Symbol(Rf"\gamma_{{{res}}}")
+    if key.startswith("M"):
+        res = stringify(key[1:])
+        return sp.Symbol(Rf"m_{{{res}}}")
+    if key.startswith("G"):
+        res = stringify(key[1:])
+        return sp.Symbol(Rf"\Gamma_{{{res}}}")
+    raise NotImplementedError(
+        f'Cannot convert key "{key}" in model parameter JSON file to SymPy symbol'
+    )
+
+
+def stringify(obj) -> Str:
+    if isinstance(obj, Particle):
+        return Str(obj.latex)
+    return Str(f"{obj}")
