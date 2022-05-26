@@ -164,6 +164,38 @@ const I = summed_over_polarization(abs2 ∘ A, tbs.two_js)
 # ╔═╡ b833843f-c8b6-44c6-847c-efce0ed989d4
 plot(ms,σs->I(σs), iσx=2, iσy=1, Ngrid=54)
 
+# ╔═╡ 45843dac-096a-4bd5-82eb-aad4f18b8f86
+begin
+	import Lb2ppiKModelLHCb:expectation
+	expectation(Op, σs) = sum(
+		conj(A(σs,[two_ν′,0,0,two_λ])) *
+			Op[twoλ2ind(two_ν′),twoλ2ind(two_ν)] *
+			A(σs,[two_ν,0,0,two_λ])
+		for two_λ in [-1,1], two_ν in [-1, 1], two_ν′ in [-1,1]) |> real
+end
+
+# ╔═╡ 2f42ac46-554c-4376-83a9-ad8eeaf90422
+let Ngrid = 55, iσx=2, iσy=1
+	σxv = range(lims(iσx,ms)..., length=Ngrid)
+	σyv = range(lims(iσy,ms)..., length=Ngrid)
+	#
+	σsv = [
+		ThreeBodyDecay.invs(σx,σy; iσx=iσx, iσy=iσy, ms=ms)
+			for σy in σyv, σx in σxv]
+	σsvphys = map(σs -> (Kibble(σs,ms^2) < 0 ? σs : NaN), σsv)
+	I_1234 =  [
+		map(σs -> (Kibble(σs,ms^2) < 0 ? expectation(Op, σs) : NaN), σsv)
+	for Op in σPauli]
+	# 
+	plot(layout=grid(1,3), size=(900,250),
+		heatmap(σxv, σyv, I_1234[1] ./ I_1234[4],
+			title="αx", clim=(-1,1), c=:balance),
+		heatmap(σxv, σyv, I_1234[2] ./ I_1234[4],
+			title="αy", clim=(-1,1), c=:balance),
+		heatmap(σxv, σyv, I_1234[3] ./ I_1234[4],
+			title="αz", clim=(-1,1), c=:balance))
+end
+
 # ╔═╡ b27001c0-df6c-4a47-ae53-8cee96cbf984
 md"""
 ### Numerical projection
@@ -262,6 +294,8 @@ end
 # ╠═abdeb1ac-19dc-45b2-94dd-5e64fb3d8f14
 # ╠═e50afc73-d0a6-4a8d-ae06-c95c9946998d
 # ╠═b833843f-c8b6-44c6-847c-efce0ed989d4
+# ╠═45843dac-096a-4bd5-82eb-aad4f18b8f86
+# ╠═2f42ac46-554c-4376-83a9-ad8eeaf90422
 # ╟─b27001c0-df6c-4a47-ae53-8cee96cbf984
 # ╠═0736dd22-89dd-4d7f-b332-b0767180ad43
 # ╠═88c58ce2-c98b-4b60-901f-ed95099c144b
