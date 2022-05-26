@@ -1,4 +1,4 @@
-name = "Lc2ppiKModelLHCb"
+name = "Lb2ppiKModelLHCb"
 uuid = "4f93614a-a399-45f9-82d7-905f290f088d"
 authors = ["Mikhail Mikhasenko <mikhail.mikhasenko@cern.ch>"]
 version = "0.1.0"
