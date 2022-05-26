@@ -39,4 +39,11 @@ export intensity
 include("amplitude.jl")
 
 
+export two_Δλ
+export σPauli
+export twoλ2ind
+export expectation
+include("sensitivity.jl")
+
+
 end # module
