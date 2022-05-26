@@ -34,4 +34,9 @@ export buildchain
 export readjson
 include("io.jl")
 
+
+export intensity
+include("amplitude.jl")
+
+
 end # module
