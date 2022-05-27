@@ -39,8 +39,8 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
     guidefontvalign=:top, guidefonthalign=:right,
     xlim=(:auto,:auto), ylim=(:auto,:auto),
     lw=1, lab="", colorbar=false,
-	xlab=L"m(K\pi)\,\,(\mathrm{GeV})",
-	ylab=L"m(pK)\,\,(\mathrm{GeV})")
+	xlab=L"m^2(K\pi)\,\,(\mathrm{GeV}^2)",
+	ylab=L"m^2(pK)\,\,(\mathrm{GeV}^2)")
 
 # ╔═╡ 877f6aab-d0ff-44d7-9ce0-e43d895be297
 md"""
@@ -83,9 +83,10 @@ end
 
 # ╔═╡ cee9dc28-8048-49e7-8caf-8e07bcd884c4
 let
-	plot(layout=grid(1,3), size=(1000,240), left_margin=4mm)
+	plot(layout=grid(1,3), size=(1000,240), left_margin=4mm, bottom_margin=7mm)
 	for (k,v) in isobars
-		plot!(sp=v.k, v.Xlineshape, lab=k, xlab="", ylab=L"(\mathrm{a.u.})")
+		plot!(sp=v.k, v.Xlineshape, lab=k,
+			xlab=L"m^2\,\,(\mathrm{GeV}^2)", ylab=L"(\mathrm{a.u.})")
 	end
 	plot!()
 end
@@ -287,7 +288,11 @@ begin
 end
 
 # ╔═╡ 320828c8-5b5d-43d0-9883-e54354296488
-plot(dataIalphaongrid_rot12, left_margin=3mm, bottom_margin=5mm)
+let
+	plot(dataIalphaongrid_rot12, left_margin=3mm, bottom_margin=5mm)
+	savefig(joinpath("plots","asymmetries_align2.pdf"))
+	plot!()
+end
 
 # ╔═╡ 9353e902-1c7b-487e-a5f4-3e99bf0fada8
 ᾱ⁽²⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot12.Iv[1:3])) ./
@@ -301,7 +306,11 @@ begin
 end
 
 # ╔═╡ 592595bc-dbe4-4f8c-833a-76790d3a00f8
-plot(dataIalphaongrid_rot31, left_margin=3mm, bottom_margin=5mm)
+let
+	plot(dataIalphaongrid_rot31, left_margin=4mm, bottom_margin=5.5mm)
+	savefig(joinpath("plots","asymmetries_align3.pdf"))
+	plot!()
+end	
 
 # ╔═╡ 3a4be1b4-a544-437a-b1f6-bd82819ba676
 ᾱ⁽³⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot31.Iv[1:3])) ./
@@ -345,24 +354,29 @@ Iv = intensity.(Aiv, Ref(couplings));
 I0 = sum(Iv)
 
 # ╔═╡ 8e06d5ec-4b98-441d-919b-7b90071e6674
-histogram2d(
-	getproperty.(pdata, :σ1),
-	getproperty.(pdata, :σ2), weights=Iv, bins=100)
+let
+	histogram2d(size=(500,440),
+		getproperty.(pdata, :σ1),
+		getproperty.(pdata, :σ2), weights=Iv, bins=100)
+	savefig(joinpath("plots","dalitz.pdf"))
+	plot!()
+end
 
 # ╔═╡ 78dba088-6d5b-4e4b-a664-f176f9e2d673
-isobarnames = map(x->x[3:end-1], couplingkeys)
+isobarnames = map(x->x[3:end-1], couplingkeys) ;
 
 # ╔═╡ fc62283e-8bcb-4fd1-8809-b7abeb991030
 begin
 	bins = 150
-	plot(layout=grid(1,3), size=(700,350), yaxis=nothing,
+	plot(layout=grid(1,3), size=(800,300), yaxis=nothing,
+		ylab=L"\mathrm{rate}\,\,(\mathrm{a.u.})",
 		stephist(getproperty.(pdata, :σ2), weights=Iv; bins,
 			xlab=L"m^2(pK^-)\,(\mathrm{GeV}^2)"),
 		stephist(getproperty.(pdata, :σ1), weights=Iv; bins,
 			xlab=L"m^2(K^-\pi^+)\,(\mathrm{GeV}^2)"),
 		stephist(getproperty.(pdata, :σ3), weights=Iv; bins,
 			xlab=L"m^2(p\pi^-)\,(\mathrm{GeV}^2)"),
-	bottom_margin=7mm)
+		left_margin=5mm, bottom_margin=7mm)
 	for s in Set(isobarnames)
 		couplingsmap = (isobarnames .== s)
 		Iξv = intensity.(Aiv, Ref(couplings .* couplingsmap));
@@ -371,6 +385,7 @@ begin
 		stephist!(sp=2, getproperty.(pdata, :σ1), weights=Iξv; bins, lab="")
 		stephist!(sp=3, getproperty.(pdata, :σ3), weights=Iξv; bins, lab=s)
 	end
+	savefig(joinpath("plots","projections.pdf"))
 	plot!()
 end
 
