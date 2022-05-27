@@ -175,7 +175,7 @@ begin
 end
 
 # ╔═╡ 2f42ac46-554c-4376-83a9-ad8eeaf90422
-let Ngrid = 55, iσx=2, iσy=1
+let Ngrid = 55, iσx=1, iσy=2
 	σxv = range(lims(iσx,ms)..., length=Ngrid)
 	σyv = range(lims(iσy,ms)..., length=Ngrid)
 	#
