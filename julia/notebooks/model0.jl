@@ -162,39 +162,160 @@ A(σs,two_λs) = sum(c*amplitude(σs,two_λs,d) for (c,d) in zip(couplings,chain
 const I = summed_over_polarization(abs2 ∘ A, tbs.two_js)
 
 # ╔═╡ b833843f-c8b6-44c6-847c-efce0ed989d4
-plot(ms,σs->I(σs), iσx=2, iσy=1, Ngrid=54)
+plot(ms,σs->I(σs), iσx=1, iσy=2, Ngrid=54)
+
+# ╔═╡ ed7f802c-a931-4114-aa30-6d10735520d7
+md"""
+### Polarization sensitivity
+"""
+
+# ╔═╡ 281b641b-fdca-4a6e-8a9d-732c34f7a71d
+σs0 = randomPoint(ms)
 
 # ╔═╡ 45843dac-096a-4bd5-82eb-aad4f18b8f86
 begin
 	import Lb2ppiKModelLHCb:expectation
 	expectation(Op, σs) = sum(
-		conj(A(σs,[two_ν′,0,0,two_λ])) *
+		conj(A(σs,[two_λ,0,0,two_ν′])) *
 			Op[twoλ2ind(two_ν′),twoλ2ind(two_ν)] *
-			A(σs,[two_ν,0,0,two_λ])
+			A(σs,[two_λ,0,0,two_ν])
 		for two_λ in [-1,1], two_ν in [-1, 1], two_ν′ in [-1,1]) |> real
 end
 
 # ╔═╡ 2f42ac46-554c-4376-83a9-ad8eeaf90422
-let Ngrid = 55, iσx=1, iσy=2
+function Ialphaongrid(; iσx, iσy, Ngrid = 100)
 	σxv = range(lims(iσx,ms)..., length=Ngrid)
 	σyv = range(lims(iσy,ms)..., length=Ngrid)
 	#
 	σsv = [
 		ThreeBodyDecay.invs(σx,σy; iσx=iσx, iσy=iσy, ms=ms)
 			for σy in σyv, σx in σxv]
-	σsvphys = map(σs -> (Kibble(σs,ms^2) < 0 ? σs : NaN), σsv)
-	I_1234 =  [
+	Iv =  [
 		map(σs -> (Kibble(σs,ms^2) < 0 ? expectation(Op, σs) : NaN), σsv)
-	for Op in σPauli]
-	# 
-	plot(layout=grid(1,3), size=(900,250),
-		heatmap(σxv, σyv, I_1234[1] ./ I_1234[4],
-			title="αx", clim=(-1,1), c=:balance),
-		heatmap(σxv, σyv, I_1234[2] ./ I_1234[4],
-			title="αy", clim=(-1,1), c=:balance),
-		heatmap(σxv, σyv, I_1234[3] ./ I_1234[4],
-			title="αz", clim=(-1,1), c=:balance))
+			for Op in σPauli]
+	return (; σxv, σyv, iσx, iσy, Iv)
 end
+
+# ╔═╡ 190a6f02-bd33-447c-a5b3-4dd3dd79579c
+dataIalphaongrid = Ialphaongrid(; iσx=1, iσy=2, Ngrid = 55) ;
+
+# ╔═╡ b50627f0-d3a6-4931-867e-5d102b543502
+@recipe function f(nt::NamedTuple{(:σxv, :σyv, :iσx, :iσy, :Iv)})
+	@unpack σxv, σyv, Iv = nt
+	layout := grid(1,3)
+	size --> (900,250)
+	for (i,t) in enumerate(["αx","αy","αz"])
+		@series begin
+			subplot := i
+			title := t
+			clim --> (-1,1)
+			c --> :balance
+			seriestype := :heatmap
+			calv = Iv[i] ./ Iv[4]
+			(σxv, σyv, calv)
+		end
+	end
+end
+
+# ╔═╡ ef85ad9b-13bb-45bc-985e-289a4a81fe7f
+plot(dataIalphaongrid)
+
+# ╔═╡ c1554cf8-3cfa-4209-9ef1-31f424ebb361
+md"""
+The three-body decay is sensitive to the inital polarization even if the Dalitz plot distribution is integated over.
+In this case the differential decay rate is a function of the three production angles, $\phi$, $\theta$, and $\chi$. The asymmetries are given by determined by the effective values of $\alpha$.
+
+$I(\phi_1, \theta_1, \chi_1) = I_0\left(1+\sum_{i,j}P_i R_{ij}(\phi, \theta, \chi) \overline{\alpha}_j\right)\,$
+
+The averaging over the dalitz plot variables does the averaging over momenta and the angles between $p$, $K$, and $\pi$ in the decay plane.
+Importnatly, the choice of the alignment configuration is determining which of the final-state particles is an anchor. Expectedly, the averaged value of the asymmetry vector is different for the three possible alignments.
+"""
+
+# ╔═╡ a2cbe50c-c1a1-4572-b440-e3c618146ae4
+ᾱ⁽¹⁾ = sum.(filter.(!isnan, dataIalphaongrid.Iv[1:3])) ./
+	sum(filter(!isnan, dataIalphaongrid.Iv[4]))
+
+# ╔═╡ f41c087e-580d-408e-afa1-50d013ffa47f
+md"""
+### Rotate $R_y^{-1}(\zeta^0_{x(1)})$ for chains 2 (x=2) and 3 (x=3)
+"""
+
+# ╔═╡ 14df1109-1904-4536-9f15-3009e4003a7f
+function rotationongrid(; iσx, iσy, Ngrid = 100)
+	σxv = range(lims(iσx,ms)..., length=Ngrid)
+	σyv = range(lims(iσy,ms)..., length=Ngrid)
+	σsv = [
+		ThreeBodyDecay.invs(σx,σy; iσx=iσx, iσy=iσy, ms=ms)
+			for σy in σyv, σx in σxv]
+	cosζ⁰₁₂, cosζ⁰₃₁ =  [
+		map(σs -> (Kibble(σs,ms^2) < 0 ? cosζ(r, σs, ms^2) : NaN), σsv)
+			for r in [wr(1,2,0), wr(3,1,0)]]
+	return (; σxv, σyv, iσx, iσy, cosζ⁰₁₂, cosζ⁰₃₁)
+end
+
+# ╔═╡ 4cec3154-2b51-4355-a813-2ce95e05eeae
+datarotationongrid = let 
+	@unpack iσx, iσy, σxv = dataIalphaongrid
+	Ngrid = length(σxv)
+	rotationongrid(; iσx, iσy, Ngrid)
+end ;
+
+# ╔═╡ c327efc1-8e7f-49e7-9407-207a44647d6f
+O3rotate(α1,α2,cosθ,signθ) =
+	α1*cosθ - α2*signθ*sqrt(1-cosθ^2)
+
+# ╔═╡ 3c7b043b-0d58-4e1b-8ce7-52bf65c6ff6f
+function O3rotate!(Iv,coswv,signθ)
+	for ci in CartesianIndices(coswv)
+		Iv[3][ci], Iv[1][ci] = 
+			O3rotate(Iv[3][ci],Iv[1][ci],coswv[ci],signθ),
+			O3rotate(Iv[1][ci],Iv[3][ci],coswv[ci],-signθ)
+	end
+end
+
+# ╔═╡ d7227cb9-02c3-43da-b44b-5af38afbe0b9
+begin
+	dataIalphaongrid_rot12 = merge(dataIalphaongrid,
+		(; Iv=copy.(dataIalphaongrid.Iv)))
+	O3rotate!(dataIalphaongrid_rot12.Iv,datarotationongrid.cosζ⁰₁₂,+1)
+end
+
+# ╔═╡ 320828c8-5b5d-43d0-9883-e54354296488
+plot(dataIalphaongrid_rot12)
+
+# ╔═╡ 9353e902-1c7b-487e-a5f4-3e99bf0fada8
+ᾱ⁽²⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot12.Iv[1:3])) ./
+	sum(filter(!isnan, dataIalphaongrid_rot12.Iv[4]))
+
+# ╔═╡ a1018b19-83ff-40a1-b5ec-2f038fc0f981
+begin
+	dataIalphaongrid_rot31 = merge(dataIalphaongrid,
+		(; Iv=copy.(dataIalphaongrid.Iv)))
+	O3rotate!(dataIalphaongrid_rot31.Iv,datarotationongrid.cosζ⁰₃₁,-1)
+end
+
+# ╔═╡ 592595bc-dbe4-4f8c-833a-76790d3a00f8
+plot(dataIalphaongrid_rot31)
+
+# ╔═╡ 3a4be1b4-a544-437a-b1f6-bd82819ba676
+ᾱ⁽³⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot31.Iv[1:3])) ./
+	sum(filter(!isnan, dataIalphaongrid_rot31.Iv[4]))
+
+# ╔═╡ e550eec0-6911-4016-824f-b21f82d10e9a
+Dict(
+	:alpha_averaged_align1 => Dict(
+		:components=>ᾱ⁽¹⁾, :norm=>norm(ᾱ⁽¹⁾)),
+	:alpha_averaged_align2 => Dict(
+		:components=>ᾱ⁽²⁾, :norm=>norm(ᾱ⁽²⁾)),
+	:alpha_averaged_align3 => Dict(
+		:components=>ᾱ⁽³⁾, :norm=>norm(ᾱ⁽³⁾))
+)
+
+# ╔═╡ 8339a757-9b66-4cb9-9bbb-a7de466fc3bf
+md"""
+Interestingly, the value of the averaged asymmetry parameter is the highest for the alignment with respect to the first chain, i.e. $K^*$ resonances.
+The reason is likely to be that the $z$-axis is determined by the vector of $K^*$ which is opposite to the vector of the proton in $\Lambda_c^+$ rest frame.
+"""
 
 # ╔═╡ b27001c0-df6c-4a47-ae53-8cee96cbf984
 md"""
@@ -219,8 +340,8 @@ I0 = sum(Iv)
 
 # ╔═╡ 8e06d5ec-4b98-441d-919b-7b90071e6674
 histogram2d(
-	getproperty.(pdata, :σ2),
-	getproperty.(pdata, :σ1), weights=Iv, bins=100)
+	getproperty.(pdata, :σ1),
+	getproperty.(pdata, :σ2), weights=Iv, bins=100)
 
 # ╔═╡ 78dba088-6d5b-4e4b-a664-f176f9e2d673
 isobarnames = map(x->x[3:end-1], couplingkeys)
@@ -294,8 +415,28 @@ end
 # ╠═abdeb1ac-19dc-45b2-94dd-5e64fb3d8f14
 # ╠═e50afc73-d0a6-4a8d-ae06-c95c9946998d
 # ╠═b833843f-c8b6-44c6-847c-efce0ed989d4
+# ╟─ed7f802c-a931-4114-aa30-6d10735520d7
+# ╠═281b641b-fdca-4a6e-8a9d-732c34f7a71d
 # ╠═45843dac-096a-4bd5-82eb-aad4f18b8f86
 # ╠═2f42ac46-554c-4376-83a9-ad8eeaf90422
+# ╠═190a6f02-bd33-447c-a5b3-4dd3dd79579c
+# ╟─b50627f0-d3a6-4931-867e-5d102b543502
+# ╠═ef85ad9b-13bb-45bc-985e-289a4a81fe7f
+# ╟─c1554cf8-3cfa-4209-9ef1-31f424ebb361
+# ╠═a2cbe50c-c1a1-4572-b440-e3c618146ae4
+# ╟─f41c087e-580d-408e-afa1-50d013ffa47f
+# ╠═14df1109-1904-4536-9f15-3009e4003a7f
+# ╠═4cec3154-2b51-4355-a813-2ce95e05eeae
+# ╠═c327efc1-8e7f-49e7-9407-207a44647d6f
+# ╠═3c7b043b-0d58-4e1b-8ce7-52bf65c6ff6f
+# ╠═d7227cb9-02c3-43da-b44b-5af38afbe0b9
+# ╠═320828c8-5b5d-43d0-9883-e54354296488
+# ╠═9353e902-1c7b-487e-a5f4-3e99bf0fada8
+# ╠═a1018b19-83ff-40a1-b5ec-2f038fc0f981
+# ╠═592595bc-dbe4-4f8c-833a-76790d3a00f8
+# ╠═3a4be1b4-a544-437a-b1f6-bd82819ba676
+# ╠═e550eec0-6911-4016-824f-b21f82d10e9a
+# ╟─8339a757-9b66-4cb9-9bbb-a7de466fc3bf
 # ╟─b27001c0-df6c-4a47-ae53-8cee96cbf984
 # ╠═0736dd22-89dd-4d7f-b332-b0767180ad43
 # ╠═88c58ce2-c98b-4b60-901f-ed95099c144b
