@@ -17,6 +17,7 @@ using ThreeBodyDecay
 using Lb2ppiKModelLHCb
 
 using BenchmarkTools
+using InteractiveUtils
 
 #                                  _|            _|
 #  _|_|_|  _|_|      _|_|      _|_|_|    _|_|    _|
