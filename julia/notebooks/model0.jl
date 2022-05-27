@@ -38,7 +38,9 @@ md"""
 theme(:wong2, frame=:box, grid=false, minorticks=true,
     guidefontvalign=:top, guidefonthalign=:right,
     xlim=(:auto,:auto), ylim=(:auto,:auto),
-    lw=1, lab="", colorbar=false)
+    lw=1, lab="", colorbar=false,
+	xlab=L"m(K\pi)\,\,(\mathrm{GeV})",
+	ylab=L"m(pK)\,\,(\mathrm{GeV})")
 
 # ╔═╡ 877f6aab-d0ff-44d7-9ce0-e43d895be297
 md"""
@@ -81,9 +83,9 @@ end
 
 # ╔═╡ cee9dc28-8048-49e7-8caf-8e07bcd884c4
 let
-	plot(layout=grid(1,3), size=(1000,240))
+	plot(layout=grid(1,3), size=(1000,240), left_margin=4mm)
 	for (k,v) in isobars
-		plot!(sp=v.k, v.Xlineshape, lab=k)
+		plot!(sp=v.k, v.Xlineshape, lab=k, xlab="", ylab=L"(\mathrm{a.u.})")
 	end
 	plot!()
 end
@@ -203,8 +205,8 @@ dataIalphaongrid = Ialphaongrid(; iσx=1, iσy=2, Ngrid = 55) ;
 @recipe function f(nt::NamedTuple{(:σxv, :σyv, :iσx, :iσy, :Iv)})
 	@unpack σxv, σyv, Iv = nt
 	layout := grid(1,3)
-	size --> (900,250)
-	for (i,t) in enumerate(["αx","αy","αz"])
+	size --> (900,300)
+	for (i,t) in enumerate([L"\alpha_x",L"\alpha_y",L"\alpha_z"])
 		@series begin
 			subplot := i
 			title := t
@@ -218,7 +220,11 @@ dataIalphaongrid = Ialphaongrid(; iσx=1, iσy=2, Ngrid = 55) ;
 end
 
 # ╔═╡ ef85ad9b-13bb-45bc-985e-289a4a81fe7f
-plot(dataIalphaongrid)
+let
+	plot(dataIalphaongrid, left_margin=3mm, bottom_margin=5mm)
+	savefig(joinpath("plots","asymmetries_align1.pdf"))
+	plot!()
+end
 
 # ╔═╡ c1554cf8-3cfa-4209-9ef1-31f424ebb361
 md"""
@@ -281,7 +287,7 @@ begin
 end
 
 # ╔═╡ 320828c8-5b5d-43d0-9883-e54354296488
-plot(dataIalphaongrid_rot12)
+plot(dataIalphaongrid_rot12, left_margin=3mm, bottom_margin=5mm)
 
 # ╔═╡ 9353e902-1c7b-487e-a5f4-3e99bf0fada8
 ᾱ⁽²⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot12.Iv[1:3])) ./
@@ -295,7 +301,7 @@ begin
 end
 
 # ╔═╡ 592595bc-dbe4-4f8c-833a-76790d3a00f8
-plot(dataIalphaongrid_rot31)
+plot(dataIalphaongrid_rot31, left_margin=3mm, bottom_margin=5mm)
 
 # ╔═╡ 3a4be1b4-a544-437a-b1f6-bd82819ba676
 ᾱ⁽³⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot31.Iv[1:3])) ./
@@ -420,7 +426,7 @@ end
 # ╠═45843dac-096a-4bd5-82eb-aad4f18b8f86
 # ╠═2f42ac46-554c-4376-83a9-ad8eeaf90422
 # ╠═190a6f02-bd33-447c-a5b3-4dd3dd79579c
-# ╟─b50627f0-d3a6-4931-867e-5d102b543502
+# ╠═b50627f0-d3a6-4931-867e-5d102b543502
 # ╠═ef85ad9b-13bb-45bc-985e-289a4a81fe7f
 # ╟─c1554cf8-3cfa-4209-9ef1-31f424ebb361
 # ╠═a2cbe50c-c1a1-4572-b440-e3c618146ae4
