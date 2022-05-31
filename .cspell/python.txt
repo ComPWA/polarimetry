@@ -22,11 +22,13 @@ nrows
 numpy
 pathlib
 pcolormesh
+phasespace
 pygments
 pyplot
 pyright
 seealso
 sharey
+singledispatch
 sympify
 sympy
 tqdm
