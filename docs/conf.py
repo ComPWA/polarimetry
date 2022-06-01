@@ -71,6 +71,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_panels",
     "sphinx_togglebutton",
+    "sphinx.ext.napoleon",
 ]
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
