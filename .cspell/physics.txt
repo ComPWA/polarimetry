@@ -5,7 +5,6 @@ Dalitz
 Flatté
 helicities
 helicity
-Kállën
 Källén
 lineshape
 lineshapes

@@ -45,6 +45,6 @@ def test_load_isobar_definitions():
     assert Λ2000.latex == "L(2000)"
     assert Λ2000.spin == 0.5
     assert Λ2000.parity == -1
-    assert Λ2000.mass == 2000
-    assert Λ2000.width == 210
+    assert Λ2000.mass == 2.0
+    assert Λ2000.width == 0.21
     assert Λ2000.lineshape == "BreitWignerMinL"

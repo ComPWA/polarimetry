@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import sympy as sp
+from ampform.kinematics.phasespace import Kallen
 from ampform.sympy import (
     UnevaluatedExpression,
     create_expression,
@@ -17,28 +18,13 @@ from ampform.sympy import (
 
 @make_commutative
 @implement_doit_method
-class Källén(UnevaluatedExpression):
-    def __new__(cls, x, y, z, **hints):
-        return create_expression(cls, x, y, z, **hints)
-
-    def evaluate(self) -> sp.Expr:
-        x, y, z = self.args
-        return x**2 + y**2 + z**2 - 2 * x * y - 2 * y * z - 2 * z * x
-
-    def _latex(self, printer, *args):
-        x, y, z = map(printer._print, self.args)
-        return Rf"\lambda\left({x}, {y}, {z}\right)"
-
-
-@make_commutative
-@implement_doit_method
 class P(UnevaluatedExpression):
     def __new__(cls, s, mi, mj, **hints):
         return create_expression(cls, s, mi, mj, **hints)
 
     def evaluate(self):
         s, mi, mj = self.args
-        return sp.sqrt(Källén(s, mi**2, mj**2)) / (2 * sp.sqrt(s))
+        return sp.sqrt(Kallen(s, mi**2, mj**2)) / (2 * sp.sqrt(s))
 
     def _latex(self, printer, *args):
         s = printer._print(self.args[0])
@@ -53,7 +39,7 @@ class Q(UnevaluatedExpression):
 
     def evaluate(self):
         s, m0, mk = self.args
-        return sp.sqrt(Källén(s, m0**2, mk**2)) / (2 * m0)  # <-- not s!
+        return sp.sqrt(Kallen(s, m0**2, mk**2)) / (2 * m0)  # <-- not s!
 
     def _latex(self, printer, *args):
         s = printer._print(self.args[0], *args)
