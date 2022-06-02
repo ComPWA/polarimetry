@@ -174,7 +174,7 @@ class BlattWeisskopf(UnevaluatedExpression):
     def __new__(cls, z, L, **hints):
         return create_expression(cls, z, L, **hints)
 
-    def evaluate(self):
+    def evaluate(self) -> sp.Piecewise:
         z, L = self.args
         cases = {
             0: 1,
