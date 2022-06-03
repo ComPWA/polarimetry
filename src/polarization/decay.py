@@ -21,7 +21,7 @@ class Particle:
     name: str
     latex: str
     spin: sp.Rational = field(converter=to_rational, validator=assert_spin_value)
-    parity: int
+    parity: Literal[-1, 1]
     mass: float
     width: float
     lineshape: Literal[
@@ -43,7 +43,7 @@ class IsobarNode:
 
 @frozen
 class ThreeBodyDecay:
-    states: StateDict
+    states: OuterStates
     chains: tuple[ThreeBodyDecayChain, ...]
 
     def __attrs_post_init__(self) -> None:
@@ -77,8 +77,30 @@ class ThreeBodyDecay:
                 return chain
         raise KeyError(f"No decay chain found for resonance {resonance_name}")
 
+    def get_subsystem(self, subsystem_id: Literal[1, 2, 3]) -> ThreeBodyDecay:
+        child1_id, child2_id = get_decay_product_ids(subsystem_id)
+        child1 = self.final_state[child1_id]
+        child2 = self.final_state[child2_id]
+        filtered_chains = [
+            chain
+            for chain in self.chains
+            if chain.decay_products in {(child1, child2), (child2, child1)}
+        ]
+        return ThreeBodyDecay(self.states, filtered_chains)
 
-StateDict = Dict[Literal[0, 1, 2, 3], Particle]
+
+def get_decay_product_ids(spectator_id: Literal[1, 2, 3]) -> tuple[int, int]:
+    if spectator_id == 1:
+        return 2, 3
+    if spectator_id == 2:
+        return 3, 1
+    if spectator_id == 3:
+        return 1, 2
+    raise ValueError(f"Spectator ID has to be one of 1, 2, 3, not {spectator_id}")
+
+
+OuterStates = Dict[Literal[0, 1, 2, 3], Particle]
+"""Mapping of the initial and final state IDs to their `.Particle` definition."""
 
 
 @frozen
