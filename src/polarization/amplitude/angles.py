@@ -23,7 +23,7 @@ def formulate_scattering_angle(
         )
     if state_id == sibling_id:
         raise ValueError(f"IDs of the decay products cannot be equal: {state_id}")
-    symbol = sp.Symbol(Rf"theta_{state_id}{sibling_id})", real=True)
+    symbol = sp.Symbol(Rf"theta_{state_id}{sibling_id}", real=True)
     spectator_id = next(iter({1, 2, 3} - {state_id, sibling_id}))
     m0 = sp.Symbol(f"m0", nonnegative=True)
     mi = sp.Symbol(f"m{state_id}", nonnegative=True)
@@ -53,7 +53,7 @@ def formulate_theta_hat_angle(
         raise ValueError(
             f"Child IDs need to be one of {', '.join(map(str, allowed_ids))}"
         )
-    symbol = sp.Symbol(Rf"theta_{isobar_id}({aligned_subsystem})", real=True)
+    symbol = sp.Symbol(Rf"\hat\theta_{isobar_id}({aligned_subsystem})", real=True)
     if isobar_id == aligned_subsystem:
         return symbol, sp.S.Zero
     if (isobar_id, aligned_subsystem) in {(3, 1), (1, 2), (2, 3)}:
@@ -86,7 +86,7 @@ def formulate_zeta_angle(
 ) -> tuple[sp.Symbol, sp.acos]:
     r"""Formulate an expression for the alignment angle :math:`\zeta^i_{j(k)}`."""
     zeta_symbol = sp.Symbol(
-        Rf"\cos(\zeta^{rotated_state}_{{{aligned_subsystem}({reference_subsystem})}})",
+        Rf"\zeta^{rotated_state}_{{{aligned_subsystem}({reference_subsystem})}}",
         real=True,
     )
     if rotated_state == 0:

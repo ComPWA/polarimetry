@@ -2,6 +2,7 @@
 
 ```{toctree}
 dynamics
+angles
 amplitude-model
 cross-check
 phase-space

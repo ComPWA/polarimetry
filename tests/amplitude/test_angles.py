@@ -51,6 +51,17 @@ def test_formulate_theta_hat_angle():
         assert formulate_theta_hat_angle(i, i)[1] == 0
 
 
+def test_formulate_zeta_angle_equation_A6():
+    """Test Eq. (A6), https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=10."""
+    for i in [1, 2, 3]:
+        for k in [1, 2, 3]:
+            _, ζi_k0 = formulate_zeta_angle(i, k, 0)
+            _, ζi_ki = formulate_zeta_angle(i, k, i)
+            _, ζi_kk = formulate_zeta_angle(i, k, k)
+            assert ζi_ki == ζi_k0
+            assert ζi_kk == 0
+
+
 @pytest.mark.parametrize(
     ("cos_ζ1", "cos_ζ2", "cos_ζ3"),
     [
