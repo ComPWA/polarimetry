@@ -25,7 +25,7 @@ import sympy as sp
 from ampform.sympy import UnevaluatedExpression
 from IPython.display import Math, display
 
-from polarization.decay import IsobarNode, Particle, ThreeBodyDecayChain
+from polarization.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 
 
 @singledispatch
@@ -99,6 +99,11 @@ def _(obj: IsobarNode, **kwargs) -> str:
     return Rf"{parent} {to} {child1} {child2}"
 
 
+@as_latex.register(ThreeBodyDecay)
+def _(obj: ThreeBodyDecay, **kwargs) -> str:
+    return as_latex(obj.chains, **kwargs)
+
+
 @as_latex.register(ThreeBodyDecayChain)
 def _(obj: ThreeBodyDecayChain, **kwargs) -> str:
     return as_latex(obj.decay, **kwargs)
@@ -128,6 +133,8 @@ def as_markdown_table(obj: Sequence) -> str:
     item_type = _determine_item_type(obj)
     if item_type is Particle:
         return _as_resonance_markdown_table(obj)
+    if item_type is ThreeBodyDecay:
+        return _as_decay_markdown_table(obj.chains)
     if item_type is ThreeBodyDecayChain:
         return _as_decay_markdown_table(obj)
     raise NotImplementedError(
@@ -135,7 +142,9 @@ def as_markdown_table(obj: Sequence) -> str:
     )
 
 
-def _determine_item_type(obj: Sequence) -> type:
+def _determine_item_type(obj) -> type:
+    if not isinstance(obj, abc.Sequence):
+        return type(obj)
     if len(obj) < 1:
         raise ValueError(f"Need at least one entry to render a table")
     item_type = type(obj[0])
@@ -170,7 +179,7 @@ def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
     return src
 
 
-def _as_decay_markdown_table(decays: Sequence[ThreeBodyDecayChain]) -> str:
+def _as_decay_markdown_table(decay_chains: Sequence[ThreeBodyDecayChain]) -> str:
     column_names = [
         "resonance",
         R"$J^P$",
@@ -181,16 +190,16 @@ def _as_decay_markdown_table(decays: Sequence[ThreeBodyDecayChain]) -> str:
         "lineshape",
     ]
     src = _create_markdown_table_header(column_names)
-    for decay in decays:
-        child1, child2 = map(as_latex, decay.decay_products)
+    for chain in decay_chains:
+        child1, child2 = map(as_latex, chain.decay_products)
         row_items = [
-            Rf"${decay.resonance.latex} \to" Rf" {child1} {child2}$",
-            Rf"${as_latex(decay.resonance, only_jp=True)}$",
-            f"{int(1e3 * decay.resonance.mass):,.0f}",
-            f"{int(1e3 * decay.resonance.width):,.0f}",
-            decay.outgoing_ls.L,
-            decay.incoming_ls.L,
-            decay.resonance.lineshape,
+            Rf"${chain.resonance.latex} \to" Rf" {child1} {child2}$",
+            Rf"${as_latex(chain.resonance, only_jp=True)}$",
+            f"{int(1e3 * chain.resonance.mass):,.0f}",
+            f"{int(1e3 * chain.resonance.width):,.0f}",
+            chain.outgoing_ls.L,
+            chain.incoming_ls.L,
+            chain.resonance.lineshape,
         ]
         src += _create_markdown_table_row(row_items)
     return src

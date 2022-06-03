@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import sys
+from typing import Dict
 
 import sympy as sp
 from attrs import field, frozen
@@ -38,6 +39,46 @@ class IsobarNode:
     @property
     def children(self) -> tuple[Particle, Particle]:
         return self.child1, self.child2
+
+
+@frozen
+class ThreeBodyDecay:
+    states: StateDict
+    chains: tuple[ThreeBodyDecayChain, ...]
+
+    def __attrs_post_init__(self) -> None:
+        expected_initial_state = self.initial_state
+        expected_final_state = set(self.final_state.values())
+        for i, chain in enumerate(self.chains):
+            if chain.parent != expected_initial_state:
+                raise ValueError(
+                    f"Chain {i} has initial state {chain.parent.name}, but should have"
+                    f" {expected_initial_state.name}"
+                )
+            final_state = {chain.spectator, *chain.decay_products}
+            if final_state != expected_final_state:
+                to_str = lambda s: ", ".join(p.name for p in s)
+                raise ValueError(
+                    f"Chain {i} has final state {to_str(final_state)}, but should have"
+                    f" {to_str(expected_final_state)}"
+                )
+
+    @property
+    def initial_state(self) -> Particle:
+        return self.states[0]
+
+    @property
+    def final_state(self) -> dict[Literal[1, 2, 3], Particle]:
+        return {k: v for k, v in self.states.items() if k != 0}
+
+    def find_chain(self, resonance_name: str) -> ThreeBodyDecayChain:
+        for chain in self.chains:
+            if chain.resonance.name == resonance_name:
+                return chain
+        raise KeyError(f"No decay chain found for resonance {resonance_name}")
+
+
+StateDict = Dict[Literal[0, 1, 2, 3], Particle]
 
 
 @frozen
