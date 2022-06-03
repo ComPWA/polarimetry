@@ -164,7 +164,7 @@ def formulate_zeta_angle(
         mk, σk = create_symbols(reference_subsystem)
         cos_zeta_expr = (
             2 * mi**2 * (mj**2 + mk**2 - σi)
-            + (σj + mi**2 - mk**2) * (σk - mi**2 - mj**2)
+            + (σj - mi**2 - mk**2) * (σk - mi**2 - mj**2)
         ) / (
             sp.sqrt(Kallen(σj, mk**2, mi**2))
             * sp.sqrt(Kallen(σk, mi**2, mj**2))

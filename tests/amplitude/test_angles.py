@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 import sympy as sp
 from ampform.kinematics.phasespace import Kallen, compute_third_mandelstam
@@ -63,7 +64,7 @@ def test_formulate_zeta_angle_equation_A6():
 
 
 @pytest.mark.parametrize(
-    ("cos_ζ1", "cos_ζ2", "cos_ζ3"),
+    ("ζ1", "ζ2", "ζ3"),
     [
         (
             formulate_zeta_angle(1, 2, 3)[1],
@@ -82,13 +83,11 @@ def test_formulate_zeta_angle_equation_A6():
         ),
     ],
 )
-def test_formulate_zeta_angle_sum_rule(
-    cos_ζ1: sp.Expr, cos_ζ2: sp.Expr, cos_ζ3: sp.Expr
-):
+def test_formulate_zeta_angle_sum_rule(ζ1: sp.Expr, ζ2: sp.Expr, ζ3: sp.Expr):
     """Test Eq. (A9), https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=11."""
     σ3_expr = compute_third_mandelstam(σ1, σ2, m0, m1, m2, m3)
     masses = {m0: 2.3, m1: 0.94, m2: 0.14, m3: 0.49, σ1: 1.2, σ2: 3.0, σ3: σ3_expr}
-    ζ1 = cos_ζ1.doit().xreplace(masses).xreplace(masses).n()
-    ζ2 = cos_ζ2.doit().xreplace(masses).xreplace(masses).n()
-    ζ3 = cos_ζ3.doit().xreplace(masses).xreplace(masses).n()
-    assert ζ1 == ζ2 + ζ3
+    ζ1 = float(ζ1.doit().xreplace(masses).xreplace(masses))
+    ζ2 = float(ζ2.doit().xreplace(masses).xreplace(masses))
+    ζ3 = float(ζ3.doit().xreplace(masses).xreplace(masses))
+    np.testing.assert_almost_equal(ζ1, ζ2 + ζ3, decimal=14)
