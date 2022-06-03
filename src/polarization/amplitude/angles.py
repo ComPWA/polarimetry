@@ -41,24 +41,24 @@ def formulate_scattering_angle(
 
 
 def formulate_theta_hat_angle(
-    isobar_id: int, alignment_system: int
+    isobar_id: int, aligned_subsystem: int
 ) -> tuple[sp.Symbol, sp.acos]:
     r"""Formulate an expression for :math:`\hat\theta_{i(j)}`."""
     allowed_ids = {1, 2, 3}
-    if not {isobar_id, alignment_system} <= allowed_ids:
+    if not {isobar_id, aligned_subsystem} <= allowed_ids:
         raise ValueError(
             f"Child IDs need to be one of {', '.join(map(str, allowed_ids))}"
         )
-    symbol = sp.Symbol(Rf"theta_{isobar_id}({alignment_system})", real=True)
-    if isobar_id == alignment_system:
+    symbol = sp.Symbol(Rf"theta_{isobar_id}({aligned_subsystem})", real=True)
+    if isobar_id == aligned_subsystem:
         return symbol, sp.S.Zero
-    if (isobar_id, alignment_system) in {(3, 1), (1, 2), (2, 3)}:
-        remaining_id = next(iter(allowed_ids - {isobar_id, alignment_system}))
+    if (isobar_id, aligned_subsystem) in {(3, 1), (1, 2), (2, 3)}:
+        remaining_id = next(iter(allowed_ids - {isobar_id, aligned_subsystem}))
         m0 = sp.Symbol(f"m0", nonnegative=True)
         mi = sp.Symbol(f"m{isobar_id}", nonnegative=True)
-        mj = sp.Symbol(f"m{alignment_system}", nonnegative=True)
+        mj = sp.Symbol(f"m{aligned_subsystem}", nonnegative=True)
         σi = sp.Symbol(f"sigma{isobar_id}", nonnegative=True)
-        σj = sp.Symbol(f"sigma{alignment_system}", nonnegative=True)
+        σj = sp.Symbol(f"sigma{aligned_subsystem}", nonnegative=True)
         σk = sp.Symbol(f"sigma{remaining_id}", nonnegative=True)
         theta = sp.acos(
             (
@@ -71,38 +71,31 @@ def formulate_theta_hat_angle(
             )
         )
         return symbol, theta
-    _, theta = formulate_theta_hat_angle(alignment_system, isobar_id)
+    _, theta = formulate_theta_hat_angle(aligned_subsystem, isobar_id)
     return symbol, -theta
 
 
 def formulate_zeta_angle(
-    boosted_state: int,
-    alignment_system: int,
-    helicity_system: int,
+    rotated_state: int,
+    aligned_subsystem: int,
+    reference_subsystem: int,
 ) -> tuple[sp.Symbol, sp.acos]:
-    r"""Formulate an expression for the alignment angle :math:`\zeta^i_{j(k)}`.
-
-    Arguments
-    ---------
-    boosted_state: The ID of the state that is being boosted.
-    alignment_system: The ID of the system that is being aligned.
-    helicity_system: The ID of the system that is being rotated.
-    """
+    r"""Formulate an expression for the alignment angle :math:`\zeta^i_{j(k)}`."""
     zeta_symbol = sp.Symbol(
-        Rf"\cos(\zeta^{boosted_state}_{{{alignment_system}({helicity_system})}})",
+        Rf"\cos(\zeta^{rotated_state}_{{{aligned_subsystem}({reference_subsystem})}})",
         real=True,
     )
-    if boosted_state == 0:
-        _, theta = formulate_theta_hat_angle(alignment_system, helicity_system)
+    if rotated_state == 0:
+        _, theta = formulate_theta_hat_angle(aligned_subsystem, reference_subsystem)
         return zeta_symbol, theta
-    if helicity_system == 0:
-        _, zeta = formulate_zeta_angle(boosted_state, alignment_system, boosted_state)
+    if reference_subsystem == 0:
+        _, zeta = formulate_zeta_angle(rotated_state, aligned_subsystem, rotated_state)
         return zeta_symbol, zeta
-    if alignment_system == helicity_system:
+    if aligned_subsystem == reference_subsystem:
         return zeta_symbol, sp.S.Zero
     m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
     σ1, σ2, σ3 = sp.symbols("sigma1:4", nonnegative=True)
-    if (boosted_state, alignment_system, helicity_system) == (1, 1, 3):
+    if (rotated_state, aligned_subsystem, reference_subsystem) == (1, 1, 3):
         cos_zeta_expr = (
             2 * m1**2 * (σ2 - m0**2 - m2**2)
             + (m0**2 + m1**2 - σ1) * (σ3 - m1**2 - m2**2)
@@ -111,7 +104,7 @@ def formulate_zeta_angle(
             * sp.sqrt(Kallen(σ3, m1**2, m2**2))
         )
         return zeta_symbol, sp.acos(cos_zeta_expr)
-    if (boosted_state, alignment_system, helicity_system) == (1, 2, 1):
+    if (rotated_state, aligned_subsystem, reference_subsystem) == (1, 2, 1):
         cos_zeta_expr = (
             2 * m1**2 * (σ3 - m0**2 - m3**2)
             + (m0**2 + m1**2 - σ1) * (σ2 - m1**2 - m3**2)
@@ -120,7 +113,7 @@ def formulate_zeta_angle(
             * sp.sqrt(Kallen(σ2, m1**2, m3**2))
         )
         return zeta_symbol, sp.acos(cos_zeta_expr)
-    if (boosted_state, alignment_system, helicity_system) == (2, 2, 1):
+    if (rotated_state, aligned_subsystem, reference_subsystem) == (2, 2, 1):
         cos_zeta_expr = (
             2 * m2**2 * (σ3 - m0**2 - m3**2)
             + (m0**2 + m2**2 - σ2) * (σ1 - m2**2 - m3**2)
@@ -129,7 +122,7 @@ def formulate_zeta_angle(
             * sp.sqrt(Kallen(σ1, m2**2, m3**2))
         )
         return zeta_symbol, sp.acos(cos_zeta_expr)
-    if (boosted_state, alignment_system, helicity_system) == (2, 3, 2):
+    if (rotated_state, aligned_subsystem, reference_subsystem) == (2, 3, 2):
         cos_zeta_expr = (
             2 * m2**2 * (σ1 - m0**2 - m1**2)
             + (m0**2 + m2**2 - σ2) * (σ3 - m2**2 - m1**2)
@@ -138,7 +131,7 @@ def formulate_zeta_angle(
             * sp.sqrt(Kallen(σ3, m2**2, m1**2))
         )
         return zeta_symbol, sp.acos(cos_zeta_expr)
-    if (boosted_state, alignment_system, helicity_system) == (3, 3, 2):
+    if (rotated_state, aligned_subsystem, reference_subsystem) == (3, 3, 2):
         cos_zeta_expr = (
             2 * m3**2 * (σ1 - m0**2 - m1**2)
             + (m0**2 + m3**2 - σ3) * (σ2 - m3**2 - m1**2)
@@ -147,7 +140,7 @@ def formulate_zeta_angle(
             * sp.sqrt(Kallen(σ2, m3**2, m1**2))
         )
         return zeta_symbol, sp.acos(cos_zeta_expr)
-    if (boosted_state, alignment_system, helicity_system) == (3, 1, 3):
+    if (rotated_state, aligned_subsystem, reference_subsystem) == (3, 1, 3):
         cos_zeta_expr = (
             2 * m3**2 * (σ2 - m0**2 - m2**2)
             + (m0**2 + m3**2 - σ3) * (σ1 - m3**2 - m2**2)
@@ -156,15 +149,15 @@ def formulate_zeta_angle(
             * sp.sqrt(Kallen(σ1, m3**2, m2**2))
         )
         return zeta_symbol, sp.acos(cos_zeta_expr)
-    if (boosted_state, alignment_system, helicity_system) in {  # Eq (A10)
+    if (rotated_state, aligned_subsystem, reference_subsystem) in {  # Eq (A10)
         (1, 2, 3),
         (2, 3, 1),
         (3, 1, 2),
     }:
         create_symbols = lambda i: sp.symbols(f"m{i} sigma{i}", nonnegative=True)
-        mi, σi = create_symbols(boosted_state)
-        mj, σj = create_symbols(alignment_system)
-        mk, σk = create_symbols(helicity_system)
+        mi, σi = create_symbols(rotated_state)
+        mj, σj = create_symbols(aligned_subsystem)
+        mk, σk = create_symbols(reference_subsystem)
         cos_zeta_expr = (
             2 * mi**2 * (mj**2 + mk**2 - σi)
             + (σj + mi**2 - mk**2) * (σk - mi**2 - mj**2)
@@ -173,7 +166,7 @@ def formulate_zeta_angle(
             * sp.sqrt(Kallen(σk, mi**2, mj**2))
         )
         return zeta_symbol, sp.acos(cos_zeta_expr)
-    if (boosted_state, alignment_system, helicity_system) in {
+    if (rotated_state, aligned_subsystem, reference_subsystem) in {
         (1, 3, 1),
         (2, 1, 2),
         (3, 2, 3),
@@ -186,8 +179,11 @@ def formulate_zeta_angle(
         (2, 1, 3),
         (3, 2, 1),
     }:
-        _, zeta = formulate_zeta_angle(boosted_state, helicity_system, alignment_system)
+        _, zeta = formulate_zeta_angle(
+            rotated_state, reference_subsystem, aligned_subsystem
+        )
         return zeta_symbol, -zeta
     raise NotImplementedError(
-        f"No expression for ζ^{boosted_state}_{alignment_system}({helicity_system})"
+        "No expression for"
+        f" ζ^{rotated_state}_{aligned_subsystem}({reference_subsystem})"
     )
