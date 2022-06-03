@@ -34,3 +34,4 @@ pyvenv*/
 .idea/
 **.code-workspace
 julia/notes/crosscheck.md
+julia/plots

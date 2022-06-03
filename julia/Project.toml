@@ -1,9 +1,10 @@
-name = "Lc2ppiKModelLHCb"
+name = "Lb2ppiKModelLHCb"
 uuid = "4f93614a-a399-45f9-82d7-905f290f088d"
 authors = ["Mikhail Mikhasenko <mikhail.mikhasenko@cern.ch>"]
 version = "0.1.0"
 
 [deps]
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 Corpuscles = "e78a0372-c628-4773-9c8d-eb17d149bf93"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
