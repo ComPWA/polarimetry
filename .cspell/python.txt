@@ -26,6 +26,7 @@ phasespace
 pygments
 pyplot
 pyright
+pytest
 seealso
 sharey
 singledispatch

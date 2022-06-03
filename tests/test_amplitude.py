@@ -1,7 +1,12 @@
+import pytest
 import sympy as sp
-from ampform.kinematics.phasespace import Kallen
+from ampform.kinematics.phasespace import Kallen, compute_third_mandelstam
 
-from polarization.amplitude import formulate_scattering_angle, formulate_theta_hat_angle
+from polarization.amplitude import (
+    formulate_scattering_angle,
+    formulate_theta_hat_angle,
+    formulate_zeta_angle,
+)
 
 m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
 σ1, σ2, σ3 = sp.symbols("sigma1:4", nonnegative=True)
@@ -44,3 +49,35 @@ def test_formulate_theta_hat_angle():
     assert formulate_theta_hat_angle(1, 2)[1] == -formulate_theta_hat_angle(2, 1)[1]
     for i in [1, 2, 3]:
         assert formulate_theta_hat_angle(i, i)[1] == 0
+
+
+@pytest.mark.parametrize(
+    ("cos_ζ1", "cos_ζ2", "cos_ζ3"),
+    [
+        (
+            formulate_zeta_angle(1, 2, 3)[1],
+            formulate_zeta_angle(1, 2, 1)[1],
+            formulate_zeta_angle(1, 1, 3)[1],
+        ),
+        (
+            formulate_zeta_angle(2, 3, 1)[1],
+            formulate_zeta_angle(2, 3, 2)[1],
+            formulate_zeta_angle(2, 2, 1)[1],
+        ),
+        (
+            formulate_zeta_angle(3, 1, 2)[1],
+            formulate_zeta_angle(3, 1, 3)[1],
+            formulate_zeta_angle(3, 3, 2)[1],
+        ),
+    ],
+)
+def test_formulate_zeta_angle_sum_rule(
+    cos_ζ1: sp.Expr, cos_ζ2: sp.Expr, cos_ζ3: sp.Expr
+):
+    """Test Eq. (A9), https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033#page=11."""
+    σ3_expr = compute_third_mandelstam(σ1, σ2, m0, m1, m2, m3)
+    masses = {m0: 2.3, m1: 0.94, m2: 0.14, m3: 0.49, σ1: 1.2, σ2: 3.0, σ3: σ3_expr}
+    ζ1 = cos_ζ1.doit().xreplace(masses).xreplace(masses).n()
+    ζ2 = cos_ζ2.doit().xreplace(masses).xreplace(masses).n()
+    ζ3 = cos_ζ3.doit().xreplace(masses).xreplace(masses).n()
+    assert ζ1 == ζ2 + ζ3
