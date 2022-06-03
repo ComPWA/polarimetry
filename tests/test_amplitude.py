@@ -1,7 +1,7 @@
 import sympy as sp
 from ampform.kinematics.phasespace import Kallen
 
-from polarization.amplitude import formulate_scattering_angle
+from polarization.amplitude import formulate_scattering_angle, formulate_theta_hat_angle
 
 m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
 σ1, σ2, σ3 = sp.symbols("sigma1:4", nonnegative=True)
@@ -28,3 +28,19 @@ def test_formulate_scattering_angle():
             * sp.sqrt(Kallen(σ2, m3**2, m1**2))
         )
     )
+
+
+def test_formulate_theta_hat_angle():
+    assert formulate_theta_hat_angle(1, 2)[1] == sp.acos(
+        (
+            (m0**2 + m1**2 - σ1) * (m0**2 + m2**2 - σ2)
+            - 2 * m0**2 * (σ3 - m1**2 - m2**2)
+        )
+        / (
+            sp.sqrt(Kallen(m0**2, m2**2, σ2))
+            * sp.sqrt(Kallen(m0**2, σ1, m1**2))
+        )
+    )
+    assert formulate_theta_hat_angle(1, 2)[1] == -formulate_theta_hat_angle(2, 1)[1]
+    for i in [1, 2, 3]:
+        assert formulate_theta_hat_angle(i, i)[1] == 0

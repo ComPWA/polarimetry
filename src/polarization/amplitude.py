@@ -38,3 +38,36 @@ def formulate_scattering_angle(
         )
     )
     return symbol, theta
+
+
+def formulate_theta_hat_angle(
+    isobar_id: int, alignment_system: int
+) -> tuple[sp.Symbol, sp.acos]:
+    r"""Formulate an expression for :math:`\hat\theta_{i(j)}`."""
+    allowed_ids = {1, 2, 3}
+    if not {isobar_id, alignment_system} <= allowed_ids:
+        raise ValueError(f"Child IDs need to be one of {', '.join(allowed_ids)}")
+    symbol = sp.Symbol(Rf"theta_{isobar_id}({alignment_system})", real=True)
+    if isobar_id == alignment_system:
+        return symbol, sp.S.Zero
+    if (isobar_id, alignment_system) in {(3, 1), (1, 2), (2, 3)}:
+        remaining_id = next(iter(allowed_ids - {isobar_id, alignment_system}))
+        m0 = sp.Symbol(f"m0", nonnegative=True)
+        mi = sp.Symbol(f"m{isobar_id}", nonnegative=True)
+        mj = sp.Symbol(f"m{alignment_system}", nonnegative=True)
+        σi = sp.Symbol(f"sigma{isobar_id}", nonnegative=True)
+        σj = sp.Symbol(f"sigma{alignment_system}", nonnegative=True)
+        σk = sp.Symbol(f"sigma{remaining_id}", nonnegative=True)
+        theta = sp.acos(
+            (
+                (m0**2 + mi**2 - σi) * (m0**2 + mj**2 - σj)
+                - 2 * m0**2 * (σk - mi**2 - mj**2)
+            )
+            / (
+                sp.sqrt(Kallen(m0**2, mj**2, σj))
+                * sp.sqrt(Kallen(m0**2, σi, mi**2))
+            )
+        )
+        return symbol, theta
+    _, theta = formulate_theta_hat_angle(alignment_system, isobar_id)
+    return symbol, -theta
