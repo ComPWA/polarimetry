@@ -25,7 +25,7 @@ import sympy as sp
 from ampform.sympy import UnevaluatedExpression
 from IPython.display import Math, display
 
-from polarization.decay import IsobarNode, Particle, Resonance, ThreeBodyDecay
+from polarization.decay import IsobarNode, Particle, ThreeBodyDecay
 
 
 @singledispatch
@@ -126,7 +126,7 @@ def _render_jp(particle: Particle) -> str:
 def as_markdown_table(obj: Sequence) -> str:
     """Render objects a `str` suitable for generating a table."""
     item_type = _determine_item_type(obj)
-    if item_type is Resonance:
+    if item_type is Particle:
         return _as_resonance_markdown_table(obj)
     if item_type is ThreeBodyDecay:
         return _as_decay_markdown_table(obj)
@@ -144,7 +144,7 @@ def _determine_item_type(obj: Sequence) -> type:
     return item_type
 
 
-def _as_resonance_markdown_table(items: Sequence[Resonance]) -> str:
+def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
     have_lineshapes = any(map(lambda p: p.lineshape is not None, items))
     column_names = [
         "name",
