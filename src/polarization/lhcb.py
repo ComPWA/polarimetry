@@ -12,7 +12,7 @@ from pathlib import Path
 import sympy as sp
 from sympy.core.symbol import Str
 
-from polarization.decay import IsobarNode, Particle, ThreeBodyDecay
+from polarization.decay import IsobarNode, Particle, ThreeBodyDecayChain
 from polarization.spin import filter_parity_violating_ls, generate_ls_couplings
 
 if sys.version_info < (3, 8):
@@ -65,8 +65,8 @@ K = Particle(
 )
 
 
-def load_three_body_decays(filename: str) -> list[ThreeBodyDecay]:
-    def create_isobar(resonance: Particle) -> ThreeBodyDecay:
+def load_three_body_decays(filename: str) -> list[ThreeBodyDecayChain]:
+    def create_isobar(resonance: Particle) -> ThreeBodyDecayChain:
         if resonance.name.startswith("K"):
             child1, child2, sibling = π, K, p
         elif resonance.name.startswith("L"):
@@ -88,7 +88,7 @@ def load_three_body_decays(filename: str) -> list[ThreeBodyDecay]:
             ),
             interaction=generate_L_min(Λc, sibling, resonance, conserve_parity=False),
         )
-        return ThreeBodyDecay(decay)
+        return ThreeBodyDecayChain(decay)
 
     def generate_L_min(
         parent: Particle, child1: Particle, child2: Particle, conserve_parity: bool

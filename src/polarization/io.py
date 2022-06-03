@@ -25,7 +25,7 @@ import sympy as sp
 from ampform.sympy import UnevaluatedExpression
 from IPython.display import Math, display
 
-from polarization.decay import IsobarNode, Particle, ThreeBodyDecay
+from polarization.decay import IsobarNode, Particle, ThreeBodyDecayChain
 
 
 @singledispatch
@@ -99,8 +99,8 @@ def _(obj: IsobarNode, **kwargs) -> str:
     return Rf"{parent} {to} {child1} {child2}"
 
 
-@as_latex.register(ThreeBodyDecay)
-def _(obj: ThreeBodyDecay, **kwargs) -> str:
+@as_latex.register(ThreeBodyDecayChain)
+def _(obj: ThreeBodyDecayChain, **kwargs) -> str:
     return as_latex(obj.decay, **kwargs)
 
 
@@ -128,7 +128,7 @@ def as_markdown_table(obj: Sequence) -> str:
     item_type = _determine_item_type(obj)
     if item_type is Particle:
         return _as_resonance_markdown_table(obj)
-    if item_type is ThreeBodyDecay:
+    if item_type is ThreeBodyDecayChain:
         return _as_decay_markdown_table(obj)
     raise NotImplementedError(
         f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
@@ -170,7 +170,7 @@ def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
     return src
 
 
-def _as_decay_markdown_table(decays: Sequence[ThreeBodyDecay]) -> str:
+def _as_decay_markdown_table(decays: Sequence[ThreeBodyDecayChain]) -> str:
     column_names = [
         "resonance",
         R"$J^P$",

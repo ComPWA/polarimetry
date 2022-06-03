@@ -41,7 +41,7 @@ class IsobarNode:
 
 
 @frozen
-class ThreeBodyDecay:
+class ThreeBodyDecayChain:
     decay: IsobarNode = field(validator=instance_of(IsobarNode))
 
     def __attrs_post_init__(self) -> None:
