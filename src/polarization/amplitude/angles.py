@@ -17,6 +17,10 @@ def formulate_scattering_angle(
     """
     if not {state_id, sibling_id} <= {1, 2, 3}:
         raise ValueError(f"Child IDs need to be one of 1, 2, 3")
+    if {state_id, sibling_id} in {(2, 1), (3, 2), (1, 3)}:
+        raise NotImplementedError(
+            f"Cannot compute scattering angle θ{state_id}{sibling_id}"
+        )
     if state_id == sibling_id:
         raise ValueError(f"IDs of the decay products cannot be equal: {state_id}")
     symbol = sp.Symbol(Rf"theta_{state_id}{sibling_id})", real=True)
