@@ -12,7 +12,7 @@ from pathlib import Path
 import sympy as sp
 from sympy.core.symbol import Str
 
-from polarization.decay import IsobarNode, Particle, Resonance, ThreeBodyDecay
+from polarization.decay import IsobarNode, Particle, ThreeBodyDecay
 from polarization.spin import filter_parity_violating_ls, generate_ls_couplings
 
 if sys.version_info < (3, 8):
@@ -21,7 +21,7 @@ else:
     from typing import Literal, TypedDict
 
 
-Λc = Resonance(
+Λc = Particle(
     name="Λc⁺",
     latex=R"\Lambda_c^+",
     spin=0.5,
@@ -29,7 +29,7 @@ else:
     mass=2.28646,
     width=3.25e-12,
 )
-p = Resonance(
+p = Particle(
     name="p",
     latex="p",
     spin=0.5,
@@ -37,7 +37,7 @@ p = Resonance(
     mass=0.938272046,
     width=0.0,
 )
-K = Resonance(
+K = Particle(
     name="K⁻",
     latex="K^-",
     spin=0,
@@ -45,7 +45,7 @@ K = Resonance(
     mass=0.493677,
     width=5.317e-17,
 )
-π = Resonance(
+π = Particle(
     name="π⁺",
     latex=R"\pi^+",
     spin=0,
@@ -55,7 +55,7 @@ K = Resonance(
 )
 
 # https://github.com/redeboer/polarization-sensitivity/blob/34f5330/julia/notebooks/model0.jl#L43-L47
-Σ = Resonance(
+Σ = Particle(
     name="Σ⁻",
     latex=R"\Sigma^-",
     spin=0.5,
@@ -66,7 +66,7 @@ K = Resonance(
 
 
 def load_three_body_decays(filename: str) -> list[ThreeBodyDecay]:
-    def create_isobar(resonance: Resonance) -> ThreeBodyDecay:
+    def create_isobar(resonance: Particle) -> ThreeBodyDecay:
         if resonance.name.startswith("K"):
             child1, child2, sibling = π, K, p
         elif resonance.name.startswith("L"):
@@ -91,7 +91,7 @@ def load_three_body_decays(filename: str) -> list[ThreeBodyDecay]:
         return ThreeBodyDecay(decay)
 
     def generate_L_min(
-        parent: Resonance, child1: Resonance, child2: Resonance, conserve_parity: bool
+        parent: Particle, child1: Particle, child2: Particle, conserve_parity: bool
     ) -> int:
         ls = generate_ls_couplings(parent.spin, child1.spin, child2.spin)
         if conserve_parity:
@@ -104,8 +104,8 @@ def load_three_body_decays(filename: str) -> list[ThreeBodyDecay]:
     return [create_isobar(res) for res in resonances.values()]
 
 
-def load_resonance_definitions(filename: Path | str) -> dict[str, Resonance]:
-    """Load `Resonance` definitions from a JSON file."""
+def load_resonance_definitions(filename: Path | str) -> dict[str, Particle]:
+    """Load `Particle` definitions from a JSON file."""
     with open(filename) as stream:
         data = json.load(stream)
     isobar_definitions = data["isobars"]
@@ -123,16 +123,16 @@ def load_model_parameters(
     return to_symbol_definitions(json_parameters)
 
 
-def to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Resonance]:
+def to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Particle]:
     return {
         name: to_resonance(name, resonance_def)
         for name, resonance_def in definition.items()
     }
 
 
-def to_resonance(name: str, definition: ResonanceJSON) -> Resonance:
+def to_resonance(name: str, definition: ResonanceJSON) -> Particle:
     spin, parity = _to_jp_pair(definition["jp"])
-    return Resonance(
+    return Particle(
         name,
         name,
         spin,

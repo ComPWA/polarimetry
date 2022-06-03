@@ -21,10 +21,6 @@ class Particle:
     latex: str
     spin: sp.Rational = field(converter=to_rational, validator=assert_spin_value)
     parity: int
-
-
-@frozen
-class Resonance(Particle):
     mass: float
     width: float
     lineshape: Literal[
@@ -34,9 +30,9 @@ class Resonance(Particle):
 
 @frozen
 class IsobarNode:
-    parent: Resonance
-    child1: Resonance | IsobarNode
-    child2: Resonance | IsobarNode
+    parent: Particle
+    child1: Particle | IsobarNode
+    child2: Particle | IsobarNode
     interaction: LSCoupling | None = field(default=None, converter=to_ls)
 
     @property
@@ -49,33 +45,33 @@ class ThreeBodyDecay:
     decay: IsobarNode = field(validator=instance_of(IsobarNode))
 
     def __attrs_post_init__(self) -> None:
-        if not isinstance(self.decay.child1, Resonance):
-            raise TypeError(f"Child 1 has of type {Resonance.__name__} (spectator)")
+        if not isinstance(self.decay.child1, Particle):
+            raise TypeError(f"Child 1 has of type {Particle.__name__} (spectator)")
         if not isinstance(self.decay.child2, IsobarNode):
             raise TypeError(f"Child 2 has of type {IsobarNode.__name__} (the decay)")
-        if not isinstance(self.decay.child2.child1, Resonance):
-            raise TypeError(f"Child 1 of child 2 has of type {Resonance.__name__}")
-        if not isinstance(self.decay.child2.child1, Resonance):
-            raise TypeError(f"Child 1 of child 2 has of type {Resonance.__name__}")
+        if not isinstance(self.decay.child2.child1, Particle):
+            raise TypeError(f"Child 1 of child 2 has of type {Particle.__name__}")
+        if not isinstance(self.decay.child2.child1, Particle):
+            raise TypeError(f"Child 1 of child 2 has of type {Particle.__name__}")
         if self.incoming_ls is None:
             raise ValueError(f"LS-coupling for production node required")
         if self.outgoing_ls is None:
             raise ValueError(f"LS-coupling for decay node required")
 
     @property
-    def parent(self) -> Resonance:
+    def parent(self) -> Particle:
         return self.decay.parent
 
     @property
-    def spectator(self) -> Resonance:
+    def spectator(self) -> Particle:
         return self.decay.child1
 
     @property
-    def resonance(self) -> Resonance:
+    def resonance(self) -> Particle:
         return self.decay.child2.parent
 
     @property
-    def decay_products(self) -> tuple[Resonance, Resonance]:
+    def decay_products(self) -> tuple[Particle, Particle]:
         return (
             self.decay.child2.child1,
             self.decay.child2.child2,
