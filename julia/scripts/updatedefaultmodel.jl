@@ -45,6 +45,9 @@ modelparameters =
     readjson(joinpath("..", "data", "modelparameters.json"))["modelstudies"];
 
 defaultparameters = first(modelparameters)["parameters"]
+defaultparameters["ArK(892)1"] = "1.0 ± 0.0"
+defaultparameters["AiK(892)1"] = "0.0 ± 0.0"
+#
 shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters))
 
 parameterupdates = [ # 6 values are updated
