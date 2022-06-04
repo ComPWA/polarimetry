@@ -3,6 +3,7 @@ ampform
 arange
 clim
 cmap
+configurator
 elif
 funcs
 functools
