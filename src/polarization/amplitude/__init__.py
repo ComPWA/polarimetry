@@ -8,6 +8,7 @@ from ampform.sympy import PoolSum
 from attrs import field, frozen
 from sympy.core.symbol import Str
 from sympy.physics.quantum.spin import Rotation as Wigner
+from sympy.physics.quantum.spin import WignerD
 
 from polarization.decay import (
     ThreeBodyDecay,
@@ -121,56 +122,31 @@ class DalitzPlotDecompositionBuilder:
         λ3: sp.Rational | sp.Symbol,
         reference_subsystem: Literal[1, 2, 3] = 1,
     ) -> tuple[PoolSum, dict[sp.Symbol, sp.Expr]]:
-        zeta01, zeta01_expr = formulate_zeta_angle(0, 1, reference_subsystem)
-        zeta02, zeta02_expr = formulate_zeta_angle(0, 2, reference_subsystem)
-        zeta03, zeta03_expr = formulate_zeta_angle(0, 3, reference_subsystem)
-        zeta11, zeta11_expr = formulate_zeta_angle(1, 1, reference_subsystem)
-        zeta21, zeta21_expr = formulate_zeta_angle(2, 1, reference_subsystem)
-        zeta31, zeta31_expr = formulate_zeta_angle(3, 1, reference_subsystem)
-        zeta12, zeta12_expr = formulate_zeta_angle(1, 2, reference_subsystem)
-        zeta22, zeta22_expr = formulate_zeta_angle(2, 2, reference_subsystem)
-        zeta32, zeta32_expr = formulate_zeta_angle(3, 2, reference_subsystem)
-        zeta13, zeta13_expr = formulate_zeta_angle(1, 3, reference_subsystem)
-        zeta23, zeta23_expr = formulate_zeta_angle(2, 3, reference_subsystem)
-        zeta33, zeta33_expr = formulate_zeta_angle(3, 3, reference_subsystem)
-        symbol_definitions = {
-            zeta01: zeta01_expr,
-            zeta02: zeta02_expr,
-            zeta03: zeta03_expr,
-            zeta11: zeta11_expr,
-            zeta21: zeta21_expr,
-            zeta31: zeta31_expr,
-            zeta12: zeta12_expr,
-            zeta22: zeta22_expr,
-            zeta32: zeta32_expr,
-            zeta13: zeta13_expr,
-            zeta23: zeta23_expr,
-            zeta33: zeta33_expr,
-        }
+        wigner_generator = _AlignmentWignerGenerator(reference_subsystem)
         _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(0:4)^{\prime}", rational=True)
         j0, j1, j2, j3 = (self.decay.states[i].spin for i in sorted(self.decay.states))
         amp_expr = PoolSum(
             A1[_λ0, _λ1, _λ2, _λ3]
-            * Wigner.d(j0, λ0, _λ0, zeta01)
-            * Wigner.d(j1, _λ1, λ1, zeta11)
-            * Wigner.d(j2, _λ2, λ2, zeta21)
-            * Wigner.d(j3, _λ3, λ3, zeta31)
+            * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=1)
+            * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=1)
+            * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=1)
+            * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=1)
             + A2[_λ0, _λ1, _λ2, _λ3]
-            * Wigner.d(j0, λ0, _λ0, zeta02)
-            * Wigner.d(j1, _λ1, λ1, zeta12)
-            * Wigner.d(j2, _λ2, λ2, zeta22)
-            * Wigner.d(j3, _λ3, λ3, zeta32)
+            * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=2)
+            * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=2)
+            * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=2)
+            * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=2)
             + A3[_λ0, _λ1, _λ2, _λ3]
-            * Wigner.d(j0, λ0, _λ0, zeta03)
-            * Wigner.d(j1, _λ1, λ1, zeta13)
-            * Wigner.d(j2, _λ2, λ2, zeta23)
-            * Wigner.d(j3, _λ3, λ3, zeta33),
+            * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=3)
+            * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=3)
+            * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=3)
+            * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=3),
             (_λ0, create_spin_range(j0)),
             (_λ1, create_spin_range(j1)),
             (_λ2, create_spin_range(j2)),
             (_λ3, create_spin_range(j3)),
         )
-        return amp_expr, symbol_definitions
+        return amp_expr, wigner_generator.angle_definitions
 
     def formulate(self, alignment_subsystem: Literal[1, 2, 3] = 1) -> AmplitudeModel:
         helicity_symbols = sp.symbols("lambda:4", rational=True)
@@ -208,6 +184,28 @@ class DalitzPlotDecompositionBuilder:
             variables=angle_definitions,
             parameter_defaults=parameter_defaults,
         )
+
+
+class _AlignmentWignerGenerator:
+    def __init__(self, reference_subsystem: Literal[1, 2, 3] = 1) -> None:
+        self.angle_definitions: dict[sp.Symbol, sp.acos] = {}
+        self.reference_subsystem = reference_subsystem
+
+    def __call__(
+        self,
+        j: sp.Rational,
+        m: sp.Rational,
+        m_prime: sp.Rational,
+        rotated_state: int,
+        aligned_subsystem: int,
+    ) -> sp.Rational | WignerD:
+        if j == 0:
+            return sp.Rational(1)
+        zeta, zeta_expr = formulate_zeta_angle(
+            rotated_state, aligned_subsystem, self.reference_subsystem
+        )
+        self.angle_definitions[zeta] = zeta_expr
+        return Wigner.d(j, m, m_prime, zeta)
 
 
 class DynamicsConfigurator:
