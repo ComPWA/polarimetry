@@ -60,6 +60,43 @@ class DalitzPlotDecompositionBuilder:
         self.decay = decay
         self.dynamics_choices = DynamicsConfigurator(decay)
 
+    def formulate(self, reference_subsystem: Literal[1, 2, 3] = 1) -> AmplitudeModel:
+        helicity_symbols = sp.symbols("lambda:4", rational=True)
+        allowed_helicities = {
+            symbol: create_spin_range(self.decay.states[i].spin)
+            for i, symbol in enumerate(helicity_symbols)
+        }
+        amplitude_definitions = {}
+        angle_definitions = {}
+        parameter_defaults = {}
+        for args in product(*allowed_helicities.values()):
+            for sub_system in [1, 2, 3]:
+                chain_model = self.formulate_subsystem_amplitude(*args, sub_system)
+                amplitude_definitions.update(chain_model.amplitudes)
+                angle_definitions.update(chain_model.variables)
+                parameter_defaults.update(chain_model.parameter_defaults)
+        aligned_amp, zeta_defs = self.formulate_aligned_amplitude(
+            *helicity_symbols, reference_subsystem
+        )
+        angle_definitions.update(zeta_defs)
+        m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
+        masses = {
+            m0: self.decay.states[0].mass,
+            m1: self.decay.states[1].mass,
+            m2: self.decay.states[2].mass,
+            m3: self.decay.states[3].mass,
+        }
+        parameter_defaults.update(masses)
+        return AmplitudeModel(
+            intensity=PoolSum(
+                sp.Abs(aligned_amp) ** 2,
+                *allowed_helicities.items(),
+            ),
+            amplitudes=amplitude_definitions,
+            variables=angle_definitions,
+            parameter_defaults=parameter_defaults,
+        )
+
     def formulate_subsystem_amplitude(
         self,
         λ0: sp.Rational,
@@ -147,43 +184,6 @@ class DalitzPlotDecompositionBuilder:
             (_λ3, create_spin_range(j3)),
         )
         return amp_expr, wigner_generator.angle_definitions
-
-    def formulate(self, alignment_subsystem: Literal[1, 2, 3] = 1) -> AmplitudeModel:
-        helicity_symbols = sp.symbols("lambda:4", rational=True)
-        allowed_helicities = {
-            symbol: create_spin_range(self.decay.states[i].spin)
-            for i, symbol in enumerate(helicity_symbols)
-        }
-        amplitude_definitions = {}
-        angle_definitions = {}
-        parameter_defaults = {}
-        for args in product(*allowed_helicities.values()):
-            for sub_system in [1, 2, 3]:
-                chain_model = self.formulate_subsystem_amplitude(*args, sub_system)
-                amplitude_definitions.update(chain_model.amplitudes)
-                angle_definitions.update(chain_model.variables)
-                parameter_defaults.update(chain_model.parameter_defaults)
-        aligned_amp, zeta_defs = self.formulate_aligned_amplitude(
-            *helicity_symbols, alignment_subsystem
-        )
-        angle_definitions.update(zeta_defs)
-        m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
-        masses = {
-            m0: self.decay.states[0].mass,
-            m1: self.decay.states[1].mass,
-            m2: self.decay.states[2].mass,
-            m3: self.decay.states[3].mass,
-        }
-        parameter_defaults.update(masses)
-        return AmplitudeModel(
-            intensity=PoolSum(
-                sp.Abs(aligned_amp) ** 2,
-                *allowed_helicities.items(),
-            ),
-            amplitudes=amplitude_definitions,
-            variables=angle_definitions,
-            parameter_defaults=parameter_defaults,
-        )
 
 
 class _AlignmentWignerGenerator:
