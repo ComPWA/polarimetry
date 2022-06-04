@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from functools import lru_cache
 from itertools import product
 
 import sympy as sp
@@ -33,14 +34,6 @@ def _print_Indexed_latex(self, printer, *args):
 
 
 sp.Indexed._latex = _print_Indexed_latex
-
-
-A1, A2, A3 = sp.symbols(R"A^(1:4)", cls=sp.IndexedBase)
-A = {
-    1: A1,
-    2: A2,
-    3: A3,
-}
 
 
 @frozen
@@ -142,6 +135,7 @@ class DalitzPlotDecompositionBuilder:
                 (λR, resonance_helicities),
             )
             terms.append(sub_amp)
+        A = _generate_amplitude_index_bases()
         amp_symbol = A[subsystem_id][λ0, λ1, λ2, λ3]
         amp_expr = sp.Add(*terms)
         return AmplitudeModel(
@@ -162,18 +156,19 @@ class DalitzPlotDecompositionBuilder:
         wigner_generator = _AlignmentWignerGenerator(reference_subsystem)
         _λ0, _λ1, _λ2, _λ3 = sp.symbols(R"\lambda_(0:4)^{\prime}", rational=True)
         j0, j1, j2, j3 = (self.decay.states[i].spin for i in sorted(self.decay.states))
+        A = _generate_amplitude_index_bases()
         amp_expr = PoolSum(
-            A1[_λ0, _λ1, _λ2, _λ3]
+            A[1][_λ0, _λ1, _λ2, _λ3]
             * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=1)
             * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=1)
             * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=1)
             * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=1)
-            + A2[_λ0, _λ1, _λ2, _λ3]
+            + A[2][_λ0, _λ1, _λ2, _λ3]
             * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=2)
             * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=2)
             * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=2)
             * wigner_generator(j3, _λ3, λ3, rotated_state=3, aligned_subsystem=2)
-            + A3[_λ0, _λ1, _λ2, _λ3]
+            + A[3][_λ0, _λ1, _λ2, _λ3]
             * wigner_generator(j0, λ0, _λ0, rotated_state=0, aligned_subsystem=3)
             * wigner_generator(j1, _λ1, λ1, rotated_state=1, aligned_subsystem=3)
             * wigner_generator(j2, _λ2, λ2, rotated_state=2, aligned_subsystem=3)
@@ -184,6 +179,11 @@ class DalitzPlotDecompositionBuilder:
             (_λ3, create_spin_range(j3)),
         )
         return amp_expr, wigner_generator.angle_definitions
+
+
+@lru_cache(maxsize=None)
+def _generate_amplitude_index_bases() -> dict[Literal[1, 2, 3], sp.IndexedBase]:
+    return dict(enumerate(sp.symbols(R"A^(1:4)", cls=sp.IndexedBase), 1))
 
 
 class _AlignmentWignerGenerator:
