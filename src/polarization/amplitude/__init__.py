@@ -26,16 +26,6 @@ else:
     from typing import Literal, Protocol
 
 
-def _print_Indexed_latex(self, printer, *args):
-    """Improved LaTeX rendering of a `sympy.Indexed` object."""
-    base = printer._print(self.base)
-    indices = ", ".join(map(printer._print, self.indices))
-    return f"{base}_{{{indices}}}"
-
-
-sp.Indexed._latex = _print_Indexed_latex
-
-
 @frozen
 class AmplitudeModel:
     intensity: sp.Expr = sp.S.One
@@ -245,3 +235,14 @@ class DynamicsBuilder(Protocol):
         self, decay_chain: ThreeBodyDecayChain
     ) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
         ...
+
+
+def simplify_latex_rendering() -> None:
+    """Improve LaTeX rendering of a `sympy.Indexed` object."""
+
+    def _print_Indexed_latex(self, printer, *args):
+        base = printer._print(self.base)
+        indices = ", ".join(map(printer._print, self.indices))
+        return f"{base}_{{{indices}}}"
+
+    sp.Indexed._latex = _print_Indexed_latex
