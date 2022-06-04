@@ -152,24 +152,23 @@ def compute_decay_couplings(decay: ThreeBodyDecay) -> dict[sp.Indexed, Literal[-
     half = sp.Rational(1, 2)
     decay_couplings = {}
     for chain in decay.chains:
-        i = Str(chain.resonance.latex)
+        R = Str(chain.resonance.latex)
         if chain.resonance.name.startswith("K"):
-            decay_couplings[H_dec[i, 0, 0]] = 1
-        if chain.resonance.name.startswith("L"):
-            decay_couplings[H_dec[i, 0, +half]] = 1
-            decay_couplings[H_dec[i, 0, -half]] = (
-                int(chain.resonance.parity)
-                * int(K.parity)
-                * int(p.parity)
-                * (-1) ** (chain.resonance.spin - K.spin - p.spin)
-            )
-        if chain.resonance.name.startswith("D"):
-            decay_couplings[H_dec[i, +half, 0]] = 1
-            decay_couplings[H_dec[i, -half, 0]] = (
-                int(chain.resonance.parity)
-                * int(p.parity)
-                * int(π.parity)
-                * (-1) ** (chain.resonance.spin - p.spin - π.spin)
+            decay_couplings[H_dec[R, 0, 0]] = 1
+        if chain.resonance.name[0] in {"D", "L"}:
+            child1, child2 = chain.decay_products
+            if chain.resonance.name.startswith("D"):
+                coupling_pos = H_dec[R, +half, 0]
+                coupling_neg = H_dec[R, -half, 0]
+            else:
+                coupling_pos = H_dec[R, 0, +half]
+                coupling_neg = H_dec[R, 0, -half]
+            decay_couplings[coupling_pos] = 1
+            decay_couplings[coupling_neg] = int(
+                chain.resonance.parity
+                * child1.parity
+                * child2.parity
+                * (-1) ** (chain.resonance.spin - child1.spin - child2.spin)
             )
     return decay_couplings
 
