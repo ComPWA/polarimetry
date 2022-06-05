@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import pytest
 import sympy as sp
 
 from polarization.decay import IsobarNode, Particle
@@ -39,11 +40,21 @@ def test_as_latex_isobar_node():
     assert latex == R"\Lambda(1520) \xrightarrow[S=1]{L=2} p K^-"
 
 
-def test_get_readable_hash_uniqueness():
-    x, y = sp.symbols("x y")
+@pytest.mark.parametrize(
+    "assumptions",
+    [
+        dict(),
+        dict(real=True),
+        dict(rational=True),
+    ],
+)
+def test_get_readable_hash(assumptions):
+    x, y = sp.symbols("x y", **assumptions)
     expr = x**2 + y
     h = get_readable_hash(expr)
     assert h == "bbc98339949be8bbeb405eb320f2b42d24c597cf0a8780408070d28a320d16fc"
+    # Assumptions do not affect the hash. This should be addressed through:
+    # https://github.com/redeboer/polarization-sensitivity/issues/41
 
 
 def test_load_isobar_definitions():
