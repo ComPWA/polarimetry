@@ -134,20 +134,35 @@ def load_resonance_definitions(filename: Path | str) -> dict[str, Particle]:
 
 
 def load_model_parameters(
-    filename: Path | str, decay: ThreeBodyDecay, model_number: int = 0
+    filename: Path | str,
+    decay: ThreeBodyDecay,
+    model_id: int | str,
+    typ: Literal["value", "uncertainty"] = "value",
 ) -> dict[sp.Indexed | sp.Symbol, complex | float]:
-    with open("../data/modelparameters.json") as stream:
+    with open(filename) as stream:
         json_data = json.load(stream)
-    json_parameters = json_data["modelstudies"][model_number]["parameters"]
+    if isinstance(model_id, str):
+        model_id = _get_model_by_title(json_data, model_id)
+    json_parameters = json_data["modelstudies"][model_id]["parameters"]
     json_parameters["ArK(892)1"] = "1.0 ± 0.0"
     json_parameters["AiK(892)1"] = "0.0 ± 0.0"
-    parameters = to_symbol_definitions(json_parameters, decay)
-    decay_couplings = compute_decay_couplings(decay)
+    parameters = _to_symbol_value_mapping(json_parameters, decay, typ)
+    decay_couplings = compute_decay_couplings(decay, typ)
     parameters.update(decay_couplings)
     return parameters
 
 
-def compute_decay_couplings(decay: ThreeBodyDecay) -> dict[sp.Indexed, Literal[-1, 1]]:
+def _get_model_by_title(json_data: dict, title: str) -> int:
+    for i, item in enumerate(json_data["modelstudies"]):
+        title = item["title"]
+        if item["title"] == title:
+            return i
+    raise KeyError(f'Could not find model with title "{title}"')
+
+
+def compute_decay_couplings(
+    decay: ThreeBodyDecay, typ: Literal["value", "uncertainty"] = "value"
+) -> dict[sp.Indexed, Literal[-1, 0, 1]]:
     H_dec = sp.IndexedBase(R"\mathcal{H}^\mathrm{decay}")
     half = sp.Rational(1, 2)
     decay_couplings = {}
@@ -170,6 +185,8 @@ def compute_decay_couplings(decay: ThreeBodyDecay) -> dict[sp.Indexed, Literal[-
                 * child2.parity
                 * (-1) ** (chain.resonance.spin - child1.spin - child2.spin)
             )
+    if typ == "uncertainty":
+        return {s: 0 for s in decay_couplings}
     return decay_couplings
 
 
@@ -224,26 +241,32 @@ class ResonanceJSON(TypedDict):
     lineshape: Literal["BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"]
 
 
-def to_symbol_definitions(
-    parameter_dict: dict[str, str], decay: ThreeBodyDecay
+def _to_symbol_value_mapping(
+    parameter_dict: dict[str, str],
+    decay: ThreeBodyDecay,
+    typ: Literal["value", "uncertainty"] = "value",
 ) -> dict[sp.Basic, complex | float]:
+    switch = 0 if typ == "value" else 1
     key_to_val: dict[str, complex | float] = {}
     for key, str_value in parameter_dict.items():
         if key.startswith("Ar"):
             identifier = key[2:]
             str_imag = parameter_dict[f"Ai{identifier}"]
-            real = to_float(str_value)
-            imag = to_float(str_imag)
+            real = _to_value_with_uncertainty(str_value)[switch]
+            imag = _to_value_with_uncertainty(str_imag)[switch]
             key = f"A{identifier}"
-            indexed_symbol: sp.Indexed = to_symbol(key)
+            indexed_symbol: sp.Indexed = parameter_key_to_symbol(key)
             chain = decay.find_chain(resonance_name=str(indexed_symbol.indices[0]))
-            factor = get_conversion_factor(chain.resonance)
+            if typ == "value":
+                factor = get_conversion_factor(chain.resonance)
+            else:
+                factor = 1
             key_to_val[f"A{identifier}"] = factor * complex(real, imag)
         elif key.startswith("Ai"):
             continue
         else:
-            key_to_val[key] = to_float(str_value)
-    return {to_symbol(key): value for key, value in key_to_val.items()}
+            key_to_val[key] = _to_value_with_uncertainty(str_value)[switch]
+    return {parameter_key_to_symbol(key): value for key, value in key_to_val.items()}
 
 
 def get_conversion_factor(
@@ -262,12 +285,16 @@ def get_conversion_factor(
     raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
 
 
-def to_float(str_value: str) -> float:
-    value, _ = map(float, str_value.split(" ± "))
-    return value
+def _to_value_with_uncertainty(str_value: str) -> float:
+    """
+    >>> _to_value_with_uncertainty('1.5 ± 0.2')
+    (1.5, 0.2)
+    """
+    value, uncertainty = map(float, str_value.split(" ± "))
+    return value, uncertainty
 
 
-def to_symbol(key: str) -> sp.Indexed | sp.Symbol:
+def parameter_key_to_symbol(key: str) -> sp.Indexed | sp.Symbol:
     H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
     half = sp.Rational(1, 2)
     if key.startswith("A"):

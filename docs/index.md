@@ -8,6 +8,7 @@ cross-check
 phase-space
 intensity-distribution
 polarization
+statistics
 API <api/polarization>
 ```
 

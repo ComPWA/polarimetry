@@ -18,9 +18,12 @@ isinstance
 isnan
 itertools
 kwargs
+lambdification
+lambdify
 lhcb
 nbconvert
 ncols
+ndarray
 nrows
 numpy
 pathlib
@@ -35,6 +38,7 @@ sharey
 singledispatch
 sympify
 sympy
+tensorwaves
 timeit
 tqdm
 vmax
