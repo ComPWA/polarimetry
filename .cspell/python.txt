@@ -35,6 +35,7 @@ sharey
 singledispatch
 sympify
 sympy
+tensorwaves
 timeit
 tqdm
 vmax
