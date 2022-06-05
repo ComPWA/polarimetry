@@ -134,17 +134,27 @@ def load_resonance_definitions(filename: Path | str) -> dict[str, Particle]:
 
 
 def load_model_parameters(
-    filename: Path | str, decay: ThreeBodyDecay, model_number: int = 0
+    filename: Path | str, decay: ThreeBodyDecay, model_id: int | str
 ) -> dict[sp.Indexed | sp.Symbol, complex | float]:
     with open("../data/modelparameters.json") as stream:
         json_data = json.load(stream)
-    json_parameters = json_data["modelstudies"][model_number]["parameters"]
+    if isinstance(model_id, str):
+        model_id = _get_model_by_title(json_data, model_id)
+    json_parameters = json_data["modelstudies"][model_id]["parameters"]
     json_parameters["ArK(892)1"] = "1.0 ± 0.0"
     json_parameters["AiK(892)1"] = "0.0 ± 0.0"
     parameters = to_symbol_definitions(json_parameters, decay)
     decay_couplings = compute_decay_couplings(decay)
     parameters.update(decay_couplings)
     return parameters
+
+
+def _get_model_by_title(json_data: dict, title: str) -> int:
+    for i, item in enumerate(json_data["modelstudies"]):
+        title = item["title"]
+        if item["title"] == title:
+            return i
+    raise KeyError(f'Could not find model with title "{title}"')
 
 
 def compute_decay_couplings(decay: ThreeBodyDecay) -> dict[sp.Indexed, Literal[-1, 1]]:
