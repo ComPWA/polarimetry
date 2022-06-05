@@ -7,6 +7,8 @@ configurator
 elif
 funcs
 functools
+hashlib
+hexdigest
 imag
 ipykernel
 ipynb

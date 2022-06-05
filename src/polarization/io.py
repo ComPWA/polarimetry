@@ -17,6 +17,10 @@ This code originates from `ComPWA/ampform#280
 """
 from __future__ import annotations
 
+import hashlib
+import logging
+import os
+import pickle
 from collections import abc
 from functools import singledispatch
 from typing import Iterable, Mapping, Sequence
@@ -234,3 +238,34 @@ def display_doit(
             environment="eqnarray",
         )
     display(Math(latex))
+
+
+def perform_cached_doit(unevaluated_expr: sp.Expr, directory: str = ".") -> sp.Expr:
+    """Perform :code:`doit()` on a `sympy.Expr` and cache the result to disk.
+
+    The cached result is fetched from disk if the hash of the original expression is the
+    same as the hash embedded in the filename.
+    """
+    h = get_readable_hash(unevaluated_expr)
+    filename = f"{directory}/sympy_expr_{h[:7]}.pkl"
+    if os.path.exists(filename):
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    logging.info(f"Cached expression file {filename} not found, performing doit()...")
+    unfolded_expr = unevaluated_expr.doit()
+    with open(filename, "wb") as f:
+        pickle.dump(unfolded_expr, f)
+    return unfolded_expr
+
+
+def get_readable_hash(obj) -> str:
+    b = _to_bytes(obj)
+    return hashlib.sha256(b).hexdigest()
+
+
+def _to_bytes(obj) -> bytes:
+    if isinstance(obj, sp.Expr):
+        # Using the str printer is slower and not necessarily unique,
+        # but pickle.dumps() does not always result in the same bytes stream.
+        return str(obj).encode()
+    return pickle.dumps(obj)
