@@ -38,6 +38,11 @@ src_paths = [
 ]
 known_third_party = "THIRDPARTY,sympy"
 
+[tool.nbqa.addopts]
+flake8 = [
+    "--extend-ignore=E501,E731,F821",
+]
+
 [tool.pytest.ini_options]
 addopts = [
     "--color=yes",
