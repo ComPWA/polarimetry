@@ -269,3 +269,8 @@ def _to_bytes(obj) -> bytes:
         # but pickle.dumps() does not always result in the same bytes stream.
         return str(obj).encode()
     return pickle.dumps(obj)
+
+
+def mute_jax_warnings() -> None:
+    jax_logger = logging.getLogger("absl")
+    jax_logger.setLevel(logging.ERROR)

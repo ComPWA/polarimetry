@@ -28,6 +28,7 @@ else:
 
 @frozen
 class AmplitudeModel:
+    decay: ThreeBodyDecay
     intensity: sp.Expr = sp.S.One
     amplitudes: dict[sp.Indexed, sp.Expr] = field(factory=dict)
     variables: dict[sp.Symbol, sp.Expr] = field(factory=dict)
@@ -71,6 +72,7 @@ class DalitzPlotDecompositionBuilder:
         }
         parameter_defaults.update(masses)
         return AmplitudeModel(
+            decay=self.decay,
             intensity=PoolSum(
                 sp.Abs(aligned_amp) ** 2,
                 *allowed_helicities.items(),
@@ -129,6 +131,7 @@ class DalitzPlotDecompositionBuilder:
         amp_symbol = A[subsystem_id][λ0, λ1, λ2, λ3]
         amp_expr = sp.Add(*terms)
         return AmplitudeModel(
+            decay=self.decay,
             intensity=sp.Abs(amp_symbol) ** 2,
             amplitudes={amp_symbol: amp_expr},
             variables={θij: θij_expr},
