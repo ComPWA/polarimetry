@@ -1,6 +1,6 @@
 """Functions for dynamics lineshapes and kinematics.
 
-.. seealso:: :doc:`/dynamics`
+.. seealso:: :doc:`/appendix/dynamics`
 """
 
 # pyright: reportPrivateUsage=false
