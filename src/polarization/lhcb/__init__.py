@@ -98,7 +98,7 @@ def load_resonance_definitions(filename: Path | str) -> dict[str, Particle]:
 def load_model_parameters(
     filename: Path | str,
     decay: ThreeBodyDecay,
-    model_id: int | str,
+    model_id: int | str = 0,
     typ: Literal["value", "uncertainty"] = "value",
 ) -> dict[sp.Indexed | sp.Symbol, complex | float]:
     with open(filename) as stream:

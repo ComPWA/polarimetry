@@ -21,6 +21,9 @@ kwargs
 lambdification
 lambdify
 lhcb
+linspace
+matplotlib
+meshgrid
 nbconvert
 ncols
 ndarray
