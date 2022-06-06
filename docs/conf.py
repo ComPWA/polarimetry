@@ -54,7 +54,11 @@ autodoc_default_options = {
     "show-inheritance": True,
 }
 autodoc_member_order = "bysource"
+autodoc_type_aliases = {
+    "OuterStates": "polarization.decay.OuterStates",
+}
 autodoc_typehints_format = "short"
+autosectionlabel_prefix_document = True
 codeautolink_concat_default = True
 copyright = "2022"
 exclude_patterns = [
@@ -65,13 +69,14 @@ exclude_patterns = [
 ]
 extensions = [
     "myst_nb",
+    "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
     "sphinx_book_theme",
     "sphinx_codeautolink",
     "sphinx_copybutton",
     "sphinx_panels",
     "sphinx_togglebutton",
-    "sphinx.ext.napoleon",
 ]
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
@@ -90,13 +95,14 @@ html_title = "Polarization sensitivity"
 intersphinx_mapping = {
     "IPython": ("https://ipython.readthedocs.io/en/stable", None),
     "ampform": (f"https://ampform.readthedocs.io/en/stable", None),
-    "attrs": (f"https://www.attrs.org/en/stable", None),
-    "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/stable", None),
-    "matplotlib": (f"https://matplotlib.org/stable", None),
+    "attrs": ("https://www.attrs.org/en/stable", None),
+    "ipywidgets": ("https://ipywidgets.readthedocs.io/en/stable", None),
+    "jax": ("https://jax.readthedocs.io/en/latest", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
     "numpy": ("https://numpy.org/doc/stable", None),
     "python": ("https://docs.python.org/3", None),
     "sympy": ("https://docs.sympy.org/latest", None),
-    "tensorwaves": (f"https://tensorwaves.readthedocs.io/en/stable", None),
+    "tensorwaves": ("https://tensorwaves.readthedocs.io/en/stable", None),
 }
 myst_enable_extensions = [
     "colon_fence",

@@ -1,14 +1,12 @@
 # Polarization sensitivity
 
 ```{toctree}
-dynamics
-angles
 amplitude-model
 cross-check
-phase-space
-intensity-distribution
+intensity
 polarization
 statistics
+appendix
 API <api/polarization>
 ```
 

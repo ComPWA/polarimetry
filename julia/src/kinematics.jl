@@ -11,4 +11,3 @@ const ms = ThreeBodyMasses(m1=mp, m2=mπ, m3=mK, m0=mΛc)
 const tbs = ThreeBodySystem(ms, ThreeBodySpins(1, 0, 0; two_h0=1))
 
 const parities = ['+', '-', '-', '±']
-

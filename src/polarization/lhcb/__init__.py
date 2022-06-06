@@ -124,7 +124,7 @@ def _get_model_by_title(json_data: dict, title: str) -> int:
 
 def compute_decay_couplings(
     decay: ThreeBodyDecay, typ: Literal["value", "uncertainty"] = "value"
-) -> dict[sp.Indexed, Literal[-1, 0, 1]]:
+) -> dict[sp.Indexed, int]:
     H_dec = sp.IndexedBase(R"\mathcal{H}^\mathrm{decay}")
     half = sp.Rational(1, 2)
     decay_couplings = {}
