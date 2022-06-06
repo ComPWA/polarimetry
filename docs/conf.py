@@ -54,7 +54,11 @@ autodoc_default_options = {
     "show-inheritance": True,
 }
 autodoc_member_order = "bysource"
+autodoc_type_aliases = {
+    "OuterStates": "polarization.decay.OuterStates",
+}
 autodoc_typehints_format = "short"
+autosectionlabel_prefix_document = True
 codeautolink_concat_default = True
 copyright = "2022"
 exclude_patterns = [
@@ -65,13 +69,14 @@ exclude_patterns = [
 ]
 extensions = [
     "myst_nb",
+    "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
     "sphinx_book_theme",
     "sphinx_codeautolink",
     "sphinx_copybutton",
     "sphinx_panels",
     "sphinx_togglebutton",
-    "sphinx.ext.napoleon",
 ]
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"

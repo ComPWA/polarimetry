@@ -15,12 +15,23 @@ from sphinx.domains.python import parse_reftarget
 from sphinx.environment import BuildEnvironment
 
 __TARGET_SUBSTITUTIONS = {
+    "Literal[(-1, 1)]": "typing.Literal",
+    "Literal[- 1, 1]": "typing.Literal",
+    "OuterStates": "polarization.decay.OuterStates",
+    "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "Path": "pathlib.Path",
+    "PoolSum": "ampform.sympy.PoolSum",
     "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
     "implement_doit_method": "ampform.sympy.implement_doit_method",
+    "sp.Expr": "sympy.core.expr.Expr",
+    "sp.Indexed": "sympy.tensor.indexed.Indexed",
     "sp.Rational": "sympy.core.numbers.Rational",
+    "sp.Symbol": "sympy.core.symbol.Symbol",
+    "sp.acos": "sympy.functions.elementary.trigonometric.acos",
 }
-__REF_TYPE_SUBSTITUTIONS = {}
+__REF_TYPE_SUBSTITUTIONS = {
+    "polarization.decay.OuterStates": "obj",
+}
 
 
 def _new_type_to_xref(
