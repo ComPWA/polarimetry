@@ -90,13 +90,14 @@ html_title = "Polarization sensitivity"
 intersphinx_mapping = {
     "IPython": ("https://ipython.readthedocs.io/en/stable", None),
     "ampform": (f"https://ampform.readthedocs.io/en/stable", None),
-    "attrs": (f"https://www.attrs.org/en/stable", None),
-    "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/stable", None),
-    "matplotlib": (f"https://matplotlib.org/stable", None),
+    "attrs": ("https://www.attrs.org/en/stable", None),
+    "ipywidgets": ("https://ipywidgets.readthedocs.io/en/stable", None),
+    "jax": ("https://jax.readthedocs.io/en/latest", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
     "numpy": ("https://numpy.org/doc/stable", None),
     "python": ("https://docs.python.org/3", None),
     "sympy": ("https://docs.sympy.org/latest", None),
-    "tensorwaves": (f"https://tensorwaves.readthedocs.io/en/stable", None),
+    "tensorwaves": ("https://tensorwaves.readthedocs.io/en/stable", None),
 }
 myst_enable_extensions = [
     "colon_fence",
