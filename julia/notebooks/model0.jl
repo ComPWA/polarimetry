@@ -261,7 +261,7 @@ function rotationongrid(; iσx, iσy, Ngrid = 100)
 end
 
 # ╔═╡ 4cec3154-2b51-4355-a813-2ce95e05eeae
-datarotationongrid = let 
+datarotationongrid = let
 	@unpack iσx, iσy, σxv = dataIalphaongrid
 	Ngrid = length(σxv)
 	rotationongrid(; iσx, iσy, Ngrid)
@@ -274,7 +274,7 @@ O3rotate(α1,α2,cosθ,signθ) =
 # ╔═╡ 3c7b043b-0d58-4e1b-8ce7-52bf65c6ff6f
 function O3rotate!(Iv,coswv,signθ)
 	for ci in CartesianIndices(coswv)
-		Iv[3][ci], Iv[1][ci] = 
+		Iv[3][ci], Iv[1][ci] =
 			O3rotate(Iv[3][ci],Iv[1][ci],coswv[ci],signθ),
 			O3rotate(Iv[1][ci],Iv[3][ci],coswv[ci],-signθ)
 	end
@@ -310,7 +310,7 @@ let
 	plot(dataIalphaongrid_rot31, left_margin=4mm, bottom_margin=5.5mm)
 	savefig(joinpath("plots","asymmetries_align3.pdf"))
 	plot!()
-end	
+end
 
 # ╔═╡ 3a4be1b4-a544-437a-b1f6-bd82819ba676
 ᾱ⁽³⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot31.Iv[1:3])) ./
@@ -395,7 +395,7 @@ begin
 	for s in Set(isobarnames)
 		couplingsmap = (isobarnames .== s)
 		Iξv = intensity.(Aiv, Ref(couplings .* couplingsmap));
-		# 
+		#
 		cs = couplings[couplingsmap]
 		Hs = getproperty.(chains[couplingsmap], :HRk)
 		#

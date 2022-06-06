@@ -88,4 +88,3 @@ const λσs0 = randomPoint(tbs)
 
 # full information
 @benchmark amplitude.($(Ref(λσs0)), $(model0.chains))
-
