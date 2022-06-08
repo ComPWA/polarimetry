@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.4
+# v0.19.5
 
 using Markdown
 using InteractiveUtils
@@ -185,6 +185,9 @@ begin
 		for two_λ in [-1,1], two_ν in [-1, 1], two_ν′ in [-1,1]) |> real
 end
 
+# ╔═╡ 8c6c0367-8b35-4037-bef2-91ff70a8cdd3
+σPauli
+
 # ╔═╡ 2f42ac46-554c-4376-83a9-ad8eeaf90422
 function Ialphaongrid(; iσx, iσy, Ngrid = 100)
 	σxv = range(lims(iσx,ms)..., length=Ngrid)
@@ -220,13 +223,6 @@ dataIalphaongrid = Ialphaongrid(; iσx=1, iσy=2, Ngrid = 55) ;
 	end
 end
 
-# ╔═╡ ef85ad9b-13bb-45bc-985e-289a4a81fe7f
-let
-	plot(dataIalphaongrid, left_margin=3mm, bottom_margin=5mm)
-	savefig(joinpath("plots","asymmetries_align1.pdf"))
-	plot!()
-end
-
 # ╔═╡ c1554cf8-3cfa-4209-9ef1-31f424ebb361
 md"""
 The three-body decay is sensitive to the inital polarization even if the Dalitz plot distribution is integated over.
@@ -238,13 +234,30 @@ The averaging over the dalitz plot variables does the averaging over momenta and
 Importnatly, the choice of the alignment configuration is determining which of the final-state particles is an anchor. Expectedly, the averaged value of the asymmetry vector is different for the three possible alignments.
 """
 
+# ╔═╡ 26fa6889-03e3-42b5-8222-c15f0ab3caa2
+md"""
+#### Alignment (1)
+"""
+
+# ╔═╡ ef85ad9b-13bb-45bc-985e-289a4a81fe7f
+let
+	plot(dataIalphaongrid, left_margin=3mm, bottom_margin=5mm)
+	savefig(joinpath("plots","asymmetries_align1.pdf"))
+	plot!()
+end
+
 # ╔═╡ a2cbe50c-c1a1-4572-b440-e3c618146ae4
 ᾱ⁽¹⁾ = sum.(filter.(!isnan, dataIalphaongrid.Iv[1:3])) ./
-	sum(filter(!isnan, dataIalphaongrid.Iv[4]))
+	sum(filter(!isnan, dataIalphaongrid.Iv[4])) ;
+
+# ╔═╡ 25466667-73de-4dcb-a97e-592dac225c10
+md"""
+#### ᾱ⁽¹⁾ = $(string(round.(ᾱ⁽¹⁾, digits=3)))
+"""
 
 # ╔═╡ f41c087e-580d-408e-afa1-50d013ffa47f
 md"""
-### Rotate $R_y^{-1}(\zeta^0_{x(1)})$ for chains 2 (x=2) and 3 (x=3)
+Now, rotate $R_y^{-1}(\zeta^0_{x(1)})$ for chains 2 (x=2) and 3 (x=3)
 """
 
 # ╔═╡ 14df1109-1904-4536-9f15-3009e4003a7f
@@ -261,7 +274,7 @@ function rotationongrid(; iσx, iσy, Ngrid = 100)
 end
 
 # ╔═╡ 4cec3154-2b51-4355-a813-2ce95e05eeae
-datarotationongrid = let 
+datarotationongrid = let
 	@unpack iσx, iσy, σxv = dataIalphaongrid
 	Ngrid = length(σxv)
 	rotationongrid(; iσx, iσy, Ngrid)
@@ -271,10 +284,15 @@ end ;
 O3rotate(α1,α2,cosθ,signθ) =
 	α1*cosθ - α2*signθ*sqrt(1-cosθ^2)
 
+# ╔═╡ bec3ddaa-c3d2-47ae-9208-359f08a85353
+md"""
+#### Alignment (2)
+"""
+
 # ╔═╡ 3c7b043b-0d58-4e1b-8ce7-52bf65c6ff6f
 function O3rotate!(Iv,coswv,signθ)
 	for ci in CartesianIndices(coswv)
-		Iv[3][ci], Iv[1][ci] = 
+		Iv[3][ci], Iv[1][ci] =
 			O3rotate(Iv[3][ci],Iv[1][ci],coswv[ci],signθ),
 			O3rotate(Iv[1][ci],Iv[3][ci],coswv[ci],-signθ)
 	end
@@ -298,6 +316,16 @@ end
 ᾱ⁽²⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot12.Iv[1:3])) ./
 	sum(filter(!isnan, dataIalphaongrid_rot12.Iv[4]))
 
+# ╔═╡ 264d4fed-d656-48f2-be04-8ef0122721de
+md"""
+#### ᾱ⁽²⁾ = $(string(round.(ᾱ⁽²⁾, digits=3)))
+"""
+
+# ╔═╡ ddcadf04-1842-4218-9ca0-550d9ca48f73
+md"""
+#### Alignment (3)
+"""
+
 # ╔═╡ a1018b19-83ff-40a1-b5ec-2f038fc0f981
 begin
 	dataIalphaongrid_rot31 = merge(dataIalphaongrid,
@@ -310,11 +338,16 @@ let
 	plot(dataIalphaongrid_rot31, left_margin=4mm, bottom_margin=5.5mm)
 	savefig(joinpath("plots","asymmetries_align3.pdf"))
 	plot!()
-end	
+end
 
 # ╔═╡ 3a4be1b4-a544-437a-b1f6-bd82819ba676
 ᾱ⁽³⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot31.Iv[1:3])) ./
-	sum(filter(!isnan, dataIalphaongrid_rot31.Iv[4]))
+	sum(filter(!isnan, dataIalphaongrid_rot31.Iv[4])) ;
+
+# ╔═╡ ac7e83fb-1ab0-41a0-ae78-c9a36053d149
+md"""
+#### ᾱ⁽³⁾ = $(string(round.(ᾱ⁽³⁾, digits=3)))
+"""
 
 # ╔═╡ e550eec0-6911-4016-824f-b21f82d10e9a
 Dict(
@@ -342,10 +375,23 @@ Ai(σs) = [[amplitude(σs,two_λs, d) for d in chains]
 	for two_λs in itr(tbs.two_js)]
 
 # ╔═╡ 88c58ce2-c98b-4b60-901f-ed95099c144b
-pdata = flatDalitzPlotSample(ms; Nev=100_000) ;
+pdata = flatDalitzPlotSample(ms; Nev=300_000) ;
 
 # ╔═╡ 589c3c6f-fc24-4c2c-bf42-df0b3187d8cf
 Aiv = ThreadsX.map(Ai, pdata) ;
+
+# ╔═╡ 25a293e0-05c6-44d2-bec0-42649558e1c2
+Iαv = [sum(
+	conj(sum(a[iλ,1,1,iν′] .* couplings)) *
+		σP[3-iν′,3-iν] *
+		sum(a[iλ,1,1,iν] .* couplings)
+	for iλ in [1,2], iν in [1,2], iν′ in [1,2],
+		a in Aiv) |> real for σP in σPauli]
+
+# ╔═╡ 01bbaad2-81e9-436c-b698-d1a16f9da529
+md"""
+#### Cross-check: ᾱ⁽¹⁾ = $(string(round.(Iαv[1:3] ./ Iαv[4], digits=3)))
+"""
 
 # ╔═╡ b3c0d027-4c98-47e4-9f9a-77ba1d10ae98
 Iv = intensity.(Aiv, Ref(couplings));
@@ -395,7 +441,7 @@ begin
 	for s in Set(isobarnames)
 		couplingsmap = (isobarnames .== s)
 		Iξv = intensity.(Aiv, Ref(couplings .* couplingsmap));
-		# 
+		#
 		cs = couplings[couplingsmap]
 		Hs = getproperty.(chains[couplingsmap], :HRk)
 		#
@@ -411,6 +457,50 @@ begin
 			order(:isobarname, by=x->eval(Meta.parse(x[3:end-1])))),
 		order(:isobarname, by=x->findfirst(x[1],"LDK")))
 end
+
+# ╔═╡ c46dca24-006d-4a15-956c-e73c9c5e55c6
+leadingfraction = let
+	iσx = 1
+	iσy = 2
+	Ngrid = 150
+
+	σxv = range(lims(iσx,ms)..., length=Ngrid)
+	σyv = range(lims(iσy,ms)..., length=Ngrid)
+	matrix = Matrix(undef,Ngrid-1,Ngrid-1)
+	for i in 1:Ngrid-1
+		for j in 1:Ngrid-1
+			_map = map(σs->
+				(σxv[i] < σs[iσx] < σxv[i+1] &&
+				σyv[j] < σs[iσy] < σyv[j+1]), pdata)
+			Iξ = [sum(intensity.(Aiv[_map],
+					Ref(couplings .* (isobarnames .== s))))
+				for s in Set(isobarnames)]
+			#
+			Iξ ./= sum(Iξ)
+			m,ind = findmax(Iξ)
+			matrix[i,j] = m==0 || isnan(m) ? (NaN,NaN) : (m,ind)
+		end
+	end
+	(;
+		matrix_li = getindex.(matrix, 2),
+		matrix_fr = getindex.(matrix, 1), iσx, iσy,
+		σxv=(σxv[1:end-1]+σxv[2:end])/2,
+		σyv=(σyv[1:end-1]+σyv[2:end])/2)
+end ; 
+
+# ╔═╡ f6f6ed4f-3a6c-4dfe-a758-504172ef5b6c
+let
+	heatmap(leadingfraction.σxv, leadingfraction.σyv,
+		leadingfraction.matrix_li', # .*
+			# (leadingfraction.matrix_li' .== 9)
+		colorbar=true,
+		title="leading fraction")
+	savefig(joinpath("plots","leadingfraction.pdf"))
+	plot!()
+end
+
+# ╔═╡ 6760c424-3cbc-4402-963b-a21bf71b8dc8
+leadind = Set(filter(x->!(isnan(x)), leadingfraction.matrix_li))
 
 # ╔═╡ Cell order:
 # ╟─d3cb114e-ee0c-4cd5-87fb-82289849aceb
@@ -439,32 +529,44 @@ end
 # ╟─ed7f802c-a931-4114-aa30-6d10735520d7
 # ╠═281b641b-fdca-4a6e-8a9d-732c34f7a71d
 # ╠═45843dac-096a-4bd5-82eb-aad4f18b8f86
+# ╠═8c6c0367-8b35-4037-bef2-91ff70a8cdd3
 # ╠═2f42ac46-554c-4376-83a9-ad8eeaf90422
 # ╠═190a6f02-bd33-447c-a5b3-4dd3dd79579c
 # ╠═b50627f0-d3a6-4931-867e-5d102b543502
-# ╠═ef85ad9b-13bb-45bc-985e-289a4a81fe7f
 # ╟─c1554cf8-3cfa-4209-9ef1-31f424ebb361
+# ╟─26fa6889-03e3-42b5-8222-c15f0ab3caa2
+# ╠═ef85ad9b-13bb-45bc-985e-289a4a81fe7f
 # ╠═a2cbe50c-c1a1-4572-b440-e3c618146ae4
+# ╟─25466667-73de-4dcb-a97e-592dac225c10
 # ╟─f41c087e-580d-408e-afa1-50d013ffa47f
 # ╠═14df1109-1904-4536-9f15-3009e4003a7f
 # ╠═4cec3154-2b51-4355-a813-2ce95e05eeae
 # ╠═c327efc1-8e7f-49e7-9407-207a44647d6f
+# ╟─bec3ddaa-c3d2-47ae-9208-359f08a85353
 # ╠═3c7b043b-0d58-4e1b-8ce7-52bf65c6ff6f
 # ╠═d7227cb9-02c3-43da-b44b-5af38afbe0b9
 # ╠═320828c8-5b5d-43d0-9883-e54354296488
 # ╠═9353e902-1c7b-487e-a5f4-3e99bf0fada8
+# ╟─264d4fed-d656-48f2-be04-8ef0122721de
+# ╟─ddcadf04-1842-4218-9ca0-550d9ca48f73
 # ╠═a1018b19-83ff-40a1-b5ec-2f038fc0f981
 # ╠═592595bc-dbe4-4f8c-833a-76790d3a00f8
 # ╠═3a4be1b4-a544-437a-b1f6-bd82819ba676
+# ╟─ac7e83fb-1ab0-41a0-ae78-c9a36053d149
 # ╠═e550eec0-6911-4016-824f-b21f82d10e9a
 # ╟─8339a757-9b66-4cb9-9bbb-a7de466fc3bf
 # ╟─b27001c0-df6c-4a47-ae53-8cee96cbf984
 # ╠═0736dd22-89dd-4d7f-b332-b0767180ad43
 # ╠═88c58ce2-c98b-4b60-901f-ed95099c144b
 # ╠═589c3c6f-fc24-4c2c-bf42-df0b3187d8cf
+# ╠═25a293e0-05c6-44d2-bec0-42649558e1c2
+# ╟─01bbaad2-81e9-436c-b698-d1a16f9da529
 # ╠═b3c0d027-4c98-47e4-9f9a-77ba1d10ae98
 # ╠═50d4a601-3f14-4034-9e6f-08eae9ca7d7c
 # ╠═8e06d5ec-4b98-441d-919b-7b90071e6674
 # ╠═78dba088-6d5b-4e4b-a664-f176f9e2d673
 # ╠═fc62283e-8bcb-4fd1-8809-b7abeb991030
 # ╠═0a976167-b074-4694-ab97-aecfcd67cc25
+# ╠═c46dca24-006d-4a15-956c-e73c9c5e55c6
+# ╠═f6f6ed4f-3a6c-4dfe-a758-504172ef5b6c
+# ╠═6760c424-3cbc-4402-963b-a21bf71b8dc8
