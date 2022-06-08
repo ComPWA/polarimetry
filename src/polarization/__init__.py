@@ -1,8 +1,12 @@
+from __future__ import annotations
+
 import sys
 
 import sympy as sp
 from ampform.sympy import PoolSum
 from sympy.physics.matrices import msigma
+
+from polarization.spin import create_spin_range
 
 from .amplitude import DalitzPlotDecompositionBuilder
 
@@ -14,29 +18,32 @@ else:
 
 def formulate_polarization(
     builder: DalitzPlotDecompositionBuilder, reference_subsystem: Literal[1, 2, 3] = 1
-):
-    spins = [builder.decay.states[i].spin for i in builder.decay.states]
+) -> tuple[PoolSum, PoolSum, PoolSum]:
     half = sp.Rational(1, 2)
-    if spins != [half, half, 0, 0]:
+    if builder.decay.initial_state.spin != half:
         raise ValueError(
-            "Can only formulate polarization for an initial state with spin 1/2 and a"
-            f" final state with spin 1/2, 0, 0, but got spins {spins}"
+            "Can only formulate polarization for an initial state with spin 1/2, but"
+            f" got {builder.decay.initial_state.spin}"
         )
     model = builder.formulate(reference_subsystem)
-    λ_p, λ_Λc, λ_Λc_prime = sp.symbols(R"lambda nu \nu^{\prime}")
+    λ0, λ0_prime = sp.symbols(R"lambda \lambda^{\prime}", rational=True)
+    λ = {
+        sp.Symbol(f"lambda{i}", rational=True): create_spin_range(state.spin)
+        for i, state in builder.decay.final_state.items()
+    }
     ref = reference_subsystem
-    return [
+    return tuple(
         PoolSum(
-            builder.formulate_aligned_amplitude(λ_Λc, λ_p, 0, 0, ref)[0].conjugate()
-            * pauli_matrix[_to_index(λ_Λc), _to_index(λ_Λc_prime)]
-            * builder.formulate_aligned_amplitude(λ_Λc_prime, λ_p, 0, 0, ref)[0],
-            (λ_Λc, [-half, +half]),
-            (λ_Λc_prime, [-half, +half]),
-            (λ_p, [-half, +half]),
-        )
+            builder.formulate_aligned_amplitude(λ0, *λ, ref)[0].conjugate()
+            * pauli_matrix[_to_index(λ0), _to_index(λ0_prime)]
+            * builder.formulate_aligned_amplitude(λ0_prime, *λ, ref)[0],
+            (λ0, [-half, +half]),
+            (λ0_prime, [-half, +half]),
+            *λ.items(),
+        ).cleanup()
         / model.intensity
         for pauli_matrix in map(msigma, [1, 2, 3])
-    ]
+    )
 
 
 def _to_index(helicity):
