@@ -458,6 +458,9 @@ begin
 		order(:isobarname, by=x->findfirst(x[1],"LDK")))
 end
 
+# ╔═╡ cff3ce5e-6dca-424a-933e-30881a03ba4a
+
+
 # ╔═╡ c46dca24-006d-4a15-956c-e73c9c5e55c6
 leadingfraction = let
 	iσx = 1
@@ -490,17 +493,28 @@ end ;
 
 # ╔═╡ f6f6ed4f-3a6c-4dfe-a758-504172ef5b6c
 let
+	selectedmatrix_li = map(leadingfraction.matrix_li' .*
+			(leadingfraction.matrix_fr' .> 0.5)) do x
+			x==0 ? NaN : x
+		end
 	heatmap(leadingfraction.σxv, leadingfraction.σyv,
-		leadingfraction.matrix_li', # .*
-			# (leadingfraction.matrix_li' .== 9)
+		selectedmatrix_li,
 		colorbar=true,
-		title="leading fraction")
-	savefig(joinpath("plots","leadingfraction.pdf"))
+		title="leading fraction > 50%")
+	savefig(joinpath("plots","leadingfraction50%.pdf"))
 	plot!()
 end
 
-# ╔═╡ 6760c424-3cbc-4402-963b-a21bf71b8dc8
-leadind = Set(filter(x->!(isnan(x)), leadingfraction.matrix_li))
+# ╔═╡ 6cc3c62d-f639-4834-8aea-1e814e353337
+let
+	setselectedmatrix_li = Set(leadingfraction.matrix_li' .*
+			(leadingfraction.matrix_fr' .> 0.5))
+	setselectedmatrix_li = filter(x->x>0, setselectedmatrix_li)
+	# 
+	distinctisobars = vcat(Set(isobarnames)...)
+	dominantisobars = getindex.(Ref(distinctisobars), setselectedmatrix_li)
+	collect(zip(setselectedmatrix_li, dominantisobars))
+end
 
 # ╔═╡ Cell order:
 # ╟─d3cb114e-ee0c-4cd5-87fb-82289849aceb
@@ -567,6 +581,7 @@ leadind = Set(filter(x->!(isnan(x)), leadingfraction.matrix_li))
 # ╠═78dba088-6d5b-4e4b-a664-f176f9e2d673
 # ╠═fc62283e-8bcb-4fd1-8809-b7abeb991030
 # ╠═0a976167-b074-4694-ab97-aecfcd67cc25
+# ╠═cff3ce5e-6dca-424a-933e-30881a03ba4a
 # ╠═c46dca24-006d-4a15-956c-e73c9c5e55c6
 # ╠═f6f6ed4f-3a6c-4dfe-a758-504172ef5b6c
-# ╠═6760c424-3cbc-4402-963b-a21bf71b8dc8
+# ╠═6cc3c62d-f639-4834-8aea-1e814e353337
