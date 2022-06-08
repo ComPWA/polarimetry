@@ -22,6 +22,7 @@ lambdification
 lambdify
 lhcb
 linspace
+makedirs
 matplotlib
 meshgrid
 nbconvert
