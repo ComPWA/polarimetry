@@ -15,11 +15,13 @@ from sphinx.domains.python import parse_reftarget
 from sphinx.environment import BuildEnvironment
 
 __TARGET_SUBSTITUTIONS = {
+    "DataSample": "tensorwaves.interface.DataSample",
     "Literal[(-1, 1)]": "typing.Literal",
     "Literal[- 1, 1]": "typing.Literal",
     "OuterStates": "polarization.decay.OuterStates",
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "Path": "pathlib.Path",
+    "Pattern": "typing.Pattern",
     "PoolSum": "ampform.sympy.PoolSum",
     "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
     "implement_doit_method": "ampform.sympy.implement_doit_method",
@@ -31,6 +33,7 @@ __TARGET_SUBSTITUTIONS = {
 }
 __REF_TYPE_SUBSTITUTIONS = {
     "polarization.decay.OuterStates": "obj",
+    "tensorwaves.interface.DataSample": "obj",
 }
 
 
