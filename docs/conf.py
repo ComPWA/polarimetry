@@ -72,6 +72,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
     "sphinx_book_theme",
     "sphinx_codeautolink",
     "sphinx_copybutton",
@@ -119,3 +120,4 @@ numfig = True
 panels_add_bootstrap_css = False
 pygments_style = "sphinx"
 use_multitoc_numbering = True
+viewcode_follow_imported_members = True
