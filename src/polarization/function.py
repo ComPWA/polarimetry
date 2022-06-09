@@ -5,11 +5,14 @@ import re
 from typing import Pattern
 
 from tensorwaves.function import ParametrizedBackendFunction
+from tensorwaves.interface import DataSample
 
 
 def compute_sub_function(
-    func: ParametrizedBackendFunction, input_data, non_zero_couplings: list[str]
-) -> None:
+    func: ParametrizedBackendFunction,
+    input_data: DataSample,
+    non_zero_couplings: list[Pattern],
+):
     old_parameters = dict(func.parameters)
     pattern = rf"\\mathcal{{H}}.*\[(?!{'|'.join(non_zero_couplings)})"
     set_parameter_to_zero(func, pattern)

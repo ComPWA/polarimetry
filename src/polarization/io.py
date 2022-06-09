@@ -247,7 +247,8 @@ def perform_cached_doit(unevaluated_expr: sp.Expr, directory: str = ".") -> sp.E
     same as the hash embedded in the filename.
     """
     h = get_readable_hash(unevaluated_expr)
-    filename = f"{directory}/sympy-expr-{h[:7]}.pkl"
+    filename = f"{directory}/.sympy-cache/{h}.pkl"
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     if os.path.exists(filename):
         with open(filename, "rb") as f:
             return pickle.load(f)
