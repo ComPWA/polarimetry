@@ -9,7 +9,9 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import OrderedDict
 
+import numpy as np
 import sympy as sp
 from sympy.core.symbol import Str
 
@@ -95,7 +97,54 @@ def load_resonance_definitions(filename: Path | str) -> dict[str, Particle]:
     return _to_resonance_dict(isobar_definitions)
 
 
-def load_model_parameters(
+class ModelParameters:
+    """A wrapper for loading parameters from :download:`modelparameters.json </../data/modelparameters.json>`."""
+
+    def __init__(self, filename: str, decay: ThreeBodyDecay) -> None:
+        with open(filename) as stream:
+            json_data = json.load(stream)
+        model_titles: list[str] = [
+            model["title"] for model in json_data["modelstudies"]
+        ]
+        self.__values: OrderedDict[str, dict[str, complex | float | int]] = {}
+        self.__uncertainties: OrderedDict[str, dict[str, complex | float | int]] = {}
+        for title in model_titles:
+            self.__values[title] = _load_model_parameters(
+                filename, decay, title, typ="value"
+            )
+            self.__uncertainties[title] = _load_model_parameters(
+                filename, decay, title, typ="uncertainty"
+            )
+
+    def get_parameter_values(
+        self, model_id: int | str
+    ) -> dict[str, complex | float | int]:
+        if isinstance(model_id, int):
+            return list(self.__values.values())[model_id]
+        return self.__values[model_id]
+
+    def get_parameter_uncertainties(
+        self, model_id: int | str
+    ) -> dict[str, complex | float | int]:
+        if isinstance(model_id, int):
+            return list(self.__uncertainties.values())[model_id]
+        return self.__uncertainties[model_id]
+
+    def create_parameter_distribution(
+        self, model_id: int | str, sample_size: int
+    ) -> dict[str, complex | float | int]:
+        return _smear_gaussian(
+            parameter_values=self.get_parameter_values(model_id),
+            parameter_uncertainties=self.get_parameter_uncertainties(model_id),
+            size=sample_size,
+        )
+
+
+def convert_dict_keys(dct: dict, key_converter: callable) -> dict:
+    return {key_converter(key): value for key, value in dct.items()}
+
+
+def _load_model_parameters(
     filename: Path | str,
     decay: ThreeBodyDecay,
     model_id: int | str = 0,
@@ -112,6 +161,36 @@ def load_model_parameters(
     decay_couplings = compute_decay_couplings(decay, typ)
     parameters.update(decay_couplings)
     return parameters
+
+
+def _smear_gaussian(
+    parameter_values: dict[str, complex | float],
+    parameter_uncertainties: dict[str, complex | float],
+    size: int,
+) -> dict[str, np.ndarray]:
+    value_distributions = {}
+    for k, mean in parameter_values.items():
+        std = parameter_uncertainties[k]
+        distribution = _create_gaussian_distribution(mean, std, size)
+        value_distributions[k] = distribution
+    return value_distributions
+
+
+def _create_gaussian_distribution(
+    mean: complex | float,
+    std: complex | float,
+    size: int,
+    seed: int | None = None,
+):
+    rng = np.random.default_rng(seed)
+    if isinstance(mean, complex) and isinstance(std, complex):
+        return (
+            rng.normal(mean.real, std.real, size)
+            + rng.normal(mean.imag, std.imag, size) * 1j
+        )
+    if isinstance(mean, (float, int)) and isinstance(std, (float, int)):
+        return rng.normal(mean, std, size)
+    raise NotImplementedError
 
 
 def _get_model_by_title(json_data: dict, title: str) -> int:
