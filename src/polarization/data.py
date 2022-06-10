@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sys
 
-import numpy as np
+import jax.numpy as jnp
 import sympy as sp
 from ampform.kinematics.phasespace import compute_third_mandelstam, is_within_phasespace
 from tensorwaves.data import (
@@ -57,9 +57,27 @@ def generate_meshgrid_sample(
 ) -> DataSample:
     """Generate a `numpy.meshgrid` sample for plotting with `matplotlib.pyplot`."""
     boundaries = __compute_dalitz_boundaries(decay)
-    sigma_x, sigma_y = np.meshgrid(
-        np.linspace(*boundaries[x_mandelstam - 1], num=resolution),
-        np.linspace(*boundaries[y_mandelstam - 1], num=resolution),
+    return generate_sub_meshgrid_sample(
+        decay,
+        resolution,
+        x_range=boundaries[x_mandelstam - 1],
+        y_range=boundaries[y_mandelstam - 1],
+        x_mandelstam=x_mandelstam,
+        y_mandelstam=y_mandelstam,
+    )
+
+
+def generate_sub_meshgrid_sample(
+    decay: ThreeBodyDecay,
+    resolution: int,
+    x_range: tuple[float, float],
+    y_range: tuple[float, float],
+    x_mandelstam: Literal[1, 2, 3] = 1,
+    y_mandelstam: Literal[1, 2, 3] = 2,
+) -> DataSample:
+    sigma_x, sigma_y = jnp.meshgrid(
+        jnp.linspace(*x_range, num=resolution),
+        jnp.linspace(*y_range, num=resolution),
     )
     phsp = {
         f"sigma{x_mandelstam}": sigma_x,
