@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
-from typing import Callable, OrderedDict, TypeVar
+from typing import Callable, TypeVar
 
 import numpy as np
 import sympy as sp
@@ -100,15 +100,23 @@ def load_resonance_definitions(filename: Path | str) -> dict[str, Particle]:
 class ModelParameters:
     """A wrapper for loading parameters from :download:`modelparameters.json </../data/modelparameters.json>`."""
 
-    def __init__(self, filename: str, decay: ThreeBodyDecay) -> None:
+    def __init__(
+        self,
+        filename: str,
+        decay: ThreeBodyDecay,
+        allowed_model_titles: list[str] | None = None,
+    ) -> None:
         with open(filename) as stream:
             json_data = json.load(stream)
-        model_titles: list[str] = [
-            model["title"] for model in json_data["modelstudies"]
-        ]
-        self.__values: OrderedDict[str, dict[str, complex | float | int]] = {}
-        self.__uncertainties: OrderedDict[str, dict[str, complex | float | int]] = {}
-        for title in model_titles:
+        if allowed_model_titles is None:
+            self.__model_titles: tuple[str, ...] = tuple(
+                model["title"] for model in json_data["modelstudies"]
+            )
+        else:
+            self.__model_titles = tuple(allowed_model_titles)
+        self.__values: dict[str, dict[str, complex | float | int]] = {}
+        self.__uncertainties: dict[str, dict[str, complex | float | int]] = {}
+        for title in self.model_titles:
             self.__values[title] = _load_model_parameters(
                 filename, decay, title, typ="value"
             )
@@ -116,26 +124,26 @@ class ModelParameters:
                 filename, decay, title, typ="uncertainty"
             )
 
+    @property
+    def model_titles(self) -> tuple[str, ...]:
+        return self.__model_titles
+
     def get_parameter_values(
-        self, model_id: int | str
+        self, model_title: str
     ) -> dict[str, complex | float | int]:
-        if isinstance(model_id, int):
-            return list(self.__values.values())[model_id]
-        return self.__values[model_id]
+        return self.__values[model_title]
 
     def get_parameter_uncertainties(
-        self, model_id: int | str
+        self, model_title: str
     ) -> dict[str, complex | float | int]:
-        if isinstance(model_id, int):
-            return list(self.__uncertainties.values())[model_id]
-        return self.__uncertainties[model_id]
+        return self.__uncertainties[model_title]
 
     def create_parameter_distribution(
-        self, model_id: int | str, sample_size: int
+        self, model_title: str, sample_size: int
     ) -> dict[str, complex | float | int]:
         return _smear_gaussian(
-            parameter_values=self.get_parameter_values(model_id),
-            parameter_uncertainties=self.get_parameter_uncertainties(model_id),
+            parameter_values=self.get_parameter_values(model_title),
+            parameter_uncertainties=self.get_parameter_uncertainties(model_title),
             size=sample_size,
         )
 
@@ -155,14 +163,14 @@ def convert_dict_keys(
 def _load_model_parameters(
     filename: Path | str,
     decay: ThreeBodyDecay,
-    model_id: int | str = 0,
+    model_title: str = "Default amplitude model.",
     typ: Literal["value", "uncertainty"] = "value",
 ) -> dict[sp.Indexed | sp.Symbol, complex | float]:
     with open(filename) as stream:
         json_data = json.load(stream)
-    if isinstance(model_id, str):
-        model_id = _get_model_by_title(json_data, model_id)
-    json_parameters = json_data["modelstudies"][model_id]["parameters"]
+    if isinstance(model_title, str):
+        model_title = _get_model_by_title(json_data, model_title)
+    json_parameters = json_data["modelstudies"][model_title]["parameters"]
     json_parameters["ArK(892)1"] = "1.0 ± 0.0"
     json_parameters["AiK(892)1"] = "0.0 ± 0.0"
     parameters = _to_symbol_value_mapping(json_parameters, decay, typ)
@@ -203,7 +211,6 @@ def _create_gaussian_distribution(
 
 def _get_model_by_title(json_data: dict, title: str) -> int:
     for i, item in enumerate(json_data["modelstudies"]):
-        title = item["title"]
         if item["title"] == title:
             return i
     raise KeyError(f'Could not find model with title "{title}"')
@@ -384,6 +391,8 @@ def parameter_key_to_symbol(key: str) -> sp.Indexed | sp.Symbol:
     if key.startswith("G"):
         R = _stringify(key[1:])
         return sp.Symbol(Rf"\Gamma_{{{R}}}")
+    if key == "dLc":
+        return sp.Symbol(R"R_{\Lambda_c}")
     raise NotImplementedError(
         f'Cannot convert key "{key}" in model parameter JSON file to SymPy symbol'
     )
