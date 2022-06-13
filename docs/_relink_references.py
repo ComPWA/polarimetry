@@ -23,6 +23,7 @@ __TARGET_SUBSTITUTIONS = {
     "Path": "pathlib.Path",
     "Pattern": "typing.Pattern",
     "PoolSum": "ampform.sympy.PoolSum",
+    "QuadContourSet": "matplotlib.contour.QuadContourSet",
     "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
     "implement_doit_method": "ampform.sympy.implement_doit_method",
     "sp.Expr": "sympy.core.expr.Expr",

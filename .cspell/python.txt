@@ -4,6 +4,7 @@ arange
 clim
 cmap
 configurator
+edgecolor
 elif
 funcs
 functools
@@ -21,6 +22,8 @@ kwargs
 lambdification
 lambdify
 lhcb
+linestyle
+linewidth
 linspace
 makedirs
 matplotlib
