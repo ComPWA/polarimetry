@@ -40,8 +40,8 @@ def as_latex(obj, **kwargs) -> str:
 
     Optional keywords:
 
-    - `only_jp`: Render a `Particle` as :math:`J^P` value (spin-parity) only.
-    - `with_jp`: Render a `Particle` with value :math:`J^P` value.
+    - only_jp: Render a `.Particle` as :math:`J^P` value (spin-parity) only.
+    - with_jp: Render a `.Particle` with value :math:`J^P` value.
     """
     return str(obj, **kwargs)
 
@@ -241,7 +241,7 @@ def display_doit(
 
 
 def perform_cached_doit(unevaluated_expr: sp.Expr, directory: str = ".") -> sp.Expr:
-    """Perform :code:`doit()` on a `sympy.Expr` and cache the result to disk.
+    """Perform :code:`doit()` on an `~sympy.core.expr.Expr` and cache the result to disk.
 
     The cached result is fetched from disk if the hash of the original expression is the
     same as the hash embedded in the filename.

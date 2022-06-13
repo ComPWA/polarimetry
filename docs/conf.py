@@ -61,6 +61,7 @@ autodoc_typehints_format = "short"
 autosectionlabel_prefix_document = True
 codeautolink_concat_default = True
 copyright = "2022"
+default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
     ".DS_Store",
@@ -116,8 +117,15 @@ nb_execution_mode = get_execution_mode()
 nb_execution_timeout = -1
 nb_output_stderr = "show"
 nb_render_markdown_format = "myst"
+nitpicky = True  # warn if cross-references are missing
+nitpick_ignore_regex = [
+    ("py:class", "KeyType"),
+    ("py:class", "NewValueType"),
+    ("py:class", "OldValueType"),
+]
 numfig = True
 panels_add_bootstrap_css = False
+primary_domain = "py"
 pygments_style = "sphinx"
 use_multitoc_numbering = True
 viewcode_follow_imported_members = True
