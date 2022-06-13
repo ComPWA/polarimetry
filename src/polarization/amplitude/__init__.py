@@ -241,7 +241,7 @@ class DynamicsBuilder(Protocol):
 
 
 def simplify_latex_rendering() -> None:
-    """Improve LaTeX rendering of a `sympy.Indexed` object."""
+    """Improve LaTeX rendering of an `~sympy.tensor.indexed.Indexed` object."""
 
     def _print_Indexed_latex(self, printer, *args):
         base = printer._print(self.base)

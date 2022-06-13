@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
-from typing import OrderedDict
+from typing import Callable, OrderedDict, TypeVar
 
 import numpy as np
 import sympy as sp
@@ -90,7 +90,7 @@ def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
 
 
 def load_resonance_definitions(filename: Path | str) -> dict[str, Particle]:
-    """Load `Particle` definitions from a JSON file."""
+    """Load `.Particle` definitions from a JSON file."""
     with open(filename) as stream:
         data = json.load(stream)
     isobar_definitions = data["isobars"]
@@ -140,7 +140,15 @@ class ModelParameters:
         )
 
 
-def convert_dict_keys(dct: dict, key_converter: callable) -> dict:
+KeyType = TypeVar("KeyType")
+OldValueType = TypeVar("OldValueType")
+NewValueType = TypeVar("NewValueType")
+
+
+def convert_dict_keys(
+    dct: dict[KeyType, OldValueType],
+    key_converter: Callable[[OldValueType], NewValueType],
+) -> dict[KeyType, NewValueType]:
     return {key_converter(key): value for key, value in dct.items()}
 
 
