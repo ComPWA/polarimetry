@@ -139,12 +139,13 @@ class ModelParameters:
         return self.__uncertainties[model_title]
 
     def create_parameter_distribution(
-        self, model_title: str, sample_size: int
+        self, model_title: str, sample_size: int, seed: int | None = None
     ) -> dict[str, complex | float | int]:
         return _smear_gaussian(
             parameter_values=self.get_parameter_values(model_title),
             parameter_uncertainties=self.get_parameter_uncertainties(model_title),
             size=sample_size,
+            seed=seed,
         )
 
 
@@ -183,11 +184,12 @@ def _smear_gaussian(
     parameter_values: dict[str, complex | float],
     parameter_uncertainties: dict[str, complex | float],
     size: int,
+    seed: int | None = None,
 ) -> dict[str, np.ndarray]:
     value_distributions = {}
     for k, mean in parameter_values.items():
         std = parameter_uncertainties[k]
-        distribution = _create_gaussian_distribution(mean, std, size)
+        distribution = _create_gaussian_distribution(mean, std, size, seed)
         value_distributions[k] = distribution
     return value_distributions
 
