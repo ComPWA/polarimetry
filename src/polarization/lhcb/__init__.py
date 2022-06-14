@@ -7,15 +7,17 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Callable, TypeVar
 
+import attrs
 import numpy as np
 import sympy as sp
 from sympy.core.symbol import Str
 
-from polarization.amplitude import DynamicsBuilder, DynamicsConfigurator
+from polarization.amplitude import AmplitudeModel, DynamicsBuilder, DynamicsConfigurator
 from polarization.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 from polarization.spin import filter_parity_violating_ls, generate_ls_couplings
 
@@ -216,6 +218,18 @@ def _get_model_by_title(json_data: dict, title: str) -> int:
         if item["title"] == title:
             return i
     raise KeyError(f'Could not find model with title "{title}"')
+
+
+def flip_production_coupling_signs(
+    model: AmplitudeModel, subsystem_names: list[str]
+) -> AmplitudeModel:
+    new_parameters = {}
+    name_pattern = rf".*\\mathrm{{production}}\[[{''.join(subsystem_names)}].*"
+    for symbol, value in model.parameter_defaults.items():
+        if re.match(name_pattern, str(symbol)) is not None:
+            value *= -1
+        new_parameters[symbol] = value
+    return attrs.evolve(model, parameter_defaults=new_parameters)
 
 
 def compute_decay_couplings(

@@ -44,7 +44,11 @@ class DalitzPlotDecompositionBuilder:
         self.decay = decay
         self.dynamics_choices = DynamicsConfigurator(decay)
 
-    def formulate(self, reference_subsystem: Literal[1, 2, 3] = 1) -> AmplitudeModel:
+    def formulate(
+        self,
+        reference_subsystem: Literal[1, 2, 3] = 1,
+        cleanup_summations: bool = False,
+    ) -> AmplitudeModel:
         helicity_symbols = sp.symbols("lambda:4", rational=True)
         allowed_helicities = {
             symbol: create_spin_range(self.decay.states[i].spin)
@@ -71,6 +75,14 @@ class DalitzPlotDecompositionBuilder:
             m3: self.decay.states[3].mass,
         }
         parameter_defaults.update(masses)
+        if cleanup_summations:
+            aligned_amp = aligned_amp.cleanup()
+        intensity = PoolSum(
+            sp.Abs(aligned_amp) ** 2,
+            *allowed_helicities.items(),
+        )
+        if cleanup_summations:
+            intensity = intensity.cleanup()
         return AmplitudeModel(
             decay=self.decay,
             intensity=PoolSum(

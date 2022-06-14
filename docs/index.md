@@ -4,6 +4,7 @@
 amplitude-model
 cross-check
 intensity
+alignment
 polarization
 statistics
 appendix
