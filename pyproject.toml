@@ -43,6 +43,9 @@ flake8 = [
     "--extend-ignore=E501,E731",
 ]
 
+[tool.nbqa.exclude]
+flake8 = "^docs/appendix/benchmark.ipynb"
+
 [tool.pytest.ini_options]
 addopts = [
     "--color=yes",

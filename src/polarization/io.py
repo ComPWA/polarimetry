@@ -272,6 +272,19 @@ def _to_bytes(obj) -> bytes:
     return pickle.dumps(obj)
 
 
+def limit_number_of_cores_for_jax(number_of_cores: int | None) -> None:
+    """ "See https://github.com/google/jax/issues/743#issuecomment-536377029."""
+    # cspell:ignore eigen
+    if number_of_cores is None:
+        if "XLA_FLAGS" in os.environ:
+            del os.environ["XLA_FLAGS"]
+    else:
+        os.environ["XLA_FLAGS"] = (
+            "--xla_cpu_multi_thread_eigen=false"
+            f" intra_op_parallelism_threads={number_of_cores}"
+        )
+
+
 def mute_jax_warnings() -> None:
     jax_logger = logging.getLogger("absl")
     jax_logger.setLevel(logging.ERROR)
