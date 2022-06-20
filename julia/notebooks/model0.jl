@@ -458,9 +458,6 @@ begin
 		order(:isobarname, by=x->findfirst(x[1],"LDK")))
 end
 
-# ╔═╡ cff3ce5e-6dca-424a-933e-30881a03ba4a
-
-
 # ╔═╡ c46dca24-006d-4a15-956c-e73c9c5e55c6
 leadingfraction = let
 	iσx = 1
@@ -479,7 +476,8 @@ leadingfraction = let
 					Ref(couplings .* (isobarnames .== s))))
 				for s in Set(isobarnames)]
 			#
-			Iξ ./= sum(Iξ)
+			I0 = sum(intensity.(Aiv[_map], Ref(couplings)))
+			Iξ ./= sum(I0)
 			m,ind = findmax(Iξ)
 			matrix[i,j] = m==0 || isnan(m) ? (NaN,NaN) : (m,ind)
 		end
@@ -581,7 +579,6 @@ end
 # ╠═78dba088-6d5b-4e4b-a664-f176f9e2d673
 # ╠═fc62283e-8bcb-4fd1-8809-b7abeb991030
 # ╠═0a976167-b074-4694-ab97-aecfcd67cc25
-# ╠═cff3ce5e-6dca-424a-933e-30881a03ba4a
 # ╠═c46dca24-006d-4a15-956c-e73c9c5e55c6
 # ╠═f6f6ed4f-3a6c-4dfe-a758-504172ef5b6c
 # ╠═6cc3c62d-f639-4834-8aea-1e814e353337
