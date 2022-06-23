@@ -30,6 +30,18 @@
       "width": "70",
       "lineshape": "BreitWignerMinL"
     },
+    "L(1800)": {
+      "jp": "1/2^-",
+      "mass": "1800",
+      "width": "200",
+      "lineshape": "BreitWignerMinL"
+    },
+    "L(1810)": {
+      "jp": "1/2^+",
+      "mass": "1790",
+      "width": "110",
+      "lineshape": "BreitWignerMinL"
+    },
     "L(2000)": {
       "jp": "1/2^-",
       "mass": "1900-2100",
@@ -46,6 +58,12 @@
       "jp": "3/2^+",
       "mass": "1640",
       "width": "300",
+      "lineshape": "BreitWignerMinL"
+    },
+    "D(1620)": {
+      "jp": "1/2^-",
+      "mass": "1610",
+      "width": "130",
       "lineshape": "BreitWignerMinL"
     },
     "D(1700)": {
@@ -65,6 +83,12 @@
       "mass": "895.5",
       "width": "47.3",
       "lineshape": "BreitWignerMinL"
+    },
+    "K(1410)": {
+      "jp": "1^-",
+      "mass": "1414",
+      "width": "232",
+      "lineshape": "BuggBreitWignerMinL"
     },
     "K(1430)": {
       "jp": "0^+",

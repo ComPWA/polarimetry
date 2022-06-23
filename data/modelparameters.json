@@ -2,7 +2,20 @@
   "modelstudies": [
     {
       "title": "Default amplitude model.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.941060 ± 0.042406",
         "ArK(700)1": "0.068908 ± 0.122603",
@@ -64,7 +77,20 @@
     },
     {
       "title": "Alternative amplitude model with K^*(892) with free mass and width.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.979206 ± 0.029926",
         "ArK(700)1": "-0.172866 ± 0.169819",
@@ -128,7 +154,20 @@
     },
     {
       "title": "Alternative amplitude model with Lz(1670) with free mass and width.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.931224 ± 0.027146",
         "ArK(700)1": "0.104999 ± 0.132084",
@@ -192,7 +231,20 @@
     },
     {
       "title": "Alternative amplitude model with Lz(1690) with free mass and width.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.941693 ± 0.027900",
         "ArK(700)1": "0.235301 ± 0.151182",
@@ -256,7 +308,20 @@
     },
     {
       "title": "Alternative amplitude model with Deltares^{++}(1232) with free mass and width.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.862213 ± 0.037889",
         "ArK(700)1": "-0.058420 ± 0.165556",
@@ -320,7 +385,20 @@
     },
     {
       "title": "Alternative amplitude model with Lz(1600), Deltares(1600)^{++}, Deltares(1700)^{++} with free mass and width.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.930361 ± 0.042917",
         "ArK(700)1": "-0.295479 ± 0.159250",
@@ -388,7 +466,20 @@
     },
     {
       "title": "Alternative amplitude model with free Lz(1405) Flatt'e widths, indicated as G1 (pK channel) and G2 (Sigmapi).",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "1.046003 ± 0.045155",
         "ArK(700)1": "0.008133 ± 0.114784",
@@ -452,7 +543,21 @@
     },
     {
       "title": "Alternative amplitude model with Lz(1800) contribution added with mass and width from Ref.~cite{PDG2020}.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(1800)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.820824 ± 0.061113",
         "ArK(700)1": "0.479870 ± 0.143496",
@@ -518,7 +623,21 @@
     },
     {
       "title": "Alternative amplitude model with  Lz(1810) contribution added with mass and width from Ref.~cite{PDG2020}.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(1810)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.857489 ± 0.032897",
         "ArK(700)1": "-0.572430 ± 0.197184",
@@ -584,7 +703,21 @@
     },
     {
       "title": "Alternative amplitude model with Deltares(1620)^{++} contribution added with free mass and width.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1620)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.594082 ± 0.036813",
         "ArK(700)1": "-0.508291 ± 0.255719",
@@ -652,8 +785,19 @@
     },
     {
       "title": "Alternative amplitude model in which a Relativistic Breit-Wigner is used for the K^*(700) contribution.",
-      "updatelineshape": {
-        "K(700)": "BuggBreitWignerMinL"
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
       },
       "parameters": {
         "ArK(700)1": "0.744669 ± 0.204785",
@@ -715,7 +859,20 @@
     },
     {
       "title": "Alternative amplitude model with K^*(700) with free mass and width.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "MK(700)": "0.874000 ± 0.004444",
         "GK(700)": "0.398000 ± 0.003845",
@@ -779,7 +936,21 @@
     },
     {
       "title": "Alternative amplitude model with  K^*(1410) contribution added with mass and width from Ref.~cite{PDG2020}.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1410)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.610031 ± 0.056464",
         "ArK(700)1": "0.998014 ± 0.157706",
@@ -849,8 +1020,19 @@
     },
     {
       "title": "Alternative amplitude model in which a Relativistic Breit-Wigner is used for the K^*(1430) contribution.",
-      "updatelineshape": {
-        "K(700)": "BuggBreitWignerMinL"
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BreitWignerMinL"
       },
       "parameters": {
         "gammaK(700)": "0.922900 ± 0.034353",
@@ -912,7 +1094,20 @@
     },
     {
       "title": "Alternative amplitude model with K^*(1430) with free width.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "gammaK(700)": "0.934183 ± 0.035840",
         "ArK(700)1": "-0.025733 ± 0.068373",
@@ -974,10 +1169,20 @@
       }
     },
     {
-      "title": "Alternative amplitude model with an additional overall exponential form factor exp(-alpha q^2) multiplying Bugg updatelineshapes. The exponential parameter is indicated as ``alpha''.",
-      "updatelineshape": {
-        "K(700)": "BuggBreitWignerMinLExpFF",
-        "K(1430)": "BuggBreitWignerMinLExpFF"
+      "title": "Alternative amplitude model with an additional overall exponential form factor exp(-alpha q^2) multiplying Bugg lineshapes. The exponential parameter is indicated as ``alpha''.",
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerExpFF",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerExpFF"
       },
       "parameters": {
         "gammaK(700)": "0.822411 ± 0.057208",
@@ -1042,7 +1247,20 @@
     },
     {
       "title": "Alternative amplitude model with free radial parameter d for the Lc resonance, indicated as dLc.",
-      "updatelineshape": {},
+      "lineshapes": {
+        "L(1405)": "Flatte1405",
+        "L(1520)": "BreitWignerMinL",
+        "L(1600)": "BreitWignerMinL",
+        "L(1670)": "BreitWignerMinL",
+        "L(1690)": "BreitWignerMinL",
+        "L(2000)": "BreitWignerMinL",
+        "D(1232)": "BreitWignerMinL",
+        "D(1600)": "BreitWignerMinL",
+        "D(1700)": "BreitWignerMinL",
+        "K(700)": "BuggBreitWignerMinL",
+        "K(892)": "BreitWignerMinL",
+        "K(1430)": "BuggBreitWignerMinL"
+      },
       "parameters": {
         "dLc": "4.204442 ± 0.341296",
         "gammaK(700)": "0.922543 ± 0.031137",
@@ -1105,7 +1323,7 @@
     },
     {
       "title": "Alternative amplitude model obtained using LS couplings.",
-      "updatelineshape": {
+      "lineshapes": {
         "L(1405)": "Flatte1405_LS",
         "L(1520)": "BreitWignerMinL_LS",
         "L(1600)": "BreitWignerMinL_LS",
