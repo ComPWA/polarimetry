@@ -47,6 +47,7 @@ sympify
 sympy
 tensorwaves
 timeit
+tolist
 tqdm
 vmax
 vmin
