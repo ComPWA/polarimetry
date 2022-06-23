@@ -33,13 +33,13 @@
     "L(1800)": {
       "jp": "1/2^-",
       "mass": "1800",
-      "width": "200",
+      "width": "300",
       "lineshape": "BreitWignerMinL"
     },
     "L(1810)": {
       "jp": "1/2^+",
-      "mass": "1790",
-      "width": "110",
+      "mass": "1810",
+      "width": "150",
       "lineshape": "BreitWignerMinL"
     },
     "L(2000)": {
@@ -62,7 +62,7 @@
     },
     "D(1620)": {
       "jp": "1/2^-",
-      "mass": "1610",
+      "mass": "1620",
       "width": "130",
       "lineshape": "BreitWignerMinL"
     },
@@ -86,8 +86,8 @@
     },
     "K(1410)": {
       "jp": "1^-",
-      "mass": "1414",
-      "width": "232",
+      "mass": "1421",
+      "width": "236",
       "lineshape": "BuggBreitWignerMinL"
     },
     "K(1430)": {
