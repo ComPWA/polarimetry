@@ -27,7 +27,7 @@ For more information about local Python set-up, see [here](https://compwa-org.re
 
 The parameters of the LHCb fit are stored in the json files in the folder [`data/`](data/)
 
-### Content of the [`data/isobars.json`](data/isobars.json)
+### Content of the [`data/resonances.json`](data/resonances.json)
 
 The file provides the description of the characteristics and parameters of the resonances in the decay chains.
 The resonances are named by `L(XXXX)`, `D(XXXX)`, and `K(XXXX)` for the Lambda**, Delta**, and K\*\* states.

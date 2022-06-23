@@ -30,7 +30,7 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
 #  _|    _|    _|  _|    _|  _|    _|  _|        _|
 #  _|    _|    _|    _|_|      _|_|_|    _|_|_|  _|
 
-isobarsinput = readjson(joinpath("..", "data", "isobars.json"))["isobars"];
+isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"];
 #
 isobars = Dict()
 for (key, dict) in isobarsinput

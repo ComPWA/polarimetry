@@ -27,7 +27,7 @@ using InteractiveUtils
 
 const model0 = let
     # 1) get isobars
-    isobarsinput = readjson(joinpath("..", "data", "isobars.json"))["isobars"]
+    isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"]
     #
     isobars = Dict()
     for (key, dict) in isobarsinput

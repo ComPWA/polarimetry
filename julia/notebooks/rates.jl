@@ -38,7 +38,7 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
 # ╔═╡ 07a14d52-6e8b-4e31-991d-8cacd576e4f4
 begin
     # 1) get isobars
-    isobarsinput = readjson(joinpath("..", "data", "isobars.json"))["isobars"]
+    isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"]
     #
     isobars = Dict()
     for (key, dict) in isobarsinput

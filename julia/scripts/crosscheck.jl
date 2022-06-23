@@ -23,7 +23,7 @@ using Lb2ppiKModelLHCb
 #  _|    _|    _|  _|    _|  _|    _|  _|        _|
 #  _|    _|    _|    _|_|      _|_|_|    _|_|_|  _|
 
-isobarsinput = readjson(joinpath("..", "data", "isobars.json"))["isobars"];
+isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"];
 #
 isobars = Dict()
 for (key, dict) in isobarsinput

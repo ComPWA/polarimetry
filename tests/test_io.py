@@ -59,7 +59,7 @@ def test_get_readable_hash(assumptions):
 
 def test_load_isobar_definitions():
     pwd = Path(__file__).absolute().parent
-    resonances = load_resonance_definitions(pwd.parent / "data" / "isobars.json")
+    resonances = load_resonance_definitions(pwd.parent / "data" / "resonances.json")
     assert len(resonances) == 12
     Λ2000 = resonances["L(2000)"]
     assert Λ2000.name == "L(2000)"
