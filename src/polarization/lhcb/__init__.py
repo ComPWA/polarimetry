@@ -239,7 +239,7 @@ def compute_decay_couplings(
     half = sp.Rational(1, 2)
     decay_couplings = {}
     for chain in decay.chains:
-        R = Str(chain.resonance.latex)
+        R = Str(chain.resonance.name)
         if chain.resonance.name.startswith("K"):
             decay_couplings[H_dec[R, 0, 0]] = 1
         if chain.resonance.name[0] in {"D", "L"}:
@@ -271,9 +271,14 @@ def _to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Partic
 
 def _to_resonance(name: str, definition: ResonanceJSON) -> Particle:
     spin, parity = _to_jp_pair(definition["jp"])
+    latex = name
+    if name.startswith("D("):
+        latex = Rf"\Delta{name[1:]}"
+    if name.startswith("L("):
+        latex = Rf"\Lambda{name[1:]}"
     return Particle(
         name,
-        name,
+        latex,
         spin,
         parity,
         mass=_average_float(definition["mass"]) * 1e-3,  # MeV to GeV
@@ -416,5 +421,5 @@ def parameter_key_to_symbol(key: str) -> sp.Indexed | sp.Symbol:
 
 def _stringify(obj) -> Str:
     if isinstance(obj, Particle):
-        return Str(obj.latex)
+        return Str(obj.name)
     return Str(f"{obj}")
