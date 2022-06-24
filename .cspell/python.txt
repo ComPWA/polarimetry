@@ -36,6 +36,7 @@ numpy
 pathlib
 pcolormesh
 phasespace
+psutil
 pygments
 pyplot
 pyright
@@ -47,6 +48,7 @@ sympify
 sympy
 tensorwaves
 timeit
+tolist
 tqdm
 vmax
 vmin
