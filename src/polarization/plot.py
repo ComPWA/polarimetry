@@ -11,7 +11,7 @@ def get_contour_line(contour_set: QuadContourSet) -> LineCollection:
     return line_collection
 
 
-def set_font_style() -> None:
+def use_mpl_latex_fonts() -> None:
     # cspell:ignore dejavusans fontset mathtext usetex
     plt.rc("font", family="serif", serif="Helvetica")
     plt.rc("mathtext", fontset="dejavusans")
