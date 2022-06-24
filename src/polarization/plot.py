@@ -1,6 +1,7 @@
 """Helper functions for `matplotlib`."""
 from __future__ import annotations
 
+import matplotlib as mpl
 from matplotlib.collections import LineCollection, PathCollection
 from matplotlib.contour import QuadContourSet
 
@@ -8,6 +9,14 @@ from matplotlib.contour import QuadContourSet
 def get_contour_line(contour_set: QuadContourSet) -> LineCollection:
     (line_collection, *_), _ = contour_set.legend_elements()
     return line_collection
+
+
+def set_font_style() -> None:
+    # cspell:ignore dejavusans fontset mathtext usetex
+    mpl.rcParams["text.usetex"] = True
+    mpl.rcParams["font.family"] = "serif"
+    mpl.rcParams["font.serif"] = "Helvetica"
+    mpl.rcParams["mathtext.fontset"] = "dejavusans"
 
 
 def stylize_contour(
