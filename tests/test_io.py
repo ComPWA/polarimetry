@@ -63,7 +63,7 @@ def test_load_isobar_definitions():
     assert len(resonances) == 12
     Λ2000 = resonances["L(2000)"]
     assert Λ2000.name == "L(2000)"
-    assert Λ2000.latex == "L(2000)"
+    assert Λ2000.latex == R"\Lambda(2000)"
     assert Λ2000.spin == 0.5
     assert Λ2000.parity == -1
     assert Λ2000.mass == 2.0
