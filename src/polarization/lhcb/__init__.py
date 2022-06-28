@@ -10,7 +10,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Callable, TypeVar
+from typing import Callable, Iterable, TypeVar
 
 import attrs
 import numpy as np
@@ -106,16 +106,19 @@ class ModelParameters:
         self,
         filename: str,
         decay: ThreeBodyDecay,
-        allowed_model_titles: list[str] | None = None,
+        allowed_model_titles: Iterable[str] | None = None,
     ) -> None:
         with open(filename) as stream:
             json_data = json.load(stream)
-        if allowed_model_titles is None:
-            self.__model_titles: tuple[str, ...] = tuple(
-                model["title"] for model in json_data["modelstudies"]
+        self.__model_titles: tuple[str, ...] = tuple(
+            model["title"] for model in json_data["modelstudies"]
+        )
+        if allowed_model_titles is not None:
+            self.__model_titles = tuple(
+                title
+                for title in self.__model_titles
+                if title in set(allowed_model_titles)
             )
-        else:
-            self.__model_titles = tuple(allowed_model_titles)
         self.__values: dict[str, dict[str, complex | float | int]] = {}
         self.__uncertainties: dict[str, dict[str, complex | float | int]] = {}
         for title in self.model_titles:
