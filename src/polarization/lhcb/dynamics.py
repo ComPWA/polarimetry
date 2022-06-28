@@ -15,9 +15,9 @@ def formulate_bugg_breit_wigner(
         raise ValueError("Bugg Breit-Wigner only defined for K* → Kπ")
     s = _get_mandelstam_s(decay_chain)
     m2, m3 = sp.symbols("m2 m3", nonnegative=True)
-    gamma = sp.Symbol(Rf"\gamma_{{{decay_chain.resonance.latex}}}")
-    mass = sp.Symbol(f"m_{{{decay_chain.resonance.latex}}}")
-    width = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.latex}}}")
+    gamma = sp.Symbol(Rf"\gamma_{{{decay_chain.resonance.name}}}")
+    mass = sp.Symbol(f"m_{{{decay_chain.resonance.name}}}")
+    width = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.name}}}")
     parameter_defaults = {
         mass: decay_chain.resonance.mass,
         width: decay_chain.resonance.width,
@@ -34,10 +34,10 @@ def formulate_flatte_1405(
 ) -> tuple[BuggBreitWigner, dict[sp.Symbol, float]]:
     s = _get_mandelstam_s(decay)
     m1, m2 = map(_to_mass_symbol, decay.decay_products)
-    mass = sp.Symbol(f"m_{{{decay.resonance.latex}}}")
-    width = sp.Symbol(Rf"\Gamma_{{{decay.resonance.latex}}}")
+    mass = sp.Symbol(f"m_{{{decay.resonance.name}}}")
+    width = sp.Symbol(Rf"\Gamma_{{{decay.resonance.name}}}")
     mπ = _to_mass_symbol(π)
-    mΣ = sp.Symbol(f"m_{{{Σ.latex}}}")
+    mΣ = sp.Symbol(f"m_{{{Σ.name}}}")
     parameter_defaults = {
         mass: decay.resonance.mass,
         width: decay.resonance.width,
@@ -55,10 +55,10 @@ def formulate_breit_wigner(decay_chain: ThreeBodyDecayChain):
     child1_mass, child2_mass = map(_to_mass_symbol, decay_chain.decay_products)
     l_dec = sp.Rational(decay_chain.outgoing_ls.L)
     l_prod = sp.Rational(decay_chain.incoming_ls.L)
-    parent_mass = sp.Symbol(f"m_{{{decay_chain.parent.latex}}}")
-    spectator_mass = sp.Symbol(f"m_{{{decay_chain.spectator.latex}}}")
-    resonance_mass = sp.Symbol(f"m_{{{decay_chain.resonance.latex}}}")
-    resonance_width = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.latex}}}")
+    parent_mass = sp.Symbol(f"m_{{{decay_chain.parent.name}}}")
+    spectator_mass = sp.Symbol(f"m_{{{decay_chain.spectator.name}}}")
+    resonance_mass = sp.Symbol(f"m_{{{decay_chain.resonance.name}}}")
+    resonance_width = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.name}}}")
     R_dec = sp.Symbol(R"R_\mathrm{res}")
     R_prod = sp.Symbol(R"R_{\Lambda_c}")
     parameter_defaults = {
@@ -107,4 +107,4 @@ def _to_mass_symbol(particle: Particle) -> sp.Symbol:
     state_id = PARTICLE_TO_ID.get(particle)
     if state_id is not None:
         return sp.Symbol(f"m{state_id}", nonnegative=True)
-    return sp.Symbol(f"m_{{{particle.latex}}}", nonnegative=True)
+    return sp.Symbol(f"m_{{{particle.name}}}", nonnegative=True)

@@ -4,6 +4,7 @@ import logging
 import re
 from typing import Pattern
 
+import jax.numpy as jnp
 from tensorwaves.function import ParametrizedBackendFunction
 from tensorwaves.interface import DataSample
 
@@ -33,3 +34,21 @@ def set_parameter_to_zero(
     if no_parameters_selected:
         logging.warning(f"All couplings were set to zero for search term {search_term}")
     func.update_parameters(new_parameters)
+
+
+def interference_intensity(func, data, chain1: list[str], chain2: list[str]) -> float:
+    I_interference = sub_intensity(func, data, chain1 + chain2)
+    I_chain1 = sub_intensity(func, data, chain1)
+    I_chain2 = sub_intensity(func, data, chain2)
+    return I_interference - I_chain1 - I_chain2
+
+
+def sub_intensity(func, data, non_zero_couplings: list[str]):
+    intensity_array = compute_sub_function(func, data, non_zero_couplings)
+    return integrate_intensity(intensity_array)
+
+
+def integrate_intensity(intensities) -> float:
+    flattened_intensities = intensities.flatten()
+    non_nan_intensities = flattened_intensities[~jnp.isnan(flattened_intensities)]
+    return float(jnp.sum(non_nan_intensities) / len(non_nan_intensities))

@@ -1,6 +1,7 @@
 absl
 ampform
 arange
+bbox
 clim
 cmap
 configurator
@@ -10,6 +11,7 @@ funcs
 functools
 hashlib
 hexdigest
+hspace
 imag
 ipykernel
 ipynb
@@ -36,10 +38,12 @@ numpy
 pathlib
 pcolormesh
 phasespace
+psutil
 pygments
 pyplot
 pyright
 pytest
+rcdefaults
 seealso
 sharey
 singledispatch
@@ -47,13 +51,17 @@ sympify
 sympy
 tensorwaves
 timeit
+tolist
 tqdm
 vmax
 vmin
+wspace
 xlabel
 xreplace
+xtick
 xticklabels
 xticks
 ylabel
+ytick
 yticklabels
 yticks

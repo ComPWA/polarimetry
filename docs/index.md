@@ -5,7 +5,7 @@ amplitude-model
 cross-check
 intensity
 polarization
-statistics
+uncertainties
 appendix
 API <api/polarization>
 ```

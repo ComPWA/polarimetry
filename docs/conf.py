@@ -59,6 +59,7 @@ autodoc_type_aliases = {
 }
 autodoc_typehints_format = "short"
 autosectionlabel_prefix_document = True
+autosectionlabel_maxdepth = 2
 codeautolink_concat_default = True
 copyright = "2022"
 default_role = "py:obj"
