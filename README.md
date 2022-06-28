@@ -23,6 +23,16 @@ pre-commit install
 
 For more information about local Python set-up, see [here](https://compwa-org.readthedocs.io/develop.html#local-set-up).
 
+### Documentation dependencies
+
+To build the documentation, you need to install LaTeX and some additional fonts. In Ubuntu, this can be done with:
+
+<!-- cspell:ignore dvipng texlive -->
+
+```shell
+sudo apt install -y cm-super dvipng texlive-latex-extra
+```
+
 ## Data
 
 The parameters of the LHCb fit are stored in the json files in the folder [`data/`](data/)
