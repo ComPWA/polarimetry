@@ -14,7 +14,7 @@ using DataFrames
 #
 using ThreeBodyDecay
 
-using Lb2ppiKModelLHCb
+using Lc2ppiKModelLHCb
 
 using BenchmarkTools
 using InteractiveUtils
