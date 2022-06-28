@@ -1,4 +1,4 @@
-module Lb2ppiKModelLHCb
+module Lc2ppiKModelLHCb
 
 using JSON
 #
