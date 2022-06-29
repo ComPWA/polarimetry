@@ -26,7 +26,7 @@ begin
     using ThreeBodyDecay
     using ThreeBodyDecay.PartialWaveFunctions
 
-    using Lb2ppiKModelLHCb
+    using Lc2ppiKModelLHCb
 end
 
 # ╔═╡ 97e2902d-8ea9-4fec-b4d4-25985db069a2

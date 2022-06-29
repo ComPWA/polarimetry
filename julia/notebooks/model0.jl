@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.5
+# v0.19.4
 
 using Markdown
 using InteractiveUtils
@@ -26,7 +26,7 @@ begin
     using ThreeBodyDecay
     using ThreeBodyDecay.PartialWaveFunctions
 
-    using Lb2ppiKModelLHCb
+    using Lc2ppiKModelLHCb
 end
 
 # ╔═╡ d3cb114e-ee0c-4cd5-87fb-82289849aceb
@@ -48,7 +48,7 @@ md"""
 """
 
 # ╔═╡ 7cc4c5f9-4392-4b57-88af-59d1cf308162
-isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"];
+isobarsinput = readjson(joinpath("..", "data", "isobars.json"))["isobars"];
 
 # ╔═╡ b0f5c181-dcb2-48f8-a510-57eac44ca4d9
 begin
@@ -100,9 +100,12 @@ md"""
 modelparameters =
     readjson(joinpath("..", "data", "modelparameters.json"))["modelstudies"];
 
+# ╔═╡ 78032115-badb-45b6-b20f-15496d460d57
+modelparameters[17]["title"]
+
 # ╔═╡ 24d051e5-4d9e-48c8-aace-225f3a0218cb
 begin
-    defaultparameters = first(modelparameters)["parameters"]
+    defaultparameters = modelparameters[1]["parameters"]
     defaultparameters["ArK(892)1"] = "1.0 ± 0.0"
     defaultparameters["AiK(892)1"] = "0.0 ± 0.0"
 end
@@ -179,16 +182,13 @@ md"""
 
 # ╔═╡ 45843dac-096a-4bd5-82eb-aad4f18b8f86
 begin
-    import Lb2ppiKModelLHCb: expectation
+    import Lc2ppiKModelLHCb: expectation
     expectation(Op, σs) = sum(
         conj(A(σs, [two_λ, 0, 0, two_ν′])) *
         Op[twoλ2ind(two_ν′), twoλ2ind(two_ν)] *
         A(σs, [two_λ, 0, 0, two_ν])
         for two_λ in [-1, 1], two_ν in [-1, 1], two_ν′ in [-1, 1]) |> real
 end
-
-# ╔═╡ 8c6c0367-8b35-4037-bef2-91ff70a8cdd3
-σPauli
 
 # ╔═╡ 2f42ac46-554c-4376-83a9-ad8eeaf90422
 function Ialphaongrid(; iσx, iσy, Ngrid=100)
@@ -460,62 +460,6 @@ begin
         order(:isobarname, by=x -> findfirst(x[1], "LDK")))
 end
 
-# ╔═╡ c46dca24-006d-4a15-956c-e73c9c5e55c6
-leadingfraction = let
-    iσx = 1
-    iσy = 2
-    Ngrid = 150
-
-    σxv = range(lims(iσx, ms)..., length=Ngrid)
-    σyv = range(lims(iσy, ms)..., length=Ngrid)
-    matrix = Matrix(undef, Ngrid - 1, Ngrid - 1)
-    for i in 1:Ngrid-1
-        for j in 1:Ngrid-1
-            _map = map(σs ->
-                    (σxv[i] < σs[iσx] < σxv[i+1] &&
-                     σyv[j] < σs[iσy] < σyv[j+1]), pdata)
-            Iξ = [sum(intensity.(Aiv[_map],
-                Ref(couplings .* (isobarnames .== s))))
-                  for s in Set(isobarnames)]
-            #
-            I0 = sum(intensity.(Aiv[_map], Ref(couplings)))
-            Iξ ./= sum(I0)
-            m, ind = findmax(Iξ)
-            matrix[i, j] = m == 0 || isnan(m) ? (NaN, NaN) : (m, ind)
-        end
-    end
-    (;
-        matrix_li=getindex.(matrix, 2),
-        matrix_fr=getindex.(matrix, 1), iσx, iσy,
-        σxv=(σxv[1:end-1] + σxv[2:end]) / 2,
-        σyv=(σyv[1:end-1] + σyv[2:end]) / 2)
-end;
-
-# ╔═╡ f6f6ed4f-3a6c-4dfe-a758-504172ef5b6c
-let
-    selectedmatrix_li = map(leadingfraction.matrix_li' .*
-                            (leadingfraction.matrix_fr' .> 0.5)) do x
-        x == 0 ? NaN : x
-    end
-    heatmap(leadingfraction.σxv, leadingfraction.σyv,
-        selectedmatrix_li,
-        colorbar=true,
-        title="leading fraction > 50%")
-    savefig(joinpath("plots", "leadingfraction50%.pdf"))
-    plot!()
-end
-
-# ╔═╡ 6cc3c62d-f639-4834-8aea-1e814e353337
-let
-    setselectedmatrix_li = Set(leadingfraction.matrix_li' .*
-                               (leadingfraction.matrix_fr' .> 0.5))
-    setselectedmatrix_li = filter(x -> x > 0, setselectedmatrix_li)
-    #
-    distinctisobars = vcat(Set(isobarnames)...)
-    dominantisobars = getindex.(Ref(distinctisobars), setselectedmatrix_li)
-    collect(zip(setselectedmatrix_li, dominantisobars))
-end
-
 # ╔═╡ Cell order:
 # ╟─d3cb114e-ee0c-4cd5-87fb-82289849aceb
 # ╠═dea88954-c7b2-11ec-1a3d-717739cfd08b
@@ -528,6 +472,7 @@ end
 # ╠═cee9dc28-8048-49e7-8caf-8e07bcd884c4
 # ╟─30c3c8ef-ad69-43e6-9a75-525dfbf7007a
 # ╠═7ecc65a4-9fe7-4209-ad54-f1c8abe52ee5
+# ╠═78032115-badb-45b6-b20f-15496d460d57
 # ╠═24d051e5-4d9e-48c8-aace-225f3a0218cb
 # ╠═f9158b4d-4d27-4aba-bf5a-529135ec48e2
 # ╠═1db41980-ea36-4238-90cd-bf2427772ea9
@@ -543,7 +488,6 @@ end
 # ╟─ed7f802c-a931-4114-aa30-6d10735520d7
 # ╠═281b641b-fdca-4a6e-8a9d-732c34f7a71d
 # ╠═45843dac-096a-4bd5-82eb-aad4f18b8f86
-# ╠═8c6c0367-8b35-4037-bef2-91ff70a8cdd3
 # ╠═2f42ac46-554c-4376-83a9-ad8eeaf90422
 # ╠═190a6f02-bd33-447c-a5b3-4dd3dd79579c
 # ╠═b50627f0-d3a6-4931-867e-5d102b543502
@@ -581,6 +525,3 @@ end
 # ╠═78dba088-6d5b-4e4b-a664-f176f9e2d673
 # ╠═fc62283e-8bcb-4fd1-8809-b7abeb991030
 # ╠═0a976167-b074-4694-ab97-aecfcd67cc25
-# ╠═c46dca24-006d-4a15-956c-e73c9c5e55c6
-# ╠═f6f6ed4f-3a6c-4dfe-a758-504172ef5b6c
-# ╠═6cc3c62d-f639-4834-8aea-1e814e353337

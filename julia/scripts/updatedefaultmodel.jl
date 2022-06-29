@@ -14,7 +14,7 @@ using DataFrames
 #
 using ThreeBodyDecay
 
-using Lb2ppiKModelLHCb
+using Lc2ppiKModelLHCb
 
 
 theme(:wong2, frame=:box, grid=false, minorticks=true,
