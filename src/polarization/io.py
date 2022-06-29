@@ -18,6 +18,7 @@ This code originates from `ComPWA/ampform#280
 from __future__ import annotations
 
 import hashlib
+import json
 import logging
 import os
 import pickle
@@ -25,6 +26,7 @@ from collections import abc
 from functools import singledispatch
 from typing import Iterable, Mapping, Sequence
 
+import jax.numpy as jnp
 import sympy as sp
 from ampform.sympy import UnevaluatedExpression
 from IPython.display import Math, display
@@ -275,3 +277,32 @@ def _to_bytes(obj) -> bytes:
 def mute_jax_warnings() -> None:
     jax_logger = logging.getLogger("absl")
     jax_logger.setLevel(logging.ERROR)
+
+
+def export_polarization_field(
+    sigma1: jnp.ndarray,
+    sigma2: jnp.ndarray,
+    alpha_x: jnp.ndarray,
+    alpha_y: jnp.ndarray,
+    alpha_z: jnp.ndarray,
+    intensity: jnp.ndarray,
+    filename: str,
+) -> None:
+    if len(sigma1.shape) != 1:
+        raise ValueError(f"sigma1 must be a 1D array, got {sigma1.shape}")
+    if len(sigma2.shape) != 1:
+        raise ValueError(f"sigma2 must be a 1D array, got {sigma2.shape}")
+    expected_shape: tuple[int, int] = (*sigma1.shape, *sigma2.shape)
+    for array in [alpha_x, alpha_y, alpha_z, intensity]:
+        if array.shape != expected_shape:
+            raise ValueError(f"Expected shape {expected_shape}, got {array.shape}")
+    json_data = {
+        "m^2_Kpi": sigma1.tolist(),
+        "m^2_pK": sigma2.tolist(),
+        "alpha_x": alpha_x.tolist(),
+        "alpha_y": alpha_y.tolist(),
+        "alpha_z": alpha_z.tolist(),
+        "intensity": intensity.tolist(),
+    }
+    with open(filename, "w") as f:
+        json.dump(json_data, f, separators=(",", ":"))
