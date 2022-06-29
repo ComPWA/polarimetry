@@ -1,11 +1,8 @@
-from pathlib import Path
-
 import pytest
 import sympy as sp
 
 from polarization.decay import IsobarNode, Particle
 from polarization.io import as_latex, get_readable_hash
-from polarization.lhcb import load_resonance_definitions
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
 dummy_args = dict(mass=0, width=0)
@@ -55,17 +52,3 @@ def test_get_readable_hash(assumptions):
     assert h == "bbc98339949be8bbeb405eb320f2b42d24c597cf0a8780408070d28a320d16fc"
     # Assumptions do not affect the hash. This should be addressed through:
     # https://github.com/redeboer/polarization-sensitivity/issues/41
-
-
-def test_load_isobar_definitions():
-    pwd = Path(__file__).absolute().parent
-    resonances = load_resonance_definitions(pwd.parent / "data" / "resonances.json")
-    assert len(resonances) == 16
-    Λ2000 = resonances["L(2000)"]
-    assert Λ2000.name == "L(2000)"
-    assert Λ2000.latex == R"\Lambda(2000)"
-    assert Λ2000.spin == 0.5
-    assert Λ2000.parity == -1
-    assert Λ2000.mass == 2.0
-    assert Λ2000.width == 0.21
-    assert Λ2000.lineshape == "BreitWignerMinL"

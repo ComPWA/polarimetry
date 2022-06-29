@@ -48,7 +48,7 @@ md"""
 """
 
 # ╔═╡ 7cc4c5f9-4392-4b57-88af-59d1cf308162
-isobarsinput = readjson(joinpath("..", "data", "isobars.json"))["isobars"];
+isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"];
 
 # ╔═╡ b0f5c181-dcb2-48f8-a510-57eac44ca4d9
 begin
