@@ -3,6 +3,7 @@ using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
 #
+import YAML
 using JSON
 using Plots
 using LaTeXStrings
@@ -30,7 +31,7 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
 #  _|    _|    _|  _|    _|  _|    _|  _|        _|
 #  _|    _|    _|    _|_|      _|_|_|    _|_|_|  _|
 
-isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"];
+isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.json"));
 #
 isobars = Dict()
 for (key, dict) in isobarsinput
@@ -42,7 +43,7 @@ end
 
 
 modelparameters =
-    readjson(joinpath("..", "data", "modelparameters.json"))["modelstudies"];
+    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
 
 defaultparameters = first(modelparameters)["parameters"]
 defaultparameters["ArK(892)1"] = "1.0 ± 0.0"

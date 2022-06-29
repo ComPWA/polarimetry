@@ -1,6 +1,7 @@
 ### A Pluto.jl notebook ###
 # v0.19.4
 
+import YAML
 using Markdown
 using InteractiveUtils
 
@@ -48,7 +49,7 @@ md"""
 """
 
 # ╔═╡ 7cc4c5f9-4392-4b57-88af-59d1cf308162
-isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"];
+isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.json"));
 
 # ╔═╡ b0f5c181-dcb2-48f8-a510-57eac44ca4d9
 begin
@@ -98,7 +99,7 @@ md"""
 
 # ╔═╡ 7ecc65a4-9fe7-4209-ad54-f1c8abe52ee5
 modelparameters =
-    readjson(joinpath("..", "data", "modelparameters.json"))["modelstudies"];
+    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
 
 # ╔═╡ 78032115-badb-45b6-b20f-15496d460d57
 modelparameters[17]["title"]

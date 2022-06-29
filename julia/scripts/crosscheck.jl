@@ -3,6 +3,7 @@ using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
 #
+import YAML
 using JSON
 using Plots
 using LaTeXStrings
@@ -23,7 +24,7 @@ using Lc2ppiKModelLHCb
 #  _|    _|    _|  _|    _|  _|    _|  _|        _|
 #  _|    _|    _|    _|_|      _|_|_|    _|_|_|  _|
 
-isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"];
+isobarsinput = readjson(joinpath("..", "data", "particle-definitions.json"));
 #
 isobars = Dict()
 for (key, dict) in isobarsinput
@@ -35,7 +36,7 @@ end
 
 
 modelparameters =
-    readjson(joinpath("..", "data", "modelparameters.json"))["modelstudies"];
+    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
 
 defaultparameters = first(modelparameters)["parameters"]
 shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters))
