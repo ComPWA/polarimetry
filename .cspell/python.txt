@@ -13,6 +13,7 @@ hashlib
 hexdigest
 hspace
 imag
+interp2d
 ipykernel
 ipynb
 ipython
@@ -44,6 +45,7 @@ pyplot
 pyright
 pytest
 rcdefaults
+scipy
 seealso
 sharey
 singledispatch
@@ -53,6 +55,7 @@ tensorwaves
 timeit
 tolist
 tqdm
+viridis
 vmax
 vmin
 wspace

@@ -306,3 +306,16 @@ def export_polarization_field(
     }
     with open(filename, "w") as f:
         json.dump(json_data, f, separators=(",", ":"))
+
+
+def import_polarization_field(filename: str, steps: int = 1) -> dict[str, jnp.ndarray]:
+    with open(filename) as f:
+        json_data: dict = json.load(f)
+    return {
+        "m^2_Kpi": jnp.array(json_data["m^2_Kpi"])[::steps],
+        "m^2_pK": jnp.array(json_data["m^2_pK"])[::steps],
+        "alpha_x": jnp.array(json_data["alpha_x"])[::steps, ::steps],
+        "alpha_y": jnp.array(json_data["alpha_y"])[::steps, ::steps],
+        "alpha_z": jnp.array(json_data["alpha_z"])[::steps, ::steps],
+        "intensity": jnp.array(json_data["intensity"])[::steps, ::steps],
+    }
