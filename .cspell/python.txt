@@ -14,6 +14,7 @@ hashlib
 hexdigest
 hspace
 imag
+interp2d
 ipykernel
 ipynb
 ipython
@@ -24,6 +25,7 @@ itertools
 kwargs
 lambdification
 lambdify
+lambdifying
 lhcb
 linestyle
 linewidth
@@ -45,6 +47,7 @@ pyplot
 pyright
 pytest
 rcdefaults
+scipy
 seealso
 sharey
 singledispatch
@@ -54,6 +57,8 @@ tensorwaves
 timeit
 tolist
 tqdm
+vectorize
+viridis
 vmax
 vmin
 wspace
