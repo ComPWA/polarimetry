@@ -1,0 +1,144 @@
+# Inititial and final states
+Lambda_c+:
+  latex: \Lambda_c^+
+  jp: 1/2^+
+  mass: 2286.46
+  width: 3.25e-9
+
+p:
+  latex: p
+  jp: 1/2^+
+  mass: 938.272046
+  width: 0.0
+
+pi+:
+  latex: \pi^+
+  jp: 0^-
+  mass: 139.57018
+  width: 2.5284e-14
+
+K-:
+  latex: K^-
+  jp: 0^-
+  mass: 493.677
+  width: 5.317e-14
+
+# Resonances
+L(1405):
+  latex: \Lambda(1405)
+  jp: 1/2^-
+  mass: 1405.1
+  width: 50.5
+  lineshape: Flatte1405
+
+L(1520):
+  latex: \Lambda(1520)
+  jp: 3/2^-
+  mass: 1515-1523
+  width: 10-20
+  lineshape: BreitWignerMinL
+
+L(1600):
+  latex: \Lambda(1600)
+  jp: 1/2^+
+  mass: 1630
+  width: 250
+  lineshape: BreitWignerMinL
+
+L(1670):
+  latex: \Lambda(1670)
+  jp: 1/2^-
+  mass: 1670
+  width: 30
+  lineshape: BreitWignerMinL
+
+L(1690):
+  latex: \Lambda(1690)
+  jp: 3/2^-
+  mass: 1690
+  width: 70
+  lineshape: BreitWignerMinL
+
+L(1800):
+  latex: \Lambda(1800)
+  jp: 1/2^-
+  mass: 1800
+  width: 300
+  lineshape: BreitWignerMinL
+
+L(1810):
+  latex: \Lambda(1810)
+  jp: 1/2^+
+  mass: 1810
+  width: 150
+  lineshape: BreitWignerMinL
+
+L(2000):
+  latex: \Lambda(2000)
+  jp: 1/2^-
+  mass: 1900-2100
+  width: 20-400
+  lineshape: BreitWignerMinL
+
+D(1232):
+  latex: \Delta(1232)
+  jp: 3/2^+
+  mass: 1232
+  width: 117
+  lineshape: BreitWignerMinL
+
+D(1600):
+  latex: \Delta(1600)
+  jp: 3/2^+
+  mass: 1640
+  width: 300
+  lineshape: BreitWignerMinL
+
+D(1620):
+  latex: \Delta(1620)
+  jp: 1/2^-
+  mass: 1620
+  width: 130
+  lineshape: BreitWignerMinL
+
+D(1700):
+  latex: \Delta(1700)
+  jp: 3/2^-
+  mass: 1690
+  width: 380
+  lineshape: BreitWignerMinL
+
+K(700):
+  latex: K(700)
+  jp: 0^+
+  mass: 824
+  width: 478
+  lineshape: BuggBreitWignerMinL
+
+K(892):
+  latex: K(892)
+  jp: 1^-
+  mass: 895.5
+  width: 47.3
+  lineshape: BreitWignerMinL
+
+K(1410):
+  latex: K(1410)
+  jp: 1^-
+  mass: 1421
+  width: 236
+  lineshape: BuggBreitWignerMinL
+
+K(1430):
+  latex: K(1430)
+  jp: 0^+
+  mass: 1375
+  width: 190
+  lineshape: BuggBreitWignerMinL
+
+# https://github.com/redeboer/polarization-sensitivity/blob/34f5330/julia/notebooks/model0.jl#L43-L47
+Sigma-:
+  latex: \Sigma^-
+  jp: 1/2^+
+  mass: 1189.37
+  width: 4.45e-12

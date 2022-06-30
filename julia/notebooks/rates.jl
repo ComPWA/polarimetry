@@ -1,6 +1,7 @@
 ### A Pluto.jl notebook ###
 # v0.19.5
 
+import YAML
 using Markdown
 using InteractiveUtils
 
@@ -38,7 +39,7 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
 # ╔═╡ 07a14d52-6e8b-4e31-991d-8cacd576e4f4
 begin
     # 1) get isobars
-    isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"]
+    isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.json"))
     #
     isobars = Dict()
     for (key, dict) in isobarsinput
@@ -47,7 +48,7 @@ begin
 
     # 2) update model parameters
     modelparameters =
-        readjson(joinpath("..", "data", "modelparameters.json"))["modelstudies"]
+        YAML.load_file(joinpath("..", "data", "model-definitions.yaml"))
 
     defaultparameters = first(modelparameters)["parameters"]
     defaultparameters["ArK(892)1"] = "1.0 ± 0.0"

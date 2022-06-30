@@ -3,6 +3,7 @@ using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
 #
+import YAML
 using JSON
 using Plots
 using LaTeXStrings
@@ -27,7 +28,7 @@ using InteractiveUtils
 
 const model0 = let
     # 1) get isobars
-    isobarsinput = readjson(joinpath("..", "data", "resonances.json"))["isobars"]
+    isobarsinput = readjson(joinpath("..", "data", "particle-definitions.json"))
     #
     isobars = Dict()
     for (key, dict) in isobarsinput
@@ -36,7 +37,7 @@ const model0 = let
 
     # 2) update model parameters
     modelparameters =
-        readjson(joinpath("..", "data", "modelparameters.json"))["modelstudies"]
+        YAML.load_file(joinpath("..", "data", "model-definitions.yaml"))
 
     defaultparameters = first(modelparameters)["parameters"]
     defaultparameters["ArK(892)1"] = "1.0 ± 0.0"

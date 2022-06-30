@@ -6,7 +6,6 @@
 """
 from __future__ import annotations
 
-import json
 import re
 import sys
 from pathlib import Path
@@ -15,9 +14,14 @@ from typing import Callable, Iterable, TypeVar
 import attrs
 import numpy as np
 import sympy as sp
+import yaml
 from sympy.core.symbol import Str
 
-from polarization.amplitude import AmplitudeModel, DynamicsBuilder, DynamicsConfigurator
+from polarization.amplitude import (
+    AmplitudeModel,
+    DalitzPlotDecompositionBuilder,
+    DynamicsBuilder,
+)
 from polarization.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 from polarization.spin import filter_parity_violating_ls, generate_ls_couplings
 
@@ -29,12 +33,73 @@ from .dynamics import (
 from .particle import PARTICLE_TO_ID, K, Λc, p, π
 
 if sys.version_info < (3, 8):
-    from typing_extensions import Literal, TypedDict
+    from typing_extensions import Literal
 else:
-    from typing import Literal, TypedDict
+    from typing import Literal
 
 
-def load_three_body_decays(filename: str) -> DynamicsConfigurator:
+def load_model(
+    model_file: Path | str,
+    particle_definitions: dict[str, Particle],
+    model_id: int | str = 0,
+) -> AmplitudeModel:
+    builder = load_model_builder(model_file, particle_definitions, model_id)
+    model = builder.formulate()
+    imported_parameter_values = load_model_parameters(
+        model_file, builder.decay, model_id
+    )
+    model.parameter_defaults.update(imported_parameter_values)
+    return model
+
+
+def load_model_builder(
+    model_file: Path | str,
+    particle_definitions: dict[str, Particle],
+    model_id: int | str = 0,
+) -> DalitzPlotDecompositionBuilder:
+    with open(model_file) as f:
+        model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
+    model_title = _find_model_title(model_definitions, model_id)
+    model_def = model_definitions[model_title]
+    lineshapes: dict[str, str] = model_def["lineshapes"]
+    decay = load_three_body_decay(lineshapes, particle_definitions)
+    amplitude_builder = DalitzPlotDecompositionBuilder(decay)
+    for chain in decay.chains:
+        lineshape_choice = lineshapes[chain.resonance.name]
+        dynamics_builder = _get_resonance_builder(lineshape_choice)
+        amplitude_builder.dynamics_choices.register_builder(chain, dynamics_builder)
+    return amplitude_builder
+
+
+def _find_model_title(model_definitions: dict, model_id: int | str) -> str:
+    if isinstance(model_id, int):
+        if model_id >= len(model_definitions):
+            raise KeyError(
+                f"Model definition file contains {len(model_definitions)} models, but"
+                f" trying to get number {model_id}."
+            )
+        for i, title in enumerate(model_definitions):
+            if i == model_id:
+                return title
+    if model_id not in model_definitions:
+        raise KeyError(f'Could not find model with title "{model_id}"')
+    return model_id
+
+
+def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
+    if lineshape == "BreitWignerMinL":
+        return formulate_breit_wigner
+    if lineshape == "BuggBreitWignerMinL":
+        return formulate_bugg_breit_wigner
+    if lineshape == "Flatte1405":
+        return formulate_flatte_1405
+    raise NotImplementedError(f'No dynamics implemented for lineshape "{lineshape}"')
+
+
+def load_three_body_decay(
+    resonance_names: Iterable[str],
+    particle_definitions: dict[str, Particle],
+) -> ThreeBodyDecay:
     def create_isobar(resonance: Particle) -> ThreeBodyDecayChain:
         if resonance.name.startswith("K"):
             child1, child2, sibling = π, K, p
@@ -69,49 +134,26 @@ def load_three_body_decays(filename: str) -> DynamicsConfigurator:
             )
         return min(ls)
 
-    resonances = load_resonance_definitions(filename)
-    decay = ThreeBodyDecay(
+    resonances = [particle_definitions[name] for name in resonance_names]
+    return ThreeBodyDecay(
         states={state_id: particle for particle, state_id in PARTICLE_TO_ID.items()},
-        chains=tuple(create_isobar(res) for res in resonances.values()),
+        chains=tuple(create_isobar(res) for res in resonances),
     )
-    dynamics_configurator = DynamicsConfigurator(decay)
-    for chain in decay.chains:
-        builder = _get_resonance_builder(chain.resonance.lineshape)
-        dynamics_configurator.register_builder(chain, builder)
-    return dynamics_configurator
-
-
-def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
-    if lineshape == "BreitWignerMinL":
-        return formulate_breit_wigner
-    if lineshape == "BuggBreitWignerMinL":
-        return formulate_bugg_breit_wigner
-    if lineshape == "Flatte1405":
-        return formulate_flatte_1405
-    raise NotImplementedError(f'No dynamics implemented for lineshape "{lineshape}"')
-
-
-def load_resonance_definitions(filename: Path | str) -> dict[str, Particle]:
-    """Load `.Particle` definitions from a JSON file."""
-    with open(filename) as stream:
-        data = json.load(stream)
-    isobar_definitions = data["isobars"]
-    return _to_resonance_dict(isobar_definitions)
 
 
 class ModelParameters:
-    """A wrapper for loading parameters from :download:`modelparameters.json </../data/modelparameters.json>`."""
+    """A wrapper for loading parameters from :download:`model-definitions.yaml </../data/model-definitions.yaml>`."""
 
     def __init__(
         self,
-        filename: str,
+        filename: Path | str,
         decay: ThreeBodyDecay,
         allowed_model_titles: Iterable[str] | None = None,
     ) -> None:
         with open(filename) as stream:
-            json_data = json.load(stream)
+            model_definitions = yaml.load(stream, Loader=yaml.SafeLoader)
         self.__model_titles: dict[int, str] = {
-            i: model["title"] for i, model in enumerate(json_data["modelstudies"])
+            i: title for i, title in enumerate(model_definitions)
         }
         if allowed_model_titles is not None:
             allowed_model_titles = set(allowed_model_titles)
@@ -123,10 +165,10 @@ class ModelParameters:
         self.__values: dict[str, dict[str, complex | float | int]] = {}
         self.__uncertainties: dict[str, dict[str, complex | float | int]] = {}
         for title in self.model_titles.values():
-            self.__values[title] = _load_model_parameters(
+            self.__values[title] = load_model_parameters(
                 filename, decay, title, typ="value"
             )
-            self.__uncertainties[title] = _load_model_parameters(
+            self.__uncertainties[title] = load_model_parameters(
                 filename, decay, title, typ="uncertainty"
             )
 
@@ -167,20 +209,19 @@ def convert_dict_keys(
     return {key_converter(key): value for key, value in dct.items()}
 
 
-def _load_model_parameters(
+def load_model_parameters(
     filename: Path | str,
     decay: ThreeBodyDecay,
-    model_title: str = "Default amplitude model.",
+    model_id: int | str = 0,
     typ: Literal["value", "uncertainty"] = "value",
 ) -> dict[sp.Indexed | sp.Symbol, complex | float]:
-    with open(filename) as stream:
-        json_data = json.load(stream)
-    if isinstance(model_title, str):
-        model_title = _get_model_by_title(json_data, model_title)
-    json_parameters = json_data["modelstudies"][model_title]["parameters"]
-    json_parameters["ArK(892)1"] = "1.0 ± 0.0"
-    json_parameters["AiK(892)1"] = "0.0 ± 0.0"
-    parameters = _to_symbol_value_mapping(json_parameters, decay, typ)
+    with open(filename) as f:
+        model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
+    model_title = _find_model_title(model_definitions, model_id)
+    parameter_definitions = model_definitions[model_title]["parameters"]
+    parameter_definitions["ArK(892)1"] = "1.0 ± 0.0"
+    parameter_definitions["AiK(892)1"] = "0.0 ± 0.0"
+    parameters = _to_symbol_value_mapping(parameter_definitions, decay, typ)
     decay_couplings = compute_decay_couplings(decay, typ)
     parameters.update(decay_couplings)
     return parameters
@@ -215,13 +256,6 @@ def _create_gaussian_distribution(
     if isinstance(mean, (float, int)) and isinstance(std, (float, int)):
         return rng.normal(mean, std, size)
     raise NotImplementedError
-
-
-def _get_model_by_title(json_data: dict, title: str) -> int:
-    for i, item in enumerate(json_data["modelstudies"]):
-        if item["title"] == title:
-            return i
-    raise KeyError(f'Could not find model with title "{title}"')
 
 
 def flip_production_coupling_signs(
@@ -264,62 +298,6 @@ def compute_decay_couplings(
     if typ == "uncertainty":
         return {s: 0 for s in decay_couplings}
     return decay_couplings
-
-
-def _to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Particle]:
-    return {
-        name: _to_resonance(name, resonance_def)
-        for name, resonance_def in definition.items()
-    }
-
-
-def _to_resonance(name: str, definition: ResonanceJSON) -> Particle:
-    spin, parity = _to_jp_pair(definition["jp"])
-    latex = name
-    if name.startswith("D("):
-        latex = Rf"\Delta{name[1:]}"
-    if name.startswith("L("):
-        latex = Rf"\Lambda{name[1:]}"
-    return Particle(
-        name,
-        latex,
-        spin,
-        parity,
-        mass=_average_float(definition["mass"]) * 1e-3,  # MeV to GeV
-        width=_average_float(definition["width"]) * 1e-3,  # MeV to GeV
-        lineshape=definition["lineshape"],
-    )
-
-
-def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
-    """
-    >>> _to_jp_pair("3/2^-")
-    (3/2, -1)
-    >>> _to_jp_pair("0^+")
-    (0, 1)
-    """
-    spin, parity_sign = input_str.split("^")
-    return sp.Rational(spin), int(f"{parity_sign}1")
-
-
-def _average_float(input_str: str) -> tuple[float, float]:
-    """
-    >>> _average_float("1405.1")
-    1405.1
-    >>> _average_float("1900-2100")
-    2000.0
-    """
-    if "-" in input_str:
-        _min, _max, *_ = map(float, input_str.split("-"))
-        return (_max + _min) / 2
-    return float(input_str)
-
-
-class ResonanceJSON(TypedDict):
-    jp: str
-    mass: str
-    width: str
-    lineshape: Literal["BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"]
 
 
 def _to_symbol_value_mapping(
