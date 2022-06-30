@@ -24,9 +24,6 @@ class Particle:
     parity: Literal[-1, 1]
     mass: float
     width: float
-    lineshape: Literal[
-        "BreitWignerMinL", "BuggBreitWignerMinL", "Flatte1405"
-    ] | None = None
 
 
 @frozen

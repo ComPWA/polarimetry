@@ -18,6 +18,7 @@ __TARGET_SUBSTITUTIONS = {
     "DataSample": "tensorwaves.interface.DataSample",
     "Literal[(-1, 1)]": "typing.Literal",
     "Literal[- 1, 1]": "typing.Literal",
+    "Literal[-1, 1]": "typing.Literal",
     "OuterStates": "polarization.decay.OuterStates",
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "Path": "pathlib.Path",

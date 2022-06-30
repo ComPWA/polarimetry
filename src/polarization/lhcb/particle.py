@@ -1,46 +1,88 @@
 """Hard-coded particle definitions."""
+from __future__ import annotations
+
+import sys
+from os.path import abspath, dirname
+from pathlib import Path
+
+import sympy as sp
+import yaml
+
 from polarization.decay import Particle
 
-Λc = Particle(
-    name="Λc⁺",
-    latex=R"\Lambda_c^+",
-    spin=0.5,
-    parity=+1,
-    mass=2.28646,
-    width=3.25e-12,
+if sys.version_info < (3, 8):
+    from typing_extensions import TypedDict
+else:
+    from typing import TypedDict
+
+
+def load_particles(filename: Path | str) -> dict[str, Particle]:
+    """Load `.Particle` definitions from a YAML file."""
+    with open(filename) as stream:
+        particle_definitions = yaml.load(stream, Loader=yaml.SafeLoader)
+    return _to_resonance_dict(particle_definitions)
+
+
+def _to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Particle]:
+    return {
+        name: _to_resonance(name, resonance_def)
+        for name, resonance_def in definition.items()
+    }
+
+
+def _to_resonance(name: str, definition: ResonanceJSON) -> Particle:
+    spin, parity = _to_jp_pair(definition["jp"])
+    latex = definition.get("latex", name)
+    return Particle(
+        name,
+        latex,
+        spin,
+        parity,
+        mass=_average_float(definition["mass"]) * 1e-3,  # MeV to GeV
+        width=_average_float(definition["width"]) * 1e-3,  # MeV to GeV
+    )
+
+
+def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
+    """
+    >>> _to_jp_pair("3/2^-")
+    (3/2, -1)
+    >>> _to_jp_pair("0^+")
+    (0, 1)
+    """
+    spin, parity_sign = input_str.split("^")
+    return sp.Rational(spin), int(f"{parity_sign}1")
+
+
+def _average_float(input_str: float | str) -> tuple[float, float]:
+    """
+    >>> _average_float("1405.1")
+    1405.1
+    >>> _average_float("1900-2100")
+    2000.0
+    """
+    if isinstance(input_str, str) and "-" in input_str:
+        _min, _max, *_ = map(float, input_str.split("-"))
+        return (_max + _min) / 2
+    return float(input_str)
+
+
+class ResonanceJSON(TypedDict):
+    latex: str
+    jp: str
+    mass: float | str
+    width: float | str
+
+
+__PARTICLE_DATABASE = load_particles(
+    f"{abspath(dirname(__file__))}/particle-definitions.yaml"
 )
-p = Particle(
-    name="p",
-    latex="p",
-    spin=0.5,
-    parity=+1,
-    mass=0.938272046,
-    width=0.0,
-)
-K = Particle(
-    name="K⁻",
-    latex="K^-",
-    spin=0,
-    parity=-1,
-    mass=0.493677,
-    width=5.317e-17,
-)
-π = Particle(
-    name="π⁺",
-    latex=R"\pi^+",
-    spin=0,
-    parity=-1,
-    mass=0.13957018,
-    width=2.5284e-17,
-)
+
+Λc = __PARTICLE_DATABASE["Lambda_c+"]
+p = __PARTICLE_DATABASE["p"]
+K = __PARTICLE_DATABASE["K-"]
+π = __PARTICLE_DATABASE["pi+"]
 PARTICLE_TO_ID = {Λc: 0, p: 1, π: 2, K: 3}
 
 # https://github.com/redeboer/polarization-sensitivity/blob/34f5330/julia/notebooks/model0.jl#L43-L47
-Σ = Particle(
-    name="Σ⁻",
-    latex=R"\Sigma^-",
-    spin=0.5,
-    parity=+1,
-    mass=1.18937,
-    width=4.45e-15,
-)
+Σ = __PARTICLE_DATABASE["Sigma-"]

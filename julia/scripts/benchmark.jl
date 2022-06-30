@@ -3,6 +3,7 @@ using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
 #
+import YAML
 using JSON
 using Plots
 using LaTeXStrings
@@ -27,21 +28,23 @@ using InteractiveUtils
 
 const model0 = let
     # 1) get isobars
-    isobarsinput = readjson(joinpath("..", "data", "isobars.json"))["isobars"]
-    #
+    isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"))
+    modelparameters =
+        YAML.load_file(joinpath("..", "data", "model-definitions.yaml"))
+    defaultmodel = modelparameters["Default amplitude model"]
+
     isobars = Dict()
-    for (key, dict) in isobarsinput
+    for (key, lineshape) in defaultmodel["lineshapes"]
+        dict = Dict{String,Any}(isobarsinput[key])
+        dict["lineshape"] = lineshape
         isobars[key] = buildchain(key, dict)
     end
 
     # 2) update model parameters
-    modelparameters =
-        readjson(joinpath("..", "data", "modelparameters.json"))["modelstudies"]
-
-    defaultparameters = first(modelparameters)["parameters"]
+    defaultparameters = defaultmodel["parameters"]
     defaultparameters["ArK(892)1"] = "1.0 ± 0.0"
     defaultparameters["AiK(892)1"] = "0.0 ± 0.0"
-
+    #
     parameterupdates = [ # 6 values are updated
         "K(1430)" => (γ=eval(Meta.parse(defaultparameters["gammaK(1430)"])).val,),
         "K(700)" => (γ=eval(Meta.parse(defaultparameters["gammaK(700)"])).val,),
