@@ -1,7 +1,6 @@
 ### A Pluto.jl notebook ###
-# v0.19.5
+# v0.19.4
 
-import YAML
 using Markdown
 using InteractiveUtils
 
@@ -12,7 +11,7 @@ begin
     Pkg.activate(".")
     Pkg.instantiate()
     #
-    using JSON
+    using YAML
     using Plots
     using LaTeXStrings
     import Plots.PlotMeasures.mm
@@ -39,18 +38,20 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
 # ╔═╡ 07a14d52-6e8b-4e31-991d-8cacd576e4f4
 begin
     # 1) get isobars
-    isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.json"))
-    #
+    isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"))
+    modelparameters =
+        YAML.load_file(joinpath("..", "data", "model-definitions.yaml"))
+    defaultmodel = modelparameters["Default amplitude model"]
+
     isobars = Dict()
-    for (key, dict) in isobarsinput
+    for (key, lineshape) in defaultmodel["lineshapes"]
+        dict = Dict{String,Any}(isobarsinput[key])
+        dict["lineshape"] = lineshape
         isobars[key] = buildchain(key, dict)
     end
 
     # 2) update model parameters
-    modelparameters =
-        YAML.load_file(joinpath("..", "data", "model-definitions.yaml"))
-
-    defaultparameters = first(modelparameters)["parameters"]
+    defaultparameters = defaultmodel["parameters"]
     defaultparameters["ArK(892)1"] = "1.0 ± 0.0"
     defaultparameters["AiK(892)1"] = "0.0 ± 0.0"
     #

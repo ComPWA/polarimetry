@@ -4,7 +4,7 @@ function readjson(path)
     return JSON.parse(f)
 end
 
-
+ifhyphenaverage(v::Number) = v
 
 function ifhyphenaverage(s::String)
     factor = findfirst('-', s) === nothing ? 1 : 2

@@ -4,7 +4,6 @@ Pkg.activate(".")
 Pkg.instantiate()
 #
 import YAML
-using JSON
 using Plots
 using LaTeXStrings
 import Plots.PlotMeasures.mm
@@ -24,23 +23,25 @@ using Lc2ppiKModelLHCb
 #  _|    _|    _|  _|    _|  _|    _|  _|        _|
 #  _|    _|    _|    _|_|      _|_|_|    _|_|_|  _|
 
-isobarsinput = readjson(joinpath("..", "data", "particle-definitions.json"));
-#
+# 1) get isobars
+isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"))
+modelparameters =
+    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"))
+defaultmodel = modelparameters["Default amplitude model"]
 isobars = Dict()
-for (key, dict) in isobarsinput
+for (key, lineshape) in defaultmodel["lineshapes"]
+    dict = Dict{String,Any}(isobarsinput[key])
+    dict["lineshape"] = lineshape
     isobars[key] = buildchain(key, dict)
 end
 
-
-
-
-
-modelparameters =
-    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
-
-defaultparameters = first(modelparameters)["parameters"]
+# 2) update model parameters
+defaultparameters = defaultmodel["parameters"]
+defaultparameters["ArK(892)1"] = "1.0 ± 0.0"
+defaultparameters["AiK(892)1"] = "0.0 ± 0.0"
+#
 shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters))
-
+#
 parameterupdates = [ # 6 values are updated
     "K(1430)" => (γ=eval(Meta.parse(defaultparameters["gammaK(1430)"])).val,),
     "K(700)" => (γ=eval(Meta.parse(defaultparameters["gammaK(700)"])).val,),
