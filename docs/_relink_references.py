@@ -27,6 +27,7 @@ __TARGET_SUBSTITUTIONS = {
     "QuadContourSet": "matplotlib.contour.QuadContourSet",
     "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
     "implement_doit_method": "ampform.sympy.implement_doit_method",
+    "jnp.ndarray": "jax.numpy.ndarray",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
     "sp.Rational": "sympy.core.numbers.Rational",
