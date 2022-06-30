@@ -24,6 +24,7 @@ itertools
 kwargs
 lambdification
 lambdify
+lambdifying
 lhcb
 linestyle
 linewidth
@@ -55,6 +56,7 @@ tensorwaves
 timeit
 tolist
 tqdm
+vectorize
 viridis
 vmax
 vmin
