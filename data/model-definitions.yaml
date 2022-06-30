@@ -70,7 +70,7 @@ Default amplitude model:
     ArD(1700)2: 12.874102 ± 0.233827
     AiD(1700)2: 2.105570 ± 0.644916
 
-Alternative amplitude model with K^*(892) with free mass and width:
+Alternative amplitude model with K(892) with free mass and width:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -144,7 +144,7 @@ Alternative amplitude model with K^*(892) with free mass and width:
     ArD(1700)2: 13.575967 ± 0.792409
     AiD(1700)2: 3.625141 ± 0.844290
 
-Alternative amplitude model with Lz(1670) with free mass and width:
+Alternative amplitude model with L(1670) with free mass and width:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -218,7 +218,7 @@ Alternative amplitude model with Lz(1670) with free mass and width:
     ArD(1700)2: 13.022957 ± 0.474631
     AiD(1700)2: 1.981198 ± 0.569500
 
-Alternative amplitude model with Lz(1690) with free mass and width:
+Alternative amplitude model with L(1690) with free mass and width:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -292,7 +292,7 @@ Alternative amplitude model with Lz(1690) with free mass and width:
     ArD(1700)2: 12.825594 ± 0.671808
     AiD(1700)2: 1.522785 ± 0.722947
 
-Alternative amplitude model with Deltares^{++}(1232) with free mass and width:
+Alternative amplitude model with D(1232) with free mass and width:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -366,7 +366,7 @@ Alternative amplitude model with Deltares^{++}(1232) with free mass and width:
     ArD(1700)2: 13.452967 ± 0.760700
     AiD(1700)2: 2.391401 ± 0.706637
 
-Alternative amplitude model with Lz(1600), Deltares(1600)^{++}, Deltares(1700)^{++} with free mass and width:
+Alternative amplitude model with L(1600), D(1600), D(1700) with free mass and width:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -444,7 +444,7 @@ Alternative amplitude model with Lz(1600), Deltares(1600)^{++}, Deltares(1700)^{
     ArD(1700)2: 13.910511 ± 0.658205
     AiD(1700)2: 8.140582 ± 0.906997
 
-Alternative amplitude model with free Lz(1405) Flatt'e widths, indicated as G1 (pK channel) and G2 (Sigmapi):
+Alternative amplitude model with free L(1405) Flatt'e widths, indicated as G1 (pK channel) and G2 (Sigmapi):
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -518,7 +518,7 @@ Alternative amplitude model with free Lz(1405) Flatt'e widths, indicated as G1 (
     ArD(1700)2: 11.665897 ± 0.613543
     AiD(1700)2: 1.484256 ± 0.646875
 
-Alternative amplitude model with Lz(1800) contribution added with mass and width from Ref.~cite{PDG2020}:
+Alternative amplitude model with L(1800) contribution added with mass and width from Ref.~cite{PDG2020}:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -595,7 +595,7 @@ Alternative amplitude model with Lz(1800) contribution added with mass and width
     ArD(1700)2: 12.627807 ± 0.266730
     AiD(1700)2: 0.711202 ± 0.639078
 
-Alternative amplitude model with  Lz(1810) contribution added with mass and width from Ref.~cite{PDG2020}:
+Alternative amplitude model with L(1810) contribution added with mass and width from Ref.~cite{PDG2020}:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -672,7 +672,7 @@ Alternative amplitude model with  Lz(1810) contribution added with mass and widt
     ArD(1700)2: 15.153234 ± 0.889049
     AiD(1700)2: 3.476165 ± 0.888907
 
-Alternative amplitude model with Deltares(1620)^{++} contribution added with free mass and width:
+Alternative amplitude model with D(1620) contribution added with free mass and width:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -751,7 +751,7 @@ Alternative amplitude model with Deltares(1620)^{++} contribution added with fre
     ArD(1700)2: 17.298070 ± 1.182873
     AiD(1700)2: 4.165149 ± 1.264982
 
-Alternative amplitude model in which a Relativistic Breit-Wigner is used for the K^*(700) contribution:
+Alternative amplitude model in which a Relativistic Breit-Wigner is used for the K(700) contribution:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -822,7 +822,7 @@ Alternative amplitude model in which a Relativistic Breit-Wigner is used for the
     ArD(1700)2: 11.987531 ± 0.604477
     AiD(1700)2: 2.058147 ± 0.653879
 
-Alternative amplitude model with K^*(700) with free mass and width:
+Alternative amplitude model with K(700) with free mass and width:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -896,7 +896,7 @@ Alternative amplitude model with K^*(700) with free mass and width:
     ArD(1700)2: 13.471328 ± 0.269478
     AiD(1700)2: 1.841069 ± 0.276973
 
-Alternative amplitude model with  K^*(1410) contribution added with mass and width from Ref.~cite{PDG2020}:
+Alternative amplitude model with K(1410) contribution added with mass and width from Ref.~cite{PDG2020}:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -977,7 +977,7 @@ Alternative amplitude model with  K^*(1410) contribution added with mass and wid
     ArD(1700)2: 14.379176 ± 0.607255
     AiD(1700)2: -0.231568 ± 0.722400
 
-Alternative amplitude model in which a Relativistic Breit-Wigner is used for the K^*(1430) contribution:
+Alternative amplitude model in which a Relativistic Breit-Wigner is used for the K(1430) contribution:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -1048,7 +1048,7 @@ Alternative amplitude model in which a Relativistic Breit-Wigner is used for the
     ArD(1700)2: 12.952162 ± 0.178677
     AiD(1700)2: 2.237971 ± 0.381360
 
-Alternative amplitude model with K^*(1430) with free width:
+Alternative amplitude model with K(1430) with free width:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -1121,9 +1121,8 @@ Alternative amplitude model with K^*(1430) with free width:
     ArD(1700)2: 12.985398 ± 0.110004
     AiD(1700)2: 2.228074 ± 0.258859
 
-? Alternative amplitude model with an additional overall exponential form factor exp(-alpha
-  q^2) multiplying Bugg lineshapes. The exponential parameter is indicated as ``alpha''
-: lineshapes:
+Alternative amplitude model with an additional overall exponential form factor exp(-alpha q^2) multiplying Bugg lineshapes. The exponential parameter is indicated as ``alpha'':
+  lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
     L(1600): BreitWignerMinL
