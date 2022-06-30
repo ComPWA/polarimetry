@@ -158,7 +158,6 @@ def _determine_item_type(obj) -> type:
 
 
 def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
-    have_lineshapes = any(map(lambda p: p.lineshape is not None, items))
     column_names = [
         "name",
         "LaTeX",
@@ -166,8 +165,6 @@ def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
         "mass (MeV)",
         "width (MeV)",
     ]
-    if have_lineshapes:
-        column_names.append("lineshape")
     src = _create_markdown_table_header(column_names)
     for particle in items:
         row_items = [
@@ -177,8 +174,6 @@ def _as_resonance_markdown_table(items: Sequence[Particle]) -> str:
             f"{int(1e3 * particle.mass):,.0f}",
             f"{int(1e3 * particle.width):,.0f}",
         ]
-        if have_lineshapes:
-            row_items.append(particle.lineshape)
         src += _create_markdown_table_row(row_items)
     return src
 
@@ -191,7 +186,6 @@ def _as_decay_markdown_table(decay_chains: Sequence[ThreeBodyDecayChain]) -> str
         R"width (MeV)",
         R"$L_\mathrm{dec}^\mathrm{min}$",
         R"$L_\mathrm{prod}^\mathrm{min}$",
-        "lineshape",
     ]
     src = _create_markdown_table_header(column_names)
     for chain in decay_chains:
@@ -203,7 +197,6 @@ def _as_decay_markdown_table(decay_chains: Sequence[ThreeBodyDecayChain]) -> str
             f"{int(1e3 * chain.resonance.width):,.0f}",
             chain.outgoing_ls.L,
             chain.incoming_ls.L,
-            chain.resonance.lineshape,
         ]
         src += _create_markdown_table_row(row_items)
     return src

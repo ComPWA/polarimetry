@@ -11,7 +11,7 @@ begin
     Pkg.activate(".")
     Pkg.instantiate()
     #
-    using JSON
+    import YAML
     using Plots
     using LaTeXStrings
     import Plots.PlotMeasures.mm
@@ -48,12 +48,21 @@ md"""
 """
 
 # ╔═╡ 7cc4c5f9-4392-4b57-88af-59d1cf308162
-isobarsinput = readjson(joinpath("..", "data", "isobars.json"))["isobars"];
+isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"));
+
+# ╔═╡ 7ecc65a4-9fe7-4209-ad54-f1c8abe52ee5
+modelparameters =
+    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
+
+# ╔═╡ 78032115-badb-45b6-b20f-15496d460d57
+defaultmodel = modelparameters["Default amplitude model"]
 
 # ╔═╡ b0f5c181-dcb2-48f8-a510-57eac44ca4d9
 begin
     isobars = Dict()
-    for (key, dict) in isobarsinput
+    for (key, lineshape) in defaultmodel["lineshapes"]
+        dict = Dict{String,Any}(isobarsinput[key])
+        dict["lineshape"] = lineshape
         isobars[key] = buildchain(key, dict)
     end
 end;
@@ -96,16 +105,9 @@ md"""
 ### Fit parameters
 """
 
-# ╔═╡ 7ecc65a4-9fe7-4209-ad54-f1c8abe52ee5
-modelparameters =
-    readjson(joinpath("..", "data", "modelparameters.json"))["modelstudies"];
-
-# ╔═╡ 78032115-badb-45b6-b20f-15496d460d57
-modelparameters[17]["title"]
-
 # ╔═╡ 24d051e5-4d9e-48c8-aace-225f3a0218cb
 begin
-    defaultparameters = modelparameters[1]["parameters"]
+    defaultparameters = defaultmodel["parameters"]
     defaultparameters["ArK(892)1"] = "1.0 ± 0.0"
     defaultparameters["AiK(892)1"] = "0.0 ± 0.0"
 end
@@ -460,19 +462,21 @@ begin
         order(:isobarname, by=x -> findfirst(x[1], "LDK")))
 end
 
+
+
 # ╔═╡ Cell order:
 # ╟─d3cb114e-ee0c-4cd5-87fb-82289849aceb
 # ╠═dea88954-c7b2-11ec-1a3d-717739cfd08b
 # ╠═e04157cc-7697-41e5-8e4e-3556332929ef
 # ╟─877f6aab-d0ff-44d7-9ce0-e43d895be297
 # ╠═7cc4c5f9-4392-4b57-88af-59d1cf308162
+# ╠═7ecc65a4-9fe7-4209-ad54-f1c8abe52ee5
+# ╠═78032115-badb-45b6-b20f-15496d460d57
 # ╠═b0f5c181-dcb2-48f8-a510-57eac44ca4d9
 # ╟─98cca824-73db-4e1c-95ae-68c3bc8574fe
 # ╠═c7572ffb-c4c7-4ce6-90a9-8237214ac91b
 # ╠═cee9dc28-8048-49e7-8caf-8e07bcd884c4
 # ╟─30c3c8ef-ad69-43e6-9a75-525dfbf7007a
-# ╠═7ecc65a4-9fe7-4209-ad54-f1c8abe52ee5
-# ╠═78032115-badb-45b6-b20f-15496d460d57
 # ╠═24d051e5-4d9e-48c8-aace-225f3a0218cb
 # ╠═f9158b4d-4d27-4aba-bf5a-529135ec48e2
 # ╠═1db41980-ea36-4238-90cd-bf2427772ea9
