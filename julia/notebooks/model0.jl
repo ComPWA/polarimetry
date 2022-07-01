@@ -63,7 +63,7 @@ begin
     for (key, lineshape) in defaultmodel["lineshapes"]
         dict = Dict{String,Any}(isobarsinput[key])
         dict["lineshape"] = lineshape
-        isobars[key] = buildchain(key, dict)
+        isobars[key] = definechaininputs(key, dict)
     end
 end;
 

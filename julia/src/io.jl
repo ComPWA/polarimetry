@@ -11,7 +11,7 @@ function ifhyphenaverage(s::String)
     eval(Meta.parse(replace(s, '-' => '+'))) / factor
 end
 
-function buildchain(key, dict)
+function definechaininputs(key, dict)
     @unpack mass, width, lineshape = dict
     #
     k = Dict('K' => 1, 'D' => 3, 'L' => 2)[first(key)]
@@ -72,4 +72,52 @@ function replacementpair(parname, val)
     s = keyname2symbol(key)
     v = eval(Meta.parse(val)).val
     isobarname => eval(:(NamedTuple{($(QuoteNode(s)),)}($(v))))
+end
+
+
+
+function LHCbModel(modeldict; particledict)
+
+    # 1) get isobars
+    isobars = Dict()
+    for (key, lineshape) in modeldict["lineshapes"]
+        dict = Dict{String,Any}(particledict[key])
+        dict["lineshape"] = lineshape
+        isobars[key] = definechaininputs(key, dict)
+    end
+
+    # 3) get parameters
+    defaultparameters = modeldict["parameters"]
+    shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters))
+    parameterupdates = [
+        replacementpair(parname, defaultparameters[parname])
+        for parname in shapeparameters]
+
+    for (p, u) in parameterupdates
+        BW = isobars[p].Xlineshape
+        isobars[p] = merge(isobars[p],
+            (Xlineshape=updatepars(BW, merge(BW.pars, u)),))
+    end
+
+    # 3) get couplings
+    couplingkeys = collect(filter(x -> x[1:2] == "Ar", keys(defaultparameters)))
+    isobarnames = map(x -> x[3:end-1], couplingkeys)
+
+    terms = []
+    for parname in couplingkeys
+        c_re_key = "Ar" * parname[3:end]
+        c_im_key = "Ai" * parname[3:end]
+        value_re = eval(Meta.parse(defaultparameters[c_re_key])).val
+        value_im = eval(Meta.parse(defaultparameters[c_im_key])).val
+        value = value_re + 1im * value_im
+        #
+        c0, d = parname2decaychain(parname, isobars)
+        #
+        push!(terms, (c0 * value, d))
+    end
+
+    chains = getindex.(terms, 2)
+    couplings = getindex.(terms, 1)
+
+    LHCbModel(; chains, couplings, isobarnames)
 end

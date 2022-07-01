@@ -31,7 +31,7 @@ export amplitudeLHCb2DPD
 export parname2decaychain
 include("mapping.jl")
 
-export buildchain
+export definechaininputs
 export readjson
 export parseshapedparameter
 export replacementpair
