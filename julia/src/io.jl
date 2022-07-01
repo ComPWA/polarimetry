@@ -4,6 +4,12 @@ function readjson(path)
     return JSON.parse(f)
 end
 
+function writejson(path, obj)
+    open(path, "w") do io
+        JSON.print(io, obj, 4)
+    end
+end
+
 ifhyphenaverage(v::Number) = v
 
 function ifhyphenaverage(s::String)

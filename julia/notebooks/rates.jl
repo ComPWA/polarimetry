@@ -17,6 +17,7 @@ begin
     import Plots.PlotMeasures.mm
     using RecipesBase
     #
+	using StaticArrays
     using LinearAlgebra
     using Parameters
     using Measurements
@@ -28,9 +29,6 @@ begin
 
     using Lc2ppiKModelLHCb
 end
-
-# ╔═╡ 71d60e67-4ae7-47d8-917c-77b61d1ee112
-using StaticArrays
 
 # ╔═╡ 97e2902d-8ea9-4fec-b4d4-25985db069a2
 theme(:wong2, frame=:box, grid=false, minorticks=true,
@@ -45,10 +43,11 @@ isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"
 modelparameters =
         YAML.load_file(joinpath("..", "data", "model-definitions.yaml")) ;
 
+# ╔═╡ cfd6b057-eda1-45a3-859f-ebc1cb4dc64e
+defaultparameters = modelparameters["Default amplitude model"]
+
 # ╔═╡ bea43e41-90dd-41cd-8ede-f483c0a2a80e
-const model = LHCbModel(
-	modelparameters["Default amplitude model"];
-	particledict=isobarsinput)
+const model = LHCbModel(defaultparameters; particledict=isobarsinput)
 
 # ╔═╡ 05ac73c0-38e0-477a-b373-63993f618d8c
 md"""
@@ -119,36 +118,44 @@ let
     plot!()
 end
 
+# ╔═╡ 46380761-d719-4ee6-beed-fc96601ed26a
+begin
+	isobarnameset = collect(Set(model.isobarnames))
+	sort!(isobarnameset, by=x -> eval(Meta.parse(x[3:end-1])))
+    sort!(isobarnameset, by=x -> findfirst(x[1], "LDK"))
+	
+end
+
 # ╔═╡ b275f3ac-65a0-46a8-b375-57fa56d489ef
 group(ratematrix, sectors) =
     [sum(getindex(ratematrix, iv, jv))
      for iv in sectors,
      jv in sectors]
 
-# ╔═╡ 79d91b3f-191e-478a-b940-5d896da658a9
-let
-    isobarnameset = collect(Set(model.isobarnames))
-	sort!(isobarnameset, by=x -> eval(Meta.parse(x[3:end-1])))
-    sort!(isobarnameset, by=x -> findfirst(x[1], "LDK"))
-	#
+# ╔═╡ aafae618-b576-46c5-852e-9dd81b19c10b
+grouppedratematrix = let
     sectors = [couplingsmap = collect(1:nchains)[(model.isobarnames.==s)]
                for s in isobarnameset]
-    #
-    grouppedratematrix = group(ratematrix, sectors)
+    _grouppedratematrix = group(ratematrix, sectors)
     nisobars = length(isobarnameset)
     for i in 1:nisobars, j in i+1:nisobars
-        grouppedratematrix[j, i] *= 2
-        grouppedratematrix[i, j] = 0
+        _grouppedratematrix[j, i] *= 2
+        _grouppedratematrix[i, j] = 0
     end
-    @assert sum(grouppedratematrix) ≈ 100
+    @assert sum(_grouppedratematrix) ≈ 100
+	_grouppedratematrix
+end ;
 
+# ╔═╡ 79d91b3f-191e-478a-b940-5d896da658a9
+let
     clim = maximum(grouppedratematrix) .* (-1.2, 1.2)
     heatmap(grouppedratematrix;
         xticks=(1:nchains, isobarnameset), xrotation=90,
         yticks=(1:nchains, isobarnameset), aspectratio=1,
         size=(600, 600), c=:delta, colorbar=true,
         title="Rate matrix for isobars", clim)
-    for i in 1:nisobars, j in i:nisobars
+	Nξ = length(isobarnameset)
+    for i in 1:Nξ, j in i:Nξ
         annotate!((i, j, text(
             round(grouppedratematrix[j, i], digits=2), 6,
             i == j ? :red : :black)))
@@ -156,14 +163,31 @@ let
     plot!()
 end
 
+# ╔═╡ 1cf6f963-903d-42ae-af3b-cab2812e7eb9
+md"""
+### Write output
+"""
+
+# ╔═╡ 24a5f0fe-430f-402c-ae08-db0d32f2bc59
+begin
+	ratesdict = Dict()
+	for (k,r) in zip(isobarnameset, diag(grouppedratematrix))
+		ratesdict[k] = round(r; digits=2)
+	end
+	writejson(joinpath("results", "rates.json"),
+		Dict("rate" => ratesdict,
+			"isobars" => isobarnameset,
+			"ratematrix" => round.(grouppedratematrix; digits=2)))
+end
+
 # ╔═╡ Cell order:
 # ╠═03733bd2-dcf3-11ec-231f-8dab0ad6b19e
 # ╠═97e2902d-8ea9-4fec-b4d4-25985db069a2
 # ╠═cd70912b-8ca1-4343-bfff-6915bda41ff9
 # ╠═9fb2530c-88fe-4751-b460-6361038e1c6e
+# ╠═cfd6b057-eda1-45a3-859f-ebc1cb4dc64e
 # ╠═bea43e41-90dd-41cd-8ede-f483c0a2a80e
 # ╟─05ac73c0-38e0-477a-b373-63993f618d8c
-# ╠═71d60e67-4ae7-47d8-917c-77b61d1ee112
 # ╠═bddbdd76-169a-41f2-ae85-2fd31c4e99f8
 # ╠═f7e600be-536e-4c64-9c63-4cb7c3c013ad
 # ╠═bf5d7a76-0398-4268-b1ce-6ac545f6816c
@@ -171,5 +195,9 @@ end
 # ╠═8294d193-4890-4d09-b174-5f8c75888720
 # ╠═4d8d466e-7e90-40b5-b423-9b25a75761cb
 # ╠═38d915db-9fa8-400b-953e-fc2750f396c0
+# ╠═46380761-d719-4ee6-beed-fc96601ed26a
 # ╠═b275f3ac-65a0-46a8-b375-57fa56d489ef
+# ╠═aafae618-b576-46c5-852e-9dd81b19c10b
 # ╠═79d91b3f-191e-478a-b940-5d896da658a9
+# ╟─1cf6f963-903d-42ae-af3b-cab2812e7eb9
+# ╠═24a5f0fe-430f-402c-ae08-db0d32f2bc59

@@ -36,7 +36,7 @@ export LHCbModel
 include("amplitude.jl")
 
 export definechaininputs
-export readjson
+export readjson, writejson
 export parseshapedparameter
 export replacementpair
 include("io.jl")
