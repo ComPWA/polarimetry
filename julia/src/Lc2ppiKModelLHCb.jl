@@ -31,16 +31,15 @@ export amplitudeLHCb2DPD
 export parname2decaychain
 include("mapping.jl")
 
+export intensity
+export LHCbModel
+include("amplitude.jl")
+
 export definechaininputs
 export readjson
 export parseshapedparameter
 export replacementpair
 include("io.jl")
-
-
-export intensity
-export LHCbModel
-include("amplitude.jl")
 
 
 export two_Δλ
