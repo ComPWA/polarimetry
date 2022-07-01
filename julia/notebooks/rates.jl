@@ -35,7 +35,7 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
     xlim=(:auto, :auto), ylim=(:auto, :auto),
     lw=1, lab="", colorbar=false)
 
-# ╔═╡ 07a14d52-6e8b-4e31-991d-8cacd576e4f4
+# ╔═╡ 35b6f5a4-c735-4025-b42b-d82bb0bad0af
 begin
     # 1) get isobars
     isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"))
@@ -49,52 +49,49 @@ begin
         dict["lineshape"] = lineshape
         isobars[key] = buildchain(key, dict)
     end
+end
 
-    # 2) update model parameters
-    defaultparameters = defaultmodel["parameters"]
-    defaultparameters["ArK(892)1"] = "1.0 ± 0.0"
-    defaultparameters["AiK(892)1"] = "0.0 ± 0.0"
-    #
-    shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters))
+# ╔═╡ b3b0fa1b-3696-4d68-a16f-83f436dd1280
+defaultparameters = defaultmodel["parameters"];
 
-    parameterupdates = [ # 6 values are updated
-        "K(1430)" => (γ=eval(Meta.parse(defaultparameters["gammaK(1430)"])).val,),
-        "K(700)" => (γ=eval(Meta.parse(defaultparameters["gammaK(700)"])).val,),
-        "L(1520)" => (m=eval(Meta.parse(defaultparameters["ML(1520)"])).val,
-            Γ=eval(Meta.parse(defaultparameters["GL(1520)"])).val),
-        "L(2000)" => (m=eval(Meta.parse(defaultparameters["ML(2000)"])).val,
-            Γ=eval(Meta.parse(defaultparameters["GL(2000)"])).val)]
-    #
-    @assert length(shapeparameters) == 6
+# ╔═╡ 1d08c8c6-70fa-4a4e-88f9-bb8db7b69937
+shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters));
 
-    # apply updates
-    for (p, u) in parameterupdates
-        BW = isobars[p].Xlineshape
-        isobars[p] = merge(isobars[p], (Xlineshape=updatepars(BW, merge(BW.pars, u)),))
-    end
+# ╔═╡ 243521c4-d028-421c-914a-bcce91525f40
+parameterupdates = [
+    replacementpair(parname, defaultparameters[parname])
+    for parname in shapeparameters]
 
+# ╔═╡ 96658459-038c-4adb-b174-78d71dd46095
+# apply updates
+for (p, u) in parameterupdates
+    BW = isobars[p].Xlineshape
+    isobars[p] = merge(isobars[p], (Xlineshape=updatepars(BW, merge(BW.pars, u)),))
+end
+
+# ╔═╡ 07a14d52-6e8b-4e31-991d-8cacd576e4f4
+const model = let
     # 3) get couplings
     couplingkeys = collect(filter(x -> x[1:2] == "Ar", keys(defaultparameters)))
     isobarnames = map(x -> x[3:end-1], couplingkeys)
 
-    const terms = [
-        let
-            #
-            c_re_key = "Ar" * parname[3:end] # = parname
-            c_im_key = "Ai" * parname[3:end]
-            value_re = eval(Meta.parse(defaultparameters[c_re_key])).val
-            value_im = eval(Meta.parse(defaultparameters[c_im_key])).val
-            value = value_re + 1im * value_im
-            #
-            c0, d = parname2decaychain(parname, isobars)
-            #
-            (c0 * value, d)
-        end for parname in couplingkeys
-    ]
+    terms = []
+    for parname in couplingkeys
+        c_re_key = "Ar" * parname[3:end] # = parname
+        c_im_key = "Ai" * parname[3:end]
+        value_re = eval(Meta.parse(defaultparameters[c_re_key])).val
+        value_im = eval(Meta.parse(defaultparameters[c_im_key])).val
+        value = value_re + 1im * value_im
+        #
+        c0, d = parname2decaychain(parname, isobars)
+        #
+        push!(terms, (c0 * value, d))
+    end
 
+    chains = getindex.(terms, 2)
+    couplings = getindex.(terms, 1)
 
-    const chains = getindex.(terms, 2)
-    const couplings = getindex.(terms, 1)
+    LHCbModel(; chains, couplings, isobarnames)
 end
 
 # ╔═╡ 05ac73c0-38e0-477a-b373-63993f618d8c
@@ -103,7 +100,7 @@ md"""
 """
 
 # ╔═╡ 684af91d-5314-45d2-ae33-065091e47025
-Ai(σs) = [[amplitude(σs, two_λs, d) for d in chains]
+Ai(σs) = [[amplitude(σs, two_λs, d) for d in model.chains]
           for two_λs in itr(tbs.two_js)]
 
 # ╔═╡ bddbdd76-169a-41f2-ae85-2fd31c4e99f8
@@ -113,7 +110,7 @@ const pdata = flatDalitzPlotSample(ms; Nev=100_000);
 Aiv = ThreadsX.map(Ai, pdata);
 
 # ╔═╡ e18dd0c6-7d48-489f-a9ac-b9a1fbc52650
-Iv = intensity.(Aiv, Ref(couplings));
+Iv = intensity.(Aiv, Ref(model.couplings));
 
 # ╔═╡ bf5d7a76-0398-4268-b1ce-6ac545f6816c
 I0 = sum(Iv)
@@ -126,10 +123,10 @@ md"""
 # ╔═╡ 8294d193-4890-4d09-b174-5f8c75888720
 begin
     delta_i(n, iv...) = (v = zeros(n); v[[iv...]] .= 1.0; v)
-    nchains = length(couplings)
+    nchains = length(model.couplings)
     ratematrix = zeros(nchains, nchains)
     for i in 1:nchains, j in i:nchains
-        cij = delta_i(nchains, i, j) .* couplings
+        cij = delta_i(nchains, i, j) .* model.couplings
         Iξv = intensity.(Aiv, Ref(cij))
         ratematrix[i, j] = sum(Iξv) / I0 * 100
         ratematrix[j, i] = ratematrix[i, j]
@@ -147,7 +144,7 @@ end
 
 # ╔═╡ 757c2cbb-5967-4af6-b811-79e7901776a8
 grouppedchains = getindex.(
-    sort(sort(collect(enumerate(isobarnames)),
+    sort(sort(collect(enumerate(model.isobarnames)),
             by=x -> x[2]),
         by=x -> findfirst(x[2][1], "LDK")), 1);
 
@@ -160,7 +157,7 @@ let
                ("-", "")[1+div((sign(two_λ) + 1), 2)] * "½"
     labelchain(chain) = chain.Xlineshape.name * " " *
                         s(chain.HRk.two_λa) * "," * s(chain.HRk.two_λb)
-    labels = labelchain.(chains)[grouppedchains]
+    labels = labelchain.(model.chains)[grouppedchains]
     #
     clim = maximum(ratematrix) .* (-1, 1)
     heatmap(grouppedratematrix;
@@ -183,10 +180,10 @@ group(ratematrix, sectors) =
 
 # ╔═╡ 79d91b3f-191e-478a-b940-5d896da658a9
 let
-    isobarnameset = collect(Set(isobarnames))
+    isobarnameset = collect(Set(model.isobarnames))
     sort!(isobarnameset, by=x -> findfirst(x[1], "LDK"))
     #
-    sectors = [couplingsmap = collect(1:nchains)[(isobarnames.==s)]
+    sectors = [couplingsmap = collect(1:nchains)[(model.isobarnames.==s)]
                for s in isobarnameset]
     #
     grouppedratematrix = group(ratematrix, sectors)
@@ -214,8 +211,13 @@ end
 # ╔═╡ Cell order:
 # ╠═03733bd2-dcf3-11ec-231f-8dab0ad6b19e
 # ╠═97e2902d-8ea9-4fec-b4d4-25985db069a2
+# ╠═35b6f5a4-c735-4025-b42b-d82bb0bad0af
+# ╠═b3b0fa1b-3696-4d68-a16f-83f436dd1280
+# ╠═1d08c8c6-70fa-4a4e-88f9-bb8db7b69937
+# ╠═243521c4-d028-421c-914a-bcce91525f40
+# ╠═96658459-038c-4adb-b174-78d71dd46095
 # ╠═07a14d52-6e8b-4e31-991d-8cacd576e4f4
-# ╠═05ac73c0-38e0-477a-b373-63993f618d8c
+# ╟─05ac73c0-38e0-477a-b373-63993f618d8c
 # ╠═684af91d-5314-45d2-ae33-065091e47025
 # ╠═bddbdd76-169a-41f2-ae85-2fd31c4e99f8
 # ╠═e936b9b0-809c-489a-8231-378220e982c3

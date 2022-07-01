@@ -48,3 +48,28 @@ function buildchain(key, dict)
         end)
     return (; k, Xlineshape, Hij, two_s=two_j, parity)
 end
+
+
+
+# shape parameters
+function parseshapedparameter(parname)
+    keytemp = r"([M,G]|gamma|alpha)"
+    nametemp = r"([L,K,D]\([0-9]*\))"
+    m = match(keytemp * nametemp, parname)
+    return (key=m[1], isobarname=m[2])
+end
+
+function keyname2symbol(key)
+    key == "M" && return :m
+    key == "G" && return :Γ
+    key == "gamma" && return :γ
+    key == "alpha" && return :α
+    error("The name of the shared parameter, $(key), is not recognized!")
+end
+
+function replacementpair(parname, val)
+    @unpack key, isobarname = parseshapedparameter(parname)
+    s = keyname2symbol(key)
+    v = eval(Meta.parse(val)).val
+    isobarname => eval(:(NamedTuple{($(QuoteNode(s)),)}($(v))))
+end
