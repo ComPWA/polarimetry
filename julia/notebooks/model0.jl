@@ -108,8 +108,6 @@ md"""
 # ╔═╡ 24d051e5-4d9e-48c8-aace-225f3a0218cb
 begin
     defaultparameters = defaultmodel["parameters"]
-    defaultparameters["ArK(892)1"] = "1.0 ± 0.0"
-    defaultparameters["AiK(892)1"] = "0.0 ± 0.0"
 end
 
 # ╔═╡ f9158b4d-4d27-4aba-bf5a-529135ec48e2

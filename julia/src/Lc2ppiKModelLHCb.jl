@@ -33,6 +33,7 @@ include("mapping.jl")
 
 export buildchain
 export readjson
+export parseshapedparameter
 export replacementpair
 include("io.jl")
 
