@@ -1,7 +1,3 @@
-
-intensity(Ai::AbstractArray, ci::AbstractVector) = sum(abs2, sum(a .* ci) for a in Ai)
-
-
 struct LHCbModel{N,T,L<:Number}
     chains::SVector{N,DecayChain{X,V1,V2,T} where {X,V1,V2}}
     couplings::SVector{N,L}
@@ -13,10 +9,17 @@ function LHCbModel(; chains, couplings, isobarnames)
     N != length(couplings) && error("Length of couplings does not match the length of the chains")
     N != length(isobarnames) && error("Length of isobarnames does not match the length of the chains")
     #
-    Ttbs = typeof(chains[1].tbs)
-    sv_chains = (SVector{N,DecayChain{X,V1,V2,Ttbs} where {X,V1,V2}})(chains)
-    sv_couplings = SVector{N}(couplings)
-    sv_isobarnames = SVector{N}(isobarnames)
+    v = collect(zip(chains, couplings, isobarnames))
+    sort!(v, by=x -> eval(Meta.parse(x[3][3:end-1])))
+    sort!(v, by=x -> findfirst(x[3][1], "LDK"))
     #
-    LHCbModel(sv_chains, sv_couplings, sv_isobarnames)
+    sort_chains, sort_couplings, sort_isobarnames =
+        getindex.(v, 1), getindex.(v, 2), getindex.(v, 3)
+    #
+    Ttbs = typeof(chains[1].tbs)
+    sv_sort_chains = (SVector{N,DecayChain{X,V1,V2,Ttbs} where {X,V1,V2}})(sort_chains)
+    sv_sort_couplings = SVector{N}(sort_couplings)
+    sv_sort_isobarnames = SVector{N}(sort_isobarnames)
+    #
+    LHCbModel(sv_sort_chains, sv_sort_couplings, sv_sort_isobarnames)
 end

@@ -97,16 +97,8 @@ end
 # ╔═╡ 4d8d466e-7e90-40b5-b423-9b25a75761cb
 @assert sum(ratematrix) ≈ 100
 
-# ╔═╡ 757c2cbb-5967-4af6-b811-79e7901776a8
-grouppedchains = getindex.(
-    sort(sort(collect(enumerate(model.isobarnames)),
-            by=x -> x[2]),
-        by=x -> findfirst(x[2][1], "LDK")), 1);
-
 # ╔═╡ 38d915db-9fa8-400b-953e-fc2750f396c0
 let
-    grouppedratematrix = ratematrix[grouppedchains, grouppedchains]
-    #
     s(two_λ) = iseven(two_λ) ?
                string(div(two_λ, 2)) :
                ("-", "")[1+div((sign(two_λ) + 1), 2)] * "½"
@@ -115,14 +107,14 @@ let
     labels = labelchain.(model.chains)[grouppedchains]
     #
     clim = maximum(ratematrix) .* (-1, 1)
-    heatmap(grouppedratematrix;
+    heatmap(ratematrix;
         xticks=(1:nchains, labels), xrotation=90,
         yticks=(1:nchains, labels), aspectratio=1,
         size=(600, 600), c=:delta, colorbar=true,
         title="Rate matrix for chains", clim)
     for i in 1:nchains, j in i+1:nchains
         annotate!((i, j, text(
-            grouppedratematrix[i, j] ≥ 0 ? "+" : "-", 4)))
+            ratematrix[i, j] ≥ 0 ? "+" : "-", 4)))
     end
     plot!()
 end
@@ -138,7 +130,7 @@ let
     isobarnameset = collect(Set(model.isobarnames))
 	sort!(isobarnameset, by=x -> eval(Meta.parse(x[3:end-1])))
     sort!(isobarnameset, by=x -> findfirst(x[1], "LDK"))
-    #
+	#
     sectors = [couplingsmap = collect(1:nchains)[(model.isobarnames.==s)]
                for s in isobarnameset]
     #
@@ -178,7 +170,6 @@ end
 # ╟─bd7c24f5-5607-4210-b84a-9ebb8d9ed41a
 # ╠═8294d193-4890-4d09-b174-5f8c75888720
 # ╠═4d8d466e-7e90-40b5-b423-9b25a75761cb
-# ╠═757c2cbb-5967-4af6-b811-79e7901776a8
 # ╠═38d915db-9fa8-400b-953e-fc2750f396c0
 # ╠═b275f3ac-65a0-46a8-b375-57fa56d489ef
 # ╠═79d91b3f-191e-478a-b940-5d896da658a9
