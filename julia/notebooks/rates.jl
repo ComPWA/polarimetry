@@ -17,7 +17,7 @@ begin
     import Plots.PlotMeasures.mm
     using RecipesBase
     #
-	using StaticArrays
+    using StaticArrays
     using LinearAlgebra
     using Parameters
     using Measurements
@@ -37,11 +37,11 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
     lw=1, lab="", colorbar=false)
 
 # ╔═╡ cd70912b-8ca1-4343-bfff-6915bda41ff9
-isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml")) ;
+isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"));
 
 # ╔═╡ 9fb2530c-88fe-4751-b460-6361038e1c6e
 modelparameters =
-        YAML.load_file(joinpath("..", "data", "model-definitions.yaml")) ;
+    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
 
 # ╔═╡ cfd6b057-eda1-45a3-859f-ebc1cb4dc64e
 defaultparameters = modelparameters["Default amplitude model"]
@@ -59,12 +59,12 @@ const pdata = flatDalitzPlotSample(ms; Nev=100_000);
 
 # ╔═╡ f7e600be-536e-4c64-9c63-4cb7c3c013ad
 const Aiv = ThreadsX.collect(
-	SVector([amplitude(σs, two_λs, d) for d in model.chains])
-          for two_λs in itr(tbs.two_js), σs in pdata) ;
+    SVector([amplitude(σs, two_λs, d) for d in model.chains])
+    for two_λs in itr(tbs.two_js), σs in pdata);
 
 # ╔═╡ bf5d7a76-0398-4268-b1ce-6ac545f6816c
 I0 = ThreadsX.sum(Aiv) do x
-	abs2(sum(x .* model.couplings))
+    abs2(sum(x .* model.couplings))
 end
 
 # ╔═╡ bd7c24f5-5607-4210-b84a-9ebb8d9ed41a
@@ -80,8 +80,8 @@ begin
     for i in 1:nchains, j in i:nchains
         cij = delta_i(nchains, i, j) .* model.couplings
         Iξv = ThreadsX.sum(Aiv) do x
-			abs2(sum(x .* cij))
-		end
+            abs2(sum(x .* cij))
+        end
         ratematrix[i, j] = Iξv / I0 * 100
         ratematrix[j, i] = ratematrix[i, j]
     end
@@ -120,10 +120,10 @@ end
 
 # ╔═╡ 46380761-d719-4ee6-beed-fc96601ed26a
 begin
-	isobarnameset = collect(Set(model.isobarnames))
-	sort!(isobarnameset, by=x -> eval(Meta.parse(x[3:end-1])))
+    isobarnameset = collect(Set(model.isobarnames))
+    sort!(isobarnameset, by=x -> eval(Meta.parse(x[3:end-1])))
     sort!(isobarnameset, by=x -> findfirst(x[1], "LDK"))
-	
+
 end
 
 # ╔═╡ b275f3ac-65a0-46a8-b375-57fa56d489ef
@@ -143,8 +143,8 @@ grouppedratematrix = let
         _grouppedratematrix[i, j] = 0
     end
     @assert sum(_grouppedratematrix) ≈ 100
-	_grouppedratematrix
-end ;
+    _grouppedratematrix
+end;
 
 # ╔═╡ 79d91b3f-191e-478a-b940-5d896da658a9
 let
@@ -154,7 +154,7 @@ let
         yticks=(1:nchains, isobarnameset), aspectratio=1,
         size=(600, 600), c=:delta, colorbar=true,
         title="Rate matrix for isobars", clim)
-	Nξ = length(isobarnameset)
+    Nξ = length(isobarnameset)
     for i in 1:Nξ, j in i:Nξ
         annotate!((i, j, text(
             round(grouppedratematrix[j, i], digits=2), 6,
@@ -170,14 +170,14 @@ md"""
 
 # ╔═╡ 24a5f0fe-430f-402c-ae08-db0d32f2bc59
 begin
-	ratesdict = []
-	for (k,r) in zip(isobarnameset, diag(grouppedratematrix))
-		push!(ratesdict, k => round(r; digits=2))
-	end
-	writejson(joinpath("results", "rates.json"),
-		Dict("rate" => ratesdict,
-			"isobars" => isobarnameset,
-			"ratematrix" => round.(grouppedratematrix; digits=2)))
+    ratesdict = []
+    for (k, r) in zip(isobarnameset, diag(grouppedratematrix))
+        push!(ratesdict, k => round(r; digits=2))
+    end
+    writejson(joinpath("results", "rates.json"),
+        Dict("rate" => ratesdict,
+            "isobars" => isobarnameset,
+            "ratematrix" => round.(grouppedratematrix; digits=2)))
 end
 
 # ╔═╡ Cell order:

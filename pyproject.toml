@@ -39,8 +39,14 @@ src_paths = [
 known_third_party = "THIRDPARTY,sympy"
 
 [tool.nbqa.addopts]
+black = [
+    "--line-length=85",
+]
 flake8 = [
     "--extend-ignore=E501,E731",
+]
+isort = [
+    "--line-length=85",
 ]
 
 [tool.nbqa.exclude]
