@@ -44,7 +44,7 @@ modelparameters =
         YAML.load_file(joinpath("..", "data", "model-definitions.yaml")) ;
 
 # ╔═╡ cfd6b057-eda1-45a3-859f-ebc1cb4dc64e
-defaultparameters = modelparameters["Default amplitude model"]
+defaultparameters = modelparameters["Alternative amplitude model with K(1430) with free width"]
 
 # ╔═╡ bea43e41-90dd-41cd-8ede-f483c0a2a80e
 const model = LHCbModel(defaultparameters; particledict=isobarsinput)
