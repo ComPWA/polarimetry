@@ -29,6 +29,9 @@ begin
     using Lc2ppiKModelLHCb
 end
 
+# ╔═╡ 71d60e67-4ae7-47d8-917c-77b61d1ee112
+using StaticArrays
+
 # ╔═╡ 97e2902d-8ea9-4fec-b4d4-25985db069a2
 theme(:wong2, frame=:box, grid=false, minorticks=true,
     guidefontvalign=:top, guidefonthalign=:right,
@@ -52,21 +55,18 @@ md"""
 ### Numerical integration over the dataset
 """
 
-# ╔═╡ 684af91d-5314-45d2-ae33-065091e47025
-Ai(σs) = [[amplitude(σs, two_λs, d) for d in model.chains]
-          for two_λs in itr(tbs.two_js)]
-
 # ╔═╡ bddbdd76-169a-41f2-ae85-2fd31c4e99f8
 const pdata = flatDalitzPlotSample(ms; Nev=100_000);
 
-# ╔═╡ e936b9b0-809c-489a-8231-378220e982c3
-Aiv = ThreadsX.map(Ai, pdata);
-
-# ╔═╡ e18dd0c6-7d48-489f-a9ac-b9a1fbc52650
-Iv = intensity.(Aiv, Ref(model.couplings));
+# ╔═╡ f7e600be-536e-4c64-9c63-4cb7c3c013ad
+const Aiv = ThreadsX.collect(
+	SVector([amplitude(σs, two_λs, d) for d in model.chains])
+          for two_λs in itr(tbs.two_js), σs in pdata) ;
 
 # ╔═╡ bf5d7a76-0398-4268-b1ce-6ac545f6816c
-I0 = sum(Iv)
+I0 = ThreadsX.sum(Aiv) do x
+	abs2(sum(x .* model.couplings))
+end
 
 # ╔═╡ bd7c24f5-5607-4210-b84a-9ebb8d9ed41a
 md"""
@@ -80,8 +80,10 @@ begin
     ratematrix = zeros(nchains, nchains)
     for i in 1:nchains, j in i:nchains
         cij = delta_i(nchains, i, j) .* model.couplings
-        Iξv = intensity.(Aiv, Ref(cij))
-        ratematrix[i, j] = sum(Iξv) / I0 * 100
+        Iξv = ThreadsX.sum(Aiv) do x
+			abs2(sum(x .* cij))
+		end
+        ratematrix[i, j] = Iξv / I0 * 100
         ratematrix[j, i] = ratematrix[i, j]
     end
     for i in 1:nchains, j in i+1:nchains
@@ -134,6 +136,7 @@ group(ratematrix, sectors) =
 # ╔═╡ 79d91b3f-191e-478a-b940-5d896da658a9
 let
     isobarnameset = collect(Set(model.isobarnames))
+	sort!(isobarnameset, by=x -> eval(Meta.parse(x[3:end-1])))
     sort!(isobarnameset, by=x -> findfirst(x[1], "LDK"))
     #
     sectors = [couplingsmap = collect(1:nchains)[(model.isobarnames.==s)]
@@ -168,10 +171,9 @@ end
 # ╠═9fb2530c-88fe-4751-b460-6361038e1c6e
 # ╠═bea43e41-90dd-41cd-8ede-f483c0a2a80e
 # ╟─05ac73c0-38e0-477a-b373-63993f618d8c
-# ╠═684af91d-5314-45d2-ae33-065091e47025
+# ╠═71d60e67-4ae7-47d8-917c-77b61d1ee112
 # ╠═bddbdd76-169a-41f2-ae85-2fd31c4e99f8
-# ╠═e936b9b0-809c-489a-8231-378220e982c3
-# ╠═e18dd0c6-7d48-489f-a9ac-b9a1fbc52650
+# ╠═f7e600be-536e-4c64-9c63-4cb7c3c013ad
 # ╠═bf5d7a76-0398-4268-b1ce-6ac545f6816c
 # ╟─bd7c24f5-5607-4210-b84a-9ebb8d9ed41a
 # ╠═8294d193-4890-4d09-b174-5f8c75888720
