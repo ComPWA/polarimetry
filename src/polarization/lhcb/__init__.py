@@ -219,8 +219,6 @@ def load_model_parameters(
         model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
     model_title = _find_model_title(model_definitions, model_id)
     parameter_definitions = model_definitions[model_title]["parameters"]
-    parameter_definitions["ArK(892)1"] = "1.0 ± 0.0"
-    parameter_definitions["AiK(892)1"] = "0.0 ± 0.0"
     parameters = _to_symbol_value_mapping(parameter_definitions, decay, typ)
     decay_couplings = compute_decay_couplings(decay, typ)
     parameters.update(decay_couplings)

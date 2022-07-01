@@ -3,6 +3,7 @@ module Lc2ppiKModelLHCb
 using JSON
 #
 using LinearAlgebra
+using StaticArrays
 using Parameters
 using Measurements
 using DataFrames
@@ -30,13 +31,15 @@ export amplitudeLHCb2DPD
 export parname2decaychain
 include("mapping.jl")
 
-export buildchain
-export readjson
-include("io.jl")
-
-
 export intensity
+export LHCbModel
 include("amplitude.jl")
+
+export definechaininputs
+export readjson, writejson
+export parseshapedparameter
+export replacementpair
+include("io.jl")
 
 
 export two_Δλ

@@ -32,50 +32,36 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
 
 
 
-# 1) get isobars
-isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"))
-modelparameters =
-    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"))
-defaultmodel = modelparameters["Default amplitude model"]
-isobars = Dict()
-for (key, lineshape) in defaultmodel["lineshapes"]
-    dict = Dict{String,Any}(isobarsinput[key])
-    dict["lineshape"] = lineshape
-    isobars[key] = buildchain(key, dict)
-end
+isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"));
 
-# 2) update model parameters
-defaultparameters = defaultmodel["parameters"]
-defaultparameters["ArK(892)1"] = "1.0 ± 0.0"
-defaultparameters["AiK(892)1"] = "0.0 ± 0.0"
-#
-shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters))
-#
-parameterupdates = [ # 6 values are updated
-    "K(1430)" => (γ=eval(Meta.parse(defaultparameters["gammaK(1430)"])).val,),
-    "K(700)" => (γ=eval(Meta.parse(defaultparameters["gammaK(700)"])).val,),
-    "L(1520)" => (m=eval(Meta.parse(defaultparameters["ML(1520)"])).val,
-        Γ=eval(Meta.parse(defaultparameters["GL(1520)"])).val),
-    "L(2000)" => (m=eval(Meta.parse(defaultparameters["ML(2000)"])).val,
-        Γ=eval(Meta.parse(defaultparameters["GL(2000)"])).val)]
-#
-@assert length(shapeparameters) == 6
+modelparameters =
+    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
+
+defaultparameters = modelparameters["Default amplitude model"]
+
+const model = LHCbModel(defaultparameters; particledict=isobarsinput)
+
+# unupdated
+shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters["parameters"]))
+for s in shapeparameters
+    pop!(defaultparameters["parameters"], s)
+end
+const model_unupdated = LHCbModel(defaultparameters; particledict=isobarsinput)
+
 
 # plot shapes vs updates
+whichisobarsmodified =
+    Set(getproperty.(parseshapedparameter.(shapeparameters), :isobarname))
 let
-    plot(layout=grid(1, length(parameterupdates)), size=(700, 200))
-    for (sp, (p, u)) in enumerate(parameterupdates)
-        BW = isobars[p].Xlineshape
-        plot!(BW; sp, lab=p)
-        plot!(updatepars(BW, merge(BW.pars, u)); sp)
+    plot(layout=grid(1, length(whichisobarsmodified)), size=(700, 200))
+    for (sp, k) in enumerate(whichisobarsmodified)
+        i = findfirst(x -> x == k, model.isobarnames)
+        i′ = findfirst(x -> x == k, model_unupdated.isobarnames)
+        BW = model.chains[i].Xlineshape
+        BW′ = model_unupdated.chains[i′].Xlineshape
+        plot!(BW′; sp, lab=k)
+        plot!(BW; sp)
     end
     plot!()
 end
 savefig(joinpath("plots", "updatedefaultmodel.pdf"))
-
-
-# apply updates
-for (p, u) in parameterupdates
-    BW = isobars[p].Xlineshape
-    isobars[p] = merge(isobars[p], (Xlineshape=updatepars(BW, merge(BW.pars, u)),))
-end
