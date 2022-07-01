@@ -170,9 +170,9 @@ md"""
 
 # ╔═╡ 24a5f0fe-430f-402c-ae08-db0d32f2bc59
 begin
-	ratesdict = Dict()
+	ratesdict = []
 	for (k,r) in zip(isobarnameset, diag(grouppedratematrix))
-		ratesdict[k] = round(r; digits=2)
+		push!(ratesdict, k => round(r; digits=2))
 	end
 	writejson(joinpath("results", "rates.json"),
 		Dict("rate" => ratesdict,
