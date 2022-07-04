@@ -24,6 +24,7 @@ isnan
 itertools
 kwargs
 lambdification
+lambdified
 lambdify
 lambdifying
 lhcb
