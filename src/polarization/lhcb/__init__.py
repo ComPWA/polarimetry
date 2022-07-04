@@ -9,7 +9,7 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
-from typing import Callable, Iterable, TypeVar
+from typing import Iterable
 
 import attrs
 import numpy as np
@@ -195,18 +195,6 @@ class ModelParameters:
             size=sample_size,
             seed=seed,
         )
-
-
-KeyType = TypeVar("KeyType")
-OldValueType = TypeVar("OldValueType")
-NewValueType = TypeVar("NewValueType")
-
-
-def convert_dict_keys(
-    dct: dict[KeyType, OldValueType],
-    key_converter: Callable[[OldValueType], NewValueType],
-) -> dict[KeyType, NewValueType]:
-    return {key_converter(key): value for key, value in dct.items()}
 
 
 def load_model_parameters(
