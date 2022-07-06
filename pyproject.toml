@@ -39,8 +39,14 @@ src_paths = [
 known_third_party = "THIRDPARTY,sympy"
 
 [tool.nbqa.addopts]
+black = [
+    "--line-length=85",
+]
 flake8 = [
     "--extend-ignore=E501,E731",
+]
+isort = [
+    "--line-length=85",
 ]
 
 [tool.nbqa.exclude]
@@ -49,13 +55,16 @@ flake8 = "^docs/appendix/benchmark.ipynb"
 [tool.pytest.ini_options]
 addopts = [
     "--color=yes",
+    "--doctest-continue-on-failure",
     "--doctest-modules",
     "--durations=3",
+    "--ignore=docs/conf.py",
     "-m not slow",
 ]
 filterwarnings = [
   "error",
-  "ignore:The .* argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
+  "ignore:.*argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
+  "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
 markers = [
     "slow: marks tests as slow (select with '-m slow')",
