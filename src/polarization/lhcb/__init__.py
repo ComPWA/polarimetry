@@ -9,7 +9,7 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
-from typing import Callable, Iterable, TypeVar
+from typing import Iterable
 
 import attrs
 import numpy as np
@@ -141,72 +141,45 @@ def load_three_body_decay(
     )
 
 
-class ModelParameters:
+class ParameterBootstrap:
     """A wrapper for loading parameters from :download:`model-definitions.yaml </../data/model-definitions.yaml>`."""
 
     def __init__(
         self,
         filename: Path | str,
         decay: ThreeBodyDecay,
-        allowed_model_titles: Iterable[str] | None = None,
+        model_id: int | str = 0,
     ) -> None:
-        with open(filename) as stream:
-            model_definitions = yaml.load(stream, Loader=yaml.SafeLoader)
-        self.__model_titles: dict[int, str] = {
-            i: title for i, title in enumerate(model_definitions)
+        self.__values = {
+            str(symbol): value
+            for symbol, value in load_model_parameters(
+                filename, decay, model_id, typ="value"
+            ).items()
         }
-        if allowed_model_titles is not None:
-            allowed_model_titles = set(allowed_model_titles)
-            self.__model_titles = {
-                i: title
-                for i, title in self.__model_titles.items()
-                if title in allowed_model_titles
-            }
-        self.__values: dict[str, dict[str, complex | float | int]] = {}
-        self.__uncertainties: dict[str, dict[str, complex | float | int]] = {}
-        for title in self.model_titles.values():
-            self.__values[title] = load_model_parameters(
-                filename, decay, title, typ="value"
-            )
-            self.__uncertainties[title] = load_model_parameters(
-                filename, decay, title, typ="uncertainty"
-            )
+        self.__uncertainties = {
+            str(symbol): value
+            for symbol, value in load_model_parameters(
+                filename, decay, model_id, typ="uncertainty"
+            ).items()
+        }
 
     @property
-    def model_titles(self) -> dict[int, str]:
-        return dict(self.__model_titles)
+    def values(self) -> dict[str, complex | float | int]:
+        return dict(self.__values)
 
-    def get_parameter_values(
-        self, model_title: str
-    ) -> dict[str, complex | float | int]:
-        return self.__values[model_title]
+    @property
+    def uncertainties(self) -> dict[str, complex | float | int]:
+        return dict(self.__uncertainties)
 
-    def get_parameter_uncertainties(
-        self, model_title: str
-    ) -> dict[str, complex | float | int]:
-        return self.__uncertainties[model_title]
-
-    def create_parameter_distribution(
-        self, model_title: str, sample_size: int, seed: int | None = None
+    def create_distribution(
+        self, sample_size: int, seed: int | None = None
     ) -> dict[str, complex | float | int]:
         return _smear_gaussian(
-            parameter_values=self.get_parameter_values(model_title),
-            parameter_uncertainties=self.get_parameter_uncertainties(model_title),
+            parameter_values=self.values,
+            parameter_uncertainties=self.uncertainties,
             size=sample_size,
             seed=seed,
         )
-
-
-KeyType = TypeVar("KeyType")
-OldValueType = TypeVar("OldValueType")
-NewValueType = TypeVar("NewValueType")
-
-
-def convert_dict_keys(
-    dct: dict[KeyType, OldValueType],
-    key_converter: Callable[[OldValueType], NewValueType],
-) -> dict[KeyType, NewValueType]:
-    return {key_converter(key): value for key, value in dct.items()}
 
 
 def load_model_parameters(
