@@ -260,6 +260,9 @@ def get_readable_hash(obj) -> str:
 
 
 def _to_bytes(obj) -> bytes:
+    if "PYTHONHASHSEED" in os.environ:
+        # https://github.com/sympy/sympy/issues/14835#issuecomment-399782969
+        return pickle.dumps(obj)
     if isinstance(obj, sp.Expr):
         # Using the str printer is slower and not necessarily unique,
         # but pickle.dumps() does not always result in the same bytes stream.
