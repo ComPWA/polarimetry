@@ -8,6 +8,8 @@ import jax.numpy as jnp
 from tensorwaves.function import ParametrizedBackendFunction
 from tensorwaves.interface import DataSample
 
+_LOGGER = logging.getLogger(__name__)
+
 
 def compute_sub_function(
     func: ParametrizedBackendFunction,
@@ -32,7 +34,7 @@ def set_parameter_to_zero(
             new_parameters[par_name] = 0
             no_parameters_selected = False
     if no_parameters_selected:
-        logging.warning(f"All couplings were set to zero for search term {search_term}")
+        _LOGGER.warning(f"All couplings were set to zero for search term {search_term}")
     func.update_parameters(new_parameters)
 
 

@@ -1,8 +1,19 @@
+# pyright: reportPrivateUsage=false
+from __future__ import annotations
+
+import logging
+import os
+from typing import TYPE_CHECKING
+
 import pytest
 import sympy as sp
 
 from polarization.decay import IsobarNode, Particle
-from polarization.io import as_latex, get_readable_hash
+from polarization.io import _warn_about_unsafe_hash, as_latex, get_readable_hash
+
+if TYPE_CHECKING:
+    from _pytest.logging import LogCaptureFixture
+
 
 # https://compwa-org--129.org.readthedocs.build/report/018.html#resonances-and-ls-scheme
 dummy_args = dict(mass=0, width=0)
@@ -38,17 +49,26 @@ def test_as_latex_isobar_node():
 
 
 @pytest.mark.parametrize(
-    "assumptions",
+    ("assumptions", "expected_hash"),
     [
-        dict(),
-        dict(real=True),
-        dict(rational=True),
+        (dict(), "34702c2"),
+        (dict(real=True), "440b870"),
+        (dict(rational=True), "f308f4c"),
     ],
 )
-def test_get_readable_hash(assumptions):
+def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture):
+    caplog.set_level(logging.WARNING)
     x, y = sp.symbols("x y", **assumptions)
     expr = x**2 + y
     h = get_readable_hash(expr)
-    assert h == "bbc98339949be8bbeb405eb320f2b42d24c597cf0a8780408070d28a320d16fc"
-    # Assumptions do not affect the hash. This should be addressed through:
-    # https://github.com/redeboer/polarization-sensitivity/issues/41
+    python_hash_seed = os.environ.get("PYTHONHASHSEED")
+    if python_hash_seed is None or not python_hash_seed.isdigit():
+        assert h[:7] == "bbc9833"
+        if _warn_about_unsafe_hash.cache_info().hits == 0:
+            assert "PYTHONHASHSEED has not been set." in caplog.text
+            caplog.clear()
+    elif python_hash_seed == "0":
+        assert h[:7] == expected_hash
+    else:
+        pytest.skip("PYTHONHASHSEED has been set, but is not 0")
+    assert caplog.text == ""
