@@ -34,6 +34,8 @@ from IPython.display import Math, display
 
 from polarization.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 
+_LOGGER = logging.getLogger(__name__)
+
 
 @singledispatch
 def as_latex(obj, **kwargs) -> str:
@@ -263,7 +265,7 @@ def perform_cached_doit(
     if os.path.exists(filename):
         with open(filename, "rb") as f:
             return pickle.load(f)
-    logging.info(f"Cached expression file {filename} not found, performing doit()...")
+    _LOGGER.info(f"Cached expression file {filename} not found, performing doit()...")
     unfolded_expr = unevaluated_expr.doit()
     with open(filename, "wb") as f:
         pickle.dump(unfolded_expr, f)
