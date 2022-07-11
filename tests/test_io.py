@@ -1,3 +1,5 @@
+import os
+
 import pytest
 import sympy as sp
 
@@ -38,17 +40,23 @@ def test_as_latex_isobar_node():
 
 
 @pytest.mark.parametrize(
-    "assumptions",
+    ("assumptions", "expected_hash"),
     [
-        dict(),
-        dict(real=True),
-        dict(rational=True),
+        (dict(), "34702c2"),
+        (dict(real=True), "440b870"),
+        (dict(rational=True), "f308f4c"),
     ],
 )
-def test_get_readable_hash(assumptions):
+def test_get_readable_hash(assumptions, expected_hash):
     x, y = sp.symbols("x y", **assumptions)
     expr = x**2 + y
     h = get_readable_hash(expr)
-    assert h == "bbc98339949be8bbeb405eb320f2b42d24c597cf0a8780408070d28a320d16fc"
+    python_hash_seed = os.environ.get("PYTHONHASHSEED")
+    if python_hash_seed is None:
+        assert h[:7] == "bbc9833"
+    elif python_hash_seed == "0":
+        assert h[:7] == expected_hash
+    else:
+        pytest.skip("PYTHONHASHSEED has been set, but is not 0")
     # Assumptions do not affect the hash. This should be addressed through:
     # https://github.com/redeboer/polarization-sensitivity/issues/41
