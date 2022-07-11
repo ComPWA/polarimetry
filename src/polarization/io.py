@@ -23,8 +23,9 @@ import logging
 import os
 import pickle
 from collections import abc
-from functools import singledispatch
+from functools import lru_cache, singledispatch
 from os.path import abspath, dirname
+from textwrap import dedent
 from typing import Iterable, Mapping, Sequence
 
 import jax.numpy as jnp
@@ -286,8 +287,20 @@ def _to_bytes(obj) -> bytes:
     if isinstance(obj, sp.Expr):
         # Using the str printer is slower and not necessarily unique,
         # but pickle.dumps() does not always result in the same bytes stream.
+        _warn_about_unsafe_hash()
         return str(obj).encode()
     return pickle.dumps(obj)
+
+
+@lru_cache(maxsize=None)  # warn once
+def _warn_about_unsafe_hash():
+    message = """
+    PYTHONHASHSEED has not been set. For safer hashing of SymPy expressions, set the
+    PYTHONHASHSEED environment variable to a fixed value and rerun the program. See
+    https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED
+    """
+    message = dedent(message).replace("\n", " ").strip()
+    _LOGGER.warning(message)
 
 
 def mute_jax_warnings() -> None:
