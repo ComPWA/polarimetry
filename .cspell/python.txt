@@ -3,6 +3,7 @@ abspath
 ampform
 arange
 bbox
+caplog
 clim
 cmap
 configurator
@@ -19,6 +20,7 @@ ipykernel
 ipynb
 ipython
 ipywidgets
+isdigit
 isinstance
 isnan
 itertools
@@ -54,6 +56,7 @@ singledispatch
 sympify
 sympy
 tensorwaves
+textwrap
 timeit
 tolist
 tqdm

@@ -6,5 +6,6 @@ Mikhasenko
 msigma
 nbformat
 phsp
+PYTHONHASHSEED
 Remco
 toctree

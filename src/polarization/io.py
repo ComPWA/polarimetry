@@ -23,7 +23,9 @@ import logging
 import os
 import pickle
 from collections import abc
-from functools import singledispatch
+from functools import lru_cache, singledispatch
+from os.path import abspath, dirname
+from textwrap import dedent
 from typing import Iterable, Mapping, Sequence
 
 import jax.numpy as jnp
@@ -32,6 +34,8 @@ from ampform.sympy import UnevaluatedExpression
 from IPython.display import Math, display
 
 from polarization.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
+
+_LOGGER = logging.getLogger(__name__)
 
 
 @singledispatch
@@ -235,19 +239,34 @@ def display_doit(
     display(Math(latex))
 
 
-def perform_cached_doit(unevaluated_expr: sp.Expr, directory: str = ".") -> sp.Expr:
+def perform_cached_doit(
+    unevaluated_expr: sp.Expr, directory: str | None = None
+) -> sp.Expr:
     """Perform :code:`doit()` on an `~sympy.core.expr.Expr` and cache the result to disk.
 
     The cached result is fetched from disk if the hash of the original expression is the
     same as the hash embedded in the filename.
+
+    Args:
+        unevaluated_expr: A `sympy.Expr <sympy.core.expr.Expr>` on which to call
+            :code:`doit()`.
+        directory: The directory in which to cache the result. If `None`, the cache
+            directory will be put under the source code directory where `polarization`
+            is installed.
+
+    .. tip:: For a faster cache, set `PYTHONHASHSEED
+        <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
+        fixed value.
     """
+    if directory is None:
+        directory = abspath(f"{dirname(__file__)}/.sympy-cache")
     h = get_readable_hash(unevaluated_expr)
-    filename = f"{directory}/.sympy-cache/{h}.pkl"
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    filename = f"{directory}/{h}.pkl"
+    os.makedirs(dirname(filename), exist_ok=True)
     if os.path.exists(filename):
         with open(filename, "rb") as f:
             return pickle.load(f)
-    logging.info(f"Cached expression file {filename} not found, performing doit()...")
+    _LOGGER.info(f"Cached expression file {filename} not found, performing doit()...")
     unfolded_expr = unevaluated_expr.doit()
     with open(filename, "wb") as f:
         pickle.dump(unfolded_expr, f)
@@ -260,11 +279,28 @@ def get_readable_hash(obj) -> str:
 
 
 def _to_bytes(obj) -> bytes:
+    python_hash_seed = os.environ.get("PYTHONHASHSEED", "")
+    if python_hash_seed is not None and python_hash_seed.isdigit():
+        # https://github.com/sympy/sympy/issues/14835#issuecomment-399782969
+        python_hash_seed = int(python_hash_seed)
+        return pickle.dumps(obj)
     if isinstance(obj, sp.Expr):
         # Using the str printer is slower and not necessarily unique,
         # but pickle.dumps() does not always result in the same bytes stream.
+        _warn_about_unsafe_hash()
         return str(obj).encode()
     return pickle.dumps(obj)
+
+
+@lru_cache(maxsize=None)  # warn once
+def _warn_about_unsafe_hash():
+    message = """
+    PYTHONHASHSEED has not been set. For safer hashing of SymPy expressions, set the
+    PYTHONHASHSEED environment variable to a fixed value and rerun the program. See
+    https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED
+    """
+    message = dedent(message).replace("\n", " ").strip()
+    _LOGGER.warning(message)
 
 
 def mute_jax_warnings() -> None:
