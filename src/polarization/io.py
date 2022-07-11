@@ -250,6 +250,10 @@ def perform_cached_doit(
         directory: The directory in which to cache the result. If `None`, the cache
             directory will be put under the source code directory where `polarization`
             is installed.
+
+    .. tip:: For a faster cache, set `PYTHONHASHSEED
+        <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>` to a
+        fixed value.
     """
     if directory is None:
         directory = abspath(f"{dirname(__file__)}/.sympy-cache")
