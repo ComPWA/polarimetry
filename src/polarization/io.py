@@ -252,7 +252,7 @@ def perform_cached_doit(
             is installed.
 
     .. tip:: For a faster cache, set `PYTHONHASHSEED
-        <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>` to a
+        <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
         fixed value.
     """
     if directory is None:
