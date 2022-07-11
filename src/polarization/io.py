@@ -276,8 +276,10 @@ def get_readable_hash(obj) -> str:
 
 
 def _to_bytes(obj) -> bytes:
-    if "PYTHONHASHSEED" in os.environ:
+    python_hash_seed = os.environ.get("PYTHONHASHSEED", "")
+    if python_hash_seed is not None and python_hash_seed.isdigit():
         # https://github.com/sympy/sympy/issues/14835#issuecomment-399782969
+        python_hash_seed = int(python_hash_seed)
         return pickle.dumps(obj)
     if isinstance(obj, sp.Expr):
         # Using the str printer is slower and not necessarily unique,

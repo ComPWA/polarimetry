@@ -52,7 +52,7 @@ def test_get_readable_hash(assumptions, expected_hash):
     expr = x**2 + y
     h = get_readable_hash(expr)
     python_hash_seed = os.environ.get("PYTHONHASHSEED")
-    if python_hash_seed is None:
+    if python_hash_seed is None or not python_hash_seed.isdigit():
         assert h[:7] == "bbc9833"
     elif python_hash_seed == "0":
         assert h[:7] == expected_hash

@@ -19,6 +19,7 @@ ipykernel
 ipynb
 ipython
 ipywidgets
+isdigit
 isinstance
 isnan
 itertools
