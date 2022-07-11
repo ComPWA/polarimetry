@@ -24,6 +24,7 @@ import os
 import pickle
 from collections import abc
 from functools import singledispatch
+from os.path import abspath, dirname
 from typing import Iterable, Mapping, Sequence
 
 import jax.numpy as jnp
@@ -235,15 +236,26 @@ def display_doit(
     display(Math(latex))
 
 
-def perform_cached_doit(unevaluated_expr: sp.Expr, directory: str = ".") -> sp.Expr:
+def perform_cached_doit(
+    unevaluated_expr: sp.Expr, directory: str | None = None
+) -> sp.Expr:
     """Perform :code:`doit()` on an `~sympy.core.expr.Expr` and cache the result to disk.
 
     The cached result is fetched from disk if the hash of the original expression is the
     same as the hash embedded in the filename.
+
+    Args:
+        unevaluated_expr: A `sympy.Expr <sympy.core.expr.Expr>` on which to call
+            :code:`doit()`.
+        directory: The directory in which to cache the result. If `None`, the cache
+            directory will be put under the source code directory where `polarization`
+            is installed.
     """
+    if directory is None:
+        directory = abspath(f"{dirname(__file__)}/.sympy-cache")
     h = get_readable_hash(unevaluated_expr)
-    filename = f"{directory}/.sympy-cache/{h}.pkl"
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    filename = f"{directory}/{h}.pkl"
+    os.makedirs(dirname(filename), exist_ok=True)
     if os.path.exists(filename):
         with open(filename, "rb") as f:
             return pickle.load(f)
