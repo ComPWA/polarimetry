@@ -24,7 +24,7 @@ import os
 import pickle
 from collections import abc
 from functools import lru_cache, singledispatch
-from os.path import abspath, dirname
+from os.path import abspath, dirname, expanduser
 from textwrap import dedent
 from typing import Iterable, Mapping, Sequence
 
@@ -259,7 +259,8 @@ def perform_cached_doit(
         fixed value.
     """
     if directory is None:
-        directory = abspath(f"{dirname(__file__)}/.sympy-cache")
+        home_directory = expanduser("~")
+        directory = abspath(f"{home_directory}/.sympy-cache")
     h = get_readable_hash(unevaluated_expr)
     filename = f"{directory}/{h}.pkl"
     os.makedirs(dirname(filename), exist_ok=True)
