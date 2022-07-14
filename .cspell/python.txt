@@ -9,6 +9,7 @@ cmap
 configurator
 edgecolor
 elif
+expanduser
 funcs
 functools
 hashlib
