@@ -1,6 +1,11 @@
 # Polarization sensitivity
 
+<!-- cspell:ignore maxdepth -->
+
 ```{toctree}
+---
+maxdepth: 2
+---
 amplitude-model
 cross-check
 intensity
