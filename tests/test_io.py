@@ -57,9 +57,9 @@ def test_as_latex_isobar_node():
 @pytest.mark.parametrize(
     ("assumptions", "expected_hash"),
     [
-        (dict(), "34702c2"),
-        (dict(real=True), "440b870"),
-        (dict(rational=True), "f308f4c"),
+        (dict(), "pythonhashseed-0+7459658071388516764"),
+        (dict(real=True), "pythonhashseed-0+3665410414623666716"),
+        (dict(rational=True), "pythonhashseed-0-7926839224244779605"),
     ],
 )
 def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture):
@@ -74,7 +74,7 @@ def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture
             assert "PYTHONHASHSEED has not been set." in caplog.text
             caplog.clear()
     elif python_hash_seed == "0":
-        assert h[:7] == expected_hash
+        assert h == expected_hash
     else:
         pytest.skip("PYTHONHASHSEED has been set, but is not 0")
     assert caplog.text == ""
@@ -83,23 +83,23 @@ def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture
 @pytest.mark.parametrize(
     ("model_id", "intensity_hash", "polarization_hash"),
     [
-        (0, "e6713ea", "ce83bd4"),
-        (1, "e6713ea", "d220bcf"),
-        (2, "e6713ea", "d220bcf"),
-        (3, "e6713ea", "d220bcf"),
-        (4, "e6713ea", "d220bcf"),
-        (5, "e6713ea", "d220bcf"),
-        (6, "e6713ea", "d220bcf"),
-        (7, "d283d6e", "7988df7"),
-        (8, "ba44b94", "678ca1b"),
-        (9, "15c4be1", "119ffeb"),
-        (10, "a6aaf57", "1381db4"),
-        (11, "e6713ea", "d220bcf"),
-        (12, "7c9726b", "411e9ba"),
-        (13, "2e8122c", "51e325e"),
-        (14, "e6713ea", "d220bcf"),
+        (0, 25920838, 86038262),
+        (1, 25920838, 86038262),
+        (2, 25920838, 86038262),
+        (3, 25920838, 86038262),
+        (4, 25920838, 86038262),
+        (5, 25920838, 86038262),
+        (6, 25920838, 86038262),
+        (7, 36469038, 58347724),
+        (8, 68439069, 78416740),
+        (9, 41149687, 59382178),
+        (10, 28117252, 90540156),
+        (11, 25920838, 86038262),
+        (12, 18533109, 48574010),
+        (13, 21731195, 36898300),
+        (14, 25920838, 86038262),
         # 15: No dynamics implemented for lineshape "BuggBreitWignerExpFF"
-        (16, "e6713ea", "d220bcf"),
+        (16, 25920838, 86038262),
         # 17: No dynamics implemented for lineshape "Flatte1405_LS"
     ],
 )
@@ -111,10 +111,10 @@ def test_get_readable_hash_large(model_id, intensity_hash, polarization_hash):
     builder = __get_model_builder(model_id)
     model = builder.formulate(reference_subsystem=1)
     h = get_readable_hash(model.full_expression)
-    assert h[:7] == intensity_hash
+    assert int(h[17:25]) == intensity_hash
     polarization_exprs = formulate_polarization(builder, reference_subsystem=1)
     h = get_readable_hash(polarization_exprs[0].doit().xreplace(model.amplitudes))
-    assert h[:7] == polarization_hash
+    assert int(h[17:25]) == polarization_hash
 
 
 def __get_model_builder(model_id: int | str) -> DalitzPlotDecompositionBuilder:

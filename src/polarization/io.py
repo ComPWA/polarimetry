@@ -275,16 +275,14 @@ def perform_cached_doit(
 
 
 def get_readable_hash(obj) -> str:
+    python_hash_seed = _get_python_hash_seed()
+    if python_hash_seed is not None:
+        return f"pythonhashseed-{python_hash_seed}{hash(obj):+}"
     b = _to_bytes(obj)
     return hashlib.sha256(b).hexdigest()
 
 
 def _to_bytes(obj) -> bytes:
-    python_hash_seed = os.environ.get("PYTHONHASHSEED", "")
-    if python_hash_seed is not None and python_hash_seed.isdigit():
-        # https://github.com/sympy/sympy/issues/14835#issuecomment-399782969
-        python_hash_seed = int(python_hash_seed)
-        return pickle.dumps(obj)
     if isinstance(obj, sp.Expr):
         # Using the str printer is slower and not necessarily unique,
         # but pickle.dumps() does not always result in the same bytes stream.
@@ -293,12 +291,19 @@ def _to_bytes(obj) -> bytes:
     return pickle.dumps(obj)
 
 
+def _get_python_hash_seed() -> int | None:
+    python_hash_seed = os.environ.get("PYTHONHASHSEED", "")
+    if python_hash_seed is not None and python_hash_seed.isdigit():
+        return int(python_hash_seed)
+    return None
+
+
 @lru_cache(maxsize=None)  # warn once
 def _warn_about_unsafe_hash():
     message = """
-    PYTHONHASHSEED has not been set. For safer hashing of SymPy expressions, set the
-    PYTHONHASHSEED environment variable to a fixed value and rerun the program. See
-    https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED
+    PYTHONHASHSEED has not been set. For faster and safer hashing of SymPy expressions,
+    set the PYTHONHASHSEED environment variable to a fixed value and rerun the program.
+    See https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED
     """
     message = dedent(message).replace("\n", " ").strip()
     _LOGGER.warning(message)
