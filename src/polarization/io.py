@@ -267,7 +267,9 @@ def perform_cached_doit(
     if os.path.exists(filename):
         with open(filename, "rb") as f:
             return pickle.load(f)
-    _LOGGER.info(f"Cached expression file {filename} not found, performing doit()...")
+    _LOGGER.warning(
+        f"Cached expression file {filename} not found, performing doit()..."
+    )
     unfolded_expr = unevaluated_expr.doit()
     with open(filename, "wb") as f:
         pickle.dump(unfolded_expr, f)
