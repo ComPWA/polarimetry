@@ -9,6 +9,7 @@ cmap
 configurator
 edgecolor
 elif
+expanduser
 funcs
 functools
 hashlib
@@ -16,6 +17,7 @@ hexdigest
 hspace
 imag
 interp2d
+ioff
 ipykernel
 ipynb
 ipython
@@ -54,6 +56,7 @@ scipy
 seealso
 sharey
 singledispatch
+svgutils
 sympify
 sympy
 tensorwaves
