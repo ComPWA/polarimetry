@@ -324,6 +324,7 @@ def export_polarization_field(
     alpha_z: jnp.ndarray,
     intensity: jnp.ndarray,
     filename: str,
+    metadata: dict | None = None,
 ) -> None:
     if len(sigma1.shape) != 1:
         raise ValueError(f"sigma1 must be a 1D array, got {sigma1.shape}")
@@ -341,6 +342,11 @@ def export_polarization_field(
         "alpha_z": alpha_z.tolist(),
         "intensity": intensity.tolist(),
     }
+    if metadata is not None:
+        json_data = {
+            "metadata": metadata,
+            **json_data,
+        }
     with open(filename, "w") as f:
         json.dump(json_data, f, separators=(",", ":"))
 
