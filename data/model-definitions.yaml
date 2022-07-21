@@ -1304,7 +1304,7 @@ Alternative amplitude model with free radial parameter d for the Lc resonance, i
     ArD(1700)2: 12.726946 ± 0.210809
     AiD(1700)2: 1.728984 ± 0.718018
 
-Alternative amplitude model obtained using (LS couplings):
+Alternative amplitude model obtained using LS couplings:
   lineshapes:
     L(1405): Flatte1405_LS
     L(1520): BreitWignerMinL_LS
