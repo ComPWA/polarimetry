@@ -94,8 +94,8 @@ Alternative amplitude model with K(892) with free mass and width:
     AiK(700)1: 2.704617 ± 0.154115
     ArK(700)2: -2.867440 ± 0.176016
     AiK(700)2: -0.173008 ± 0.166487
-    MK(892): 0.895262 ± 0.000220
-    GK(892): 0.047548 ± 0.000464
+    MK(892): 0.894262 ± 0.000220
+    GK(892): 0.045548 ± 0.000464
     ArK(892)2: 1.256591 ± 0.082629
     AiK(892)2: -0.961626 ± 0.073051
     ArK(892)3: -3.051419 ± 0.243241
@@ -275,8 +275,8 @@ Alternative amplitude model with L(1690) with free mass and width:
     AiL(1670)1: -0.122270 ± 0.019908
     ArL(1670)2: -0.554003 ± 0.062269
     AiL(1670)2: 1.054215 ± 0.062275
-    ML(1690): 1.700233 ± 0.001956
-    GL(1690): 0.094103 ± 0.001011
+    ML(1690): 1.704233 ± 0.001956
+    GL(1690): 0.080103 ± 0.001011
     ArL(1690)1: -0.486576 ± 0.058133
     AiL(1690)1: -0.155656 ± 0.053014
     ArL(1690)2: -2.873073 ± 0.140066
@@ -361,8 +361,8 @@ Alternative amplitude model with D(1232) with free mass and width:
     AiL(2000)1: -8.493874 ± 0.527933
     ArL(2000)2: -4.222160 ± 0.353790
     AiL(2000)2: -4.710304 ± 0.328325
-    MD(1232): 1.243549 ± 0.000726
-    GD(1232): 0.130084 ± 0.002105
+    MD(1232): 1.241349 ± 0.000726
+    GD(1232): 0.122084 ± 0.002105
     ArD(1232)1: -7.913454 ± 0.431139
     AiD(1232)1: 2.468312 ± 0.399099
     ArD(1232)2: -13.990674 ± 0.733443
@@ -490,7 +490,7 @@ Alternative amplitude model with free L(1405) Flatt'e widths, indicated as G1 (p
     ArK(1430)2: 1.462918 ± 0.499231
     AiK(1430)2: 8.721736 ± 0.432555
     G1L(1405): 0.036126 ± 0.005923
-    G2L(1405): 0.094903 ± 0.000202
+    G2L(1405): 0.099914 ± 0.000202
     ArL(1405)1: -5.874996 ± 0.391042
     AiL(1405)1: 4.574277 ± 0.413604
     ArL(1405)2: 12.197520 ± 0.675524
@@ -532,7 +532,7 @@ Alternative amplitude model with free L(1405) Flatt'e widths, indicated as G1 (p
     ArD(1700)2: 11.665897 ± 0.613543
     AiD(1700)2: 1.484256 ± 0.646875
 
-Alternative amplitude model with L(1800) contribution added with mass and width from Ref.~cite{PDG2020}:
+Alternative amplitude model with L(1800) contribution added with free mass and width:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -588,12 +588,12 @@ Alternative amplitude model with L(1800) contribution added with mass and width 
     AiL(1690)1: -0.171170 ± 0.035648
     ArL(1690)2: -2.643447 ± 0.060018
     AiL(1690)2: -0.438738 ± 0.131131
+    ML(1800): 1.719993 ± 0.000857
+    GL(1800): 0.399984 ± 0.002649
     ArL(1800)1: -2.896177 ± 0.507260
     AiL(1800)1: -4.187938 ± 0.474559
     ArL(1800)2: -5.771801 ± 0.380095
     AiL(1800)2: 2.443076 ± 0.439612
-    ML(2000): 1.967001 ± 0.001551
-    GL(2000): 0.172887 ± 0.003175
     ArL(2000)1: -10.400572 ± 0.257214
     AiL(2000)1: -4.340623 ± 0.625761
     ArL(2000)2: -4.045572 ± 0.215202
@@ -611,7 +611,7 @@ Alternative amplitude model with L(1800) contribution added with mass and width 
     ArD(1700)2: 12.627807 ± 0.266730
     AiD(1700)2: 0.711202 ± 0.639078
 
-Alternative amplitude model with L(1810) contribution added with mass and width from Ref.~cite{PDG2020}:
+Alternative amplitude model with L(1810) contribution added with free mass and width:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -667,6 +667,8 @@ Alternative amplitude model with L(1810) contribution added with mass and width 
     AiL(1690)1: -0.408917 ± 0.057318
     ArL(1690)2: -2.545942 ± 0.133344
     AiL(1690)2: -0.375079 ± 0.153121
+    ML(1810): 1.849944 ± 0.006531
+    GL(1810): 0.360737 ± 0.039132
     ArL(1810)1: -0.865366 ± 0.368650
     AiL(1810)1: 4.993321 ± 0.804440
     ArL(1810)2: 1.179995 ± 0.417286
@@ -760,8 +762,8 @@ Alternative amplitude model with D(1620) contribution added with free mass and w
     AiD(1600)1: -2.695902 ± 1.036508
     ArD(1600)2: 10.375705 ± 0.800934
     AiD(1600)2: 1.121209 ± 0.805173
-    MD(1620): 1.55738 ± 0.000728
-    GD(1620): 0.181832 ± 0.001744
+    MD(1620): 1.589956 ± 0.000728
+    GD(1620): 0.149998 ± 0.001744
     ArD(1620)1: 0.348943 ± 0.231875
     AiD(1620)1: 3.210361 ± 0.238051
     ArD(1620)2: 0.414536 ± 0.095090
@@ -861,8 +863,8 @@ Alternative amplitude model with K(700) with free mass and width:
   parameters:
     ArK(892)1: 1.0 ± 0.0
     AiK(892)1: 0.0 ± 0.0
-    MK(700): 0.874000 ± 0.004444
-    GK(700): 0.398000 ± 0.003845
+    MK(700): 0.832039 ± 0.006076
+    GK(700): 0.649995 ± 0.051001
     gammaK(700): 1.293655 ± 0.065049
     ArK(700)1: -0.117095 ± 0.177157
     AiK(700)1: 2.704896 ± 0.059553
@@ -920,7 +922,7 @@ Alternative amplitude model with K(700) with free mass and width:
     ArD(1700)2: 13.471328 ± 0.269478
     AiD(1700)2: 1.841069 ± 0.276973
 
-Alternative amplitude model with K(1410) contribution added with mass and width from Ref.~cite{PDG2020}:
+Alternative amplitude model with K(1410) contribution added with mass and width from PDG2020:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL
@@ -1104,7 +1106,7 @@ Alternative amplitude model with K(1430) with free width:
     AiK(892)3: -3.342337 ± 0.052285
     ArK(892)4: -0.682157 ± 0.049104
     AiK(892)4: -4.190488 ± 0.031710
-    GK(1430): 0.150117 ± 0.012478
+    GK(1430): 0.359999 ± 0.012478
     gammaK(1430): 0.353942 ± 0.012437
     ArK(1430)1: -6.369001 ± 0.226267
     AiK(1430)1: 11.341841 ± 0.219290
