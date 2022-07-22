@@ -28,6 +28,7 @@ from polarization.spin import filter_parity_violating_ls, generate_ls_couplings
 from .dynamics import (
     formulate_breit_wigner,
     formulate_bugg_breit_wigner,
+    formulate_exponential_bugg_breit_wigner,
     formulate_flatte_1405,
 )
 from .particle import PARTICLE_TO_ID, K, Λc, p, π
@@ -89,6 +90,8 @@ def _find_model_title(model_definitions: dict, model_id: int | str) -> str:
 def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
     if lineshape == "BreitWignerMinL":
         return formulate_breit_wigner
+    if lineshape == "BuggBreitWignerExpFF":
+        return formulate_exponential_bugg_breit_wigner
     if lineshape == "BuggBreitWignerMinL":
         return formulate_bugg_breit_wigner
     if lineshape == "Flatte1405":
@@ -356,6 +359,9 @@ def parameter_key_to_symbol(key: str) -> sp.Indexed | sp.Symbol:
                     return H_prod[R, +1, +half]
                 if i == 4:
                     return H_prod[R, 0, +half]
+    if key.startswith("alpha"):
+        R = _stringify(key[5:])
+        return sp.Symbol(Rf"\alpha_{{{R}}}")
     if key.startswith("gamma"):
         R = _stringify(key[5:])
         return sp.Symbol(Rf"\gamma_{{{R}}}")

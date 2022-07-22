@@ -1164,9 +1164,9 @@ Alternative amplitude model with an additional overall exponential form factor e
     D(1232): BreitWignerMinL
     D(1600): BreitWignerMinL
     D(1700): BreitWignerMinL
-    K(700): BuggBreitWigner
+    K(700): BuggBreitWignerExpFF
     K(892): BreitWignerMinL
-    K(1430): BuggBreitWigner
+    K(1430): BuggBreitWignerExpFF
   parameters:
     ArK(892)1: 1.0 ± 0.0
     AiK(892)1: 0.0 ± 0.0
