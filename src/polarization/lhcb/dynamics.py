@@ -48,18 +48,20 @@ def formulate_flatte_1405(
     s = _get_mandelstam_s(decay)
     m1, m2 = map(_to_mass_symbol, decay.decay_products)
     mass = sp.Symbol(f"m_{{{decay.resonance.name}}}")
-    width = sp.Symbol(Rf"\Gamma_{{{decay.resonance.name}}}")
+    Γ1 = sp.Symbol(Rf"\Gamma_{{{decay.resonance.name} \to {p.latex} {K.latex}}}")
+    Γ2 = sp.Symbol(Rf"\Gamma_{{{decay.resonance.name} \to {Σ.latex} {π.latex}}}")
     mπ = _to_mass_symbol(π)
     mΣ = sp.Symbol(f"m_{{{Σ.name}}}")
     parameter_defaults = {
         mass: decay.resonance.mass,
-        width: decay.resonance.width,
+        Γ1: decay.resonance.width,
+        Γ2: decay.resonance.width,
         m1: decay.decay_products[0].mass,
         m2: decay.decay_products[1].mass,
         mπ: π.mass,
         mΣ: Σ.mass,
     }
-    dynamics = FlattéSWave(s, mass, width, (m1, m2), (mπ, mΣ))
+    dynamics = FlattéSWave(s, mass, (Γ1, Γ2), (m1, m2), (mπ, mΣ))
     return dynamics, parameter_defaults
 
 

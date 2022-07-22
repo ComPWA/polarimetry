@@ -31,7 +31,7 @@ from .dynamics import (
     formulate_exponential_bugg_breit_wigner,
     formulate_flatte_1405,
 )
-from .particle import PARTICLE_TO_ID, K, Λc, p, π
+from .particle import PARTICLE_TO_ID, K, Λc, Σ, p, π
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal
@@ -368,6 +368,12 @@ def parameter_key_to_symbol(key: str) -> sp.Indexed | sp.Symbol:
     if key.startswith("M"):
         R = _stringify(key[1:])
         return sp.Symbol(Rf"m_{{{R}}}")
+    if key.startswith("G1"):
+        R = _stringify(key[2:])
+        return sp.Symbol(Rf"\Gamma_{{{R} \to {p.latex} {K.latex}}}")
+    if key.startswith("G2"):
+        R = _stringify(key[2:])
+        return sp.Symbol(Rf"\Gamma_{{{R} \to {Σ.latex} {π.latex}}}")
     if key.startswith("G"):
         R = _stringify(key[1:])
         return sp.Symbol(Rf"\Gamma_{{{R}}}")
