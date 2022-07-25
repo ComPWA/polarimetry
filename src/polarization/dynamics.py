@@ -27,8 +27,8 @@ class P(UnevaluatedExpression):
         return sp.sqrt(Kallen(s, mi**2, mj**2)) / (2 * sp.sqrt(s))
 
     def _latex(self, printer, *args):
-        s = printer._print(self.args[0])
-        return Rf"p_{{{s}}}"
+        s, mi, mj = map(printer._print, self.args)
+        return Rf"p_{{{mi},{mj}}}\left({s}\right)"
 
 
 @make_commutative
@@ -42,8 +42,8 @@ class Q(UnevaluatedExpression):
         return sp.sqrt(Kallen(s, m0**2, mk**2)) / (2 * m0)  # <-- not s!
 
     def _latex(self, printer, *args):
-        s = printer._print(self.args[0], *args)
-        return Rf"q_{{{s}}}"
+        s, m0, mk = map(printer._print, self.args)
+        return Rf"q_{{{m0},{mk}}}\left({s}\right)"
 
 
 @make_commutative
