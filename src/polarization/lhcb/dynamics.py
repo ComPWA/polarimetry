@@ -32,6 +32,7 @@ def formulate_bugg_breit_wigner(
 def formulate_exponential_bugg_breit_wigner(
     decay_chain: ThreeBodyDecayChain,
 ) -> tuple[BuggBreitWigner, dict[sp.Symbol, float]]:
+    """See `this paper, Eq. (4) <https://arxiv.org/pdf/hep-ex/0510019.pdf#page=3>`_."""
     expr, parameter_defaults = formulate_bugg_breit_wigner(decay_chain)
     alpha = sp.Symbol(Rf"\alpha_{{{decay_chain.resonance.name}}}")
     parameter_defaults[alpha] = sp.Rational(0)
