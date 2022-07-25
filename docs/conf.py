@@ -8,8 +8,10 @@ from _relink_references import relink_references
 
 
 def get_execution_mode() -> str:
+    if "FORCE_EXECUTE_NB" in os.environ:
+        print("\033[93;1mWill run ALL Jupyter notebooks!\033[0m")
+        return "force"
     if "EXECUTE_NB" in os.environ:
-        print("\033[93;1mWill run Jupyter notebooks!\033[0m")
         return "cache"
     return "off"
 
