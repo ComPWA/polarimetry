@@ -3,7 +3,7 @@ from __future__ import annotations
 import sympy as sp
 
 from polarization.decay import Particle, ThreeBodyDecayChain
-from polarization.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave, P
+from polarization.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave, Q
 
 from .particle import PARTICLE_TO_ID, K, Σ, p, π
 
@@ -37,8 +37,8 @@ def formulate_exponential_bugg_breit_wigner(
     alpha = sp.Symbol(Rf"\alpha_{{{decay_chain.resonance.name}}}")
     parameter_defaults[alpha] = sp.Rational(0)
     s = _get_mandelstam_s(decay_chain)
-    m2, m3 = sp.symbols("m2 m3", nonnegative=True)
-    q = P(s, m2, m3)
+    m0, m1 = sp.symbols("m0 m1", nonnegative=True)
+    q = Q(s, m0, m1)
     expr *= sp.exp(-alpha * q**2)
     return expr, parameter_defaults
 
