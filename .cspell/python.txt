@@ -7,6 +7,7 @@ caplog
 clim
 cmap
 configurator
+corrcoef
 edgecolor
 elif
 expanduser
