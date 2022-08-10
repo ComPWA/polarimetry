@@ -84,7 +84,7 @@ def formulate_breit_wigner(decay_chain: ThreeBodyDecayChain):
         resonance_width: decay_chain.resonance.width,
         child1_mass: decay_chain.decay_products[0].mass,
         child2_mass: decay_chain.decay_products[1].mass,
-        # https://github.com/redeboer/polarization-sensitivity/pull/11#issuecomment-1128784376
+        # https://github.com/ComPWA/polarization-sensitivity/pull/11#issuecomment-1128784376
         R_dec: 1.5,
         R_prod: 5,
     }

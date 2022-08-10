@@ -136,7 +136,7 @@ K(1430):
   width: 190
   lineshape: BuggBreitWignerMinL
 
-# https://github.com/redeboer/polarization-sensitivity/blob/34f5330/julia/notebooks/model0.jl#L43-L47
+# https://github.com/ComPWA/polarization-sensitivity/blob/34f5330/julia/notebooks/model0.jl#L43-L47
 Sigma-:
   latex: \Sigma^-
   jp: 1/2^+

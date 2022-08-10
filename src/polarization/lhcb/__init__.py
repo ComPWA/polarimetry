@@ -331,7 +331,7 @@ def parameter_key_to_symbol(key: str) -> sp.Indexed | sp.Symbol:
     H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
     half = sp.Rational(1, 2)
     if key.startswith("A"):
-        # https://github.com/redeboer/polarization-sensitivity/issues/5#issue-1220525993
+        # https://github.com/ComPWA/polarization-sensitivity/issues/5#issue-1220525993
         R = _stringify(key[1:-1])
         i = int(key[-1])
         if str(R).startswith("L"):
