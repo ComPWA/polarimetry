@@ -2,6 +2,7 @@ import os
 import shutil
 import subprocess
 import sys
+from textwrap import dedent
 
 sys.path.insert(0, os.path.abspath("."))
 from _relink_references import relink_references
@@ -14,6 +15,18 @@ def get_execution_mode() -> str:
     if "EXECUTE_NB" in os.environ:
         return "cache"
     return "off"
+
+
+def get_link_to_julia_pages() -> str:
+    julia_landing_page = "./_static/julia/index.html"
+    if os.path.exists(julia_landing_page):
+        src = f"""
+        :::{{tip}}
+        Several cross-checks with Julia can be found [here]({julia_landing_page}).
+        :::
+        """
+        return dedent(src)
+    return ""
 
 
 def generate_api() -> None:
@@ -84,6 +97,7 @@ extensions = [
     "sphinx_togglebutton",
 ]
 html_sourcelink_suffix = ""
+html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "launch_buttons": {
@@ -118,6 +132,9 @@ myst_enable_extensions = [
     "substitution",
 ]
 myst_render_markdown_format = "myst"
+myst_substitutions = {
+    "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
+}
 nb_execution_allow_errors = False
 nb_execution_mode = get_execution_mode()
 nb_execution_timeout = -1
