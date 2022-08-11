@@ -11,6 +11,7 @@
   "reportUnknownMemberType": false,
   "reportUnknownParameterType": false,
   "reportUnknownVariableType": false,
+  "reportUnnecessaryContains": false,
   "reportUnnecessaryIsInstance": false,
   "reportUnusedClass": true,
   "reportUnusedFunction": true,
