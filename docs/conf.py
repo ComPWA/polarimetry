@@ -17,8 +17,8 @@ def execute_pluto_notebooks() -> None:
             " https://julialang.org/downloads"
         )
     result = subprocess.call(
-        "julia --project=./julia ./julia/exportnotebooks.jl",
-        cwd="..",
+        "julia --project=. ./exportnotebooks.jl",
+        cwd="../julia",
         shell=True,
     )
     if result != 0:
