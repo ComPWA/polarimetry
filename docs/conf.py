@@ -8,6 +8,23 @@ sys.path.insert(0, os.path.abspath("."))
 from _relink_references import relink_references
 
 
+def execute_pluto_notebooks() -> None:
+    if "EXECUTE_PLUTO" not in os.environ:
+        return
+    if shutil.which("julia") is None:
+        raise ValueError(
+            "Julia is not installed. Please download it at`"
+            " https://julialang.org/downloads"
+        )
+    result = subprocess.call(
+        "julia --project=./julia ./julia/exportnotebooks.jl",
+        cwd="..",
+        shell=True,
+    )
+    if result != 0:
+        raise ValueError("Failed to execute pluto notebooks")
+
+
 def get_execution_mode() -> str:
     if "FORCE_EXECUTE_NB" in os.environ:
         print("\033[93;1mWill run ALL Jupyter notebooks!\033[0m")
@@ -48,6 +65,7 @@ def generate_api() -> None:
     )
 
 
+execute_pluto_notebooks()
 generate_api()
 relink_references()
 
