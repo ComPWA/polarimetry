@@ -9,7 +9,12 @@
     "editor.defaultFormatter": "julialang.language-julia"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [],
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 80,
+    "editor.wrappingIndent": "same",
+    "editor.wrappingStrategy": "advanced"
   },
   "[python]": {
     "editor.codeActionsOnSave": {
@@ -26,6 +31,7 @@
     ".cspell/*.txt": "plaintext"
   },
   "files.eol": "\n",
+  "julia.NumThreads": "auto",
   "python.analysis.autoImportCompletions": false,
   "python.analysis.diagnosticMode": "workspace",
   "python.formatting.provider": "black",
@@ -34,6 +40,5 @@
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
   "rewrap.wrappingColumn": 88,
-  "telemetry.telemetryLevel": "off",
-  "julia.NumThreads": "auto"
+  "telemetry.telemetryLevel": "off"
 }
