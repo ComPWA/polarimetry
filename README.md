@@ -1,10 +1,10 @@
 # Polarization sensitivity in Λc → pπK
 
-<!-- cspell:ignore Flatte modelparameters modelstudies -->
+<!-- cspell:ignore Flatte modelparameters modelstudies semileptonic -->
 
 [![GPLv3+ license](https://img.shields.io/badge/License-GPLv3+-blue.svg)](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
 
-This repository originates from [ComPWA/compwa-org#129](https://github.com/ComPWA/compwa-org/pull/129). It formulates a symbolic amplitude model for the decay Λc → pπK that is aligned with [Dalitz-plot decomposition](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033) and computes
+This repository a symbolic amplitude model for the decay $\Lambda^+_c \to p \pi^+ K^-$ that is aligned with [Dalitz-plot decomposition](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033) and computes an align polarimeter vector field $\vec\alpha$. Helicity couplings and other parameter values are taken from [_Amplitude analysis of the $\Lambda^+_c \to p K^- \pi^+$ decay and $\Lambda^+_c$ baryon polarization measurement in semileptonic beauty hadron decays_](https://inspirehep.net/literature/2132745) (2022) by the LHCb Collaboration and its [supplementary material](https://cds.cern.ch/record/2824328/files).
 
 ## Installation
 
