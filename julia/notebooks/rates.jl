@@ -174,7 +174,9 @@ begin
     for (k, r) in zip(isobarnameset, diag(grouppedratematrix))
         push!(ratesdict, k => round(r; digits=2))
     end
-    writejson(joinpath("results", "rates.json"),
+    results_dir = "results"
+    mkdir(results_dir)
+    writejson(joinpath(results_dir, "rates.json"),
         Dict("rate" => ratesdict,
             "isobars" => isobarnameset,
             "ratematrix" => round.(grouppedratematrix; digits=2)))

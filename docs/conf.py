@@ -2,9 +2,27 @@ import os
 import shutil
 import subprocess
 import sys
+from textwrap import dedent
 
 sys.path.insert(0, os.path.abspath("."))
 from _relink_references import relink_references
+
+
+def execute_pluto_notebooks() -> None:
+    if "EXECUTE_PLUTO" not in os.environ:
+        return
+    if shutil.which("julia") is None:
+        raise ValueError(
+            "Julia is not installed. Please download it at`"
+            " https://julialang.org/downloads"
+        )
+    result = subprocess.call(
+        "julia --project=. ./exportnotebooks.jl",
+        cwd="../julia",
+        shell=True,
+    )
+    if result != 0:
+        raise ValueError("Failed to execute pluto notebooks")
 
 
 def get_execution_mode() -> str:
@@ -14,6 +32,18 @@ def get_execution_mode() -> str:
     if "EXECUTE_NB" in os.environ:
         return "cache"
     return "off"
+
+
+def get_link_to_julia_pages() -> str:
+    julia_landing_page = "./_static/julia/index.html"
+    if os.path.exists(julia_landing_page):
+        src = f"""
+        :::{{tip}}
+        Several cross-checks with Julia can be found [here]({julia_landing_page}).
+        :::
+        """
+        return dedent(src)
+    return ""
 
 
 def generate_api() -> None:
@@ -35,6 +65,7 @@ def generate_api() -> None:
     )
 
 
+execute_pluto_notebooks()
 generate_api()
 relink_references()
 
@@ -84,6 +115,7 @@ extensions = [
     "sphinx_togglebutton",
 ]
 html_sourcelink_suffix = ""
+html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "launch_buttons": {
@@ -118,6 +150,9 @@ myst_enable_extensions = [
     "substitution",
 ]
 myst_render_markdown_format = "myst"
+myst_substitutions = {
+    "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
+}
 nb_execution_allow_errors = False
 nb_execution_mode = get_execution_mode()
 nb_execution_timeout = -1

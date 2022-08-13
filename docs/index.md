@@ -1,3 +1,8 @@
+---
+myst:
+  all_links_external: True
+---
+
 # Polarization sensitivity
 
 <!-- cspell:ignore maxdepth -->
@@ -14,6 +19,8 @@ uncertainties
 appendix
 API <api/polarization>
 ```
+
+{{ LINK_TO_JULIA_PAGES }}
 
 :::{dropdown} Notebook execution times
 

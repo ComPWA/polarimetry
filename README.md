@@ -23,12 +23,30 @@ pre-commit install
 
 For more information about local Python set-up, see [here](https://compwa-org.readthedocs.io/develop.html#local-set-up).
 
+This repository also contains Julia source code and Pluto notebooks. Julia can be downloaded [here](https://julialang.org/downloads). You then have to activate and instantiated the Julia environment provided in the [`julia`](./julia) folder. This can be done as follows from the root directory:
+
+```shell
+julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
+```
+
 ### Documentation dependencies
 
 To build the documentation, you need to install LaTeX and some additional fonts. In Ubuntu, this can be done with:
 
-<!-- cspell:ignore dvipng texlive -->
+<!-- cspell:ignore docnb dvipng texlive -->
 
 ```shell
 sudo apt install -y cm-super dvipng texlive-latex-extra
+```
+
+If you have installed Julia and instantiated the Julia environment, you can embed the [Pluto notebooks](./julia/notebooks) as static pages in the documentation with:
+
+```shell
+EXECUTE_PLUTO=YES tox -e docnb
+```
+
+or, alternatively, by executing _all_ Jupyter and Pluto notebooks:
+
+```shell
+tox -e docnb-force
 ```
