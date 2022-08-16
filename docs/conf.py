@@ -8,6 +8,15 @@ sys.path.insert(0, os.path.abspath("."))
 from _relink_references import relink_references
 
 
+def download_intensity_distribution() -> str:
+    filename = "intensity-distribution.png"
+    if not os.path.exists(filename):
+        return ""
+    return f"""
+    High-resolution image can be downloaded here: {{download}}`{filename}`
+    """.strip()
+
+
 def execute_pluto_notebooks() -> None:
     if "EXECUTE_PLUTO" not in os.environ:
         return
@@ -30,6 +39,7 @@ def get_execution_mode() -> str:
         print("\033[93;1mWill run ALL Jupyter notebooks!\033[0m")
         return "force"
     if "EXECUTE_NB" in os.environ:
+        print("\033[93;1mWill run Jupyter notebooks with cache\033[0m")
         return "cache"
     return "off"
 
@@ -152,6 +162,7 @@ myst_enable_extensions = [
 myst_render_markdown_format = "myst"
 myst_substitutions = {
     "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
+    "download_intensity_distribution": download_intensity_distribution(),
 }
 nb_execution_allow_errors = False
 nb_execution_mode = get_execution_mode()
