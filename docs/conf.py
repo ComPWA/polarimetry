@@ -8,6 +8,36 @@ sys.path.insert(0, os.path.abspath("."))
 from _relink_references import relink_references
 
 
+def download_figure_1() -> str:
+    files = [
+        "figure1.svg",
+        "figure1-inset.svg",
+    ]
+    if any(not os.path.exists(f) for f in files):
+        return ""
+    return f"""
+    High-resolution image can be downloaded here: {{download}}`{files[0]}` / {{download}}`{files[1]}`
+    """.strip()
+
+
+def download_figures_2_and_3() -> str:
+    files = [
+        "figure2.svg",
+        "figure2-inset.svg",
+        "figure3a.svg",
+        "figure3a-inset.svg",
+        "figure3b.svg",
+        "figure3b-inset.svg",
+    ]
+    if any(not os.path.exists(f) for f in files):
+        return ""
+    return f"""**Figures 2 and 3** for the paper can be downloaded here:
+    - {{download}}`{files[0]}` / {{download}}`{files[1]}`
+    - {{download}}`{files[2]}` / {{download}}`{files[3]}`
+    - {{download}}`{files[4]}` / {{download}}`{files[5]}`
+    """.strip()
+
+
 def download_intensity_distribution() -> str:
     filename = "intensity-distribution.png"
     if not os.path.exists(filename):
@@ -162,6 +192,8 @@ myst_enable_extensions = [
 myst_render_markdown_format = "myst"
 myst_substitutions = {
     "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
+    "download_figure_1": download_figure_1(),
+    "download_figures_2_and_3": download_figures_2_and_3(),
     "download_intensity_distribution": download_intensity_distribution(),
 }
 nb_execution_allow_errors = False
