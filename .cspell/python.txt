@@ -3,6 +3,7 @@ abspath
 ampform
 arange
 bbox
+cairosvg
 caplog
 clim
 cmap
@@ -17,6 +18,8 @@ hashlib
 hexdigest
 hspace
 imag
+imread
+imshow
 interp2d
 ioff
 ipykernel
@@ -79,3 +82,4 @@ ylabel
 ytick
 yticklabels
 yticks
+zorder
