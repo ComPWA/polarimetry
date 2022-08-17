@@ -1,5 +1,7 @@
 ComPWA
 Conda
+docnb
+dvipng
 heli
 ifhyphenaverage
 Mikhasenko
@@ -8,4 +10,6 @@ nbformat
 phsp
 PYTHONHASHSEED
 Remco
+texlive
 toctree
+venv

@@ -4,7 +4,9 @@
 
 [![GPLv3+ license](https://img.shields.io/badge/License-GPLv3+-blue.svg)](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
 
-This repository a symbolic amplitude model for the decay $\Lambda^+_c \to p \pi^+ K^-$ that is aligned with [Dalitz-plot decomposition](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033) and computes an align polarimeter vector field $\vec\alpha$. Helicity couplings and other parameter values are taken from [_Amplitude analysis of the $\Lambda^+_c \to p K^- \pi^+$ decay and $\Lambda^+_c$ baryon polarization measurement in semileptonic beauty hadron decays_](https://inspirehep.net/literature/2132745) (2022) by the LHCb Collaboration and its [supplementary material](https://cds.cern.ch/record/2824328/files).
+This repository a symbolic amplitude model for the decay $\Lambda^+_c \to p \pi^+ K^-$ that is aligned with [Dalitz-plot decomposition](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033) and computes an align polarimeter vector field $\vec\alpha$. Helicity couplings and other parameter values are taken from a recent study by the LHCb Collaboration[^1] and its [supplementary material](https://cds.cern.ch/record/2824328/files).
+
+[^1]: Amplitude analysis of the $\Lambda^+_c \to p K^- \pi^+$ decay and $\Lambda^+_c$ baryon polarization measurement in semileptonic beauty hadron decays (2022) [[link]](https://inspirehep.net/literature/2132745)
 
 ## Installation
 
@@ -32,8 +34,6 @@ julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
 ### Documentation dependencies
 
 To build the documentation, you need to install LaTeX and some additional fonts. In Ubuntu, this can be done with:
-
-<!-- cspell:ignore docnb dvipng texlive -->
 
 ```shell
 sudo apt install -y cm-super dvipng texlive-latex-extra
