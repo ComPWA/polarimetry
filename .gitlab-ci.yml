@@ -20,4 +20,3 @@ pages:
   artifacts:
     paths:
       - public
-    when: always
