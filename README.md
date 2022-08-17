@@ -1,4 +1,4 @@
-# Polarization sensitivity in Λc → pπK
+# Aligned polarimetry field of the Λc → p π K decay
 
 <!-- cspell:ignore semileptonic -->
 
@@ -14,7 +14,7 @@ It's recommended to develop this code base with [VSCode](https://code.visualstud
 
 ```shell
 conda env create
-conda activate polarization
+conda activate polarimetry
 ```
 
 Style checks are enforced with [Pre-commit](https://pre-commit.com). To activate for each commit, run:

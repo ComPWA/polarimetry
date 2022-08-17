@@ -8,7 +8,7 @@ import sympy as sp
 from attrs import field, frozen
 from attrs.validators import instance_of
 
-from polarization._attrs import assert_spin_value, to_ls, to_rational
+from polarimetry._attrs import assert_spin_value, to_ls, to_rational
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal

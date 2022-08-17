@@ -3,7 +3,7 @@
 Functions in this module are registered with :func:`functools.singledispatch` and can be
 extended as follows:
 
->>> from polarization.io import as_latex
+>>> from polarimetry.io import as_latex
 >>> @as_latex.register(int)
 ... def _(obj: int) -> str:
 ...     return "my custom rendering"
@@ -33,7 +33,7 @@ import sympy as sp
 from ampform.sympy import UnevaluatedExpression
 from IPython.display import Math, display
 
-from polarization.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
+from polarimetry.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -251,7 +251,7 @@ def perform_cached_doit(
         unevaluated_expr: A `sympy.Expr <sympy.core.expr.Expr>` on which to call
             :code:`doit()`.
         directory: The directory in which to cache the result. If `None`, the cache
-            directory will be put under the source code directory where `polarization`
+            directory will be put under the source code directory where `polarimetry`
             is installed.
 
     .. tip:: For a faster cache, set `PYTHONHASHSEED
@@ -316,7 +316,7 @@ def mute_jax_warnings() -> None:
     jax_logger.setLevel(logging.ERROR)
 
 
-def export_polarization_field(
+def export_polarimetry_field(
     sigma1: jnp.ndarray,
     sigma2: jnp.ndarray,
     alpha_x: jnp.ndarray,
@@ -351,7 +351,7 @@ def export_polarization_field(
         json.dump(json_data, f, separators=(",", ":"))
 
 
-def import_polarization_field(filename: str, steps: int = 1) -> dict[str, jnp.ndarray]:
+def import_polarimetry_field(filename: str, steps: int = 1) -> dict[str, jnp.ndarray]:
     with open(filename) as f:
         json_data: dict = json.load(f)
     return {

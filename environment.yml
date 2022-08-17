@@ -1,4 +1,4 @@
-name: polarization
+name: polarimetry
 channels:
   - defaults
 dependencies:

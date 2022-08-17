@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sympy as sp
 
-from polarization.dynamics import Kallen
+from polarimetry.dynamics import Kallen
 
 
 def formulate_scattering_angle(

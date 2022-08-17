@@ -123,7 +123,7 @@ class BuggBreitWigner(UnevaluatedExpression):
 @make_commutative
 @implement_doit_method
 class FlattéSWave(UnevaluatedExpression):
-    # https://github.com/ComPWA/polarization-sensitivity/blob/34f5330/julia/notebooks/model0.jl#L151-L161
+    # https://github.com/ComPWA/polarimetry/blob/34f5330/julia/notebooks/model0.jl#L151-L161
     def __new__(cls, s, m0, widths, masses1, masses2):
         return create_expression(cls, s, m0, widths, masses1, masses2)
 

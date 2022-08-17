@@ -3,7 +3,7 @@ myst:
   all_links_external: True
 ---
 
-# Polarization sensitivity
+# Polarimetry in Λc → p π K
 
 <!-- cspell:ignore maxdepth -->
 
@@ -14,10 +14,10 @@ maxdepth: 2
 amplitude-model
 cross-check
 intensity
-polarization
+polarimetry
 uncertainties
 appendix
-API <api/polarization>
+API <api/polarimetry>
 ```
 
 {{ LINK_TO_JULIA_PAGES }}

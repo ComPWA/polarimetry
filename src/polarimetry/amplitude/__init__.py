@@ -11,12 +11,8 @@ from sympy.core.symbol import Str
 from sympy.physics.quantum.spin import Rotation as Wigner
 from sympy.physics.quantum.spin import WignerD
 
-from polarization.decay import (
-    ThreeBodyDecay,
-    ThreeBodyDecayChain,
-    get_decay_product_ids,
-)
-from polarization.spin import create_spin_range
+from polarimetry.decay import ThreeBodyDecay, ThreeBodyDecayChain, get_decay_product_ids
+from polarimetry.spin import create_spin_range
 
 from .angles import formulate_scattering_angle, formulate_zeta_angle
 

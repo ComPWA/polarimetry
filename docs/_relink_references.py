@@ -19,7 +19,7 @@ __TARGET_SUBSTITUTIONS = {
     "Literal[(-1, 1)]": "typing.Literal",
     "Literal[- 1, 1]": "typing.Literal",
     "Literal[-1, 1]": "typing.Literal",
-    "OuterStates": "polarization.decay.OuterStates",
+    "OuterStates": "polarimetry.decay.OuterStates",
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "Path": "pathlib.Path",
     "Pattern": "typing.Pattern",
@@ -35,7 +35,7 @@ __TARGET_SUBSTITUTIONS = {
     "sp.acos": "sympy.functions.elementary.trigonometric.acos",
 }
 __REF_TYPE_SUBSTITUTIONS = {
-    "polarization.decay.OuterStates": "obj",
+    "polarimetry.decay.OuterStates": "obj",
     "tensorwaves.interface.DataSample": "obj",
 }
 

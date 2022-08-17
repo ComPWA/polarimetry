@@ -17,13 +17,13 @@ import sympy as sp
 import yaml
 from sympy.core.symbol import Str
 
-from polarization.amplitude import (
+from polarimetry.amplitude import (
     AmplitudeModel,
     DalitzPlotDecompositionBuilder,
     DynamicsBuilder,
 )
-from polarization.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
-from polarization.spin import filter_parity_violating_ls, generate_ls_couplings
+from polarimetry.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
+from polarimetry.spin import filter_parity_violating_ls, generate_ls_couplings
 
 from .dynamics import (
     formulate_breit_wigner,
@@ -331,7 +331,7 @@ def parameter_key_to_symbol(key: str) -> sp.Indexed | sp.Symbol:
     H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
     half = sp.Rational(1, 2)
     if key.startswith("A"):
-        # https://github.com/ComPWA/polarization-sensitivity/issues/5#issue-1220525993
+        # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
         R = _stringify(key[1:-1])
         i = int(key[-1])
         if str(R).startswith("L"):
