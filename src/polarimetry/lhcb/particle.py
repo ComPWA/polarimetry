@@ -8,7 +8,7 @@ from pathlib import Path
 import sympy as sp
 import yaml
 
-from polarization.decay import Particle
+from polarimetry.decay import Particle
 
 if sys.version_info < (3, 8):
     from typing_extensions import TypedDict
@@ -84,5 +84,5 @@ K = __PARTICLE_DATABASE["K-"]
 π = __PARTICLE_DATABASE["pi+"]
 PARTICLE_TO_ID = {Λc: 0, p: 1, π: 2, K: 3}
 
-# https://github.com/ComPWA/polarization-sensitivity/blob/34f5330/julia/notebooks/model0.jl#L43-L47
+# https://github.com/ComPWA/polarimetry/blob/34f5330/julia/notebooks/model0.jl#L43-L47
 Σ = __PARTICLE_DATABASE["Sigma-"]

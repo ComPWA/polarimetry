@@ -6,7 +6,7 @@ import sympy as sp
 from ampform.sympy import PoolSum
 from sympy.physics.matrices import msigma
 
-from polarization.spin import create_spin_range
+from polarimetry.spin import create_spin_range
 
 from .amplitude import DalitzPlotDecompositionBuilder
 
@@ -16,13 +16,13 @@ else:
     from typing import Literal
 
 
-def formulate_polarization(
+def formulate_polarimetry(
     builder: DalitzPlotDecompositionBuilder, reference_subsystem: Literal[1, 2, 3] = 1
 ) -> tuple[PoolSum, PoolSum, PoolSum]:
     half = sp.Rational(1, 2)
     if builder.decay.initial_state.spin != half:
         raise ValueError(
-            "Can only formulate polarization for an initial state with spin 1/2, but"
+            "Can only formulate polarimetry for an initial state with spin 1/2, but"
             f" got {builder.decay.initial_state.spin}"
         )
     model = builder.formulate(reference_subsystem)

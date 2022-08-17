@@ -6,7 +6,7 @@ requires = [
 ]
 
 [tool.setuptools_scm]
-write_to = "src/polarization/version.py"
+write_to = "src/polarimetry/version.py"
 
 [tool.black]
 exclude = '''

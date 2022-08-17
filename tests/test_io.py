@@ -9,12 +9,12 @@ from typing import TYPE_CHECKING
 import pytest
 import sympy as sp
 
-from polarization import formulate_polarization
-from polarization.amplitude import DalitzPlotDecompositionBuilder
-from polarization.decay import IsobarNode, Particle
-from polarization.io import _warn_about_unsafe_hash, as_latex, get_readable_hash
-from polarization.lhcb import load_model_builder
-from polarization.lhcb.particle import load_particles
+from polarimetry import formulate_polarimetry
+from polarimetry.amplitude import DalitzPlotDecompositionBuilder
+from polarimetry.decay import IsobarNode, Particle
+from polarimetry.io import _warn_about_unsafe_hash, as_latex, get_readable_hash
+from polarimetry.lhcb import load_model_builder
+from polarimetry.lhcb.particle import load_particles
 
 if TYPE_CHECKING:
     from _pytest.logging import LogCaptureFixture
@@ -81,7 +81,7 @@ def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture
 
 
 @pytest.mark.parametrize(
-    ("model_id", "intensity_hash", "polarization_hash"),
+    ("model_id", "intensity_hash", "polarimetry_hash"),
     [
         (0, 55901977, 26197362),
         (1, 55901977, 26197362),
@@ -103,7 +103,7 @@ def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture
         # 17: No dynamics implemented for lineshape "Flatte1405_LS"
     ],
 )
-def test_get_readable_hash_large(model_id, intensity_hash, polarization_hash):
+def test_get_readable_hash_large(model_id, intensity_hash, polarimetry_hash):
     python_hash_seed = os.environ.get("PYTHONHASHSEED")
     if python_hash_seed != "0":
         pytest.skip("PYTHONHASHSEED is not 0")
@@ -112,9 +112,9 @@ def test_get_readable_hash_large(model_id, intensity_hash, polarization_hash):
     model = builder.formulate(reference_subsystem=1)
     h = get_readable_hash(model.full_expression)
     assert int(h[17:25]) == intensity_hash
-    polarization_exprs = formulate_polarization(builder, reference_subsystem=1)
-    h = get_readable_hash(polarization_exprs[0].doit().xreplace(model.amplitudes))
-    assert int(h[17:25]) == polarization_hash
+    polarimetry_exprs = formulate_polarimetry(builder, reference_subsystem=1)
+    h = get_readable_hash(polarimetry_exprs[0].doit().xreplace(model.amplitudes))
+    assert int(h[17:25]) == polarimetry_hash
 
 
 def __get_model_builder(model_id: int | str) -> DalitzPlotDecompositionBuilder:

@@ -7,7 +7,7 @@ import sympy as sp
 from attrs import Attribute
 
 if TYPE_CHECKING:
-    from polarization.decay import LSCoupling
+    from polarimetry.decay import LSCoupling
 
 
 def assert_spin_value(instance, attribute: Attribute, value: sp.Rational) -> None:
@@ -18,7 +18,7 @@ def assert_spin_value(instance, attribute: Attribute, value: sp.Rational) -> Non
 
 
 def to_ls(obj: LSCoupling | tuple[int, SupportsFloat] | None) -> LSCoupling:
-    from polarization.decay import LSCoupling
+    from polarimetry.decay import LSCoupling
 
     if obj is None:
         return None

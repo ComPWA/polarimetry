@@ -15,8 +15,8 @@ from tensorwaves.function import PositionalArgumentFunction
 from tensorwaves.function.sympy import create_function
 from tensorwaves.interface import DataSample
 
-from polarization.amplitude import AmplitudeModel
-from polarization.decay import ThreeBodyDecay
+from polarimetry.amplitude import AmplitudeModel
+from polarimetry.decay import ThreeBodyDecay
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal

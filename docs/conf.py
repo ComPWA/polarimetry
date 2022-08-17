@@ -92,8 +92,8 @@ def generate_api() -> None:
         " ".join(
             [
                 "sphinx-apidoc",
-                f"../src/polarization/",
-                f"../src/polarization/version.py",
+                f"../src/polarimetry/",
+                f"../src/polarimetry/version.py",
                 "-o api/",
                 "--force",
                 "--no-toc",
@@ -128,7 +128,7 @@ autodoc_default_options = {
 }
 autodoc_member_order = "bysource"
 autodoc_type_aliases = {
-    "OuterStates": "polarization.decay.OuterStates",
+    "OuterStates": "polarimetry.decay.OuterStates",
 }
 autodoc_typehints_format = "short"
 autosectionlabel_prefix_document = True
@@ -162,7 +162,7 @@ html_theme_options = {
         "binderhub_url": "https://mybinder.org",
     },
     "path_to_docs": "docs",
-    "repository_url": "https://github.com/ComPWA/polarization-sensitivity",
+    "repository_url": "https://github.com/ComPWA/polarimetry",
     "repository_branch": "main",
     "show_navbar_depth": 2,
     "show_toc_level": 2,
@@ -170,7 +170,7 @@ html_theme_options = {
     "use_edit_page_button": True,
     "use_issues_button": True,
 }
-html_title = "Polarization sensitivity"
+html_title = "Polarimetry Λc → p K π"
 intersphinx_mapping = {
     "IPython": ("https://ipython.readthedocs.io/en/stable", None),
     "ampform": (f"https://ampform.readthedocs.io/en/stable", None),

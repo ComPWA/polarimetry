@@ -3,7 +3,7 @@ import pytest
 import sympy as sp
 from ampform.kinematics.phasespace import Kallen, compute_third_mandelstam
 
-from polarization.amplitude.angles import (
+from polarimetry.amplitude.angles import (
     formulate_scattering_angle,
     formulate_theta_hat_angle,
     formulate_zeta_angle,

@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import sympy as sp
 
-from polarization.decay import Particle, ThreeBodyDecayChain
-from polarization.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave, Q
+from polarimetry.decay import Particle, ThreeBodyDecayChain
+from polarimetry.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave, Q
 
 from .particle import PARTICLE_TO_ID, K, Σ, p, π
 
@@ -84,7 +84,7 @@ def formulate_breit_wigner(decay_chain: ThreeBodyDecayChain):
         resonance_width: decay_chain.resonance.width,
         child1_mass: decay_chain.decay_products[0].mass,
         child2_mass: decay_chain.decay_products[1].mass,
-        # https://github.com/ComPWA/polarization-sensitivity/pull/11#issuecomment-1128784376
+        # https://github.com/ComPWA/polarimetry/pull/11#issuecomment-1128784376
         R_dec: 1.5,
         R_prod: 5,
     }
