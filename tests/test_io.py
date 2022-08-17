@@ -98,7 +98,7 @@ def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture
         (12, 55885058, 68738708),
         (13, 14855507, 48169132),
         (14, 55901977, 26197362),
-        # 15: No dynamics implemented for lineshape "BuggBreitWignerExpFF"
+        (15, 62960341, 24711378),
         (16, 55901977, 26197362),
         # 17: No dynamics implemented for lineshape "Flatte1405_LS"
     ],
