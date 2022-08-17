@@ -13,8 +13,10 @@ def download_figure_1() -> str:
         "figure1.svg",
         "figure1-inset.svg",
     ]
-    if any(not os.path.exists(f) for f in files):
-        return ""
+    for file in files:
+        if not os.path.exists(file):
+            print_missing_file_warning(file)
+            return ""
     return f"""
     High-resolution image can be downloaded here: {{download}}`{files[0]}` / {{download}}`{files[1]}`
     """.strip()
@@ -29,22 +31,30 @@ def download_figures_2_and_3() -> str:
         "figure3b.svg",
         "figure3b-inset.svg",
     ]
-    if any(not os.path.exists(f) for f in files):
-        return ""
-    return f"""**Figures 2 and 3** for the paper can be downloaded here:
+    for file in files:
+        if not os.path.exists(file):
+            print_missing_file_warning(file)
+            return ""
+
+    src = f"""
+    **Figures 2 and 3** for the paper can be downloaded here:
+
     - {{download}}`{files[0]}` / {{download}}`{files[1]}`
     - {{download}}`{files[2]}` / {{download}}`{files[3]}`
     - {{download}}`{files[4]}` / {{download}}`{files[5]}`
-    """.strip()
+    """
+    return dedent(src).strip()
 
 
 def download_intensity_distribution() -> str:
     filename = "intensity-distribution.png"
     if not os.path.exists(filename):
+        print_missing_file_warning(filename)
         return ""
-    return f"""
+    src = f"""
     High-resolution image can be downloaded here: {{download}}`{filename}`
-    """.strip()
+    """
+    return dedent(src).strip()
 
 
 def execute_pluto_notebooks() -> None:
@@ -103,6 +113,10 @@ def generate_api() -> None:
         ),
         shell=True,
     )
+
+
+def print_missing_file_warning(filename: str) -> None:
+    print(f"\033[93;1m{filename} not found, so cannot create download links\033[0m")
 
 
 execute_pluto_notebooks()
