@@ -59,6 +59,7 @@ rcdefaults
 scipy
 seealso
 sharey
+shutil
 singledispatch
 svgutils
 sympify
