@@ -33,8 +33,6 @@ julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
 
 To build the documentation, you need to install LaTeX and some additional fonts. In Ubuntu, this can be done with:
 
-<!-- cspell:ignore docnb dvipng texlive -->
-
 ```shell
 sudo apt install -y cm-super dvipng texlive-latex-extra
 ```
