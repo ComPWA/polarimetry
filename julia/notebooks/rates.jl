@@ -60,7 +60,7 @@ const pdata = flatDalitzPlotSample(ms; Nev=100_000);
 
 # ╔═╡ f7e600be-536e-4c64-9c63-4cb7c3c013ad
 const Aiv = ThreadsX.collect(
-    SVector([amplitude(σs, two_λs, d) for d in model.chains])
+    SVector([amplitude(d, σs, two_λs) for d in model.chains])
     for two_λs in itr(tbs.two_js), σs in pdata);
 
 # ╔═╡ bf5d7a76-0398-4268-b1ce-6ac545f6816c
@@ -175,7 +175,7 @@ begin
     for (k, r) in zip(isobarnameset, diag(grouppedratematrix))
         push!(ratesdict, k => round(r; digits=2))
     end
-	results_dir = "results"
+    results_dir = "results"
     !(results_dir ∈ readdir(".")) && mkdir(results_dir)
     writejson(joinpath(results_dir, "rates.json"),
         Dict("rate" => ratesdict,
