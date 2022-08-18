@@ -1,10 +1,11 @@
 ### A Pluto.jl notebook ###
-# v0.19.4
+# v0.19.11
 
 using Markdown
 using InteractiveUtils
 
 # ╔═╡ 03733bd2-dcf3-11ec-231f-8dab0ad6b19e
+# ╠═╡ show_logs = false
 begin
     cd(joinpath(@__DIR__, ".."))
     using Pkg
@@ -103,7 +104,7 @@ let
                ("-", "")[1+div((sign(two_λ) + 1), 2)] * "½"
     labelchain(chain) = chain.Xlineshape.name * " " *
                         s(chain.HRk.two_λa) * "," * s(chain.HRk.two_λb)
-    labels = labelchain.(model.chains)[grouppedchains]
+    labels = labelchain.(model.chains)
     #
     clim = maximum(ratematrix) .* (-1, 1)
     heatmap(ratematrix;
@@ -174,8 +175,8 @@ begin
     for (k, r) in zip(isobarnameset, diag(grouppedratematrix))
         push!(ratesdict, k => round(r; digits=2))
     end
-    results_dir = "results"
-    mkdir(results_dir)
+	results_dir = "results"
+    !(results_dir ∈ readdir(".")) && mkdir(results_dir)
     writejson(joinpath(results_dir, "rates.json"),
         Dict("rate" => ratesdict,
             "isobars" => isobarnameset,
