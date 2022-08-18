@@ -9,6 +9,7 @@ using Measurements
 using DataFrames
 #
 using ThreeBodyDecay
+import ThreeBodyDecay: amplitude
 #
 using RecipesBase
 
