@@ -412,8 +412,12 @@ end
 
 # ╔═╡ 0a976167-b074-4694-ab97-aecfcd67cc25
 begin
+	sξnames = collect(Set(model.isobarnames)) |>
+		c->sort(c; by=x->eval(Meta.parse(x[3:end-1]))) |>
+		c->sort(c; by=x->findfirst(x[1], "LDK"))
+	# 
     rates = DataFrame()
-    for s in Set(model.isobarnames)
+    for s in sξnames
         couplingsmap = (model.isobarnames .== s)
         couplings = model.couplings .* couplingsmap
         Iξv = sum(Aiv; dims=(1, 2, 3, 4)) do x
@@ -430,11 +434,8 @@ begin
             αz, αy, αx, α_abs=sqrt(αz^2 + αy^2 + αx^2)))
     end
 	# 
-    sort(
-        sort(
-            transform(rates, [:rate, :αz, :α_abs] .=> ByRow(x -> round(x; digits=2)); renamecols=false),
-            order(:isobarname, by=x -> eval(Meta.parse(x[3:end-1])))),
-        order(:isobarname, by=x -> findfirst(x[1], "LDK")))
+	transform(rates, [:rate, :αz, :α_abs] .=> ByRow(x -> round(x; digits=2)); 
+		renamecols=false)
 end
 
 # ╔═╡ Cell order:
