@@ -96,6 +96,13 @@ def get_link_to_julia_pages() -> str:
     return ""
 
 
+def get_nb_remove_code_source():
+    if sys.argv[2] == "latexpdf":
+        print(f"\033[91;1mCell input will not be rendered\033[0m")
+        return True
+    return False
+
+
 def generate_api() -> None:
     shutil.rmtree("api", ignore_errors=True)
     subprocess.call(
@@ -222,6 +229,7 @@ nb_execution_show_tb = True
 nb_execution_timeout = -1
 nb_output_stderr = "show"
 nb_render_markdown_format = "myst"
+nb_remove_code_source = get_nb_remove_code_source()
 nitpicky = True  # warn if cross-references are missing
 nitpick_ignore_regex = [
     ("py:class", "KeyType"),
