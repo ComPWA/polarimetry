@@ -57,6 +57,7 @@
     ".prettierignore",
     ".vscode/*",
     "LICENSE",
+    "Makefile",
     "Manifest.toml",
     "Project.toml",
     "conf.py",

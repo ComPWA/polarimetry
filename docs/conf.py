@@ -198,6 +198,12 @@ intersphinx_mapping = {
     "sympy": ("https://docs.sympy.org/latest", None),
     "tensorwaves": ("https://tensorwaves.readthedocs.io/en/stable", None),
 }
+latex_elements = {
+    "preamble": R"""
+\usepackage[utf8x]{inputenc}
+""",
+    "inputenc": "",
+}
 myst_enable_extensions = [
     "colon_fence",
     "dollarmath",
