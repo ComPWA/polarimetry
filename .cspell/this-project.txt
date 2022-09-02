@@ -15,6 +15,7 @@ Mikhasenko
 msigma
 nbformat
 phsp
+pushd
 PYTHONHASHSEED
 Remco
 texlive

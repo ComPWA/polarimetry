@@ -9,13 +9,13 @@ docs:
     - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
     - python3 -m pip install .[doc]
   script:
-    - cd docs
+    - pushd docs
     - make latex
-    - cd _build/latex
+    - pushd _build/latex
     - make LATEXMKOPTS=' -f' LATEXOPTS=' -interaction=batchmode'
     # Check if there are there are missing figures in the PDF build
     - "! grep -r '\PYGZlt{}Figure size ' ."
-    - cd ../..
+    - cd "$(dirs -l -0)" && dirs -c
     - sphinx-build -nW --color --keep-going -b html docs/ public
   variables:
     EXECUTE_NB: "YES"
