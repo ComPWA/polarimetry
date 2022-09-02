@@ -122,6 +122,22 @@ def generate_api() -> None:
     )
 
 
+def get_link_to_single_pdf() -> str:
+    build_file = "_build/latex/python.pdf"
+    embedded_file = "_static/polarimetry.pdf"
+    if os.path.exists(build_file):
+        shutil.copy(build_file, embedded_file)
+    if os.path.exists(embedded_file):
+        src = f"""
+        :::{{tip}}
+        This webpage can be downloaded as a **single PDF file** [here]({embedded_file}).
+        :::
+        """
+        return dedent(src)
+    print(f"\033[91;1mSingle PDF has not yet been built.\033[0m")
+    return ""
+
+
 def print_missing_file_warning(filename: str) -> None:
     print(f"\033[93;1m{filename} not found, so cannot create download links\033[0m")
 
@@ -233,6 +249,7 @@ myst_enable_extensions = [
 ]
 myst_render_markdown_format = "myst"
 myst_substitutions = {
+    "DOWNLOAD_SINGLE_PDF": get_link_to_single_pdf(),
     "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
     "download_figure_1": download_figure_1(),
     "download_figures_2_and_3": download_figures_2_and_3(),

@@ -22,6 +22,8 @@ API <api/polarimetry>
 
 {{ LINK_TO_JULIA_PAGES }}
 
+{{ DOWNLOAD_SINGLE_PDF }}
+
 :::{dropdown} Notebook execution times
 
 ```{nb-exec-table}
