@@ -241,6 +241,14 @@ latex_elements = {
 }
 """
 }
+latex_appendices = [
+    "appendix/dynamics",
+    "appendix/angles",
+    "appendix/phase-space",
+    "appendix/alignment",
+    "appendix/benchmark",
+    "appendix/serialization",
+]
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 myst_enable_extensions = [
     "colon_fence",
