@@ -5,6 +5,7 @@ docnb
 dvipng
 heli
 ifhyphenaverage
+inkscape
 latexmk
 LATEXMKOPTS
 LATEXOPTS

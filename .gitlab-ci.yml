@@ -6,7 +6,7 @@ docs:
     - main
   before_script:
     - apt-get update
-    - apt-get install -y cm-super dvipng latexmk texlive-latex-extra
+    - apt-get install -y cm-super dvipng inkscape latexmk texlive-latex-extra
     - python3 -m pip install .[doc]
     - wget -q https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz
     - tar xzf julia-1.7.3-linux-x86_64.tar.gz
