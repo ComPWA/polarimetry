@@ -14,7 +14,7 @@ docs:
     - cd _build/latex
     - make LATEXMKOPTS=' -f' LATEXOPTS=' -interaction=batchmode'
     # Check if there are there are missing figures in the PDF build
-    - ! grep -r '\PYGZlt{}Figure size ' .
+    - "! grep -r '\PYGZlt{}Figure size ' ."
     - cd ../..
     - sphinx-build -nW --color --keep-going -b html docs/ public
   variables:
