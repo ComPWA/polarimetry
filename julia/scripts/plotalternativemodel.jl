@@ -81,7 +81,7 @@ end
 pdata = flatDalitzPlotSample(ms; Nev=100_000);
 
 @time const Aiv = ThreadsX.collect(
-    SVector([amplitude(σs, two_λs, d) for d in model.chains])
+    SVector([amplitude(d, σs, two_λs) for d in model.chains])
     for two_λs in itr(tbs.two_js), σs in pdata);
 #
 Iv = sum(Aiv; dims=(1, 2, 3, 4)) do x
@@ -90,7 +90,7 @@ end[1, 1, 1, 1, :]
 
 #
 @time const Aiv′ = ThreadsX.collect(
-    SVector([amplitude(σs, two_λs, d) for d in model16.chains])
+    SVector([amplitude(d, σs, two_λs) for d in model16.chains])
     for two_λs in itr(tbs.two_js), σs in pdata);
 #
 Iv′ = sum(Aiv′; dims=(1, 2, 3, 4)) do x

@@ -64,4 +64,3 @@ let
     end
     plot!()
 end
-savefig(joinpath("plots", "updatedefaultmodel.pdf"))

@@ -23,3 +23,11 @@ function LHCbModel(; chains, couplings, isobarnames)
     #
     LHCbModel(sv_sort_chains, sv_sort_couplings, sv_sort_isobarnames)
 end
+
+
+amplitude(model::LHCbModel, σs, two_λs) =
+    sum(c * amplitude(d, σs, two_λs) for (c, d) in zip(model.couplings, model.chains))
+
+intensity(model::LHCbModel, σs) =
+    sum(abs2, amplitude(model, σs, two_λs)
+              for two_λs in itr(tbs.two_js))

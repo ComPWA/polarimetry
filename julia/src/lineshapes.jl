@@ -1,5 +1,5 @@
 
-breakup(m², m1², m2²) = sqrt(KallenFact(m², m1², m2²)) / (2 * sqrt(m²))
+breakup(m², m1², m2²) = sqrtKallenFact(sqrt(m²), sqrt(m1²), sqrt(m2²)) / (2 * sqrt(m²))
 
 function F²(l, p, p0, d)
     pR = p * d

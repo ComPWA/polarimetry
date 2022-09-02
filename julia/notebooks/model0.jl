@@ -1,10 +1,11 @@
 ### A Pluto.jl notebook ###
-# v0.19.4
+# v0.19.11
 
 using Markdown
 using InteractiveUtils
 
 # ╔═╡ dea88954-c7b2-11ec-1a3d-717739cfd08b
+# ╠═╡ show_logs = false
 begin
     cd(joinpath(@__DIR__, ".."))
     using Pkg
@@ -22,6 +23,7 @@ begin
     using Measurements
     using DataFrames
     using ThreadsX
+    using StaticArrays
     #
     using ThreeBodyDecay
     using ThreeBodyDecay.PartialWaveFunctions
@@ -55,12 +57,15 @@ modelparameters =
     YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
 
 # ╔═╡ 78032115-badb-45b6-b20f-15496d460d57
-defaultmodel = modelparameters["Default amplitude model"]
+modeldict = modelparameters["Default amplitude model"]
+
+# ╔═╡ 3f9e1ed7-b308-4cbe-805d-cbe3f22e3d1f
+defaultparameters = modeldict["parameters"]
 
 # ╔═╡ b0f5c181-dcb2-48f8-a510-57eac44ca4d9
 begin
     isobars = Dict()
-    for (key, lineshape) in defaultmodel["lineshapes"]
+    for (key, lineshape) in modeldict["lineshapes"]
         dict = Dict{String,Any}(isobarsinput[key])
         dict["lineshape"] = lineshape
         isobars[key] = definechaininputs(key, dict)
@@ -105,11 +110,6 @@ md"""
 ### Fit parameters
 """
 
-# ╔═╡ 24d051e5-4d9e-48c8-aace-225f3a0218cb
-begin
-    defaultparameters = defaultmodel["parameters"]
-end
-
 # ╔═╡ f9158b4d-4d27-4aba-bf5a-529135ec48e2
 shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters))
 
@@ -153,40 +153,32 @@ const terms = [
 ]
 
 # ╔═╡ 8d8824e8-7809-4368-840c-b8f6d38ad7c2
-begin
-    const chains = getindex.(terms, 2)
-    const couplings = getindex.(terms, 1)
-end;
+const model =
+    LHCbModel(;
+        chains=getindex.(terms, 2),
+        couplings=getindex.(terms, 1),
+        isobarnames=map(x -> x[3:end-1], couplingkeys))
 
 # ╔═╡ d547fc89-3756-49d3-8b49-ad0c56c5c3a3
 md"""
 ### Plotting the distributions
 """
 
-# ╔═╡ abdeb1ac-19dc-45b2-94dd-5e64fb3d8f14
-A(σs, two_λs) = sum(c * amplitude(σs, two_λs, d) for (c, d) in zip(couplings, chains))
-
-# ╔═╡ e50afc73-d0a6-4a8d-ae06-c95c9946998d
-const I = summed_over_polarization(abs2 ∘ A, tbs.two_js)
-
 # ╔═╡ b833843f-c8b6-44c6-847c-efce0ed989d4
-plot(ms, σs -> I(σs), iσx=1, iσy=2, Ngrid=54)
+plot(ms, Base.Fix1(intensity, model), iσx=1, iσy=2, Ngrid=54)
 
 # ╔═╡ ed7f802c-a931-4114-aa30-6d10735520d7
 md"""
 ### Polarization sensitivity
 """
 
-# ╔═╡ 281b641b-fdca-4a6e-8a9d-732c34f7a71d
-σs0 = randomPoint(ms)
-
 # ╔═╡ 45843dac-096a-4bd5-82eb-aad4f18b8f86
 begin
     import Lc2ppiKModelLHCb: expectation
     expectation(Op, σs) = sum(
-        conj(A(σs, [two_λ, 0, 0, two_ν′])) *
+        conj(amplitude(model, σs, [two_λ, 0, 0, two_ν′])) *
         Op[twoλ2ind(two_ν′), twoλ2ind(two_ν)] *
-        A(σs, [two_λ, 0, 0, two_ν])
+        amplitude(model, σs, [two_λ, 0, 0, two_ν])
         for two_λ in [-1, 1], two_ν in [-1, 1], two_ν′ in [-1, 1]) |> real
 end
 
@@ -242,11 +234,7 @@ md"""
 """
 
 # ╔═╡ ef85ad9b-13bb-45bc-985e-289a4a81fe7f
-let
-    plot(dataIalphaongrid, left_margin=3mm, bottom_margin=5mm)
-    savefig(joinpath("plots", "asymmetries_align1.pdf"))
-    plot!()
-end
+plot(dataIalphaongrid, left_margin=3mm, bottom_margin=5mm)
 
 # ╔═╡ a2cbe50c-c1a1-4572-b440-e3c618146ae4
 ᾱ⁽¹⁾ = sum.(filter.(!isnan, dataIalphaongrid.Iv[1:3])) ./
@@ -308,11 +296,7 @@ begin
 end
 
 # ╔═╡ 320828c8-5b5d-43d0-9883-e54354296488
-let
-    plot(dataIalphaongrid_rot12, left_margin=3mm, bottom_margin=5mm)
-    savefig(joinpath("plots", "asymmetries_align2.pdf"))
-    plot!()
-end
+plot(dataIalphaongrid_rot12, left_margin=3mm, bottom_margin=5mm)
 
 # ╔═╡ 9353e902-1c7b-487e-a5f4-3e99bf0fada8
 ᾱ⁽²⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot12.Iv[1:3])) ./
@@ -336,11 +320,7 @@ begin
 end
 
 # ╔═╡ 592595bc-dbe4-4f8c-833a-76790d3a00f8
-let
-    plot(dataIalphaongrid_rot31, left_margin=4mm, bottom_margin=5.5mm)
-    savefig(joinpath("plots", "asymmetries_align3.pdf"))
-    plot!()
-end
+plot(dataIalphaongrid_rot31, left_margin=4mm, bottom_margin=5.5mm)
 
 # ╔═╡ 3a4be1b4-a544-437a-b1f6-bd82819ba676
 ᾱ⁽³⁾ = sum.(filter.(!isnan, dataIalphaongrid_rot31.Iv[1:3])) ./
@@ -352,14 +332,13 @@ md"""
 """
 
 # ╔═╡ e550eec0-6911-4016-824f-b21f82d10e9a
-Dict(
-    :alpha_averaged_align1 => Dict(
-        :components => ᾱ⁽¹⁾, :norm => norm(ᾱ⁽¹⁾)),
-    :alpha_averaged_align2 => Dict(
-        :components => ᾱ⁽²⁾, :norm => norm(ᾱ⁽²⁾)),
-    :alpha_averaged_align3 => Dict(
-        :components => ᾱ⁽³⁾, :norm => norm(ᾱ⁽³⁾))
-)
+DataFrame(
+    :alignment => "confuguration " .* string.([1,2,3]),
+	:components => NamedTuple{(:ᾱx,:ᾱy,:ᾱz)}.(
+		[ᾱ⁽¹⁾,  ᾱ⁽²⁾, ᾱ⁽³⁾] .|> x->round.(x; digits=3))
+) |> df->select(df, Not(:components),
+	:components => AsTable,
+	:components => ByRow(norm) => :norm)
 
 # ╔═╡ 8339a757-9b66-4cb9-9bbb-a7de466fc3bf
 md"""
@@ -372,23 +351,21 @@ md"""
 ### Numerical projection
 """
 
-# ╔═╡ 0736dd22-89dd-4d7f-b332-b0767180ad43
-Ai(σs) = [[amplitude(σs, two_λs, d) for d in chains]
-          for two_λs in itr(tbs.two_js)]
-
 # ╔═╡ 88c58ce2-c98b-4b60-901f-ed95099c144b
 pdata = flatDalitzPlotSample(ms; Nev=300_000);
 
 # ╔═╡ 589c3c6f-fc24-4c2c-bf42-df0b3187d8cf
-Aiv = ThreadsX.map(Ai, pdata);
+const Aiv = ThreadsX.collect(
+    SVector([amplitude(d, σs, two_λs) for d in model.chains])
+    for two_λs in itr(tbs.two_js), σs in pdata);
 
 # ╔═╡ 25a293e0-05c6-44d2-bec0-42649558e1c2
 Iαv = [sum(
-    conj(sum(a[iλ, 1, 1, iν′] .* couplings)) *
+    sum(Aiv[iλ, 1, 1, iν′,e] .* model.couplings)' *
     σP[3-iν′, 3-iν] *
-    sum(a[iλ, 1, 1, iν] .* couplings)
+    sum(Aiv[iλ, 1, 1, iν, e] .* model.couplings)
     for iλ in [1, 2], iν in [1, 2], iν′ in [1, 2],
-    a in Aiv) |> real for σP in σPauli]
+    	e in 1:size(Aiv,5)) |> real for σP in σPauli]
 
 # ╔═╡ 01bbaad2-81e9-436c-b698-d1a16f9da529
 md"""
@@ -396,22 +373,17 @@ md"""
 """
 
 # ╔═╡ b3c0d027-4c98-47e4-9f9a-77ba1d10ae98
-Iv = intensity.(Aiv, Ref(couplings));
+Iv = sum(Aiv; dims=(1, 2, 3, 4)) do x
+    abs2(sum(x .* model.couplings))
+end[1, 1, 1, 1, :]
 
 # ╔═╡ 50d4a601-3f14-4034-9e6f-08eae9ca7d7c
 I0 = sum(Iv)
 
 # ╔═╡ 8e06d5ec-4b98-441d-919b-7b90071e6674
-let
-    histogram2d(size=(500, 440),
-        getproperty.(pdata, :σ1),
-        getproperty.(pdata, :σ2), weights=Iv, bins=100)
-    savefig(joinpath("plots", "dalitz.pdf"))
-    plot!()
-end
-
-# ╔═╡ 78dba088-6d5b-4e4b-a664-f176f9e2d673
-isobarnames = map(x -> x[3:end-1], couplingkeys);
+histogram2d(size=(500, 440),
+    getproperty.(pdata, :σ1),
+    getproperty.(pdata, :σ2), weights=Iv, bins=100)
 
 # ╔═╡ fc62283e-8bcb-4fd1-8809-b7abeb991030
 begin
@@ -425,27 +397,35 @@ begin
         stephist(getproperty.(pdata, :σ3), weights=Iv; bins,
             xlab=L"m^2(p\pi^-)\,(\mathrm{GeV}^2)"),
         left_margin=5mm, bottom_margin=7mm)
-    for s in Set(isobarnames)
-        couplingsmap = (isobarnames .== s)
-        Iξv = intensity.(Aiv, Ref(couplings .* couplingsmap))
+    for s in Set(model.isobarnames)
+        couplings = model.couplings .* (model.isobarnames .== s)
+        Iξv = sum(Aiv; dims=(1, 2, 3, 4)) do x
+            abs2(sum(x .* couplings))
+        end[1, 1, 1, 1, :]
         #
         stephist!(sp=1, getproperty.(pdata, :σ2), weights=Iξv; bins, lab="")
         stephist!(sp=2, getproperty.(pdata, :σ1), weights=Iξv; bins, lab="")
         stephist!(sp=3, getproperty.(pdata, :σ3), weights=Iξv; bins, lab=s)
     end
-    savefig(joinpath("plots", "projections.pdf"))
     plot!()
 end
 
 # ╔═╡ 0a976167-b074-4694-ab97-aecfcd67cc25
 begin
+	sξnames = collect(Set(model.isobarnames)) |>
+		c->sort(c; by=x->eval(Meta.parse(x[3:end-1]))) |>
+		c->sort(c; by=x->findfirst(x[1], "LDK"))
+	# 
     rates = DataFrame()
-    for s in Set(isobarnames)
-        couplingsmap = (isobarnames .== s)
-        Iξv = intensity.(Aiv, Ref(couplings .* couplingsmap))
+    for s in sξnames
+        couplingsmap = (model.isobarnames .== s)
+        couplings = model.couplings .* couplingsmap
+        Iξv = sum(Aiv; dims=(1, 2, 3, 4)) do x
+            abs2(sum(x .* couplings))
+        end[1, 1, 1, 1, :]
         #
         cs = couplings[couplingsmap]
-        Hs = getproperty.(chains[couplingsmap], :HRk)
+        Hs = getproperty.(model.chains[couplingsmap], :HRk)
         #
         ex, ey, ez, e0 = expectation.(σPauli, Ref(cs), Ref(Hs))
         #
@@ -453,14 +433,10 @@ begin
         push!(rates, (isobarname=s, rate=sum(Iξv) / I0 * 100,
             αz, αy, αx, α_abs=sqrt(αz^2 + αy^2 + αx^2)))
     end
-    sort(
-        sort(
-            transform(rates, [:rate, :αz, :α_abs] .=> ByRow(x -> round(x; digits=2)); renamecols=false),
-            order(:isobarname, by=x -> eval(Meta.parse(x[3:end-1])))),
-        order(:isobarname, by=x -> findfirst(x[1], "LDK")))
+	# 
+	transform(rates, [:rate, :αz, :α_abs] .=> ByRow(x -> round(x; digits=2)); 
+		renamecols=false)
 end
-
-
 
 # ╔═╡ Cell order:
 # ╟─d3cb114e-ee0c-4cd5-87fb-82289849aceb
@@ -470,12 +446,12 @@ end
 # ╠═7cc4c5f9-4392-4b57-88af-59d1cf308162
 # ╠═7ecc65a4-9fe7-4209-ad54-f1c8abe52ee5
 # ╠═78032115-badb-45b6-b20f-15496d460d57
+# ╠═3f9e1ed7-b308-4cbe-805d-cbe3f22e3d1f
 # ╠═b0f5c181-dcb2-48f8-a510-57eac44ca4d9
 # ╟─98cca824-73db-4e1c-95ae-68c3bc8574fe
 # ╠═c7572ffb-c4c7-4ce6-90a9-8237214ac91b
 # ╠═cee9dc28-8048-49e7-8caf-8e07bcd884c4
 # ╟─30c3c8ef-ad69-43e6-9a75-525dfbf7007a
-# ╠═24d051e5-4d9e-48c8-aace-225f3a0218cb
 # ╠═f9158b4d-4d27-4aba-bf5a-529135ec48e2
 # ╠═1db41980-ea36-4238-90cd-bf2427772ea9
 # ╠═1f6dc202-8734-4232-9f48-a88ebf17ff93
@@ -484,11 +460,8 @@ end
 # ╠═168707da-d42c-4b2f-94b6-f7bc15cb29cb
 # ╠═8d8824e8-7809-4368-840c-b8f6d38ad7c2
 # ╟─d547fc89-3756-49d3-8b49-ad0c56c5c3a3
-# ╠═abdeb1ac-19dc-45b2-94dd-5e64fb3d8f14
-# ╠═e50afc73-d0a6-4a8d-ae06-c95c9946998d
 # ╠═b833843f-c8b6-44c6-847c-efce0ed989d4
 # ╟─ed7f802c-a931-4114-aa30-6d10735520d7
-# ╠═281b641b-fdca-4a6e-8a9d-732c34f7a71d
 # ╠═45843dac-096a-4bd5-82eb-aad4f18b8f86
 # ╠═2f42ac46-554c-4376-83a9-ad8eeaf90422
 # ╠═190a6f02-bd33-447c-a5b3-4dd3dd79579c
@@ -516,7 +489,6 @@ end
 # ╠═e550eec0-6911-4016-824f-b21f82d10e9a
 # ╟─8339a757-9b66-4cb9-9bbb-a7de466fc3bf
 # ╟─b27001c0-df6c-4a47-ae53-8cee96cbf984
-# ╠═0736dd22-89dd-4d7f-b332-b0767180ad43
 # ╠═88c58ce2-c98b-4b60-901f-ed95099c144b
 # ╠═589c3c6f-fc24-4c2c-bf42-df0b3187d8cf
 # ╠═25a293e0-05c6-44d2-bec0-42649558e1c2
@@ -524,6 +496,5 @@ end
 # ╠═b3c0d027-4c98-47e4-9f9a-77ba1d10ae98
 # ╠═50d4a601-3f14-4034-9e6f-08eae9ca7d7c
 # ╠═8e06d5ec-4b98-441d-919b-7b90071e6674
-# ╠═78dba088-6d5b-4e4b-a664-f176f9e2d673
 # ╠═fc62283e-8bcb-4fd1-8809-b7abeb991030
 # ╠═0a976167-b074-4694-ab97-aecfcd67cc25
