@@ -135,9 +135,11 @@ def get_link_to_single_pdf() -> str:
         shutil.copy(build_file, embedded_file)
     if os.path.exists(embedded_file):
         src = f"""
+        ::::{{only}} html
         :::{{tip}}
         This webpage can be downloaded as a **single PDF file** [here]({embedded_file}).
         :::
+        ::::
         """
         return dedent(src)
     print(f"\033[91;1mSingle PDF has not yet been built.\033[0m")
