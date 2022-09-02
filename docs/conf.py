@@ -198,6 +198,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_panels",
     "sphinx_togglebutton",
+    "sphinxcontrib.cairosvgconverter",
 ]
 html_sourcelink_suffix = ""
 html_static_path = ["_static"]
