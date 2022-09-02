@@ -284,7 +284,7 @@ nb_execution_excludepatterns = [
     "appendix/serialization.ipynb",
     "cross-check.ipynb",
     # "intensity.ipynb",
-    "polarimetry.ipynb",
+    # "polarimetry.ipynb",
     "uncertainties.ipynb",
 ]
 nb_execution_mode = get_execution_mode()
