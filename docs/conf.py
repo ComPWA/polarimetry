@@ -280,7 +280,7 @@ nb_execution_timeout = -1
 nb_output_stderr = "show"
 nb_render_markdown_format = "myst"
 nb_remove_code_source = get_nb_remove_code_source()
-nitpicky = True  # warn if cross-references are missing
+nitpicky = False
 nitpick_ignore_regex = [
     ("py:class", "KeyType"),
     ("py:class", "NewValueType"),
