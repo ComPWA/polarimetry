@@ -20,3 +20,4 @@ Remco
 texlive
 toctree
 venv
+xetex
