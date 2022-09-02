@@ -10,6 +10,7 @@ myst:
 ```{toctree}
 ---
 maxdepth: 2
+numbered:
 ---
 amplitude-model
 cross-check
@@ -17,6 +18,9 @@ intensity
 polarimetry
 uncertainties
 appendix
+```
+
+```{toctree}
 API <api/polarimetry>
 ```
 
