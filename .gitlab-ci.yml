@@ -8,6 +8,11 @@ docs:
     - apt-get update
     - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex
     - python3 -m pip install .[doc]
+    - wget -q https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz
+    - tar xzf julia-1.7.3-linux-x86_64.tar.gz
+    - mv julia-1.7.3 /opt/
+    - ln -s /opt/julia-1.7.3/bin/julia /usr/local/bin/julia
+    - julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
   script:
     - cd docs
     - make latex
