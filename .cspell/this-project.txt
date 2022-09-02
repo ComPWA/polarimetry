@@ -1,9 +1,15 @@
+batchmode
 ComPWA
 Conda
 docnb
 dvipng
 heli
 ifhyphenaverage
+latexmk
+LATEXMKOPTS
+LATEXOPTS
+latexpdf
+lualatex
 Mikhasenko
 msigma
 nbformat
