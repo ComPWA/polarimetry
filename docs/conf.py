@@ -222,6 +222,7 @@ intersphinx_mapping = {
     "tensorwaves": ("https://tensorwaves.readthedocs.io/en/stable", None),
 }
 latex_elements = {
+    "papersize": "a4paper",
     "preamble": R"""
 \usepackage{bookmark}
 \usepackage[Latin,Greek]{ucharclasses}
@@ -239,7 +240,7 @@ latex_elements = {
     \fi
   },
 }
-"""
+""",
 }
 latex_appendices = [
     "appendix/dynamics",
