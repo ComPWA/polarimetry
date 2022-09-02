@@ -274,6 +274,19 @@ myst_substitutions = {
     "download_intensity_distribution": download_intensity_distribution(),
 }
 nb_execution_allow_errors = False
+nb_execution_excludepatterns = [
+    "docs/amplitude-model.ipynb",
+    "docs/appendix/alignment.ipynb",
+    "docs/appendix/angles.ipynb",
+    "docs/appendix/benchmark.ipynb",
+    "docs/appendix/dynamics.ipynb",
+    # "docs/appendix/phase-space.ipynb",
+    "docs/appendix/serialization.ipynb",
+    "docs/cross-check.ipynb",
+    # "docs/intensity.ipynb",
+    "docs/polarimetry.ipynb",
+    "docs/uncertainties.ipynb",
+]
 nb_execution_mode = get_execution_mode()
 nb_execution_show_tb = True
 nb_execution_timeout = -1
