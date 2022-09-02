@@ -275,17 +275,17 @@ myst_substitutions = {
 }
 nb_execution_allow_errors = False
 nb_execution_excludepatterns = [
-    "docs/amplitude-model.ipynb",
-    "docs/appendix/alignment.ipynb",
-    "docs/appendix/angles.ipynb",
-    "docs/appendix/benchmark.ipynb",
-    "docs/appendix/dynamics.ipynb",
-    # "docs/appendix/phase-space.ipynb",
-    "docs/appendix/serialization.ipynb",
-    "docs/cross-check.ipynb",
-    # "docs/intensity.ipynb",
-    "docs/polarimetry.ipynb",
-    "docs/uncertainties.ipynb",
+    "amplitude-model.ipynb",
+    "appendix/alignment.ipynb",
+    "appendix/angles.ipynb",
+    "appendix/benchmark.ipynb",
+    "appendix/dynamics.ipynb",
+    # "appendix/phase-space.ipynb",
+    "appendix/serialization.ipynb",
+    "cross-check.ipynb",
+    # "intensity.ipynb",
+    "polarimetry.ipynb",
+    "uncertainties.ipynb",
 ]
 nb_execution_mode = get_execution_mode()
 nb_execution_show_tb = True
