@@ -21,3 +21,4 @@ texlive
 toctree
 venv
 xetex
+xindy

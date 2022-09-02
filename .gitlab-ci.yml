@@ -6,7 +6,7 @@ docs:
     - main
   before_script:
     - apt-get update
-    - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex
+    - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
     - python3 -m pip install .[doc]
   script:
     - cd docs
