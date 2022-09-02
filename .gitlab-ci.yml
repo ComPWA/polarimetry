@@ -21,8 +21,6 @@ docs:
     - cd ../..
     - sphinx-build -nW --color --keep-going -b html docs/ public
   variables:
-    EXECUTE_NB: "YES"
-    EXECUTE_PLUTO: "YES"
     PYTHONHASHSEED: "0"
   artifacts:
     paths:
