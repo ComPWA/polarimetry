@@ -42,7 +42,7 @@ sudo apt install -y cm-super dvipng texlive-latex-extra
 In addition, for [building the documentation as a single PDF file](#building-the-documentation), you need to install XeTeX:
 
 ```shell
-sudo apt install -y texlive-xetex
+sudo apt install -y latexmk texlive-fonts-extra texlive-xetex
 ```
 
 <!-- cspell:ignore xetex -->
@@ -69,7 +69,7 @@ or, alternatively, by executing _all_ Jupyter and Pluto notebooks (ignoring any 
 tox -e docnb-force
 ```
 
-The [above commands](#building-the-documentation) result in a static HTML webpage. It's also possible to render the notebook as a single PDF file. This can be done as follows:
+The [above commands](#building-the-documentation) result in a static HTML webpage. It's also possible to render the notebook as a single PDF file. This can be done as follows:[^3]
 
 ```shell
 tox -e pdf
@@ -86,4 +86,14 @@ EXECUTE_NB=YES tox -e pdf
 
     ```shell
     tox -e doc
+    ```
+
+[^3]:
+    The LaTeX PDF build is still buggy. But the following set of commands for `bash` should produce a PDF without problems (once the correct dependencies are installed):
+
+    ```shell
+    cd docs
+    EXECUTE_NB= make latex
+    cd _build/latex
+    make LATEXOPTS=' -interaction=batchmode' LATEXMKOPTS=' -f'
     ```
