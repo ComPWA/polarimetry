@@ -97,7 +97,7 @@ def get_link_to_julia_pages() -> str:
 
 
 def get_nb_remove_code_source():
-    if sys.argv[2] == "latexpdf":
+    if "latex" in sys.argv[2]:
         print(f"\033[91;1mCell input will not be rendered\033[0m")
         return True
     return False
@@ -207,10 +207,25 @@ intersphinx_mapping = {
 }
 latex_elements = {
     "preamble": R"""
-\usepackage[utf8x]{inputenc}
-""",
-    "inputenc": "",
+\usepackage{bookmark}
+\usepackage[Latin,Greek]{ucharclasses}
+\usepackage{unicode-math}
+\hypersetup{
+    pdfencoding=auto,
+    psdextra
 }
+
+\bookmarksetup{
+  numbered,
+  addtohook={%
+    \ifnum\bookmarkget{level}>1 %
+      \bookmarksetup{numbered=false}%
+    \fi
+  },
+}
+"""
+}
+latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 myst_enable_extensions = [
     "colon_fence",
     "dollarmath",

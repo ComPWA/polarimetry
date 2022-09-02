@@ -39,6 +39,14 @@ To build the documentation, you need to install LaTeX and some additional fonts.
 sudo apt install -y cm-super dvipng texlive-latex-extra
 ```
 
+In addition, for [building the documentation as a single PDF file](#building-the-documentation), you need to install XeTeX:
+
+```shell
+sudo apt install -y texlive-xetex
+```
+
+<!-- cspell:ignore xetex -->
+
 ## Building the documentation
 
 Having [installed the Python environment](#installation), you can build the documentation with:[^2]
@@ -59,6 +67,18 @@ or, alternatively, by executing _all_ Jupyter and Pluto notebooks (ignoring any 
 
 ```shell
 tox -e docnb-force
+```
+
+The [above commands](#building-the-documentation) result in a static HTML webpage. It's also possible to render the notebook as a single PDF file. This can be done as follows:
+
+```shell
+tox -e pdf
+```
+
+Just as above, cell output can be rendered by setting the `EXECUTE_NB` variable to some value:
+
+```shell
+EXECUTE_NB=YES tox -e pdf
 ```
 
 [^2]:
