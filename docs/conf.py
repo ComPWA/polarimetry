@@ -117,7 +117,7 @@ def get_nb_remove_code_source():
     return False
 
 
-def get_time() -> str:
+def get_timestamp() -> str:
     now = datetime.now()
     return now.strftime("%d/%m/%Y %H:%M:%S")
 
@@ -226,7 +226,7 @@ html_sourcelink_suffix = ""
 html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
-    "extra_navbar": f"<p>Version {get_version()} ({get_time()})</p>",
+    "extra_navbar": f"<p>Version {get_version()} ({get_timestamp()})</p>",
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
     },
@@ -286,7 +286,7 @@ latex_elements = {
   },
 }
 """,
-    "releasename": get_version(),
+    "releasename": f"{get_version()} ({get_timestamp()})",
 }
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 latex_show_pagerefs = True
