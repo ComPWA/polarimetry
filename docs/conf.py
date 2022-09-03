@@ -276,6 +276,7 @@ latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 myst_enable_extensions = [
     "colon_fence",
     "dollarmath",
+    "html_image",
     "substitution",
 ]
 myst_render_markdown_format = "myst"
