@@ -5,6 +5,8 @@ myst:
 
 # Polarimetry in Λc → p π K
 
+{{ DOWNLOAD_SINGLE_PDF }}
+
 <!-- cspell:ignore maxdepth -->
 
 ```{toctree}
@@ -22,8 +24,6 @@ API <api/polarimetry>
 ```
 
 {{ LINK_TO_JULIA_PAGES }}
-
-{{ DOWNLOAD_SINGLE_PDF }}
 
 :::{dropdown} Notebook execution times
 
