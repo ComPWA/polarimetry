@@ -129,7 +129,7 @@ def generate_api() -> None:
 
 
 def get_link_to_single_pdf() -> str:
-    build_file = "_build/latex/python.pdf"
+    build_file = "_build/latex/polarimetry.pdf"
     embedded_file = "_static/polarimetry.pdf"
     if os.path.exists(build_file):
         shutil.copy(build_file, embedded_file)
