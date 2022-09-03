@@ -1,8 +1,7 @@
 image: python:3.8
 
-docs:
+pages:
   only:
-    - PDF-documentation
     - main
   before_script:
     - apt-get update
