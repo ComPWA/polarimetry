@@ -17,18 +17,7 @@ cross-check
 intensity
 polarimetry
 uncertainties
-```
-
-````{only} html
-```{toctree}
----
-maxdepth: 2
----
 appendix
-```
-````
-
-```{toctree}
 API <api/polarimetry>
 ```
 

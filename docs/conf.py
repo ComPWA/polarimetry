@@ -230,14 +230,6 @@ intersphinx_mapping = {
     "sympy": ("https://docs.sympy.org/latest", None),
     "tensorwaves": ("https://tensorwaves.readthedocs.io/en/stable", None),
 }
-latex_appendices = [
-    "appendix/dynamics",
-    "appendix/angles",
-    "appendix/phase-space",
-    "appendix/alignment",
-    "appendix/benchmark",
-    "appendix/serialization",
-]
 latex_documents = [
     # https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-latex_documents
     (
