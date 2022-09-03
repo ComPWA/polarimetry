@@ -293,7 +293,6 @@ nb_execution_excludepatterns = [
     "appendix/benchmark.ipynb",
     "appendix/serialization.ipynb",
     "cross-check.ipynb",
-    "uncertainties.ipynb",
 ]
 nb_execution_mode = get_execution_mode()
 nb_execution_show_tb = True
