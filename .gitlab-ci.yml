@@ -6,7 +6,7 @@ pages:
   before_script:
     - apt-get update
     - apt-get install -y cm-super dvipng texlive-latex-extra
-    - python3 -m pip install .[doc]
+    - python3 -m pip install .[doc] -c .constraints/py3.8.txt
     - wget -q https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz
     - tar xzf julia-1.7.3-linux-x86_64.tar.gz
     - mv julia-1.7.3 /opt/

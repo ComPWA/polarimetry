@@ -5,6 +5,8 @@ dependencies:
   - python==3.8.*
   - pip
   - pip:
-      - -e .[dev]
+      - |
+        -c .constraints/py3.8.txt
+        -e .[dev]
 variables:
   PYTHONHASHSEED: 0
