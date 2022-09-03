@@ -165,7 +165,7 @@ extensions = [
     "sphinx_book_theme",
     "sphinx_codeautolink",
     "sphinx_copybutton",
-    "sphinx_panels",
+    "sphinx_design",
     "sphinx_togglebutton",
 ]
 html_sourcelink_suffix = ""
@@ -223,7 +223,6 @@ nitpick_ignore_regex = [
     ("py:class", "OldValueType"),
 ]
 numfig = True
-panels_add_bootstrap_css = False
 primary_domain = "py"
 pygments_style = "sphinx"
 suppress_warnings = [
