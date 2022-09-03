@@ -238,6 +238,19 @@ latex_appendices = [
     "appendix/benchmark",
     "appendix/serialization",
 ]
+latex_documents = [
+    # https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-latex_documents
+    (
+        "index",
+        "polarimetry.tex",
+        R"""
+        $\Lambda_c$ polarimetry using the dominant hadronic mode ― supplemental material
+        """.strip(),
+        author,
+        "manual",
+        True,
+    ),
+]
 latex_elements = {
     "papersize": "a4paper",
     "preamble": R"""
