@@ -4,6 +4,13 @@ import subprocess
 import sys
 from textwrap import dedent
 
+if sys.version_info < (3, 8):
+    from importlib_metadata import PackageNotFoundError
+    from importlib_metadata import version as get_package_version
+else:
+    from importlib.metadata import PackageNotFoundError
+    from importlib.metadata import version as get_package_version
+
 sys.path.insert(0, os.path.abspath("."))
 from _relink_references import relink_references
 
@@ -107,6 +114,13 @@ def get_nb_remove_code_source():
         print(f"\033[91;1mCell input will not be rendered\033[0m")
         return True
     return False
+
+
+def get_version() -> str:
+    try:
+        return get_package_version("polarimetry")
+    except PackageNotFoundError:
+        return ""
 
 
 def generate_api() -> None:
@@ -265,6 +279,7 @@ latex_elements = {
   },
 }
 """,
+    "releasename": get_version(),
 }
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 latex_show_pagerefs = True
@@ -304,4 +319,5 @@ suppress_warnings = [
     "mystnb.unknown_mime_type",
 ]
 use_multitoc_numbering = True
+version = get_version()
 viewcode_follow_imported_members = True
