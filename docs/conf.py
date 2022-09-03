@@ -240,7 +240,7 @@ latex_documents = [
         """.strip(),
         author,
         "manual",
-        True,
+        False,
     ),
 ]
 latex_elements = {
