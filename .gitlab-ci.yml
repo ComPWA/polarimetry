@@ -12,7 +12,7 @@ docs:
     - pushd docs
     - make latex
     - pushd _build/latex
-    - make LATEXMKOPTS=' -f' LATEXOPTS=' -interaction=batchmode'
+    - make LATEXOPTS=' -interaction=batchmode'
     # Check if there are there are missing figures in the PDF build
     - "! grep -r '\PYGZlt{}Figure size ' ."
     - cd "$(dirs -l -0)" && dirs -c
