@@ -265,6 +265,7 @@ latex_elements = {
 """,
 }
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
+latex_show_pagerefs = True
 myst_enable_extensions = [
     "colon_fence",
     "dollarmath",
