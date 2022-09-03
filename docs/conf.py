@@ -2,6 +2,7 @@ import os
 import shutil
 import subprocess
 import sys
+from datetime import datetime
 from textwrap import dedent
 
 if sys.version_info < (3, 8):
@@ -116,6 +117,11 @@ def get_nb_remove_code_source():
     return False
 
 
+def get_time() -> str:
+    now = datetime.now()
+    return now.strftime("%d/%m/%Y %H:%M:%S")
+
+
 def get_version() -> str:
     try:
         return get_package_version("polarimetry")
@@ -220,6 +226,7 @@ html_sourcelink_suffix = ""
 html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
+    "extra_navbar": f"<p>Version {get_version()} ({get_time()})</p>",
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
     },
