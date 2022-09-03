@@ -136,8 +136,10 @@ def get_link_to_single_pdf() -> str:
     if os.path.exists(embedded_file):
         src = f"""
         ::::{{only}} html
-        :::{{tip}}
-        This webpage can be downloaded as a **single PDF file** [here]({embedded_file}).
+        :::{{button-link}} {embedded_file}
+        :color: primary
+        :shadow:
+        Download this website as a **report**
         :::
         ::::
         """
