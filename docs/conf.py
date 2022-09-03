@@ -288,12 +288,6 @@ myst_substitutions = {
     "download_intensity_distribution": download_intensity_distribution(),
 }
 nb_execution_allow_errors = False
-nb_execution_excludepatterns = [
-    "appendix/alignment.ipynb",
-    "appendix/benchmark.ipynb",
-    "appendix/serialization.ipynb",
-    "cross-check.ipynb",
-]
 nb_execution_mode = get_execution_mode()
 nb_execution_show_tb = True
 nb_execution_timeout = -1
