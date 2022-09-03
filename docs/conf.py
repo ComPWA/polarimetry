@@ -230,6 +230,14 @@ intersphinx_mapping = {
     "sympy": ("https://docs.sympy.org/latest", None),
     "tensorwaves": ("https://tensorwaves.readthedocs.io/en/stable", None),
 }
+latex_appendices = [
+    "appendix/dynamics",
+    "appendix/angles",
+    "appendix/phase-space",
+    "appendix/alignment",
+    "appendix/benchmark",
+    "appendix/serialization",
+]
 latex_elements = {
     "papersize": "a4paper",
     "preamble": R"""
@@ -251,14 +259,6 @@ latex_elements = {
 }
 """,
 }
-latex_appendices = [
-    "appendix/dynamics",
-    "appendix/angles",
-    "appendix/phase-space",
-    "appendix/alignment",
-    "appendix/benchmark",
-    "appendix/serialization",
-]
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 myst_enable_extensions = [
     "colon_fence",
