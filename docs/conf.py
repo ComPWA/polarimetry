@@ -280,11 +280,8 @@ nb_execution_excludepatterns = [
     "appendix/angles.ipynb",
     "appendix/benchmark.ipynb",
     "appendix/dynamics.ipynb",
-    # "appendix/phase-space.ipynb",
     "appendix/serialization.ipynb",
     "cross-check.ipynb",
-    # "intensity.ipynb",
-    # "polarimetry.ipynb",
     "uncertainties.ipynb",
 ]
 nb_execution_mode = get_execution_mode()
