@@ -110,6 +110,7 @@
   "version": "0.2",
   "ignoreWords": [
     "Sigmapi",
+    "prereleased",
     "tableofcontents"
   ]
 }
