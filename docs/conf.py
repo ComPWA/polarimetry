@@ -275,11 +275,8 @@ myst_substitutions = {
 }
 nb_execution_allow_errors = False
 nb_execution_excludepatterns = [
-    "amplitude-model.ipynb",
     "appendix/alignment.ipynb",
-    "appendix/angles.ipynb",
     "appendix/benchmark.ipynb",
-    "appendix/dynamics.ipynb",
     "appendix/serialization.ipynb",
     "cross-check.ipynb",
     "uncertainties.ipynb",
