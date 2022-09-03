@@ -44,7 +44,7 @@ identify==2.5.3
 idna==3.3
 imagesize==1.4.1
 iminuit==2.16.0
-importlib-metadata==4.12.0
+importlib-metadata==4.12.0 ; python_version < "3.8.0"
 importlib-resources==5.9.0
 iniconfig==1.1.1
 ipykernel==6.15.2
