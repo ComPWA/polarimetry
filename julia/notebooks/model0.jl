@@ -415,7 +415,7 @@ begin
 	sξnames = collect(Set(model.isobarnames)) |>
 		c->sort(c; by=x->eval(Meta.parse(x[3:end-1]))) |>
 		c->sort(c; by=x->findfirst(x[1], "LDK"))
-	# 
+	#
     rates = DataFrame()
     for s in sξnames
         couplingsmap = (model.isobarnames .== s)
@@ -433,8 +433,8 @@ begin
         push!(rates, (isobarname=s, rate=sum(Iξv) / I0 * 100,
             αz, αy, αx, α_abs=sqrt(αz^2 + αy^2 + αx^2)))
     end
-	# 
-	transform(rates, [:rate, :αz, :α_abs] .=> ByRow(x -> round(x; digits=2)); 
+	#
+	transform(rates, [:rate, :αz, :α_abs] .=> ByRow(x -> round(x; digits=2));
 		renamecols=false)
 end
 

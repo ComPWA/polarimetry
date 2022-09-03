@@ -1,3 +1,4 @@
+autoupdate
 batchmode
 ComPWA
 Conda
@@ -11,7 +12,9 @@ LATEXMKOPTS
 LATEXOPTS
 latexpdf
 lualatex
+MAINT
 Mikhasenko
+mkdir
 msigma
 nbformat
 phsp
