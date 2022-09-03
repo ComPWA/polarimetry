@@ -6,7 +6,7 @@ using InteractiveUtils
 
 # ╔═╡ 82366e00-987a-11ec-2631-455a8bb3ff96
 begin
-    cd(@__DIR__)
+    cd(joinpath(@__DIR__, ".."))
     using Pkg
     Pkg.activate(".")
     Pkg.instantiate()
@@ -18,11 +18,10 @@ begin
     using Parameters
     #
     using ThreeBodyDecay
-    using PartialWaveFunctions
 end
 
 # ╔═╡ fd9ea193-f54b-4ef4-98a5-e00279f48002
-const ms = ThreeBodyMasses(m1=0.938, m2=0.140, m3=0.493, m0=2.28)
+const ms = ThreeBodyMasses(0.938, 0.140, 0.493, m0=2.28)
 
 # ╔═╡ fcc14f24-d230-4f79-92bb-85a783ea75c5
 begin
@@ -71,7 +70,7 @@ plot(layout=grid(1, 2), size=(700, 250),
 # ╔═╡ 8af8de89-9f26-4052-8391-f2733788be5a
 function ξΛ(σs)
     θp = -acos(-cosθ31(σs, ms²)) # - (π-θ)
-    θΛ = acos(-cosθhat12(σs, ms²)) # π-θ
+    θΛ = acos(-cosζ12_for0(σs, ms²)) # π-θ
     α = acos(cosαΛ(σs))
     return θp + θΛ + α
 end
@@ -82,7 +81,7 @@ plot(ms, ξΛ, colorbar=true)
 # ╔═╡ e142916e-b305-46c6-8ba3-44c7caeccff8
 function ξΔ(σs)
     θp = acos(cosθ12(σs, ms²)) # just θ
-    θΔ = -acos(-cosθhat31(σs, ms²)) # -(π-θ)
+    θΔ = -acos(-cosζ31_for0(σs, ms²)) # -(π-θ)
     α = acos(cosαΔ(σs))
     return θp + θΔ - α
 end

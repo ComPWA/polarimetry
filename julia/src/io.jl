@@ -33,7 +33,7 @@ function definechaininputs(key, dict)
     @unpack two_js = tbs
     #
     reaction_ij = jp_R => (jp(two_js[i] // 2, parities[i]), jp(two_js[j] // 2, parities[j]))
-    reaction_Rk(P0) = jp(two_js[0] // 2, P0) => (jp_R, jp(two_js[k] // 2, parities[k]))
+    reaction_Rk(P0) = jp(two_js[4] // 2, P0) => (jp_R, jp(two_js[k] // 2, parities[k]))
     #
     LS = vcat(possible_ls.(reaction_Rk.(('+', '-')))...)
     minLS = first(sort(vcat(LS...); by=x -> x[1]))
@@ -50,7 +50,7 @@ function definechaininputs(key, dict)
                 name=$key,
                 l=$(onlyls[1]),
                 minL=$(minLS[1]),
-                m1=$(ms[i]), m2=$(ms[j]), mk=$(ms[k]), m0=$(ms[0]))
+                m1=$(ms[i]), m2=$(ms[j]), mk=$(ms[k]), m0=$(ms[4]))
         end)
     return (; k, Xlineshape, Hij, two_s=two_j, parity)
 end
