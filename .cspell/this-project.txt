@@ -1,10 +1,13 @@
+autoupdate
 ComPWA
 Conda
 docnb
 dvipng
 heli
 ifhyphenaverage
+MAINT
 Mikhasenko
+mkdir
 msigma
 nbformat
 phsp
