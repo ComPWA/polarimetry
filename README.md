@@ -39,14 +39,51 @@ To build the documentation, you need to install LaTeX and some additional fonts.
 sudo apt install -y cm-super dvipng texlive-latex-extra
 ```
 
+In addition, for [building the documentation as a single PDF file](#building-the-documentation), you need to install XeTeX:
+
+```shell
+sudo apt install -y inkscape latexmk texlive-fonts-extra texlive-xetex xindy
+```
+
+<!-- cspell:ignore xetex -->
+
+## Building the documentation
+
+Having [installed the Python environment](#installation), you can build the documentation with:[^2]
+
+```shell
+tox -e docnb
+```
+
+This will run all Jupyter notebooks and convert the output to static webpages (view the output under `docs/_build/html/index.html`). Running all notebooks from scratch (without any available cache) should take **around one hour**.
+
 If you have installed Julia and instantiated the Julia environment, you can embed the [Pluto notebooks](./julia/notebooks) as static pages in the documentation with:
 
 ```shell
 EXECUTE_PLUTO=YES tox -e docnb
 ```
 
-or, alternatively, by executing _all_ Jupyter and Pluto notebooks:
+or, alternatively, by executing _all_ Jupyter and Pluto notebooks (ignoring any existing caches):
 
 ```shell
 tox -e docnb-force
 ```
+
+The [above commands](#building-the-documentation) result in a static HTML webpage. It's also possible to render the notebook as a single PDF file. This can be done as follows:
+
+```shell
+tox -e pdf
+```
+
+Just as above, cell output can be rendered by setting the `EXECUTE_NB` variable to some value:
+
+```shell
+EXECUTE_NB=YES tox -e pdf
+```
+
+[^2]:
+    It's also possible have a look at the documentation _without_ cell output (just as a check for the links). This can be done with:
+
+    ```shell
+    tox -e doc
+    ```

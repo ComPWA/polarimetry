@@ -58,6 +58,7 @@
     ".prettierignore",
     ".vscode/*",
     "LICENSE",
+    "Makefile",
     "Manifest.toml",
     "Project.toml",
     "conf.py",
@@ -109,6 +110,7 @@
   "version": "0.2",
   "ignoreWords": [
     "Sigmapi",
+    "prereleased",
     "tableofcontents"
   ]
 }
