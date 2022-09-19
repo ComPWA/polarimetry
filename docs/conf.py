@@ -25,11 +25,12 @@ def download_figure_1() -> str:
         if not os.path.exists(file):
             print_missing_file_warning(file)
             return ""
-    return f"""
+    src = f"""
     ```{{only}} html
     High-resolution image can be downloaded here: {{download}}`{files[0]}` / {{download}}`{files[1]}`
     ```
-    """.strip()
+    """
+    return dedent(src).strip()
 
 
 def download_figures_2_and_3() -> str:
