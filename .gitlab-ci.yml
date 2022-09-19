@@ -14,9 +14,7 @@ pages:
     - julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
   script:
     - pushd docs
-    - make latex
-    - pushd _build/latex
-    - make LATEXOPTS=' -interaction=batchmode'
+    - make latexpdf LATEXOPTS=' -interaction=batchmode'
     # Check if there are there are missing figures in the PDF build
     - "! grep -r 'PYGZlt{}Figure size ' ."
     - cd "$(dirs -l -0)" && dirs -c
