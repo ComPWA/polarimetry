@@ -25,7 +25,7 @@ repos:
       - id: black
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.8.1
+    rev: v6.9.0
     hooks:
       - id: cspell
 
@@ -35,7 +35,7 @@ repos:
       - id: isort
 
   - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.4.0
+    rev: 1.5.0
     hooks:
       - id: nbqa-black
         additional_dependencies:
@@ -73,12 +73,12 @@ repos:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.269
+    rev: v1.1.271
     hooks:
       - id: pyright
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.37.3
+    rev: v2.38.0
     hooks:
       - id: pyupgrade
         args:

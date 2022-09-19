@@ -321,11 +321,6 @@ nitpick_ignore_regex = [
 numfig = True
 primary_domain = "py"
 pygments_style = "sphinx"
-suppress_warnings = [
-    # skipping unknown output mime type: application/json
-    # https://gitlab.cern.ch/polarimetry/Lc2pKpi/-/jobs/24273321#L2123
-    "mystnb.unknown_mime_type",
-]
 use_multitoc_numbering = True
 version = get_version()
 viewcode_follow_imported_members = True
