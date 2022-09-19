@@ -18,10 +18,9 @@ pages:
     # Check if there are there are missing figures in the PDF build
     - "! grep -r 'PYGZlt{}Figure size ' ."
     - cd "$(dirs -l -0)" && dirs -c
-    - sphinx-build -nW --color --keep-going -b html docs/ public
+    - EXECUTE_PLUTO="YES" sphinx-build -nW --color --keep-going -b html docs/ public
   variables:
     EXECUTE_NB: "YES"
-    EXECUTE_PLUTO: "YES"
     PYTHONHASHSEED: "0"
   artifacts:
     paths:
