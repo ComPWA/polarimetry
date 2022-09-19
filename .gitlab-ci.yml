@@ -6,18 +6,18 @@ pages:
   before_script:
     - apt-get update
     - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
-    - python3 -m pip install .[doc] -c .constraints/py3.8.txt
+    - python3 -m pip install .[doc] tox -c .constraints/py3.8.txt
     - wget -q https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz
     - tar xzf julia-1.7.3-linux-x86_64.tar.gz
     - mv julia-1.7.3 /opt/
     - ln -s /opt/julia-1.7.3/bin/julia /usr/local/bin/julia
     - julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
   script:
-    - cd docs
-    - make latexpdf LATEXOPTS=' -interaction=batchmode'
+    - tox -e pdf
     # Check if there are there are missing figures in the PDF build
-    - "! grep -r 'PYGZlt{}Figure size ' ."
-    - EXECUTE_PLUTO="YES" sphinx-build -nW --color --keep-going -b html ./ ../public
+    - "! grep -r 'PYGZlt{}Figure size ' docs/_build"
+    - EXECUTE_PLUTO="YES" tox -e docnb
+    - mv docs/_build/html/ public/
   variables:
     EXECUTE_NB: "YES"
     PYTHONHASHSEED: "0"
