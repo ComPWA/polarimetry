@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import itertools
 import re
 import sys
 from pathlib import Path
@@ -57,13 +58,14 @@ def load_model_builder(
     model_file: Path | str,
     particle_definitions: dict[str, Particle],
     model_id: int | str = 0,
+    min_ls: bool = True,
 ) -> DalitzPlotDecompositionBuilder:
     with open(model_file) as f:
         model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
     model_title = _find_model_title(model_definitions, model_id)
     model_def = model_definitions[model_title]
     lineshapes: dict[str, str] = model_def["lineshapes"]
-    decay = load_three_body_decay(lineshapes, particle_definitions)
+    decay = load_three_body_decay(lineshapes, particle_definitions, min_ls=min_ls)
     amplitude_builder = DalitzPlotDecompositionBuilder(decay)
     for chain in decay.chains:
         lineshape_choice = lineshapes[chain.resonance.name]
@@ -102,8 +104,9 @@ def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
 def load_three_body_decay(
     resonance_names: Iterable[str],
     particle_definitions: dict[str, Particle],
+    min_ls: bool = True,
 ) -> ThreeBodyDecay:
-    def create_isobar(resonance: Particle) -> ThreeBodyDecayChain:
+    def create_isobar(resonance: Particle) -> list[ThreeBodyDecayChain]:
         if resonance.name.startswith("K"):
             child1, child2, sibling = π, K, p
         elif resonance.name.startswith("L"):
@@ -112,35 +115,54 @@ def load_three_body_decay(
             child1, child2, sibling = p, π, K
         else:
             raise NotImplementedError
-        decay = IsobarNode(
-            parent=Λc,
-            child1=sibling,
-            child2=IsobarNode(
-                parent=resonance,
-                child1=child1,
-                child2=child2,
-                interaction=generate_L_min(
-                    resonance, child1, child2, conserve_parity=True
+        prod_ls_couplings = generate_ls(Λc, sibling, resonance, conserve_parity=False)
+        dec_ls_couplings = generate_ls(resonance, child1, child2, conserve_parity=True)
+        if min_ls:
+            decay = IsobarNode(
+                parent=Λc,
+                child1=sibling,
+                child2=IsobarNode(
+                    parent=resonance,
+                    child1=child1,
+                    child2=child2,
+                    interaction=min(dec_ls_couplings),
                 ),
-            ),
-            interaction=generate_L_min(Λc, sibling, resonance, conserve_parity=False),
-        )
-        return ThreeBodyDecayChain(decay)
+                interaction=min(prod_ls_couplings),
+            )
+            return [ThreeBodyDecayChain(decay)]
+        chains = []
+        for dec_ls, prod_ls in itertools.product(prod_ls_couplings, dec_ls_couplings):
+            decay = IsobarNode(
+                parent=Λc,
+                child1=sibling,
+                child2=IsobarNode(
+                    parent=resonance,
+                    child1=child1,
+                    child2=child2,
+                    interaction=dec_ls,
+                ),
+                interaction=prod_ls,
+            )
+            chains.append(ThreeBodyDecayChain(decay))
+        return chains
 
-    def generate_L_min(
+    def generate_ls(
         parent: Particle, child1: Particle, child2: Particle, conserve_parity: bool
-    ) -> int:
+    ) -> list[tuple[int, sp.Rational]]:
         ls = generate_ls_couplings(parent.spin, child1.spin, child2.spin)
         if conserve_parity:
-            ls = filter_parity_violating_ls(
+            return filter_parity_violating_ls(
                 ls, parent.parity, child1.parity, child2.parity
             )
-        return min(ls)
+        return ls
 
     resonances = [particle_definitions[name] for name in resonance_names]
+    chains: list[ThreeBodyDecayChain] = []
+    for res in resonances:
+        chains.extend(create_isobar(res))
     return ThreeBodyDecay(
         states={state_id: particle for particle, state_id in PARTICLE_TO_ID.items()},
-        chains=tuple(create_isobar(res) for res in resonances),
+        chains=tuple(chains),
     )
 
 
