@@ -116,7 +116,10 @@ class DalitzPlotDecompositionBuilder:
             self.decay.final_state[2].spin,
             self.decay.final_state[3].spin,
         ]
-        H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
+        if self.min_ls:
+            H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
+        else:
+            H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{LS,production}")
         H_dec = sp.IndexedBase(R"\mathcal{H}^\mathrm{decay}")
         λR = sp.Symbol(R"\lambda_R", rational=True)
         terms = []
@@ -130,20 +133,29 @@ class DalitzPlotDecompositionBuilder:
             resonance_helicities = create_spin_range(resonance_spin)
             for λR_val in resonance_helicities:
                 if λ[0] == λR_val - λ[k]:  # Kronecker delta
-                    parameter_defaults[H_prod[R, λR_val, λ[k]]] = 1
+                    if self.min_ls:
+                        parameter_defaults[H_prod[R, λR_val, λ[k]]] = 1
                     parameter_defaults[H_dec[R, λ[i], λ[j]]] = 1
             sub_amp_expr = (
                 sp.KroneckerDelta(λ[0], λR - λ[k])
-                * H_prod[R, λR, λ[k]]
                 * (-1) ** (spin[k] - λ[k])
                 * dynamics
                 * Wigner.d(resonance_spin, λR, λ[i] - λ[j], θij)
                 * H_dec[R, λ[i], λ[j]]
                 * (-1) ** (spin[j] - λ[j])
             )
-            if not self.min_ls:
+            if self.min_ls:
+                sub_amp_expr *= H_prod[R, λR, λ[k]]
+            else:
                 production_isobar = chain.decay
                 resonance_isobar = chain.decay.child2
+                assert production_isobar.interaction is not None
+                assert resonance_isobar.interaction is not None
+                sub_amp_expr *= H_prod[
+                    R,
+                    production_isobar.interaction.L,
+                    production_isobar.interaction.S,
+                ]
                 sub_amp_expr *= _formulate_clebsch_gordan_factor(
                     production_isobar,
                     child1_helicity=λR,
