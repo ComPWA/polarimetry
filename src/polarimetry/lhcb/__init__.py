@@ -58,14 +58,14 @@ def load_model_builder(
     model_file: Path | str,
     particle_definitions: dict[str, Particle],
     model_id: int | str = 0,
-    min_ls: bool = True,
 ) -> DalitzPlotDecompositionBuilder:
     with open(model_file) as f:
         model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
     model_title = _find_model_title(model_definitions, model_id)
     model_def = model_definitions[model_title]
     lineshapes: dict[str, str] = model_def["lineshapes"]
-    decay = load_three_body_decay(lineshapes, particle_definitions, min_ls=min_ls)
+    min_ls = "LS couplings" not in model_title
+    decay = load_three_body_decay(lineshapes, particle_definitions, min_ls)
     amplitude_builder = DalitzPlotDecompositionBuilder(decay, min_ls)
     for chain in decay.chains:
         lineshape_choice = lineshapes[chain.resonance.name]
