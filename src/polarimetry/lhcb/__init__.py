@@ -48,7 +48,7 @@ def load_model(
     builder = load_model_builder(model_file, particle_definitions, model_id)
     model = builder.formulate()
     imported_parameter_values = load_model_parameters(
-        model_file, builder.decay, model_id
+        model_file, builder.decay, model_id, particle_definitions
     )
     model.parameter_defaults.update(imported_parameter_values)
     return model
@@ -176,16 +176,25 @@ class ParameterBootstrap:
         decay: ThreeBodyDecay,
         model_id: int | str = 0,
     ) -> None:
+        particle_definitions = extract_particle_definitions(decay)
         self.__values = {
             str(symbol): value
             for symbol, value in load_model_parameters(
-                filename, decay, model_id, typ="value"
+                filename,
+                decay,
+                model_id,
+                particle_definitions,
+                typ="value",
             ).items()
         }
         self.__uncertainties = {
             str(symbol): value
             for symbol, value in load_model_parameters(
-                filename, decay, model_id, typ="uncertainty"
+                filename,
+                decay,
+                model_id,
+                particle_definitions,
+                typ="uncertainty",
             ).items()
         }
 
@@ -212,13 +221,17 @@ def load_model_parameters(
     filename: Path | str,
     decay: ThreeBodyDecay,
     model_id: int | str = 0,
+    particle_definitions: dict[str, Particle] | None = None,
     typ: Literal["value", "uncertainty"] = "value",
 ) -> dict[sp.Indexed | sp.Symbol, complex | float]:
     with open(filename) as f:
         model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
     model_title = _find_model_title(model_definitions, model_id)
+    min_ls = "LS couplings" not in model_title
     parameter_definitions = model_definitions[model_title]["parameters"]
-    parameters = _to_symbol_value_mapping(parameter_definitions, decay, typ)
+    parameters = _to_symbol_value_mapping(
+        parameter_definitions, decay, min_ls, typ, particle_definitions
+    )
     decay_couplings = compute_decay_couplings(decay, typ)
     parameters.update(decay_couplings)
     return parameters
@@ -300,7 +313,9 @@ def compute_decay_couplings(
 def _to_symbol_value_mapping(
     parameter_dict: dict[str, str],
     decay: ThreeBodyDecay,
-    typ: Literal["value", "uncertainty"] = "value",
+    min_ls: bool,
+    typ: Literal["value", "uncertainty"],
+    particle_definitions: dict[str, Particle] | None = None,
 ) -> dict[sp.Basic, complex | float]:
     switch = 0 if typ == "value" else 1
     key_to_val: dict[str, complex | float] = {}
@@ -311,7 +326,9 @@ def _to_symbol_value_mapping(
             real = _to_value_with_uncertainty(str_value)[switch]
             imag = _to_value_with_uncertainty(str_imag)[switch]
             key = f"A{identifier}"
-            indexed_symbol: sp.Indexed = parameter_key_to_symbol(key)
+            indexed_symbol: sp.Indexed = parameter_key_to_symbol(
+                key, min_ls, particle_definitions
+            )
             chain = decay.find_chain(resonance_name=str(indexed_symbol.indices[0]))
             if typ == "value":
                 factor = get_conversion_factor(chain.resonance)
@@ -322,7 +339,10 @@ def _to_symbol_value_mapping(
             continue
         else:
             key_to_val[key] = _to_value_with_uncertainty(str_value)[switch]
-    return {parameter_key_to_symbol(key): value for key, value in key_to_val.items()}
+    return {
+        parameter_key_to_symbol(key, min_ls, particle_definitions): value
+        for key, value in key_to_val.items()
+    }
 
 
 def _to_value_with_uncertainty(str_value: str) -> float:
@@ -350,38 +370,71 @@ def get_conversion_factor(
     raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
 
 
-def parameter_key_to_symbol(key: str) -> sp.Indexed | sp.Symbol:
-    H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
+def parameter_key_to_symbol(
+    key: str,
+    min_ls: bool = True,
+    particle_definitions: dict[str, Particle] | None = None,
+) -> sp.Indexed | sp.Symbol:
+    if min_ls:
+        H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
+    else:
+        H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{LS,production}")
     half = sp.Rational(1, 2)
     if key.startswith("A"):
         # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
         R = _stringify(key[1:-1])
-        i = int(key[-1])
-        if str(R).startswith("L"):
-            if i == 1:
-                return H_prod[R, -half, 0]
-            if i == 2:
-                return H_prod[R, +half, 0]
-        if str(R).startswith("D"):
-            if i == 1:
-                return H_prod[R, -half, 0]
-            if i == 2:
-                return H_prod[R, +half, 0]
-        if str(R).startswith("K"):
-            if str(R) in {"K(700)", "K(1430)"}:
-                if i == 1:
-                    return H_prod[R, 0, +half]
-                if i == 2:
-                    return H_prod[R, 0, -half]
-            else:
-                if i == 1:
-                    return H_prod[R, 0, -half]
-                if i == 2:
-                    return H_prod[R, -1, -half]
-                if i == 3:
-                    return H_prod[R, +1, +half]
-                if i == 4:
-                    return H_prod[R, 0, +half]
+        subsystem_identifier = str(R)[0]
+        coupling_number = int(key[-1])
+        if min_ls:
+            # Helicity couplings
+            if subsystem_identifier in {"D", "L"}:
+                if coupling_number == 1:
+                    return H_prod[R, -half, 0]
+                if coupling_number == 2:
+                    return H_prod[R, +half, 0]
+            if subsystem_identifier == "K":
+                if str(R) in {"K(700)", "K(1430)"}:
+                    if coupling_number == 1:
+                        return H_prod[R, 0, +half]
+                    if coupling_number == 2:
+                        return H_prod[R, 0, -half]
+                else:
+                    if coupling_number == 1:
+                        return H_prod[R, 0, -half]
+                    if coupling_number == 2:
+                        return H_prod[R, -1, -half]
+                    if coupling_number == 3:
+                        return H_prod[R, +1, +half]
+                    if coupling_number == 4:
+                        return H_prod[R, 0, +half]
+        else:
+            # LS-couplings: supplemental material p.1 (https://cds.cern.ch/record/2824328/files)
+            if particle_definitions is None:
+                raise ValueError(
+                    "You need to provide particle definitions in order to map the"
+                    " coupling IDs to coupling symbols"
+                )
+            resonance = particle_definitions[str(R)]
+            if subsystem_identifier in {"D", "L"}:
+                if coupling_number == 1:
+                    return H_prod[R, resonance.spin - half, resonance.spin]
+                if coupling_number == 2:
+                    return H_prod[R, resonance.spin + half, resonance.spin]
+            if subsystem_identifier == "K":
+                if resonance.spin == 0:  # "K(700)", "K(1430)"
+                    if coupling_number == 1:
+                        return H_prod[R, 0, half]
+                    if coupling_number == 2:
+                        return H_prod[R, 1, half]
+                else:
+                    if coupling_number == 1:
+                        return H_prod[R, 0, half]
+                    if coupling_number == 2:
+                        return H_prod[R, 1, half]
+                    if coupling_number == 3:
+                        return H_prod[R, 1, 3 * half]
+                    if coupling_number == 4:
+                        return H_prod[R, 2, 3 * half]
     if key.startswith("alpha"):
         R = _stringify(key[5:])
         return sp.Symbol(Rf"\alpha_{{{R}}}")
@@ -411,3 +464,18 @@ def _stringify(obj) -> Str:
     if isinstance(obj, Particle):
         return Str(obj.name)
     return Str(f"{obj}")
+
+
+def extract_particle_definitions(decay: ThreeBodyDecay) -> dict[str, Particle]:
+    particles = {}
+
+    def update_definitions(particle: Particle) -> None:
+        particles[particle.name] = particle
+
+    for chain in decay.chains:
+        update_definitions(chain.parent)
+        update_definitions(chain.resonance)
+        update_definitions(chain.spectator)
+        update_definitions(chain.decay_products[0])
+        update_definitions(chain.decay_products[1])
+    return particles
