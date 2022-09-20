@@ -131,7 +131,7 @@ def load_three_body_decay(
             )
             return [ThreeBodyDecayChain(decay)]
         chains = []
-        for dec_ls, prod_ls in itertools.product(prod_ls_couplings, dec_ls_couplings):
+        for dec_ls, prod_ls in itertools.product(dec_ls_couplings, prod_ls_couplings):
             decay = IsobarNode(
                 parent=Λc,
                 child1=sibling,
