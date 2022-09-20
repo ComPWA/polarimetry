@@ -160,10 +160,6 @@ class DalitzPlotDecompositionBuilder:
                     production_isobar,
                     child1_helicity=λR,
                     child2_helicity=λ[k],
-                ) * _formulate_clebsch_gordan_factor(
-                    resonance_isobar,
-                    child1_helicity=λ[i],
-                    child2_helicity=λ[j],
                 )
             sub_amp = PoolSum(
                 sub_amp_expr,
