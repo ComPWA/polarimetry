@@ -156,7 +156,7 @@ class DalitzPlotDecompositionBuilder:
             sub_amp = PoolSum(
                 sub_amp_expr,
                 (λR, resonance_helicities),
-            )
+            ).cleanup()
             terms.append(sub_amp)
         A = _generate_amplitude_index_bases()
         amp_symbol = A[subsystem_id][λ0, λ1, λ2, λ3]
