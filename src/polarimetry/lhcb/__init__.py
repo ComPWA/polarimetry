@@ -66,7 +66,7 @@ def load_model_builder(
     model_def = model_definitions[model_title]
     lineshapes: dict[str, str] = model_def["lineshapes"]
     decay = load_three_body_decay(lineshapes, particle_definitions, min_ls=min_ls)
-    amplitude_builder = DalitzPlotDecompositionBuilder(decay)
+    amplitude_builder = DalitzPlotDecompositionBuilder(decay, min_ls)
     for chain in decay.chains:
         lineshape_choice = lineshapes[chain.resonance.name]
         dynamics_builder = _get_resonance_builder(lineshape_choice)
@@ -90,13 +90,13 @@ def _find_model_title(model_definitions: dict, model_id: int | str) -> str:
 
 
 def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
-    if lineshape == "BreitWignerMinL":
+    if lineshape in {"BreitWignerMinL", "BreitWignerMinL_LS"}:
         return formulate_breit_wigner
     if lineshape == "BuggBreitWignerExpFF":
         return formulate_exponential_bugg_breit_wigner
-    if lineshape == "BuggBreitWignerMinL":
+    if lineshape in {"BuggBreitWignerMinL", "BuggBreitWignerMinL_LS"}:
         return formulate_bugg_breit_wigner
-    if lineshape == "Flatte1405":
+    if lineshape in {"Flatte1405", "Flatte1405_LS"}:
         return formulate_flatte_1405
     raise NotImplementedError(f'No dynamics implemented for lineshape "{lineshape}"')
 

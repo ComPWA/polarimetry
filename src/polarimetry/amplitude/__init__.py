@@ -8,10 +8,17 @@ import sympy as sp
 from ampform.sympy import PoolSum
 from attrs import field, frozen
 from sympy.core.symbol import Str
+from sympy.physics.quantum.spin import CG
 from sympy.physics.quantum.spin import Rotation as Wigner
 from sympy.physics.quantum.spin import WignerD
 
-from polarimetry.decay import ThreeBodyDecay, ThreeBodyDecayChain, get_decay_product_ids
+from polarimetry.decay import (
+    IsobarNode,
+    Particle,
+    ThreeBodyDecay,
+    ThreeBodyDecayChain,
+    get_decay_product_ids,
+)
 from polarimetry.spin import create_spin_range
 
 from .angles import formulate_scattering_angle, formulate_zeta_angle
@@ -36,9 +43,10 @@ class AmplitudeModel:
 
 
 class DalitzPlotDecompositionBuilder:
-    def __init__(self, decay: ThreeBodyDecay) -> None:
+    def __init__(self, decay: ThreeBodyDecay, min_ls: bool = True) -> None:
         self.decay = decay
         self.dynamics_choices = DynamicsConfigurator(decay)
+        self.min_ls = min_ls
 
     def formulate(
         self,
@@ -124,14 +132,29 @@ class DalitzPlotDecompositionBuilder:
                 if λ[0] == λR_val - λ[k]:  # Kronecker delta
                     parameter_defaults[H_prod[R, λR_val, λ[k]]] = 1
                     parameter_defaults[H_dec[R, λ[i], λ[j]]] = 1
-            sub_amp = PoolSum(
+            sub_amp_expr = (
                 sp.KroneckerDelta(λ[0], λR - λ[k])
                 * H_prod[R, λR, λ[k]]
                 * (-1) ** (spin[k] - λ[k])
                 * dynamics
                 * Wigner.d(resonance_spin, λR, λ[i] - λ[j], θij)
                 * H_dec[R, λ[i], λ[j]]
-                * (-1) ** (spin[j] - λ[j]),
+                * (-1) ** (spin[j] - λ[j])
+            )
+            if not self.min_ls:
+                production_isobar = chain.decay
+                resonance_isobar = chain.decay.child2
+                sub_amp_expr *= _formulate_clebsch_gordan_factor(
+                    production_isobar,
+                    child1_helicity=λR,
+                    child2_helicity=λ[k],
+                ) * _formulate_clebsch_gordan_factor(
+                    resonance_isobar,
+                    child1_helicity=λ[i],
+                    child2_helicity=λ[j],
+                )
+            sub_amp = PoolSum(
+                sub_amp_expr,
                 (λR, resonance_helicities),
             )
             terms.append(sub_amp)
@@ -257,3 +280,42 @@ def simplify_latex_rendering() -> None:
         return f"{base}_{{{indices}}}"
 
     sp.Indexed._latex = _print_Indexed_latex
+
+
+def _formulate_clebsch_gordan_factor(
+    isobar: IsobarNode,
+    child1_helicity: sp.Rational | sp.Symbol,
+    child2_helicity: sp.Rational | sp.Symbol,
+) -> sp.Expr:
+    if isobar.interaction is None:
+        raise ValueError(
+            "Cannot formulate amplitude model in LS-basis if LS-couplings are missing"
+        )
+    # https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802
+    # and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)
+    cg_ss = CG(
+        j1=_get_particle(isobar.child1).spin,
+        m1=child1_helicity,
+        j2=_get_particle(isobar.child2).spin,
+        m2=-child2_helicity,
+        j3=isobar.interaction.S,
+        m3=child1_helicity - child2_helicity,
+    )
+    cg_ll = CG(
+        j1=isobar.interaction.L,
+        m1=0,
+        j2=isobar.interaction.S,
+        m2=child1_helicity - child2_helicity,
+        j3=isobar.parent.spin,
+        m3=child1_helicity - child2_helicity,
+    )
+    sqrt_factor = sp.sqrt(
+        (2 * isobar.interaction.L + 1) / (2 * isobar.interaction.S + 1)
+    )
+    return sqrt_factor * cg_ll * cg_ss
+
+
+def _get_particle(isobar: IsobarNode | Particle) -> Particle:
+    if isinstance(isobar, IsobarNode):
+        return isobar.parent
+    return isobar
