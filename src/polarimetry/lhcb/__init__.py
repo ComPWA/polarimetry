@@ -331,7 +331,10 @@ def _to_symbol_value_mapping(
             )
             chain = decay.find_chain(resonance_name=str(indexed_symbol.indices[0]))
             if typ == "value":
-                factor = get_conversion_factor(chain.resonance)
+                if min_ls:
+                    factor = get_conversion_factor(chain.resonance)
+                else:
+                    factor = get_conversion_factor(chain.resonance)
             else:
                 factor = 1
             key_to_val[f"A{identifier}"] = factor * complex(real, imag)
@@ -367,6 +370,21 @@ def get_conversion_factor(
         return factor
     if resonance.name.startswith("L"):
         return int(-resonance.parity * factor)
+    raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
+
+
+def get_conversion_factor_ls(isobar: IsobarNode) -> Literal[-1, 1]:
+    # https://github.com/ComPWA/polarimetry/issues/122#issuecomment-1252334099
+    assert isobar.interaction is not None, "LS-values required"
+    resonance = isobar.parent
+    L = isobar.interaction.L
+    S = isobar.interaction.S
+    if resonance.name.startswith("K"):
+        return int((-1) ** resonance.spin)
+    if resonance.name.startswith("L"):
+        return int(-resonance.parity * (-1) ** (L + S - resonance.spin))
+    if resonance.name.startswith("D"):
+        return int(-resonance.parity * (-1) ** (L + S - sp.Rational(1, 2)))
     raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
 
 
