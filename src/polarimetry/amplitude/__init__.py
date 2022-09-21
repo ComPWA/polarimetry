@@ -148,7 +148,7 @@ class DalitzPlotDecompositionBuilder:
                 sub_amp_expr *= H_prod[R, λR, λ[k]]
             else:
                 production_isobar = chain.decay
-                resonance_isobar = chain.decay.child2
+                resonance_isobar = chain.decay.child1
                 assert production_isobar.interaction is not None
                 assert resonance_isobar.interaction is not None
                 sub_amp_expr *= H_prod[
@@ -158,8 +158,8 @@ class DalitzPlotDecompositionBuilder:
                 ]
                 sub_amp_expr *= _formulate_clebsch_gordan_factor(
                     production_isobar,
-                    child1_helicity=λ[k],
-                    child2_helicity=λR,
+                    child1_helicity=λR,
+                    child2_helicity=λ[k],
                 )
             sub_amp = PoolSum(
                 sub_amp_expr,

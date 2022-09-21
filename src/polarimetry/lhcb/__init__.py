@@ -115,18 +115,18 @@ def load_three_body_decay(
             child1, child2, spectator = p, π, K
         else:
             raise NotImplementedError
-        prod_ls_couplings = generate_ls(Λc, spectator, resonance, conserve_parity=False)
+        prod_ls_couplings = generate_ls(Λc, resonance, spectator, conserve_parity=False)
         dec_ls_couplings = generate_ls(resonance, child1, child2, conserve_parity=True)
         if min_ls:
             decay = IsobarNode(
                 parent=Λc,
-                child1=spectator,
-                child2=IsobarNode(
+                child1=IsobarNode(
                     parent=resonance,
                     child1=child1,
                     child2=child2,
                     interaction=min(dec_ls_couplings),
                 ),
+                child2=spectator,
                 interaction=min(prod_ls_couplings),
             )
             return [ThreeBodyDecayChain(decay)]
@@ -134,13 +134,13 @@ def load_three_body_decay(
         for dec_ls, prod_ls in itertools.product(dec_ls_couplings, prod_ls_couplings):
             decay = IsobarNode(
                 parent=Λc,
-                child1=spectator,
-                child2=IsobarNode(
+                child1=IsobarNode(
                     parent=resonance,
                     child1=child1,
                     child2=child2,
                     interaction=dec_ls,
                 ),
+                child2=spectator,
                 interaction=prod_ls,
             )
             chains.append(ThreeBodyDecayChain(decay))
