@@ -380,7 +380,7 @@ def get_conversion_factor_ls(isobar: IsobarNode) -> Literal[-1, 1]:
     L = isobar.interaction.L
     S = isobar.interaction.S
     if resonance.name.startswith("K"):
-        return int((-1) ** resonance.spin)
+        return 1
     if resonance.name.startswith("L"):
         return int(-resonance.parity * (-1) ** (L + S - resonance.spin))
     if resonance.name.startswith("D"):
