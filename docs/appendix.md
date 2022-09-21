@@ -7,4 +7,5 @@ appendix/phase-space
 appendix/alignment
 appendix/benchmark
 appendix/serialization
+appendix/ls-model
 ```
