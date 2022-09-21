@@ -30,6 +30,7 @@ __TARGET_SUBSTITUTIONS = {
     "jnp.ndarray": "jax.numpy.ndarray",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
+    "sp.Mul": "sympy.core.mul.Mul",
     "sp.Rational": "sympy.core.numbers.Rational",
     "sp.Symbol": "sympy.core.symbol.Symbol",
     "sp.acos": "sympy.functions.elementary.trigonometric.acos",

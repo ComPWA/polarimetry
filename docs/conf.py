@@ -18,8 +18,8 @@ from _relink_references import relink_references
 
 def download_figure_1() -> str:
     files = [
-        "figure1.svg",
-        "figure1-inset.svg",
+        "_images/figure1.svg",
+        "_images/figure1-inset.svg",
     ]
     for file in files:
         if not os.path.exists(file):
@@ -27,7 +27,8 @@ def download_figure_1() -> str:
             return ""
     src = f"""
     ```{{only}} html
-    High-resolution image can be downloaded here: {{download}}`{files[0]}` / {{download}}`{files[1]}`
+    High-resolution image can be downloaded here:
+    {_to_download_link(files[0])} / {_to_download_link(files[1])}
     ```
     """
     return dedent(src).strip()
@@ -35,12 +36,12 @@ def download_figure_1() -> str:
 
 def download_figures_2_and_3() -> str:
     files = [
-        "figure2.svg",
-        "figure2-inset.svg",
-        "figure3a.svg",
-        "figure3a-inset.svg",
-        "figure3b.svg",
-        "figure3b-inset.svg",
+        "_images/figure2.svg",
+        "_images/figure2-inset.svg",
+        "_images/figure3a.svg",
+        "_images/figure3a-inset.svg",
+        "_images/figure3b.svg",
+        "_images/figure3b-inset.svg",
     ]
     for file in files:
         if not os.path.exists(file):
@@ -51,25 +52,30 @@ def download_figures_2_and_3() -> str:
     ```{{only}} html
     **Figures 2 and 3** for the paper can be downloaded here:
 
-    - {{download}}`{files[0]}` / {{download}}`{files[1]}`
-    - {{download}}`{files[2]}` / {{download}}`{files[3]}`
-    - {{download}}`{files[4]}` / {{download}}`{files[5]}`
+    - {_to_download_link(files[0])} / {_to_download_link(files[1])}
+    - {_to_download_link(files[2])} / {_to_download_link(files[3])}
+    - {_to_download_link(files[4])} / {_to_download_link(files[5])}
     ```
     """
     return dedent(src).strip()
 
 
 def download_intensity_distribution() -> str:
-    filename = "intensity-distribution.png"
+    filename = "_images/intensity-distribution.png"
     if not os.path.exists(filename):
         print_missing_file_warning(filename)
         return ""
     src = f"""
     ```{{only}} html
-    High-resolution image can be downloaded here: {{download}}`{filename}`
+    High-resolution image can be downloaded here: {_to_download_link(filename)}
     ```
     """
     return dedent(src).strip()
+
+
+def _to_download_link(path: str) -> str:
+    basename = os.path.basename(path)
+    return "{download}" + f"`{basename}<{path}>`"
 
 
 def execute_pluto_notebooks() -> None:
