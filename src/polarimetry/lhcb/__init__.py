@@ -105,16 +105,16 @@ def load_three_body_decay(
 ) -> ThreeBodyDecay:
     def create_isobar(resonance: Particle) -> ThreeBodyDecayChain:
         if resonance.name.startswith("K"):
-            child1, child2, sibling = π, K, p
+            child1, child2, spectator = π, K, p
         elif resonance.name.startswith("L"):
-            child1, child2, sibling = K, p, π
+            child1, child2, spectator = K, p, π
         elif resonance.name.startswith("D"):
-            child1, child2, sibling = p, π, K
+            child1, child2, spectator = p, π, K
         else:
             raise NotImplementedError
         decay = IsobarNode(
             parent=Λc,
-            child1=sibling,
+            child1=spectator,
             child2=IsobarNode(
                 parent=resonance,
                 child1=child1,
@@ -123,7 +123,7 @@ def load_three_body_decay(
                     resonance, child1, child2, conserve_parity=True
                 ),
             ),
-            interaction=generate_L_min(Λc, sibling, resonance, conserve_parity=False),
+            interaction=generate_L_min(Λc, spectator, resonance, conserve_parity=False),
         )
         return ThreeBodyDecayChain(decay)
 
