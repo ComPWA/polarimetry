@@ -114,8 +114,7 @@ def load_three_body_decay(
             raise NotImplementedError
         decay = IsobarNode(
             parent=Λc,
-            child1=spectator,
-            child2=IsobarNode(
+            child1=IsobarNode(
                 parent=resonance,
                 child1=child1,
                 child2=child2,
@@ -123,7 +122,8 @@ def load_three_body_decay(
                     resonance, child1, child2, conserve_parity=True
                 ),
             ),
-            interaction=generate_L_min(Λc, spectator, resonance, conserve_parity=False),
+            child2=spectator,
+            interaction=generate_L_min(Λc, resonance, spectator, conserve_parity=False),
         )
         return ThreeBodyDecayChain(decay)
 
