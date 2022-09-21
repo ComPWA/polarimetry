@@ -105,14 +105,14 @@ class ThreeBodyDecayChain:
     decay: IsobarNode = field(validator=instance_of(IsobarNode))
 
     def __attrs_post_init__(self) -> None:
-        if not isinstance(self.decay.child1, Particle):
-            raise TypeError(f"Child 1 has of type {Particle.__name__} (spectator)")
-        if not isinstance(self.decay.child2, IsobarNode):
-            raise TypeError(f"Child 2 has of type {IsobarNode.__name__} (the decay)")
-        if not isinstance(self.decay.child2.child1, Particle):
-            raise TypeError(f"Child 1 of child 2 has of type {Particle.__name__}")
-        if not isinstance(self.decay.child2.child1, Particle):
-            raise TypeError(f"Child 1 of child 2 has of type {Particle.__name__}")
+        if not isinstance(self.decay.child1, IsobarNode):
+            raise TypeError(f"Child 1 has of type {IsobarNode.__name__} (the decay)")
+        if not isinstance(self.decay.child1.child1, Particle):
+            raise TypeError(f"Child 1 of child 1 has of type {Particle.__name__}")
+        if not isinstance(self.decay.child1.child1, Particle):
+            raise TypeError(f"Child 1 of child 1 has of type {Particle.__name__}")
+        if not isinstance(self.decay.child2, Particle):
+            raise TypeError(f"Child 2 has of type {Particle.__name__} (spectator)")
         if self.incoming_ls is None:
             raise ValueError(f"LS-coupling for production node required")
         if self.outgoing_ls is None:
@@ -123,19 +123,19 @@ class ThreeBodyDecayChain:
         return self.decay.parent
 
     @property
-    def spectator(self) -> Particle:
-        return self.decay.child1
-
-    @property
     def resonance(self) -> Particle:
-        return self.decay.child2.parent
+        return self.decay.child1.parent
 
     @property
     def decay_products(self) -> tuple[Particle, Particle]:
         return (
-            self.decay.child2.child1,
-            self.decay.child2.child2,
+            self.decay.child1.child1,
+            self.decay.child1.child2,
         )
+
+    @property
+    def spectator(self) -> Particle:
+        return self.decay.child2
 
     @property
     def incoming_ls(self) -> LSCoupling:
@@ -143,7 +143,7 @@ class ThreeBodyDecayChain:
 
     @property
     def outgoing_ls(self) -> LSCoupling:
-        return self.decay.child2.interaction
+        return self.decay.child1.interaction
 
 
 @frozen

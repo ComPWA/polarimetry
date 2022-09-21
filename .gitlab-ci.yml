@@ -13,13 +13,12 @@ pages:
     - ln -s /opt/julia-1.7.3/bin/julia /usr/local/bin/julia
     - julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
   script:
-    - tox -e pdf
+    - tox -e pdfnb
     # Check if there are there are missing figures in the PDF build
     - "! grep -r 'PYGZlt{}Figure size ' docs/_build"
     - EXECUTE_PLUTO="YES" tox -e docnb
     - mv docs/_build/html/ public/
   variables:
-    EXECUTE_NB: "YES"
     PYTHONHASHSEED: "0"
   artifacts:
     paths:
