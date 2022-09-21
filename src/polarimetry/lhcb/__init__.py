@@ -360,6 +360,7 @@ def _to_value_with_uncertainty(str_value: str) -> float:
 def get_conversion_factor(
     resonance: Particle, proton_helicity: sp.Rational | None = None
 ) -> Literal[-1, 1]:
+    # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
     half = sp.Rational(1, 2)
     factor = 1
     if proton_helicity is not None:
