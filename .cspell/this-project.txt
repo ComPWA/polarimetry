@@ -17,6 +17,7 @@ Mikhasenko
 mkdir
 msigma
 nbformat
+pdfnb
 phsp
 pushd
 PYTHONHASHSEED
