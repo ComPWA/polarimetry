@@ -31,7 +31,7 @@ def formulate_bugg_breit_wigner(
 
 def formulate_exponential_bugg_breit_wigner(
     decay_chain: ThreeBodyDecayChain,
-) -> tuple[BuggBreitWigner, dict[sp.Symbol, float]]:
+) -> tuple[sp.Mul, dict[sp.Symbol, float]]:
     """See `this paper, Eq. (4) <https://arxiv.org/pdf/hep-ex/0510019.pdf#page=3>`_."""
     expr, parameter_defaults = formulate_bugg_breit_wigner(decay_chain)
     alpha = sp.Symbol(Rf"\alpha_{{{decay_chain.resonance.name}}}")
@@ -45,7 +45,7 @@ def formulate_exponential_bugg_breit_wigner(
 
 def formulate_flatte_1405(
     decay: ThreeBodyDecayChain,
-) -> tuple[BuggBreitWigner, dict[sp.Symbol, float]]:
+) -> tuple[FlattéSWave, dict[sp.Symbol, float]]:
     s = _get_mandelstam_s(decay)
     m1, m2 = map(_to_mass_symbol, decay.decay_products)
     mass = sp.Symbol(f"m_{{{decay.resonance.name}}}")
@@ -66,7 +66,9 @@ def formulate_flatte_1405(
     return dynamics, parameter_defaults
 
 
-def formulate_breit_wigner(decay_chain: ThreeBodyDecayChain):
+def formulate_breit_wigner(
+    decay_chain: ThreeBodyDecayChain,
+) -> tuple[BreitWignerMinL, dict[sp.Symbol, float]]:
     s = _get_mandelstam_s(decay_chain)
     child1_mass, child2_mass = map(_to_mass_symbol, decay_chain.decay_products)
     l_dec = sp.Rational(decay_chain.outgoing_ls.L)
@@ -105,15 +107,15 @@ def formulate_breit_wigner(decay_chain: ThreeBodyDecayChain):
 
 
 def _get_mandelstam_s(decay: ThreeBodyDecayChain) -> sp.Symbol:
-    σ1, σ2, σ3 = sp.symbols("sigma1:4", nonnegative=True)
+    s1, s2, s3 = sp.symbols("sigma1:4", nonnegative=True)
     m1, m2, m3 = map(_to_mass_symbol, [p, π, K])
     decay_masses = {_to_mass_symbol(p) for p in decay.decay_products}
     if decay_masses == {m2, m3}:
-        return σ1
+        return s1
     if decay_masses == {m1, m3}:
-        return σ2
+        return s2
     if decay_masses == {m1, m2}:
-        return σ3
+        return s3
     raise NotImplementedError(
         f"Cannot find Mandelstam variable for {''.join(decay_masses)}"
     )
