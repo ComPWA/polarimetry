@@ -108,19 +108,19 @@ def load_three_body_decay(
 ) -> ThreeBodyDecay:
     def create_isobar(resonance: Particle) -> list[ThreeBodyDecayChain]:
         if resonance.name.startswith("K"):
-            child1, child2, sibling = π, K, p
+            child1, child2, spectator = π, K, p
         elif resonance.name.startswith("L"):
-            child1, child2, sibling = K, p, π
+            child1, child2, spectator = K, p, π
         elif resonance.name.startswith("D"):
-            child1, child2, sibling = p, π, K
+            child1, child2, spectator = p, π, K
         else:
             raise NotImplementedError
-        prod_ls_couplings = generate_ls(Λc, sibling, resonance, conserve_parity=False)
+        prod_ls_couplings = generate_ls(Λc, spectator, resonance, conserve_parity=False)
         dec_ls_couplings = generate_ls(resonance, child1, child2, conserve_parity=True)
         if min_ls:
             decay = IsobarNode(
                 parent=Λc,
-                child1=sibling,
+                child1=spectator,
                 child2=IsobarNode(
                     parent=resonance,
                     child1=child1,
@@ -134,7 +134,7 @@ def load_three_body_decay(
         for dec_ls, prod_ls in itertools.product(dec_ls_couplings, prod_ls_couplings):
             decay = IsobarNode(
                 parent=Λc,
-                child1=sibling,
+                child1=spectator,
                 child2=IsobarNode(
                     parent=resonance,
                     child1=child1,
