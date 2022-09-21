@@ -317,9 +317,7 @@ def _formulate_clebsch_gordan_factor(
         j3=isobar.parent.spin,
         m3=child1_helicity - child2_helicity,
     )
-    sqrt_factor = sp.sqrt(
-        (2 * isobar.interaction.L + 1) / (2 * isobar.interaction.S + 1)
-    )
+    sqrt_factor = sp.sqrt((2 * isobar.interaction.L + 1) / (2 * isobar.parent.spin + 1))
     return sqrt_factor * cg_ll * cg_ss
 
 
