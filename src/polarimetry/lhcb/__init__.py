@@ -334,7 +334,7 @@ def _to_symbol_value_mapping(
                 if min_ls:
                     factor = get_conversion_factor(chain.resonance)
                 else:
-                    factor = get_conversion_factor(chain.resonance)
+                    factor = get_conversion_factor_ls(chain.decay)
             else:
                 factor = 1
             key_to_val[f"A{identifier}"] = factor * complex(real, imag)
