@@ -229,6 +229,10 @@ extensions = [
     "sphinx_togglebutton",
     "sphinxcontrib.inkscapeconverter",
 ]
+html_js_files = [
+    # https://github.com/requirejs/requirejs/tags
+    "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js",
+]
 html_sourcelink_suffix = ""
 html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
@@ -327,6 +331,11 @@ nitpick_ignore_regex = [
 numfig = True
 primary_domain = "py"
 pygments_style = "sphinx"
+suppress_warnings = [
+    "mystnb.mime_priority",  # plotly figures in LaTeX build
+    # https://github.com/executablebooks/MyST-NB/blob/4dcf7c5/docs/conf.py#L46-L47
+    "mystnb.unknown_mime_type",
+]
 use_multitoc_numbering = True
 version = get_version()
 viewcode_follow_imported_members = True

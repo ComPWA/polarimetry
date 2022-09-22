@@ -111,6 +111,9 @@
   "ignoreWords": [
     "Sigmapi",
     "prereleased",
-    "tableofcontents"
+    "tableofcontents",
+    "xaxis",
+    "yaxis",
+    "zaxis"
   ]
 }
