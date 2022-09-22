@@ -50,6 +50,7 @@ numpy
 pathlib
 pcolormesh
 phasespace
+plotly
 psutil
 pygments
 pyplot
