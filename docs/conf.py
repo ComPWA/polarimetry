@@ -332,6 +332,7 @@ numfig = True
 primary_domain = "py"
 pygments_style = "sphinx"
 suppress_warnings = [
+    "mystnb.mime_priority",  # plotly figures in LaTeX build
     # https://github.com/executablebooks/MyST-NB/blob/4dcf7c5/docs/conf.py#L46-L47
     "mystnb.unknown_mime_type",
 ]
