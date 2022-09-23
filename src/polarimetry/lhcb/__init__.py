@@ -308,7 +308,7 @@ def _to_value_with_uncertainty(str_value: str) -> float:
     >>> _to_value_with_uncertainty('1.5 ± 0.2')
     (1.5, 0.2)
     """
-    value, uncertainty = map(float, str_value.split(" ± "))
+    value, uncertainty, *_ = map(float, str_value.split(" ± "))
     return value, uncertainty
 
 
