@@ -251,8 +251,7 @@ def perform_cached_doit(
         unevaluated_expr: A `sympy.Expr <sympy.core.expr.Expr>` on which to call
             :code:`doit()`.
         directory: The directory in which to cache the result. If `None`, the cache
-            directory will be put under the source code directory where `polarimetry`
-            is installed.
+            directory will be put under the home directory.
 
     .. tip:: For a faster cache, set `PYTHONHASHSEED
         <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
