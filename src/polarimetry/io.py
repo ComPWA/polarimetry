@@ -28,10 +28,14 @@ from os.path import abspath, dirname, expanduser
 from textwrap import dedent
 from typing import Iterable, Mapping, Sequence
 
+import cloudpickle
 import jax.numpy as jnp
 import sympy as sp
 from ampform.sympy import UnevaluatedExpression
 from IPython.display import Math, display
+from tensorwaves.function import ParametrizedBackendFunction, PositionalArgumentFunction
+from tensorwaves.function.sympy import create_function, create_parametrized_function
+from tensorwaves.interface import ParameterValue
 
 from polarimetry.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 
@@ -256,6 +260,8 @@ def perform_cached_doit(
     .. tip:: For a faster cache, set `PYTHONHASHSEED
         <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
         fixed value.
+
+    .. seealso:: :func:`perform_cached_lambdify`
     """
     if directory is None:
         home_directory = expanduser("~")
@@ -273,6 +279,54 @@ def perform_cached_doit(
     with open(filename, "wb") as f:
         pickle.dump(unfolded_expr, f)
     return unfolded_expr
+
+
+def perform_cached_lambdify(
+    expr: sp.Expr,
+    parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
+    backend: str = "jax",
+    directory: str | None = None,
+) -> ParametrizedBackendFunction | PositionalArgumentFunction:
+    """Lambdify a SymPy `~sympy.core.expr.Expr` and cache the result to disk.
+
+    The cached result is fetched from disk if the hash of the expression is the same as
+    the hash embedded in the filename.
+
+    Args:
+        expr: A `sympy.Expr <sympy.core.expr.Expr>` on which to call
+            :func:`~tensorwaves.function.sympy.create_function` or
+            :func:`~tensorwaves.function.sympy.create_parametrized_function`.
+        parameters: Specify this argument in order to create a
+            `~tensorwaves.function.ParametrizedBackendFunction` instead of a
+            `~tensorwaves.function.PositionalArgumentFunction`.
+        backend: The choice of backend for the created numerical function. **WARNING**:
+            this function has only been tested for :code:`backend="jax"`!
+        directory: The directory in which to cache the result. If `None`, the cache
+            directory will be put under the home directory.
+
+    .. tip:: For a faster cache, set `PYTHONHASHSEED
+        <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
+        fixed value.
+
+    .. seealso:: :func:`perform_cached_doit`
+    """
+    if directory is None:
+        home_directory = expanduser("~")
+        directory = abspath(f"{home_directory}/.sympy-cache-{backend}")
+    h = get_readable_hash(expr)
+    filename = f"{directory}/{h}.pkl"
+    os.makedirs(dirname(filename), exist_ok=True)
+    if os.path.exists(filename):
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    _LOGGER.warning(f"Cached function file {filename} not found, lambdifying...")
+    if parameters is None:
+        func = create_function(expr, backend)
+    else:
+        func = create_parametrized_function(expr, parameters, backend)
+    with open(filename, "wb") as f:
+        cloudpickle.dump(func, f)
+    return func
 
 
 def get_readable_hash(obj) -> str:

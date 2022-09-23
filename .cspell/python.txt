@@ -6,6 +6,7 @@ bbox
 cairosvg
 caplog
 clim
+cloudpickle
 cmap
 configurator
 corrcoef
