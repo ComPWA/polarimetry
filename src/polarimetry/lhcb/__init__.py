@@ -311,6 +311,7 @@ def _to_value_with_uncertainty(str_value: str) -> MeasuredParameter[float]:
     >>> par
     MeasuredParameter(value=0.94, hesse=0.042, model=0.35, systematic=0.04)
     >>> par.uncertainty
+    0.042
     """
     float_values = tuple(float(s) for s in str_value.split(" ± "))
     if len(float_values) == 2:
