@@ -268,7 +268,6 @@ def perform_cached_doit(
         directory = abspath(f"{home_directory}/.sympy-cache")
     h = get_readable_hash(unevaluated_expr)
     filename = f"{directory}/{h}.pkl"
-    os.makedirs(dirname(filename), exist_ok=True)
     if os.path.exists(filename):
         with open(filename, "rb") as f:
             return pickle.load(f)
@@ -276,6 +275,7 @@ def perform_cached_doit(
         f"Cached expression file {filename} not found, performing doit()..."
     )
     unfolded_expr = unevaluated_expr.doit()
+    os.makedirs(dirname(filename), exist_ok=True)
     with open(filename, "wb") as f:
         pickle.dump(unfolded_expr, f)
     return unfolded_expr
@@ -315,7 +315,6 @@ def perform_cached_lambdify(
         directory = abspath(f"{home_directory}/.sympy-cache-{backend}")
     h = get_readable_hash(expr)
     filename = f"{directory}/{h}.pkl"
-    os.makedirs(dirname(filename), exist_ok=True)
     if os.path.exists(filename):
         with open(filename, "rb") as f:
             return pickle.load(f)
@@ -324,6 +323,7 @@ def perform_cached_lambdify(
         func = create_function(expr, backend)
     else:
         func = create_parametrized_function(expr, parameters, backend)
+    os.makedirs(dirname(filename), exist_ok=True)
     with open(filename, "wb") as f:
         cloudpickle.dump(func, f)
     return func
