@@ -20,10 +20,12 @@ __TARGET_SUBSTITUTIONS = {
     "Literal[- 1, 1]": "typing.Literal",
     "Literal[-1, 1]": "typing.Literal",
     "OuterStates": "polarimetry.decay.OuterStates",
+    "ParameterValue": "tensorwaves.interface.ParameterValue",
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "Path": "pathlib.Path",
     "Pattern": "typing.Pattern",
     "PoolSum": "ampform.sympy.PoolSum",
+    "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
     "QuadContourSet": "matplotlib.contour.QuadContourSet",
     "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
     "implement_doit_method": "ampform.sympy.implement_doit_method",
@@ -39,6 +41,7 @@ __TARGET_SUBSTITUTIONS = {
 __REF_TYPE_SUBSTITUTIONS = {
     "polarimetry.decay.OuterStates": "obj",
     "tensorwaves.interface.DataSample": "obj",
+    "tensorwaves.interface.ParameterValue": "obj",
 }
 
 
