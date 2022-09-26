@@ -66,7 +66,7 @@ EXECUTE_PLUTO=YES tox -e docnb
 or, alternatively, by executing _all_ Jupyter and Pluto notebooks (ignoring any existing caches):
 
 ```shell
-tox -e docnb-force
+EXECUTE_PLUTO=YES tox -e docnb-force
 ```
 
 The [above commands](#building-the-documentation) result in a static HTML webpage. It's also possible to render the notebook as a single PDF file. This can be done as follows:

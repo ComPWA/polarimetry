@@ -9,12 +9,13 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
-from typing import Iterable
+from typing import Generic, Iterable, TypeVar
 
 import attrs
 import numpy as np
 import sympy as sp
 import yaml
+from attrs import frozen
 from sympy.core.symbol import Str
 
 from polarimetry.amplitude import (
@@ -154,26 +155,18 @@ class ParameterBootstrap:
         decay: ThreeBodyDecay,
         model_id: int | str = 0,
     ) -> None:
-        self.__values = {
-            str(symbol): value
-            for symbol, value in load_model_parameters(
-                filename, decay, model_id, typ="value"
-            ).items()
-        }
-        self.__uncertainties = {
-            str(symbol): value
-            for symbol, value in load_model_parameters(
-                filename, decay, model_id, typ="uncertainty"
-            ).items()
-        }
+        symbolic_parameters = load_model_parameters_with_uncertainties(
+            filename, decay, model_id
+        )
+        self.__parameters = {str(k): v for k, v in symbolic_parameters.items()}
 
     @property
     def values(self) -> dict[str, complex | float | int]:
-        return dict(self.__values)
+        return {k: v.value for k, v in self.__parameters.items()}
 
     @property
     def uncertainties(self) -> dict[str, complex | float | int]:
-        return dict(self.__uncertainties)
+        return {k: v.uncertainty for k, v in self.__parameters.items()}
 
     def create_distribution(
         self, sample_size: int, seed: int | None = None
@@ -190,14 +183,22 @@ def load_model_parameters(
     filename: Path | str,
     decay: ThreeBodyDecay,
     model_id: int | str = 0,
-    typ: Literal["value", "uncertainty"] = "value",
 ) -> dict[sp.Indexed | sp.Symbol, complex | float]:
+    parameters = load_model_parameters_with_uncertainties(filename, decay, model_id)
+    return {k: v.value for k, v in parameters.items()}
+
+
+def load_model_parameters_with_uncertainties(
+    filename: Path | str,
+    decay: ThreeBodyDecay,
+    model_id: int | str = 0,
+) -> dict[sp.Indexed | sp.Symbol, MeasuredParameter]:
     with open(filename) as f:
         model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
     model_title = _find_model_title(model_definitions, model_id)
     parameter_definitions = model_definitions[model_title]["parameters"]
-    parameters = _to_symbol_value_mapping(parameter_definitions, decay, typ)
-    decay_couplings = compute_decay_couplings(decay, typ)
+    parameters = _to_symbol_value_mapping(parameter_definitions, decay)
+    decay_couplings = compute_decay_couplings(decay)
     parameters.update(decay_couplings)
     return parameters
 
@@ -246,8 +247,8 @@ def flip_production_coupling_signs(
 
 
 def compute_decay_couplings(
-    decay: ThreeBodyDecay, typ: Literal["value", "uncertainty"] = "value"
-) -> dict[sp.Indexed, int]:
+    decay: ThreeBodyDecay,
+) -> dict[sp.Indexed, MeasuredParameter[int]]:
     H_dec = sp.IndexedBase(R"\mathcal{H}^\mathrm{decay}")
     half = sp.Rational(1, 2)
     decay_couplings = {}
@@ -270,46 +271,109 @@ def compute_decay_couplings(
                 * child2.parity
                 * (-1) ** (chain.resonance.spin - child1.spin - child2.spin)
             )
-    if typ == "uncertainty":
-        return {s: 0 for s in decay_couplings}
-    return decay_couplings
+    return {
+        symbol: MeasuredParameter(value, hesse=0)
+        for symbol, value in decay_couplings.items()
+    }
 
 
 def _to_symbol_value_mapping(
-    parameter_dict: dict[str, str],
-    decay: ThreeBodyDecay,
-    typ: Literal["value", "uncertainty"] = "value",
-) -> dict[sp.Basic, complex | float]:
-    switch = 0 if typ == "value" else 1
-    key_to_val: dict[str, complex | float] = {}
+    parameter_dict: dict[str, str], decay: ThreeBodyDecay
+) -> dict[sp.Basic, MeasuredParameter]:
+    key_to_value: dict[str, MeasuredParameter] = {}
     for key, str_value in parameter_dict.items():
         if key.startswith("Ar"):
             identifier = key[2:]
             str_imag = parameter_dict[f"Ai{identifier}"]
-            real = _to_value_with_uncertainty(str_value)[switch]
-            imag = _to_value_with_uncertainty(str_imag)[switch]
             key = f"A{identifier}"
             indexed_symbol: sp.Indexed = parameter_key_to_symbol(key)
             chain = decay.find_chain(resonance_name=str(indexed_symbol.indices[0]))
-            if typ == "value":
-                factor = get_conversion_factor(chain.resonance)
-            else:
-                factor = 1
-            key_to_val[f"A{identifier}"] = factor * complex(real, imag)
+            conversion_factor = get_conversion_factor(chain.resonance)
+            real = _to_value_with_uncertainty(str_value)
+            imag = _to_value_with_uncertainty(str_imag)
+            parameter = _form_complex_parameter(real, imag)
+            key_to_value[f"A{identifier}"] = attrs.evolve(
+                parameter,
+                value=conversion_factor * parameter.value,
+            )
         elif key.startswith("Ai"):
             continue
         else:
-            key_to_val[key] = _to_value_with_uncertainty(str_value)[switch]
-    return {parameter_key_to_symbol(key): value for key, value in key_to_val.items()}
+            key_to_value[key] = _to_value_with_uncertainty(str_value)
+    return {parameter_key_to_symbol(key): value for key, value in key_to_value.items()}
 
 
-def _to_value_with_uncertainty(str_value: str) -> float:
+def _to_value_with_uncertainty(str_value: str) -> MeasuredParameter[float]:
     """
     >>> _to_value_with_uncertainty('1.5 ± 0.2')
-    (1.5, 0.2)
+    MeasuredParameter(value=1.5, hesse=0.2, model=None, systematic=None)
+    >>> par = _to_value_with_uncertainty('0.94 ± 0.042 ± 0.35 ± 0.04')
+    >>> par
+    MeasuredParameter(value=0.94, hesse=0.042, model=0.35, systematic=0.04)
+    >>> par.uncertainty
+    0.042
     """
-    value, uncertainty = map(float, str_value.split(" ± "))
-    return value, uncertainty
+    float_values = tuple(float(s) for s in str_value.split(" ± "))
+    if len(float_values) == 2:
+        return MeasuredParameter(
+            value=float_values[0],
+            hesse=float_values[1],
+        )
+    if len(float_values) == 4:
+        return MeasuredParameter(
+            value=float_values[0],
+            hesse=float_values[1],
+            model=float_values[2],
+            systematic=float_values[3],
+        )
+    raise ValueError(f"Cannot convert '{str_value}' to {MeasuredParameter.__name__}")
+
+
+def _form_complex_parameter(
+    real: MeasuredParameter[float],
+    imag: MeasuredParameter[float],
+) -> MeasuredParameter[complex]:
+    def convert_optional(real: float | None, imag: float | None) -> complex | None:
+        if real is None or imag is None:
+            return None
+        return complex(real, imag)
+
+    return MeasuredParameter(
+        value=complex(real.value, imag.value),
+        hesse=complex(real.hesse, imag.hesse),
+        model=convert_optional(real.model, imag.model),
+        systematic=convert_optional(real.systematic, imag.systematic),
+    )
+
+
+ParameterType = TypeVar("ParameterType", complex, float)
+"""Template for the parameter type of a for `MeasuredParameter`."""
+
+
+@frozen
+class MeasuredParameter(Generic[ParameterType]):
+    """Data structure for imported parameter values.
+
+    `MeasuredParameter.value` and `~.MeasuredParameter.hesse` are taken from the
+    `supplemental material <https://cds.cern.ch/record/2824328/files>`_, whereas
+    `~.MeasuredParameter.model` and `~.MeasuredParameter.systematic` are taken from
+    `Tables 8 and 9 <https://arxiv.org/pdf/2208.03262.pdf#page=21>`_ from the original
+    LHCb paper.
+    """
+
+    value: ParameterType
+    """Central value of the parameter as determined by a fit with Minuit."""
+    hesse: ParameterType
+    """Parameter uncertainty as determined by a fit with Minuit."""
+    model: ParameterType | None = None
+    """Systematic uncertainties from fit bootstrapping."""
+    systematic: ParameterType | None = None
+    """Systematic uncertainties from detector effects etc.."""
+
+    @property
+    def uncertainty(self) -> ParameterType:
+        # Will implement quadratic sum of uncertainties here
+        return self.hesse
 
 
 def get_conversion_factor(
