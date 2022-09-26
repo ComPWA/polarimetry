@@ -20,6 +20,7 @@ __TARGET_SUBSTITUTIONS = {
     "Literal[- 1, 1]": "typing.Literal",
     "Literal[-1, 1]": "typing.Literal",
     "OuterStates": "polarimetry.decay.OuterStates",
+    "ParameterType": "polarimetry.lhcb.ParameterType",
     "ParameterValue": "tensorwaves.interface.ParameterValue",
     "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
     "Path": "pathlib.Path",
@@ -39,6 +40,7 @@ __TARGET_SUBSTITUTIONS = {
 }
 __REF_TYPE_SUBSTITUTIONS = {
     "polarimetry.decay.OuterStates": "obj",
+    "polarimetry.lhcb.ParameterType": "obj",
     "tensorwaves.interface.DataSample": "obj",
     "tensorwaves.interface.ParameterValue": "obj",
 }

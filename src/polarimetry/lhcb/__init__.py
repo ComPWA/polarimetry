@@ -347,20 +347,28 @@ def _form_complex_parameter(
 
 
 ParameterType = TypeVar("ParameterType", complex, float)
+"""Template for the parameter type of a for `MeasuredParameter`."""
 
 
 @frozen
 class MeasuredParameter(Generic[ParameterType]):
-    """Data structure for imported parameter values."""
+    """Data structure for imported parameter values.
+
+    `MeasuredParameter.value` and `~.MeasuredParameter.hesse` are taken from the
+    `supplemental material <https://cds.cern.ch/record/2824328/files>`_, whereas
+    `~.MeasuredParameter.model` and `~.MeasuredParameter.systematic` are taken from
+    `Tables 8 and 9 <https://arxiv.org/pdf/2208.03262.pdf#page=21>`_ from the original
+    LHCb paper.
+    """
 
     value: ParameterType
-    """The determined central value as posted in the `supplemental material <https://cds.cern.ch/record/2824328/files>`."""
+    """Central value of the parameter as determined by a fit with Minuit."""
     hesse: ParameterType
-    """The determined central value as posted in the `supplemental material <https://cds.cern.ch/record/2824328/files>`."""
+    """Parameter uncertainty as determined by a fit with Minuit."""
     model: ParameterType | None = None
-    """Systematic uncertainties from alternative models, see Table 8."""
+    """Systematic uncertainties from fit bootstrapping."""
     systematic: ParameterType | None = None
-    """Systematic uncertainties from detector effects etc., see Table 8."""
+    """Systematic uncertainties from detector effects etc.."""
 
     @property
     def uncertainty(self) -> ParameterType:
