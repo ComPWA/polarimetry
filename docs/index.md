@@ -27,6 +27,7 @@ cross-check
 intensity
 polarimetry
 uncertainties
+resonance-polarimetry
 appendix
 API <api/polarimetry>
 ```
