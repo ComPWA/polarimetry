@@ -38,6 +38,7 @@ __TARGET_SUBSTITUTIONS = {
     "sp.Rational": "sympy.core.numbers.Rational",
     "sp.Symbol": "sympy.core.symbol.Symbol",
     "sp.acos": "sympy.functions.elementary.trigonometric.acos",
+    "typing.Literal[-1, 1]": "typing.Literal",
 }
 __REF_TYPE_SUBSTITUTIONS = {
     "jax.numpy.ndarray": "obj",
