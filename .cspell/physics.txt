@@ -1,8 +1,10 @@
 Blatt
 Breit
 Bugg
+Clebsch
 Dalitz
 Flatté
+Gordan
 helicities
 helicity
 Källén

@@ -16,13 +16,14 @@ from sphinx.environment import BuildEnvironment
 
 __TARGET_SUBSTITUTIONS = {
     "DataSample": "tensorwaves.interface.DataSample",
+    "Function": "tensorwaves.interface.Function",
     "Literal[(-1, 1)]": "typing.Literal",
     "Literal[- 1, 1]": "typing.Literal",
     "Literal[-1, 1]": "typing.Literal",
     "OuterStates": "polarimetry.decay.OuterStates",
     "ParameterType": "polarimetry.lhcb.ParameterType",
     "ParameterValue": "tensorwaves.interface.ParameterValue",
-    "ParametrizedBackendFunction": "tensorwaves.function.ParametrizedBackendFunction",
+    "ParametrizedFunction": "tensorwaves.interface.ParametrizedFunction",
     "Path": "pathlib.Path",
     "Pattern": "typing.Pattern",
     "PoolSum": "ampform.sympy.PoolSum",
@@ -37,13 +38,16 @@ __TARGET_SUBSTITUTIONS = {
     "sp.Rational": "sympy.core.numbers.Rational",
     "sp.Symbol": "sympy.core.symbol.Symbol",
     "sp.acos": "sympy.functions.elementary.trigonometric.acos",
+    "typing.Literal[-1, 1]": "typing.Literal",
 }
 __REF_TYPE_SUBSTITUTIONS = {
     "jax.numpy.ndarray": "obj",
     "polarimetry.decay.OuterStates": "obj",
     "polarimetry.lhcb.ParameterType": "obj",
     "tensorwaves.interface.DataSample": "obj",
+    "tensorwaves.interface.Function": "obj",
     "tensorwaves.interface.ParameterValue": "obj",
+    "tensorwaves.interface.ParametrizedFunction": "obj",
 }
 
 

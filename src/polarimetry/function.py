@@ -5,14 +5,13 @@ import re
 from typing import Pattern
 
 import jax.numpy as jnp
-from tensorwaves.function import ParametrizedBackendFunction
-from tensorwaves.interface import DataSample
+from tensorwaves.interface import DataSample, ParametrizedFunction
 
 _LOGGER = logging.getLogger(__name__)
 
 
 def compute_sub_function(
-    func: ParametrizedBackendFunction,
+    func: ParametrizedFunction,
     input_data: DataSample,
     non_zero_couplings: list[Pattern],
 ):
@@ -24,9 +23,7 @@ def compute_sub_function(
     return array
 
 
-def set_parameter_to_zero(
-    func: ParametrizedBackendFunction, search_term: Pattern
-) -> None:
+def set_parameter_to_zero(func: ParametrizedFunction, search_term: Pattern) -> None:
     new_parameters = dict(func.parameters)
     no_parameters_selected = True
     for par_name in func.parameters:
