@@ -65,7 +65,7 @@ jsonschema==4.16.0
 jupyter-cache==0.5.0
 jupyter-client==7.3.5
 jupyter-core==4.11.1
-jupyter-server==1.19.0
+jupyter-server==1.19.1
 jupyterlab==3.4.7
 jupyterlab-code-formatter==1.5.3
 jupyterlab-markup==1.1.0
