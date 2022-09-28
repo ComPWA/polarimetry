@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 import sys
+from copy import deepcopy
 from math import sqrt
 from pathlib import Path
 from typing import Generic, Iterable, TypeVar
@@ -159,15 +160,15 @@ class ParameterBootstrap:
         symbolic_parameters = load_model_parameters_with_uncertainties(
             filename, decay, model_id
         )
-        self.__parameters = {str(k): v for k, v in symbolic_parameters.items()}
+        self._parameters = {str(k): v for k, v in symbolic_parameters.items()}
 
     @property
     def values(self) -> dict[str, complex | float | int]:
-        return {k: v.value for k, v in self.__parameters.items()}
+        return {k: v.value for k, v in self._parameters.items()}
 
     @property
     def uncertainties(self) -> dict[str, complex | float | int]:
-        return {k: v.uncertainty for k, v in self.__parameters.items()}
+        return {k: v.uncertainty for k, v in self._parameters.items()}
 
     def create_distribution(
         self, sample_size: int, seed: int | None = None
@@ -236,15 +237,27 @@ def _create_gaussian_distribution(
 
 
 def flip_production_coupling_signs(
-    model: AmplitudeModel, subsystem_names: list[str]
-) -> AmplitudeModel:
-    new_parameters = {}
+    model: AmplitudeModel | ParameterBootstrap, subsystem_names: list[str]
+) -> AmplitudeModel | ParameterBootstrap:
+    if isinstance(model, AmplitudeModel):
+        new_parameters = dict(model.parameter_defaults)
+    else:
+        # pyright: reportPrivateUsage=false
+        new_parameters = dict(model._parameters)
     name_pattern = rf".*\\mathrm{{production}}\[[{''.join(subsystem_names)}].*"
-    for symbol, value in model.parameter_defaults.items():
-        if re.match(name_pattern, str(symbol)) is not None:
-            value *= -1
-        new_parameters[symbol] = value
-    return attrs.evolve(model, parameter_defaults=new_parameters)
+    for symbol in new_parameters:
+        if re.match(name_pattern, str(symbol)) is None:
+            continue
+        if isinstance(model, AmplitudeModel):
+            new_parameters[symbol] *= -1
+        else:
+            par = new_parameters[symbol]
+            new_parameters[symbol] = attrs.evolve(par, value=-1 * par.value)
+    if isinstance(model, AmplitudeModel):
+        return attrs.evolve(model, parameter_defaults=new_parameters)
+    bootstrap = deepcopy(model)
+    bootstrap._parameters = new_parameters
+    return bootstrap
 
 
 def compute_decay_couplings(

@@ -39,6 +39,7 @@ __TARGET_SUBSTITUTIONS = {
     "sp.acos": "sympy.functions.elementary.trigonometric.acos",
 }
 __REF_TYPE_SUBSTITUTIONS = {
+    "jax.numpy.ndarray": "obj",
     "polarimetry.decay.OuterStates": "obj",
     "polarimetry.lhcb.ParameterType": "obj",
     "tensorwaves.interface.DataSample": "obj",
