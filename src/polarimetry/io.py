@@ -33,9 +33,8 @@ import jax.numpy as jnp
 import sympy as sp
 from ampform.sympy import UnevaluatedExpression
 from IPython.display import Math, display
-from tensorwaves.function import ParametrizedBackendFunction, PositionalArgumentFunction
 from tensorwaves.function.sympy import create_function, create_parametrized_function
-from tensorwaves.interface import ParameterValue
+from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
 
 from polarimetry.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 
@@ -286,7 +285,7 @@ def perform_cached_lambdify(
     parameters: Mapping[sp.Symbol, ParameterValue] | None = None,
     backend: str = "jax",
     directory: str | None = None,
-) -> ParametrizedBackendFunction | PositionalArgumentFunction:
+) -> ParametrizedFunction | Function:
     """Lambdify a SymPy `~sympy.core.expr.Expr` and cache the result to disk.
 
     The cached result is fetched from disk if the hash of the expression is the same as
