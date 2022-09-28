@@ -10,6 +10,7 @@ cloudpickle
 cmap
 configurator
 corrcoef
+deepcopy
 edgecolor
 elif
 expanduser
