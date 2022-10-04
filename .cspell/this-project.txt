@@ -1,3 +1,4 @@
+aslatex
 autoupdate
 batchmode
 ComPWA
