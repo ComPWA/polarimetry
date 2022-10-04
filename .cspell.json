@@ -111,6 +111,7 @@
   "ignoreWords": [
     "Sigmapi",
     "prereleased",
+    "rgba",
     "tableofcontents",
     "textbf",
     "xaxis",
