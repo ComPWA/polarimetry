@@ -12,7 +12,7 @@ import sys
 from copy import deepcopy
 from math import sqrt
 from pathlib import Path
-from typing import Generic, Iterable, TypeVar
+from typing import Generic, Iterable, TypeVar, overload
 
 import attrs
 import numpy as np
@@ -266,9 +266,21 @@ def _create_gaussian_distribution(
     raise NotImplementedError
 
 
+@overload
 def flip_production_coupling_signs(
-    model: AmplitudeModel | ParameterBootstrap, subsystem_names: list[str]
-) -> AmplitudeModel | ParameterBootstrap:
+    model: AmplitudeModel, subsystem_names: list[str]
+) -> AmplitudeModel:
+    ...
+
+
+@overload
+def flip_production_coupling_signs(
+    model: ParameterBootstrap, subsystem_names: list[str]
+) -> ParameterBootstrap:
+    ...
+
+
+def flip_production_coupling_signs(model, subsystem_names):
     if isinstance(model, AmplitudeModel):
         new_parameters = dict(model.parameter_defaults)
     else:
