@@ -16,7 +16,7 @@ docs:
     - tox -e pdfnb
     - EXECUTE_PLUTO="YES" tox -e docnb
     - mv docs/_build/html/ public/
-    - mv docs/_build/latex/ public/latex/
+    - tar czf public/latex.tar.gz -C docs/_build/ latex/
   variables:
     PYTHONHASHSEED: "0"
   artifacts:
