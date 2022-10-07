@@ -5,7 +5,7 @@
   "reportMissingParameterType": false,
   "reportMissingTypeArgument": false,
   "reportMissingTypeStubs": false,
-  "reportPrivateImportUsage": false,
+  "reportPrivateImportUsage": true,
   "reportUnknownArgumentType": false,
   "reportUnknownLambdaType": false,
   "reportUnknownMemberType": false,
