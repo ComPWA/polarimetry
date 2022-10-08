@@ -17,11 +17,13 @@ version.py
 # Temporary files
 *.pyc
 *condaenv.*
+.cache/
 .coverage
 .coverage.*
 .ipynb_checkpoints/
 .mypy*/
 .pytest_cache/
+.sympy-cache*/
 __pycache__/
 htmlcov/
 prof/
