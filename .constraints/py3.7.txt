@@ -46,7 +46,7 @@ idna==3.4
 imagesize==1.4.1
 iminuit==2.17.0
 importlib-metadata==5.0.0 ; python_version < "3.8.0"
-importlib-resources==5.9.0
+importlib-resources==5.10.0
 iniconfig==1.1.1
 ipykernel==6.16.0
 ipython==7.34.0
@@ -85,7 +85,7 @@ mpmath==1.2.1
 mypy-extensions==0.4.3
 myst-nb==0.17.1
 myst-parser==0.18.1
-nbclassic==0.4.4
+nbclassic==0.4.5
 nbclient==0.5.13
 nbconvert==7.2.1
 nbformat==5.6.1
@@ -151,7 +151,7 @@ sphinxcontrib-htmlhelp==2.0.0
 sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
-sphinxcontrib-svg2pdfconverter==1.2.0
+sphinxcontrib-svg2pdfconverter==1.2.1
 sqlalchemy==1.4.41
 svgutils==0.3.4
 sympy==1.10.1
@@ -175,7 +175,7 @@ webencodings==0.5.1
 websocket-client==1.4.1
 wheel==0.37.1
 widgetsnbextension==4.0.3
-zipp==3.8.1
+zipp==3.9.0
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
