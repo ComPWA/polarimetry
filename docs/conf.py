@@ -18,8 +18,8 @@ from _relink_references import relink_references
 
 def download_figure_1() -> str:
     files = [
-        "_images/figure1.svg",
-        "_images/figure1-inset.svg",
+        "_static/images/figure1.svg",
+        "_static/images/figure1-inset.svg",
     ]
     for file in files:
         if not os.path.exists(file):
@@ -36,12 +36,12 @@ def download_figure_1() -> str:
 
 def download_figures_2_and_3() -> str:
     files = [
-        "_images/figure2.svg",
-        "_images/figure2-inset.svg",
-        "_images/figure3a.svg",
-        "_images/figure3a-inset.svg",
-        "_images/figure3b.svg",
-        "_images/figure3b-inset.svg",
+        "_static/images/figure2.svg",
+        "_static/images/figure2-inset.svg",
+        "_static/images/figure3a.svg",
+        "_static/images/figure3a-inset.svg",
+        "_static/images/figure3b.svg",
+        "_static/images/figure3b-inset.svg",
     ]
     for file in files:
         if not os.path.exists(file):
@@ -61,7 +61,7 @@ def download_figures_2_and_3() -> str:
 
 
 def download_intensity_distribution() -> str:
-    filename = "_images/intensity-distribution.png"
+    filename = "_static/images/intensity-distribution.png"
     if not os.path.exists(filename):
         print_missing_file_warning(filename)
         return ""
@@ -75,7 +75,7 @@ def download_intensity_distribution() -> str:
 
 def _to_download_link(path: str) -> str:
     basename = os.path.basename(path)
-    return "{download}" + f"`{basename}<{path}>`"
+    return f"[{basename}]({path})"
 
 
 def execute_pluto_notebooks() -> None:
@@ -302,6 +302,12 @@ latex_elements = {
 }
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 latex_show_pagerefs = True
+linkcheck_ignore = [
+    "https://arxiv.org/pdf/2208.03262.pdf",
+    "https://arxiv.org/pdf/hep-ex/0510019.pdf",
+    "https://github.com/ComPWA/polarimetry",
+    "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033",
+]
 myst_enable_extensions = [
     "colon_fence",
     "dollarmath",

@@ -110,10 +110,13 @@
   "version": "0.2",
   "ignoreWords": [
     "Sigmapi",
+    "lc2pkpi",
+    "nbsp",
     "prereleased",
     "rgba",
     "tableofcontents",
     "textbf",
+    "xaxes",
     "xaxis",
     "xshift",
     "yaxis",
