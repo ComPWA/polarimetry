@@ -254,7 +254,8 @@ def perform_cached_doit(
         unevaluated_expr: A `sympy.Expr <sympy.core.expr.Expr>` on which to call
             :code:`doit()`.
         directory: The directory in which to cache the result. If `None`, the cache
-            directory will be put under the home directory.
+            directory will be put under the home directory, or to the path specified by
+            the environment variable :code:`SYMPY_CACHE_DIR`.
 
     .. tip:: For a faster cache, set `PYTHONHASHSEED
         <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
@@ -263,8 +264,8 @@ def perform_cached_doit(
     .. seealso:: :func:`perform_cached_lambdify`
     """
     if directory is None:
-        home_directory = expanduser("~")
-        directory = abspath(f"{home_directory}/.sympy-cache")
+        main_cache_dir = _get_main_cache_dir()
+        directory = abspath(f"{main_cache_dir}/.sympy-cache")
     h = get_readable_hash(unevaluated_expr)
     filename = f"{directory}/{h}.pkl"
     if os.path.exists(filename):
@@ -301,7 +302,8 @@ def perform_cached_lambdify(
         backend: The choice of backend for the created numerical function. **WARNING**:
             this function has only been tested for :code:`backend="jax"`!
         directory: The directory in which to cache the result. If `None`, the cache
-            directory will be put under the home directory.
+            directory will be put under the home directory, or to the path specified by
+            the environment variable :code:`SYMPY_CACHE_DIR`.
 
     .. tip:: For a faster cache, set `PYTHONHASHSEED
         <https://docs.python.org/3/using/cmdline.html#envvar-PYTHONHASHSEED>`_ to a
@@ -310,8 +312,8 @@ def perform_cached_lambdify(
     .. seealso:: :func:`perform_cached_doit`
     """
     if directory is None:
-        home_directory = expanduser("~")
-        directory = abspath(f"{home_directory}/.sympy-cache-{backend}")
+        main_cache_dir = _get_main_cache_dir()
+        directory = abspath(f"{main_cache_dir}/.sympy-cache-{backend}")
     h = get_readable_hash(expr)
     filename = f"{directory}/{h}.pkl"
     if os.path.exists(filename):
@@ -326,6 +328,13 @@ def perform_cached_lambdify(
     with open(filename, "wb") as f:
         cloudpickle.dump(func, f)
     return func
+
+
+def _get_main_cache_dir() -> str:
+    cache_dir = os.environ.get("SYMPY_CACHE_DIR")
+    if cache_dir is None:
+        cache_dir = expanduser("~")  # home directory
+    return cache_dir
 
 
 def get_readable_hash(obj) -> str:
