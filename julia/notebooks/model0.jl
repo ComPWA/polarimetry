@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.11
+# v0.19.9
 
 using Markdown
 using InteractiveUtils
@@ -113,14 +113,17 @@ md"""
 # ╔═╡ f9158b4d-4d27-4aba-bf5a-529135ec48e2
 shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters))
 
+# ╔═╡ 838d0391-f1f2-4a4f-9b8f-0a6021720c5b
+x = defaultparameters["gammaK(1430)"]
+
 # ╔═╡ 1db41980-ea36-4238-90cd-bf2427772ea9
 parameterupdates = [
-    "K(1430)" => (γ=eval(Meta.parse(defaultparameters["gammaK(1430)"])).val,),
-    "K(700)" => (γ=eval(Meta.parse(defaultparameters["gammaK(700)"])).val,),
-    "L(1520)" => (m=eval(Meta.parse(defaultparameters["ML(1520)"])).val,
-        Γ=eval(Meta.parse(defaultparameters["GL(1520)"])).val),
-    "L(2000)" => (m=eval(Meta.parse(defaultparameters["ML(2000)"])).val,
-        Γ=eval(Meta.parse(defaultparameters["GL(2000)"])).val)]
+    "K(1430)" => (γ=MeasuredParameter(defaultparameters["gammaK(1430)"]).val,),
+    "K(700)" => (γ=MeasuredParameter(defaultparameters["gammaK(700)"]).val,),
+    "L(1520)" => (m=MeasuredParameter(defaultparameters["ML(1520)"]).val,
+        Γ=MeasuredParameter(defaultparameters["GL(1520)"]).val),
+    "L(2000)" => (m=MeasuredParameter(defaultparameters["ML(2000)"]).val,
+        Γ=MeasuredParameter(defaultparameters["GL(2000)"]).val)]
 
 # ╔═╡ 1f6dc202-8734-4232-9f48-a88ebf17ff93
 for (p, u) in parameterupdates
@@ -142,8 +145,8 @@ const terms = [
         #
         c_re_key = "Ar" * parname[3:end] # = parname
         c_im_key = "Ai" * parname[3:end]
-        value_re = eval(Meta.parse(defaultparameters[c_re_key])).val
-        value_im = eval(Meta.parse(defaultparameters[c_im_key])).val
+        value_re = MeasuredParameter(defaultparameters[c_re_key]).val
+        value_im = MeasuredParameter(defaultparameters[c_im_key]).val
         value = value_re + 1im * value_im
         #
         c0, d = parname2decaychain(parname, isobars)
@@ -453,6 +456,7 @@ end
 # ╠═cee9dc28-8048-49e7-8caf-8e07bcd884c4
 # ╟─30c3c8ef-ad69-43e6-9a75-525dfbf7007a
 # ╠═f9158b4d-4d27-4aba-bf5a-529135ec48e2
+# ╠═838d0391-f1f2-4a4f-9b8f-0a6021720c5b
 # ╠═1db41980-ea36-4238-90cd-bf2427772ea9
 # ╠═1f6dc202-8734-4232-9f48-a88ebf17ff93
 # ╟─21c125fc-e218-4676-9846-822d951f4f1b

@@ -42,13 +42,13 @@ defaultparameters["AiK(892)1"] = "0.0 ± 0.0"
 #
 shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters))
 #
-parameterupdates = [ # 6 values are updated
-    "K(1430)" => (γ=eval(Meta.parse(defaultparameters["gammaK(1430)"])).val,),
-    "K(700)" => (γ=eval(Meta.parse(defaultparameters["gammaK(700)"])).val,),
-    "L(1520)" => (m=eval(Meta.parse(defaultparameters["ML(1520)"])).val,
-        Γ=eval(Meta.parse(defaultparameters["GL(1520)"])).val),
-    "L(2000)" => (m=eval(Meta.parse(defaultparameters["ML(2000)"])).val,
-        Γ=eval(Meta.parse(defaultparameters["GL(2000)"])).val)]
+parameterupdates = [
+    "K(1430)" => (γ=MeasuredParameter(defaultparameters["gammaK(1430)"]).val,),
+    "K(700)" => (γ=MeasuredParameter(defaultparameters["gammaK(700)"]).val,),
+    "L(1520)" => (m=MeasuredParameter(defaultparameters["ML(1520)"]).val,
+        Γ=MeasuredParameter(defaultparameters["GL(1520)"]).val),
+    "L(2000)" => (m=MeasuredParameter(defaultparameters["ML(2000)"]).val,
+        Γ=MeasuredParameter(defaultparameters["GL(2000)"]).val)]
 #
 @assert length(shapeparameters) == 6
 

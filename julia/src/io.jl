@@ -10,12 +10,18 @@ function writejson(path, obj)
     end
 end
 
-ifhyphenaverage(v::Number) = v
+"""
+    ifhyphenaverage(s::String)
 
+The function treats the shape-parameter fields in the particle-description file.
+If range is provided, it averages the limits.
+"""
 function ifhyphenaverage(s::String)
     factor = findfirst('-', s) === nothing ? 1 : 2
     eval(Meta.parse(replace(s, '-' => '+'))) / factor
 end
+ifhyphenaverage(v::Number) = v
+
 
 function definechaininputs(key, dict)
     @unpack mass, width, lineshape = dict
@@ -76,7 +82,7 @@ end
 function replacementpair(parname, val)
     @unpack key, isobarname = parseshapedparameter(parname)
     s = keyname2symbol(key)
-    v = eval(Meta.parse(val)).val
+    v = MeasuredParameter(val).val
     isobarname => eval(:(NamedTuple{($(QuoteNode(s)),)}($(v))))
 end
 
@@ -113,8 +119,8 @@ function LHCbModel(modeldict; particledict)
     for parname in couplingkeys
         c_re_key = "Ar" * parname[3:end]
         c_im_key = "Ai" * parname[3:end]
-        value_re = eval(Meta.parse(defaultparameters[c_re_key])).val
-        value_im = eval(Meta.parse(defaultparameters[c_im_key])).val
+        value_re = MeasuredParameter(defaultparameters[c_re_key]).val
+        value_im = MeasuredParameter(defaultparameters[c_im_key]).val
         value = value_re + 1im * value_im
         #
         c0, d = parname2decaychain(parname, isobars)

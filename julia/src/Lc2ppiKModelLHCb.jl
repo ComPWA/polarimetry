@@ -36,6 +36,9 @@ export intensity
 export LHCbModel
 include("amplitude.jl")
 
+export MeasuredParameter
+include("measuredparameter.jl")
+
 export definechaininputs
 export readjson, writejson
 export parseshapedparameter
