@@ -1,5 +1,30 @@
 image: python:3.8
 
+cache:
+  - paths:
+      - .cache/pip
+  - key:
+      prefix: myst-nb
+      files:
+        - .constraints/*.txt
+        - data/*
+        # https://gitlab.com/gitlab-org/gitlab/-/issues/301161
+        # - src/polarimetry/*.py
+        # - src/polarimetry/*/*.py
+    paths:
+      - docs/_build/.jupyter_cache
+      - docs/_images
+      - docs/_static/images
+      - docs/appendix/export
+      - docs/export
+  - key:
+      prefix: sympy
+      files:
+        - .constraints/*.txt
+    paths:
+      - .sympy-cache-jax
+      - .sympy-cache
+
 pages:
   only:
     - main
@@ -21,16 +46,6 @@ pages:
     paths:
       - public
     when: always
-  cache:
-    paths:
-      - .cache/pip
-      - .sympy-cache-jax
-      - .sympy-cache
-      - docs/_build/.jupyter_cache
-      - docs/_images
-      - docs/_static/images
-      - docs/appendix/export
-      - docs/export
 
 # https://docs.gitlab.com/ee/ci/caching/#cache-python-dependencies
 variables:
