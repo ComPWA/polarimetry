@@ -1321,8 +1321,8 @@ Alternative amplitude model obtained using LS couplings:
     K(892): BreitWignerMinL_LS
     K(1430): BuggBreitWignerMinL_LS
   parameters:
-    gammaK(700): 0.941060 ± 0.042406
-    gammaK(1430): 0.020981 ± 0.011062
+    gammaK(700): 0.847475 ± 0.038013
+    gammaK(1430): 0.022335 ± 0.010936
     ArK(892)1: 1.0 ± 0.0
     AiK(892)1: 0.0 ± 0.0
     ArK(700)1: -0.000167 ± 0.019096
