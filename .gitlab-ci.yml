@@ -22,6 +22,10 @@ pages:
       - public
     when: always
   cache:
+    key:
+      files:
+        - .constraints/*.txt
+        - data/*
     paths:
       - .cache/pip
       - .sympy-cache-jax
