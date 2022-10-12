@@ -10,6 +10,7 @@ import itertools
 import re
 import sys
 from copy import deepcopy
+from math import sqrt
 from pathlib import Path
 from typing import Generic, Iterable, TypeVar, overload
 
@@ -377,7 +378,7 @@ def _to_value_with_uncertainty(str_value: str) -> MeasuredParameter[float]:
     >>> par
     MeasuredParameter(value=0.94, hesse=0.042, model=0.35, systematic=0.04)
     >>> par.uncertainty
-    0.042
+    0.058
     """
     float_values = tuple(float(s) for s in str_value.split(" ± "))
     if len(float_values) == 2:
@@ -438,8 +439,14 @@ class MeasuredParameter(Generic[ParameterType]):
 
     @property
     def uncertainty(self) -> ParameterType:
-        # Will implement quadratic sum of uncertainties here
-        return self.hesse
+        if self.systematic is None:
+            return self.hesse
+        if isinstance(self.value, float):
+            return sqrt(self.hesse**2 + self.systematic**2)
+        return complex(
+            sqrt(self.hesse.real**2 + self.systematic.real**2),
+            sqrt(self.hesse.imag**2 + self.systematic.imag**2),
+        )
 
 
 def get_conversion_factor(
