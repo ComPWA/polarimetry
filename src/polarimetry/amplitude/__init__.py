@@ -8,7 +8,7 @@ import sympy as sp
 from ampform.sympy import PoolSum
 from attrs import field, frozen
 from sympy.core.symbol import Str
-from sympy.physics.quantum.spin import CG
+from sympy.physics.quantum.cg import CG
 from sympy.physics.quantum.spin import Rotation as Wigner
 from sympy.physics.quantum.spin import WignerD
 

@@ -5,12 +5,9 @@ import sys
 import jax.numpy as jnp
 import sympy as sp
 from ampform.kinematics.phasespace import compute_third_mandelstam, is_within_phasespace
-from tensorwaves.data import (
-    IntensityDistributionGenerator,
-    NumpyDomainGenerator,
-    NumpyUniformRNG,
-    SympyDataTransformer,
-)
+from tensorwaves.data import IntensityDistributionGenerator, NumpyDomainGenerator
+from tensorwaves.data.rng import NumpyUniformRNG
+from tensorwaves.data.transform import SympyDataTransformer
 from tensorwaves.function import PositionalArgumentFunction
 from tensorwaves.function.sympy import create_function
 from tensorwaves.interface import DataSample
