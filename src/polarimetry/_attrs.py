@@ -1,3 +1,4 @@
+# pyright: reportImportCycles=false
 """Helper functions for constructing `attrs` decorated classes."""
 from __future__ import annotations
 

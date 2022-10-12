@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import sympy as sp
-
-from polarimetry.dynamics import Kallen
+from ampform.kinematics.phasespace import Kallen
 
 
 def formulate_scattering_angle(

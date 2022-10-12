@@ -34,6 +34,7 @@
   "julia.NumThreads": "auto",
   "python.analysis.autoImportCompletions": false,
   "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.typeCheckingMode": "strict",
   "python.formatting.provider": "black",
   "python.linting.enabled": true,
   "python.testing.pytestArgs": ["--color=no"],
