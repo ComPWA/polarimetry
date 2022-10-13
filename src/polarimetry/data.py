@@ -88,7 +88,10 @@ def generate_sub_meshgrid_sample(
     return phsp
 
 
-def generate_phasespace_sample(decay: ThreeBodyDecay, n_events: int, seed=None):
+def generate_phasespace_sample(
+    decay: ThreeBodyDecay, n_events: int, seed: int | None = None
+) -> DataSample:
+    r"""Generate a uniform distribution over Dalitz variables :math:`\sigma_{1,2,3}`."""
     boundaries = __compute_dalitz_boundaries(decay)
     domain_generator = NumpyDomainGenerator(
         boundaries={
