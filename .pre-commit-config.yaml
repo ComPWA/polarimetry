@@ -16,6 +16,11 @@ repos:
       - id: check-yaml
       - id: debug-statements
       - id: end-of-file-fixer
+        exclude: >
+          (?x)^(
+            .*\.bib|
+            .*\.svg
+          )$
       - id: mixed-line-ending
       - id: trailing-whitespace
 
@@ -74,7 +79,7 @@ repos:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.274
+    rev: v1.1.275
     hooks:
       - id: pyright
 

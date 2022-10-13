@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "ExecutableBookProject.myst-highlight",
     "bungcip.better-toml",
     "eamodio.gitlens",
     "editorconfig.editorconfig",
