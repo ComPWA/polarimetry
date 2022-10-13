@@ -29,6 +29,7 @@ polarimetry
 uncertainties
 resonance-polarimetry
 appendix
+references
 API <api/polarimetry>
 ```
 

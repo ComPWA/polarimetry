@@ -1,9 +1,30 @@
+# pyright: reportPrivateUsage=false
+import dataclasses
 import os
 import shutil
 import subprocess
 import sys
 from datetime import datetime
 from textwrap import dedent
+from typing import Union
+
+import sphinxcontrib.bibtex.plugin  # type: ignore[import]
+from pybtex.database import Entry
+from pybtex.plugin import register_plugin
+from pybtex.richtext import BaseText, Tag, Text
+from pybtex.style.formatting.unsrt import Style as UnsrtStyle
+from pybtex.style.template import (
+    FieldIsMissing,
+    Node,
+    _format_list,
+    field,
+    href,
+    join,
+    node,
+    sentence,
+    words,
+)
+from sphinxcontrib.bibtex.style.referencing.author_year import AuthorYearReferenceStyle
 
 if sys.version_info < (3, 8):
     from importlib_metadata import PackageNotFoundError
@@ -207,6 +228,9 @@ autodoc_type_aliases = {
 autodoc_typehints_format = "short"
 autosectionlabel_prefix_document = True
 autosectionlabel_maxdepth = 2
+bibtex_bibfiles = [
+    "_static/references.bib",
+]
 codeautolink_concat_default = True
 copyright = "2022"
 default_role = "py:obj"
@@ -227,6 +251,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_design",
     "sphinx_togglebutton",
+    "sphinxcontrib.bibtex",
     "sphinxcontrib.inkscapeconverter",
 ]
 html_js_files = [
@@ -346,3 +371,104 @@ suppress_warnings = [
 use_multitoc_numbering = True
 version = get_version()
 viewcode_follow_imported_members = True
+
+
+# Specify bibliography style
+@dataclasses.dataclass
+class NoCommaReferenceStyle(AuthorYearReferenceStyle):
+    author_year_sep: Union["BaseText", str] = " "
+
+
+sphinxcontrib.bibtex.plugin.register_plugin(
+    "sphinxcontrib.bibtex.style.referencing",
+    "author_year_no_comma",
+    NoCommaReferenceStyle,
+)
+
+
+@node
+def et_al(children, data, sep="", sep2=None, last_sep=None):  # type: ignore[no-untyped-def]
+    if sep2 is None:
+        sep2 = sep
+    if last_sep is None:
+        last_sep = sep
+    parts = [part for part in _format_list(children, data) if part]
+    if len(parts) <= 1:
+        return Text(*parts)
+    if len(parts) == 2:
+        return Text(sep2).join(parts)
+    if len(parts) == 3:
+        return Text(last_sep).join([Text(sep).join(parts[:-1]), parts[-1]])
+    return Text(parts[0], Tag("em", " et al"))
+
+
+@node
+def names(children, context, role, **kwargs):  # type: ignore[no-untyped-def]
+    """Return formatted names."""
+    assert not children
+    try:
+        persons = context["entry"].persons[role]
+    except KeyError:
+        # pylint: disable=raise-missing-from
+        raise FieldIsMissing(role, context["entry"])
+
+    style = context["style"]
+    formatted_names = [
+        style.format_name(person, style.abbreviate_names) for person in persons
+    ]
+    return et_al(**kwargs)[formatted_names].format_data(context)
+
+
+class MyStyle(UnsrtStyle):
+    def __init__(self) -> None:
+        super().__init__(abbreviate_names=True)
+
+    def format_names(self, role, as_sentence: bool = True) -> Node:  # type: ignore[no-untyped-def]
+        formatted_names = names(role, sep=", ", sep2=" and ", last_sep=", and ")
+        if as_sentence:
+            return sentence[formatted_names]
+        return formatted_names
+
+    def format_eprint(self, e: Entry) -> Node:
+        if "doi" in e.fields:
+            return ""
+        return super().format_eprint(e)
+
+    def format_url(self, e: Entry) -> Node:
+        if "doi" in e.fields or "eprint" in e.fields:
+            return ""
+        return words[
+            href[
+                field("url", raw=True),
+                field("url", raw=True, apply_func=remove_http),
+            ]
+        ]
+
+    def format_isbn(self, e: Entry) -> Node:
+        return href[
+            join[
+                "https://isbnsearch.org/isbn/",
+                field("isbn", raw=True, apply_func=remove_dashes_and_spaces),
+            ],
+            join[
+                "ISBN:",
+                field("isbn", raw=True),
+            ],
+        ]
+
+
+def remove_dashes_and_spaces(isbn: str) -> str:
+    to_remove = ["-", " "]
+    for remove in to_remove:
+        isbn = isbn.replace(remove, "")
+    return isbn
+
+
+def remove_http(url: str) -> str:
+    to_remove = ["https://", "http://"]
+    for remove in to_remove:
+        url = url.replace(remove, "")
+    return url
+
+
+register_plugin("pybtex.style.formatting", "unsrt_et_al", MyStyle)

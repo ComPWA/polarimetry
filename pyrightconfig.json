@@ -13,6 +13,8 @@
   "reportUnknownVariableType": false,
   "reportUnnecessaryContains": true,
   "reportUnnecessaryIsInstance": false,
+  "reportUntypedBaseClass": false,
+  "reportUntypedFunctionDecorator": false,
   "reportUnusedClass": true,
   "reportUnusedFunction": true,
   "reportUnusedImport": true,
