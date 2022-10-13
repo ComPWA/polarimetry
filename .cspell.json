@@ -111,7 +111,10 @@
   "version": "0.2",
   "ignoreWords": [
     "Sigmapi",
+    "cmin",
+    "einsum",
     "hangle",
+    "iminuit",
     "lc2pkpi",
     "mystnb",
     "nbsp",

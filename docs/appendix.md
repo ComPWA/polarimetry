@@ -9,4 +9,5 @@ appendix/benchmark
 appendix/serialization
 appendix/ls-model
 appendix/homomorphism
+appendix/polarization-fit
 ```
