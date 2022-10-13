@@ -63,7 +63,7 @@ jinja2==3.1.2
 json5==0.9.10
 jsonschema==4.16.0
 jupyter-cache==0.5.0
-jupyter-client==7.4.1
+jupyter-client==7.4.2
 jupyter-core==4.11.1
 jupyter-server==1.21.0
 jupyterlab==3.4.8
@@ -75,6 +75,7 @@ jupyterlab-server==2.15.2
 jupyterlab-widgets==3.0.3
 kaleido==0.2.1
 kiwisolver==1.4.4
+latexcodec==2.0.1
 livereload==2.6.3
 lxml==4.9.1
 markdown-it-py==2.1.0
@@ -88,7 +89,7 @@ mpmath==1.2.1
 mypy-extensions==0.4.3
 myst-nb==0.17.1
 myst-parser==0.18.1
-nbclassic==0.4.5
+nbclassic==0.4.6
 nbclient==0.5.13
 nbconvert==7.2.1
 nbformat==5.7.0
@@ -97,7 +98,7 @@ nest-asyncio==1.5.6
 nodeenv==1.7.0
 notebook==6.4.12
 notebook-shim==0.1.0
-numpy==1.23.3
+numpy==1.23.4
 opt-einsum==3.3.0
 packaging==21.3
 pandas==1.5.0
@@ -119,6 +120,8 @@ psutil==5.9.2
 ptyprocess==0.7.0
 pure-eval==0.2.2
 py==1.11.0
+pybtex==0.24.0
+pybtex-docutils==1.0.2
 pycparser==2.21
 pydantic==1.10.2
 pydata-sphinx-theme==0.8.1
@@ -149,6 +152,7 @@ sphinx-copybutton==0.5.0
 sphinx-design==0.3.0
 sphinx-togglebutton==0.3.2
 sphinxcontrib-applehelp==1.0.2
+sphinxcontrib-bibtex==2.5.0
 sphinxcontrib-devhelp==1.0.2
 sphinxcontrib-htmlhelp==2.0.0
 sphinxcontrib-jsmath==1.0.1
