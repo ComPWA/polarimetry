@@ -255,6 +255,7 @@ md"""
 
 # ╔═╡ a1b0bfdc-84ad-4075-b5f5-c924c0f42dee
 md"""
+#### First test: flipping $p$, $K$ and $\pi$ momenta in $\Lambda_c^+$ rest frame
 The following cell validates the transformation of the angles under parity flip of the three-vectors in the $\Lambda_c^+$ rest frame.
 ```math
 \begin{align}
@@ -296,6 +297,35 @@ let # 3 angles x 10 tries
 	end
 end |> x->x=>(prod(x) && "✔")
 
+# ╔═╡ 7ed18287-8b9f-42b1-8504-1b03bd3c6bda
+md"""
+#### Second test: flipping all vectors
+"""
+
+# ╔═╡ f114f585-bce6-4455-82c8-b9911d861e1a
+begin
+	mapϕ′(ϕ) = -ϕ
+	mapθ′(θ) = θ
+	mapχ′(χ) = -χ
+end ;
+
+# ╔═╡ 23317a51-223e-44f9-b861-5c3d34736d87
+let # 3 angles x 10 tries
+	mapslices(rand(3,10), dims=1) do r
+		angles = NamedTuple{(:ϕ1, :θ1, :ϕ23)}(r .* [2π, π, 2π] .- [π,0,π])
+		pD, pB, pC =constructinvariants(σs0) |> R(angles...)
+		# the xz axes remain, the vectors are flipped
+		pD′ = -pD |> Ry(π)
+		pB′ = -pB |> Ry(π)
+		pX′ = -[0,0,-1] |> Ry(π)
+		pP′ = -[1,0,0] |> Ry(π)
+		# 
+		ϕ, θ, χ = eulerfromalgebra(pD′, pB′, pX′, pP′)
+		#
+		mapϕ′(angles.ϕ1) ≈ ϕ && mapθ′(angles.θ1) ≈ θ && mapχ′(angles.ϕ23) ≈ χ
+	end
+end |> x->x=>(prod(x) && "✔")
+
 # ╔═╡ Cell order:
 # ╟─049886e5-0839-4dce-9621-32cce58132f5
 # ╠═b56fc9a7-fa03-47d6-b22e-0097be7155d3
@@ -324,3 +354,6 @@ end |> x->x=>(prod(x) && "✔")
 # ╟─a1b0bfdc-84ad-4075-b5f5-c924c0f42dee
 # ╠═060dfd12-7f22-483b-9189-6df247c9850e
 # ╠═77eab378-4677-4349-91e3-2d3b81c1e466
+# ╟─7ed18287-8b9f-42b1-8504-1b03bd3c6bda
+# ╠═f114f585-bce6-4455-82c8-b9911d861e1a
+# ╠═23317a51-223e-44f9-b861-5c3d34736d87
