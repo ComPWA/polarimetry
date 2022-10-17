@@ -42,7 +42,7 @@ sudo apt install -y cm-super dvipng texlive-latex-extra
 In addition, for [building the documentation as a single PDF file](#building-the-documentation), you need to install XeTeX:
 
 ```shell
-sudo apt install -y inkscape latexmk texlive-fonts-extra texlive-xetex xindy
+sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
 ```
 
 <!-- cspell:ignore xetex -->

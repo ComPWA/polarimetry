@@ -4,6 +4,7 @@
 *.pkl
 *.png
 *.svg
+*.tar.gz
 *.v2
 
 # Build files

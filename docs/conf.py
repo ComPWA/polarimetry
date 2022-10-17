@@ -239,6 +239,7 @@ exclude_patterns = [
     ".DS_Store",
     "Thumbs.db",
     "_build",
+    "_static/export/README.md",
 ]
 extensions = [
     "myst_nb",
