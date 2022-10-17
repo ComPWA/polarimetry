@@ -14,6 +14,7 @@ cache:
     paths:
       - docs/_build/.jupyter_cache
       - docs/_images
+      - docs/_static/export
       - docs/_static/images
       - docs/appendix/export
       - docs/export
