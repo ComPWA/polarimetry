@@ -17,7 +17,6 @@ cache:
       - docs/_static/export
       - docs/_static/images
       - docs/appendix/export
-      - docs/export
   - key:
       prefix: sympy
       files:
