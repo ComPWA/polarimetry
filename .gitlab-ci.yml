@@ -28,6 +28,7 @@ cache:
 pages:
   only:
     - main
+    - tags
   before_script:
     - apt-get update
     - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
