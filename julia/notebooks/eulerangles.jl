@@ -20,7 +20,7 @@ begin
     using Parameters
     #
     using ThreeBodyDecay
-	using Lc2ppiKModelLHCb 
+	using Lc2ppiKModelLHCb
 end
 
 # ╔═╡ 049886e5-0839-4dce-9621-32cce58132f5
@@ -62,10 +62,10 @@ begin
     Rz(θ) = x -> Rz(x, θ)
     Ry(θ) = x -> Ry(x, θ)
 	R(ϕ, θ, χ) = x -> R(x, ϕ, θ, χ)
-	
+
 	Ry(ps::NamedTuple{(:p1,:p2,:p3)}, θ) =
 		(; p1=Ry(ps.p1,θ), p2=Ry(ps.p2,θ), p3=Ry(ps.p3,θ))
-	# 
+	#
 	function R(ps::NamedTuple{(:p1,:p2,:p3)}, ϕ, θ, χ)
 		@unpack p1, p2, p3 = ps
 	    p1′ = p1 |> Rz(χ) |> Ry(θ) |> Rz(ϕ)
@@ -136,7 +136,7 @@ ps0 = constructinvariants(σs0) |> Ry(π)
 # ╔═╡ 36526f74-2e4c-44c1-8097-67553277ed83
 let
 	@unpack p4p, p4pi, p4k = pointvariables
-	isapprox(ps0.p1, p4p[1:3]; atol=1e-8), 
+	isapprox(ps0.p1, p4p[1:3]; atol=1e-8),
 	isapprox(ps0.p2, p4pi[1:3]; atol=1e-8),
 	isapprox(ps0.p3, p4k[1:3]; atol=1e-8)
 end |> x->x=>(prod(x) && "✔")
@@ -156,7 +156,7 @@ begin
 	    #
 	    (ϕ1 ≈ ϕp) * 100 + (θ1 ≈ θp) * 10 + (ϕ23 ≈ χK)
 	end
-		# 
+		#
 	σsv = flatDalitzPlotSample(ms; Nev=10)
 	(checkconsistency.(σsv; ϕ1=-0.3, θ1=1.3, ϕ23=-0.4) .== 111) |>
 		x->x=>(prod(x) && "✔")
@@ -167,7 +167,7 @@ md"""
 #### Check-3:
 The angle-mapping relations are checked:
 ```math
-\begin{align} 
+\begin{align}
     &&\bar{\theta}_K &= \theta_{23}\,,\\ \nonumber
     \theta_{\Lambda} &= \pi - \zeta^0_{1(2)}\,,&\theta_p^{\Lambda} &= -(\pi - \theta_{31})\,, \\ \nonumber
     \theta_{\Delta} &= -(\pi-\zeta^0_{3(1)})\,,&\theta_p^{\Delta} &= \theta_{12}\,.
@@ -180,7 +180,7 @@ begin # computed the DPD angles
 	θ12 = acos(cosθ12(σs0, ms²))
 	θ23 = acos(cosθ23(σs0, ms²))
 	θ31 = acos(cosθ31(σs0, ms²))
-	# 
+	#
 	ζ⁰12 = acos(cosζ(wr(1, 2, 0), σs0, ms²))
 	ζ⁰31 = acos(cosζ(wr(3, 1, 0), σs0, ms²))
 end ;
@@ -232,7 +232,7 @@ function eulerfromalgebra(_pD, _pB,
 		_pP = [1,0,0] # x axes
 		)
 	pP, pX, pD, pB = _pP[1:3], _pX[1:3] ,_pD[1:3], _pB[1:3]
-	# 
+	#
 	ϕ = atan(-(pP × pX) · pD, (-(pP × pX) × (-pX) ./ norm(pX)) · pD)
 	θ = acos((pX · pD) / norm(pX) / norm(pD))
 	χ = atan((pX × pD) · pB, ((pX × pD) × -pD ./ norm(pD)) · pB)
@@ -266,8 +266,8 @@ The following cell validates the transformation of the angles under parity flip 
 \end{array}
 \right.
 \\
-\theta&\to \pi-\theta \\ 
-\chi &\to 
+\theta&\to \pi-\theta \\
+\chi &\to
 \left\{
 \begin{array}{}
 -\pi-\chi &\text{ for } \chi < 0,\\
@@ -319,7 +319,7 @@ let # 3 angles x 10 tries
 		pB′ = -pB |> Ry(π)
 		pX′ = -[0,0,-1] |> Ry(π)
 		pP′ = -[1,0,0] |> Ry(π)
-		# 
+		#
 		ϕ, θ, χ = eulerfromalgebra(pD′, pB′, pX′, pP′)
 		#
 		mapϕ′(angles.ϕ1) ≈ ϕ && mapθ′(angles.θ1) ≈ θ && mapχ′(angles.ϕ23) ≈ χ
