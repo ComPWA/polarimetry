@@ -243,6 +243,7 @@ exclude_patterns = [
 ]
 extensions = [
     "myst_nb",
+    "sphinx_reredirects",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
@@ -365,6 +366,9 @@ nitpick_ignore_regex = [
 numfig = True
 primary_domain = "py"
 pygments_style = "sphinx"
+redirects = {
+    "appendix/polarization-fit": "../zz.polarization-fit.html",
+}
 suppress_warnings = [
     "mystnb.mime_priority",  # plotly figures in LaTeX build
     # https://github.com/executablebooks/MyST-NB/blob/4dcf7c5/docs/conf.py#L46-L47

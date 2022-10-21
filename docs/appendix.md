@@ -9,5 +9,7 @@ appendix/benchmark
 appendix/serialization
 appendix/ls-model
 appendix/homomorphism
-appendix/polarization-fit
+zz.polarization-fit
 ```
+
+<!-- The polarization-fit notebook has prefix zz., because it has to be executed last -->
