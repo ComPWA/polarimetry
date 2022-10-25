@@ -206,7 +206,7 @@ relink_references()
 
 
 add_module_names = False
-author = "Mikhail Mikhasenko, Remco de Boer"
+author = "Mikhail Mikhasenko, Remco de Boer, Miriam Fritsch"
 autodoc_default_options = {
     "exclude-members": ", ".join(
         [
