@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import sys
 from datetime import datetime
-from textwrap import dedent
+from textwrap import dedent, indent
 from typing import Union
 
 import sphinxcontrib.bibtex.plugin  # type: ignore[import]
@@ -37,46 +37,27 @@ sys.path.insert(0, os.path.abspath("."))
 from _relink_references import relink_references
 
 
-def download_figure_1() -> str:
+def download_paper_figures() -> str:
     files = [
-        "_static/images/figure1.svg",
-        "_static/images/figure1-inset.svg",
+        "_static/images/total-polarimetry-field.svg",
+        "_static/images/polarimetry-field-L1520-unaligned.svg",
+        "_static/images/polarimetry-field-L1520-aligned.svg",
+        "_static/images/polarimetry-field-norm-uncertainties.png",
     ]
     for file in files:
         if not os.path.exists(file):
             print_missing_file_warning(file)
             return ""
+    list_of_figures = indent("\n".join(_to_download_link(f) for f in files), "    - ")
     src = f"""
-    ```{{only}} html
-    High-resolution image can be downloaded here:
-    {_to_download_link(files[0])} / {_to_download_link(files[1])}
-    ```
-    """
-    return dedent(src).strip()
+    ::::{{only}} html
+    :::{{tip}}
+    Figures for the paper can be downloaded here:
+    {list_of_figures.strip()}
 
-
-def download_figures_2_and_3() -> str:
-    files = [
-        "_static/images/figure2.svg",
-        "_static/images/figure2-inset.svg",
-        "_static/images/figure3a.svg",
-        "_static/images/figure3a-inset.svg",
-        "_static/images/figure3b.svg",
-        "_static/images/figure3b-inset.svg",
-    ]
-    for file in files:
-        if not os.path.exists(file):
-            print_missing_file_warning(file)
-            return ""
-
-    src = f"""
-    ```{{only}} html
-    **Figures 2 and 3** for the paper can be downloaded here:
-
-    - {_to_download_link(files[0])} / {_to_download_link(files[1])}
-    - {_to_download_link(files[2])} / {_to_download_link(files[3])}
-    - {_to_download_link(files[4])} / {_to_download_link(files[5])}
-    ```
+    All other exported figures can be [here](./_static/images/).
+    :::
+    ::::
     """
     return dedent(src).strip()
 
@@ -96,7 +77,7 @@ def download_intensity_distribution() -> str:
 
 def _to_download_link(path: str) -> str:
     basename = os.path.basename(path)
-    return f"[{basename}]({path})"
+    return f"[`{basename}`]({path})"
 
 
 def execute_pluto_notebooks() -> None:
@@ -346,9 +327,8 @@ myst_render_markdown_format = "myst"
 myst_substitutions = {
     "DOWNLOAD_SINGLE_PDF": get_link_to_single_pdf(),
     "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
-    "download_figure_1": download_figure_1(),
-    "download_figures_2_and_3": download_figures_2_and_3(),
-    "download_intensity_distribution": download_intensity_distribution(),
+    "DOWNLOAD_PAPER_FIGURES": download_paper_figures(),
+    "DOWNLOAD_INTENSITY_DISTRIBUTION": download_intensity_distribution(),
 }
 nb_execution_allow_errors = False
 nb_execution_mode = get_execution_mode()
