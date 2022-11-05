@@ -5,14 +5,36 @@
   https://gitlab.com/Molcas/OpenMolcas/-/blob/c6e64d/doc/source/molcas.bib#L2745
 """
 
+from __future__ import annotations
+
+import codecs
+
+import docutils.nodes
+import latexcodec  # pyright:ignore[reportUnusedImport]
 from pybtex.markup import LaTeXParser
 from pybtex.richtext import Protected, String, Text
 from pybtex.scanner import Literal, PybtexSyntaxError
 from pybtex_docutils import Backend
+from sphinx.application import Sphinx
+
+
+def setup(app: Sphinx) -> None:
+    Text.from_latex = _patch_from_latex
+    if Backend.default_suffix != ".txt":  # pyright:ignore[reportUnnecessaryComparison]
+        Backend.format_math = _patch_format_math
+
+
+@classmethod
+def _patch_from_latex(cls, latex: str) -> LaTeXMathParser:
+    return LaTeXMathParser(codecs.decode(latex, "ulatex")).parse()
+
+
+def _patch_format_math(self, text: list[Text]) -> list[docutils.nodes.math]:
+    return [docutils.nodes.math("", "", *text)]
 
 
 class Math(Protected):
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Math({", ".join(repr(part) for part in self.parts)})'
 
     def render(self, backend):
@@ -59,27 +81,3 @@ class LaTeXMathParser(LaTeXParser):
                 if level == 0:
                     raise PybtexSyntaxError("unbalanced braces", self)
                 break
-
-
-@classmethod
-def _patch_from_latex(cls, latex):
-    import codecs
-
-    import latexcodec  # pyright:ignore[reportUnusedImport]
-
-    return LaTeXMathParser(codecs.decode(latex, "ulatex")).parse()
-
-
-def _patch_format_math(self, text):
-    import docutils.nodes
-
-    return [docutils.nodes.math("", "", *text)]
-
-
-Text.from_latex = _patch_from_latex
-if Backend.default_suffix != ".txt":  # pyright:ignore[reportUnnecessaryComparison]
-    Backend.format_math = _patch_format_math
-
-
-def setup(app):
-    pass

@@ -33,7 +33,6 @@ else:
     from importlib.metadata import PackageNotFoundError
     from importlib.metadata import version as get_package_version
 
-sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.abspath("extensions"))
 
 
@@ -236,6 +235,7 @@ extensions = [
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
     "sphinxcontrib.inkscapeconverter",
+    "support_bibtex_math",
 ]
 html_js_files = [
     # https://github.com/requirejs/requirejs/tags
