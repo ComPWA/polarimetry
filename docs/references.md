@@ -2,7 +2,7 @@
 
 :::{only} html
 
-```{button-link} /_static/references.bib
+```{button-link} _static/references.bib
 :color: secondary
 :shadow:
 Download BibTeX
