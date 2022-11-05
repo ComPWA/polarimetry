@@ -5,6 +5,7 @@ arange
 bbox
 cairosvg
 caplog
+classmethod
 clim
 cloudpickle
 cmap

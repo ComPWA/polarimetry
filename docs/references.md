@@ -16,3 +16,5 @@ style: unsrt_et_al
 cited:
 ---
 ```
+
+$~$ <!-- activate math mode -->

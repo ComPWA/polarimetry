@@ -223,6 +223,7 @@ exclude_patterns = [
     "_static/export/README.md",
 ]
 extensions = [
+    "_support_bibtex_math",
     "myst_nb",
     "sphinx_reredirects",
     "sphinx.ext.autosectionlabel",
@@ -261,7 +262,7 @@ html_theme_options = {
 html_title = "Polarimetry Λc → p K π"
 intersphinx_mapping = {
     "IPython": ("https://ipython.readthedocs.io/en/stable", None),
-    "ampform": (f"https://ampform.readthedocs.io/en/stable", None),
+    "ampform": ("https://ampform.readthedocs.io/en/stable", None),
     "attrs": ("https://www.attrs.org/en/stable", None),
     "iminuit": ("https://iminuit.readthedocs.io/en/stable", None),
     "ipywidgets": ("https://ipywidgets.readthedocs.io/en/stable", None),
@@ -398,7 +399,7 @@ def names(children, context, role, **kwargs):  # type: ignore[no-untyped-def]
         # pylint: disable=raise-missing-from
         raise FieldIsMissing(role, context["entry"])
 
-    style = context["style"]
+    style: UnsrtStyle = context["style"]
     formatted_names = [
         style.format_name(person, style.abbreviate_names) for person in persons
     ]
