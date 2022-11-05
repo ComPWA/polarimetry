@@ -425,7 +425,7 @@ class MeasuredParameter(Generic[ParameterType]):
     `supplemental material <https://cds.cern.ch/record/2824328/files>`_, whereas
     `~.MeasuredParameter.model` and `~.MeasuredParameter.systematic` are taken from
     `Tables 8 and 9 <https://arxiv.org/pdf/2208.03262.pdf#page=21>`_ from the original
-    LHCb paper.
+    LHCb paper :cite:`LHCb-PAPER-2022-002`.
     """
 
     value: ParameterType
