@@ -3,7 +3,7 @@ myst:
   all_links_external: True
 ---
 
-# Polarimetry in Λc → p π K
+# Polarimetry in Λ<sub>c</sub> → p π K
 
 {{ DOWNLOAD_SINGLE_PDF }}
 
