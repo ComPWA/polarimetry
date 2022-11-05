@@ -34,7 +34,7 @@ else:
     from importlib.metadata import version as get_package_version
 
 sys.path.insert(0, os.path.abspath("."))
-from _relink_references import relink_references
+sys.path.insert(0, os.path.abspath("extensions"))
 
 
 def download_paper_figures() -> str:
@@ -183,7 +183,6 @@ def print_missing_file_warning(filename: str) -> None:
 
 execute_pluto_notebooks()
 generate_api()
-relink_references()
 
 
 add_module_names = False
@@ -223,8 +222,8 @@ exclude_patterns = [
     "_static/export/README.md",
 ]
 extensions = [
-    "_support_bibtex_math",
     "myst_nb",
+    "relink_references",
     "sphinx_reredirects",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
@@ -330,6 +329,41 @@ myst_substitutions = {
     "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
     "DOWNLOAD_PAPER_FIGURES": download_paper_figures(),
     "DOWNLOAD_INTENSITY_DISTRIBUTION": download_intensity_distribution(),
+}
+relink_ref_types = {
+    "jax.numpy.ndarray": "obj",
+    "polarimetry.decay.OuterStates": "obj",
+    "polarimetry.lhcb.ParameterType": "obj",
+    "tensorwaves.interface.DataSample": "obj",
+    "tensorwaves.interface.Function": "obj",
+    "tensorwaves.interface.ParameterValue": "obj",
+    "tensorwaves.interface.ParametrizedFunction": "obj",
+}
+relink_targets = {
+    "DataSample": "tensorwaves.interface.DataSample",
+    "Function": "tensorwaves.interface.Function",
+    "Literal[(-1, 1)]": "typing.Literal",
+    "Literal[- 1, 1]": "typing.Literal",
+    "Literal[-1, 1]": "typing.Literal",
+    "OuterStates": "polarimetry.decay.OuterStates",
+    "ParameterType": "polarimetry.lhcb.ParameterType",
+    "ParameterValue": "tensorwaves.interface.ParameterValue",
+    "ParametrizedFunction": "tensorwaves.interface.ParametrizedFunction",
+    "Path": "pathlib.Path",
+    "Pattern": "typing.Pattern",
+    "PoolSum": "ampform.sympy.PoolSum",
+    "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
+    "QuadContourSet": "matplotlib.contour.QuadContourSet",
+    "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
+    "implement_doit_method": "ampform.sympy.implement_doit_method",
+    "jnp.ndarray": "jax.numpy.ndarray",
+    "sp.Expr": "sympy.core.expr.Expr",
+    "sp.Indexed": "sympy.tensor.indexed.Indexed",
+    "sp.Mul": "sympy.core.mul.Mul",
+    "sp.Rational": "sympy.core.numbers.Rational",
+    "sp.Symbol": "sympy.core.symbol.Symbol",
+    "sp.acos": "sympy.functions.elementary.trigonometric.acos",
+    "typing.Literal[-1, 1]": "typing.Literal",
 }
 nb_execution_allow_errors = False
 nb_execution_mode = get_execution_mode()
