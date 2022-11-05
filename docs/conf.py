@@ -1,30 +1,9 @@
-# pyright: reportPrivateUsage=false
-import dataclasses
 import os
 import shutil
 import subprocess
 import sys
 from datetime import datetime
 from textwrap import dedent, indent
-from typing import Union
-
-import sphinxcontrib.bibtex.plugin  # type: ignore[import]
-from pybtex.database import Entry
-from pybtex.plugin import register_plugin
-from pybtex.richtext import BaseText, Tag, Text
-from pybtex.style.formatting.unsrt import Style as UnsrtStyle
-from pybtex.style.template import (
-    FieldIsMissing,
-    Node,
-    _format_list,
-    field,
-    href,
-    join,
-    node,
-    sentence,
-    words,
-)
-from sphinxcontrib.bibtex.style.referencing.author_year import AuthorYearReferenceStyle
 
 if sys.version_info < (3, 8):
     from importlib_metadata import PackageNotFoundError
@@ -33,8 +12,7 @@ else:
     from importlib.metadata import PackageNotFoundError
     from importlib.metadata import version as get_package_version
 
-sys.path.insert(0, os.path.abspath("."))
-from _relink_references import relink_references
+sys.path.insert(0, os.path.abspath("extensions"))
 
 
 def download_paper_figures() -> str:
@@ -183,7 +161,6 @@ def print_missing_file_warning(filename: str) -> None:
 
 execute_pluto_notebooks()
 generate_api()
-relink_references()
 
 
 add_module_names = False
@@ -224,6 +201,7 @@ exclude_patterns = [
 ]
 extensions = [
     "myst_nb",
+    "relink_references",
     "sphinx_reredirects",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
@@ -236,6 +214,8 @@ extensions = [
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
     "sphinxcontrib.inkscapeconverter",
+    "support_bibtex_math",
+    "unsrt_et_al",
 ]
 html_js_files = [
     # https://github.com/requirejs/requirejs/tags
@@ -258,10 +238,10 @@ html_theme_options = {
     "use_edit_page_button": True,
     "use_issues_button": True,
 }
-html_title = "Polarimetry Λc → p K π"
+html_title = "Polarimetry Λ<sub>c</sub> → p K π"
 intersphinx_mapping = {
     "IPython": ("https://ipython.readthedocs.io/en/stable", None),
-    "ampform": (f"https://ampform.readthedocs.io/en/stable", None),
+    "ampform": ("https://ampform.readthedocs.io/en/stable", None),
     "attrs": ("https://www.attrs.org/en/stable", None),
     "iminuit": ("https://iminuit.readthedocs.io/en/stable", None),
     "ipywidgets": ("https://ipywidgets.readthedocs.io/en/stable", None),
@@ -330,6 +310,41 @@ myst_substitutions = {
     "DOWNLOAD_PAPER_FIGURES": download_paper_figures(),
     "DOWNLOAD_INTENSITY_DISTRIBUTION": download_intensity_distribution(),
 }
+relink_ref_types = {
+    "jax.numpy.ndarray": "obj",
+    "polarimetry.decay.OuterStates": "obj",
+    "polarimetry.lhcb.ParameterType": "obj",
+    "tensorwaves.interface.DataSample": "obj",
+    "tensorwaves.interface.Function": "obj",
+    "tensorwaves.interface.ParameterValue": "obj",
+    "tensorwaves.interface.ParametrizedFunction": "obj",
+}
+relink_targets = {
+    "DataSample": "tensorwaves.interface.DataSample",
+    "Function": "tensorwaves.interface.Function",
+    "Literal[(-1, 1)]": "typing.Literal",
+    "Literal[- 1, 1]": "typing.Literal",
+    "Literal[-1, 1]": "typing.Literal",
+    "OuterStates": "polarimetry.decay.OuterStates",
+    "ParameterType": "polarimetry.lhcb.ParameterType",
+    "ParameterValue": "tensorwaves.interface.ParameterValue",
+    "ParametrizedFunction": "tensorwaves.interface.ParametrizedFunction",
+    "Path": "pathlib.Path",
+    "Pattern": "typing.Pattern",
+    "PoolSum": "ampform.sympy.PoolSum",
+    "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
+    "QuadContourSet": "matplotlib.contour.QuadContourSet",
+    "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
+    "implement_doit_method": "ampform.sympy.implement_doit_method",
+    "jnp.ndarray": "jax.numpy.ndarray",
+    "sp.Expr": "sympy.core.expr.Expr",
+    "sp.Indexed": "sympy.tensor.indexed.Indexed",
+    "sp.Mul": "sympy.core.mul.Mul",
+    "sp.Rational": "sympy.core.numbers.Rational",
+    "sp.Symbol": "sympy.core.symbol.Symbol",
+    "sp.acos": "sympy.functions.elementary.trigonometric.acos",
+    "typing.Literal[-1, 1]": "typing.Literal",
+}
 nb_execution_allow_errors = False
 nb_execution_mode = get_execution_mode()
 nb_execution_show_tb = True
@@ -357,104 +372,3 @@ suppress_warnings = [
 use_multitoc_numbering = True
 version = get_version()
 viewcode_follow_imported_members = True
-
-
-# Specify bibliography style
-@dataclasses.dataclass
-class NoCommaReferenceStyle(AuthorYearReferenceStyle):
-    author_year_sep: Union["BaseText", str] = " "
-
-
-sphinxcontrib.bibtex.plugin.register_plugin(
-    "sphinxcontrib.bibtex.style.referencing",
-    "author_year_no_comma",
-    NoCommaReferenceStyle,
-)
-
-
-@node
-def et_al(children, data, sep="", sep2=None, last_sep=None):  # type: ignore[no-untyped-def]
-    if sep2 is None:
-        sep2 = sep
-    if last_sep is None:
-        last_sep = sep
-    parts = [part for part in _format_list(children, data) if part]
-    if len(parts) <= 1:
-        return Text(*parts)
-    if len(parts) == 2:
-        return Text(sep2).join(parts)
-    if len(parts) == 3:
-        return Text(last_sep).join([Text(sep).join(parts[:-1]), parts[-1]])
-    return Text(parts[0], Tag("em", " et al"))
-
-
-@node
-def names(children, context, role, **kwargs):  # type: ignore[no-untyped-def]
-    """Return formatted names."""
-    assert not children
-    try:
-        persons = context["entry"].persons[role]
-    except KeyError:
-        # pylint: disable=raise-missing-from
-        raise FieldIsMissing(role, context["entry"])
-
-    style = context["style"]
-    formatted_names = [
-        style.format_name(person, style.abbreviate_names) for person in persons
-    ]
-    return et_al(**kwargs)[formatted_names].format_data(context)
-
-
-class MyStyle(UnsrtStyle):
-    def __init__(self) -> None:
-        super().__init__(abbreviate_names=True)
-
-    def format_names(self, role, as_sentence: bool = True) -> Node:  # type: ignore[no-untyped-def]
-        formatted_names = names(role, sep=", ", sep2=" and ", last_sep=", and ")
-        if as_sentence:
-            return sentence[formatted_names]
-        return formatted_names
-
-    def format_eprint(self, e: Entry) -> Node:
-        if "doi" in e.fields:
-            return ""
-        return super().format_eprint(e)
-
-    def format_url(self, e: Entry) -> Node:
-        if "doi" in e.fields or "eprint" in e.fields:
-            return ""
-        return words[
-            href[
-                field("url", raw=True),
-                field("url", raw=True, apply_func=remove_http),
-            ]
-        ]
-
-    def format_isbn(self, e: Entry) -> Node:
-        return href[
-            join[
-                "https://isbnsearch.org/isbn/",
-                field("isbn", raw=True, apply_func=remove_dashes_and_spaces),
-            ],
-            join[
-                "ISBN:",
-                field("isbn", raw=True),
-            ],
-        ]
-
-
-def remove_dashes_and_spaces(isbn: str) -> str:
-    to_remove = ["-", " "]
-    for remove in to_remove:
-        isbn = isbn.replace(remove, "")
-    return isbn
-
-
-def remove_http(url: str) -> str:
-    to_remove = ["https://", "http://"]
-    for remove in to_remove:
-        url = url.replace(remove, "")
-    return url
-
-
-register_plugin("pybtex.style.formatting", "unsrt_et_al", MyStyle)

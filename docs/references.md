@@ -2,7 +2,7 @@
 
 :::{only} html
 
-```{button-link} /_static/references.bib
+```{button-link} _static/references.bib
 :color: secondary
 :shadow:
 Download BibTeX
@@ -16,3 +16,5 @@ style: unsrt_et_al
 cited:
 ---
 ```
+
+$~$ <!-- activate math mode -->

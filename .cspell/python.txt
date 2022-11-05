@@ -5,11 +5,14 @@ arange
 bbox
 cairosvg
 caplog
+classmethod
 clim
 cloudpickle
 cmap
 configurator
 corrcoef
+dataclass
+dataclasses
 deepcopy
 edgecolor
 elif
@@ -54,7 +57,9 @@ pcolormesh
 phasespace
 plotly
 psutil
+pybtex
 pygments
+pylint
 pyplot
 pyright
 pytest
@@ -64,6 +69,7 @@ seealso
 sharey
 shutil
 singledispatch
+sphinxcontrib
 svgutils
 sympify
 sympy
