@@ -1,6 +1,7 @@
 aslatex
 autoupdate
 batchmode
+bibtex
 ComPWA
 Conda
 docnb
