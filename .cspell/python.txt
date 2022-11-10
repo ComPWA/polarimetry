@@ -17,6 +17,7 @@ deepcopy
 edgecolor
 elif
 expanduser
+fontsize
 funcs
 functools
 hashlib
