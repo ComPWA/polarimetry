@@ -374,6 +374,7 @@ def _warn_about_unsafe_hash():
 
 def mute_jax_warnings() -> None:
     jax_logger = logging.getLogger("absl")
+    jax_logger = logging.getLogger("jax._src.lib.xla_bridge")
     jax_logger.setLevel(logging.ERROR)
 
 
