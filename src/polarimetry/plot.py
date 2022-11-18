@@ -11,14 +11,11 @@ def add_watermark(
     ax: Axes,
     x: float = 0.03,
     y: float = 0.03,
-    fontsize: int = 20,
-    bold: bool = True,
+    fontsize: int | None = None,
+    **kwargs,
 ) -> None:
-    if bold:
-        text = R"\textbf{LHCb}" "\n" R"\textbf{Preliminary}"
-    else:
-        text = "LHCb\nPreliminary"
-    ax.text(x, y, text, size=fontsize, transform=ax.transAxes)
+    text = "LHCb\n" R"$1.7\mathrm{~fb}^{-1}$"
+    ax.text(x, y, text, size=fontsize, transform=ax.transAxes, **kwargs)
 
 
 def get_contour_line(contour_set: QuadContourSet) -> LineCollection:
