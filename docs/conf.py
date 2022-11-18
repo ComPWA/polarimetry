@@ -320,6 +320,7 @@ relink_ref_types = {
     "tensorwaves.interface.ParametrizedFunction": "obj",
 }
 relink_targets = {
+    "Axes": "matplotlib.axes.Axes",
     "DataSample": "tensorwaves.interface.DataSample",
     "Function": "tensorwaves.interface.Function",
     "Literal[(-1, 1)]": "typing.Literal",
