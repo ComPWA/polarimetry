@@ -21,7 +21,9 @@ else:
     from typing import Literal
 
 
-def create_data_transformer(model: AmplitudeModel) -> SympyDataTransformer:
+def create_data_transformer(
+    model: AmplitudeModel, backend: str = "jax"
+) -> SympyDataTransformer:
     kinematic_variables = {
         symbol: expression.doit().subs(model.parameter_defaults)
         for symbol, expression in model.variables.items()
@@ -29,7 +31,7 @@ def create_data_transformer(model: AmplitudeModel) -> SympyDataTransformer:
     identity_mapping = {s: s for s in sp.symbols("sigma1:4", nonnegative=True)}
     kinematic_variables.update(identity_mapping)
     return SympyDataTransformer.from_sympy(
-        kinematic_variables, backend="jax", use_cse=False
+        kinematic_variables, backend=backend, use_cse=False
     )
 
 
