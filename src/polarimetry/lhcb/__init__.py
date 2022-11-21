@@ -474,7 +474,8 @@ def get_conversion_factor_ls(production_node: IsobarNode) -> Literal[-1, 1]:
     L = production_node.interaction.L
     S = production_node.interaction.S
     if resonance.name.startswith("K"):
-        return 1  # see https://github.com/ComPWA/polarimetry/issues/179
+        # https://github.com/ComPWA/polarimetry/issues/192#issuecomment-1321892494
+        return int((-1) ** (L + S - sp.Rational(1, 2)))
     if resonance.name.startswith("L"):
         return int(-resonance.parity * (-1) ** (L + S - resonance.spin))
     if resonance.name.startswith("D"):

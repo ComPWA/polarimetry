@@ -45,13 +45,13 @@ def test_get_conversion_factor_ls():
         "D(1700)  L=1  S=3/2  factor=+1",
         "D(1700)  L=2  S=3/2  factor=-1",
         "K(700)   L=0  S=1/2  factor=+1",
-        "K(700)   L=1  S=1/2  factor=+1",
+        "K(700)   L=1  S=1/2  factor=-1",
         "K(892)   L=0  S=1/2  factor=+1",
-        "K(892)   L=1  S=1/2  factor=+1",
+        "K(892)   L=1  S=1/2  factor=-1",
         "K(892)   L=1  S=3/2  factor=+1",
-        "K(892)   L=2  S=3/2  factor=+1",
+        "K(892)   L=2  S=3/2  factor=-1",
         "K(1430)  L=0  S=1/2  factor=+1",
-        "K(1430)  L=1  S=1/2  factor=+1",
+        "K(1430)  L=1  S=1/2  factor=-1",
     ]
 
 
