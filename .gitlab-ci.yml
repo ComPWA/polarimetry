@@ -1,9 +1,14 @@
 image: python:3.8
 
+.pip-cache: &pip-cache
+  key:
+    prefix: pip
+  paths:
+    - .cache/pip
+  when: always
+
 cache:
-  - paths:
-      - .cache/pip
-    when: always
+  - *pip-cache
   - key:
       prefix: myst-nb
       files:
@@ -30,10 +35,10 @@ cache:
 pre-commit:
   stage: test
   cache:
-    - paths:
-        - .cache/pip
-      when: always
-    - paths:
+    - *pip-cache
+    - key:
+        prefix: pip
+      paths:
         - .cache/pre-commit
       when: always
   before_script:
