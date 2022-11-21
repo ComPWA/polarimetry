@@ -61,21 +61,23 @@ documentation:
     - julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
   script:
     - tox -e pdfnb
+    - tar czf latex.tar.gz -C docs/_build/latex/
     - EXECUTE_PLUTO="YES" tox -e docnb
-    - mv docs/_build/html/ public/
-    - tar czf public/latex.tar.gz -C docs/_build/ latex/
   artifacts:
     paths:
-      - public
+      - docs/_build/html/
+      - latex.tar.gz
     when: always
 
 pages:
   stage: deploy
+  dependencies:
+    - documentation
   only:
     - main
     - tags
   script:
-    - Deploying to GitLab pages
+    - mv docs/_build/html/ public/
   artifacts:
     paths:
       - public
