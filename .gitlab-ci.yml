@@ -24,7 +24,6 @@ image: python:3.8
     key:
       prefix: pre-commit
       files:
-        - .constraints/*.txt
         - .pre-commit-config.yaml
     paths:
       - .cache/pre-commit/
