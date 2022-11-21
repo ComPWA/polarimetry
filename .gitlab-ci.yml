@@ -1,7 +1,12 @@
 image: python:3.8
 
-cache:
-  - paths:
+.caches:
+  - &julia
+    key:
+      files:
+        - julia/Manifest.toml
+        - julia/Project.toml
+    paths:
       - .cache/pip
       - .cache/pre-commit
       - .julia/artifacts/
@@ -9,7 +14,19 @@ cache:
       - .julia/packages/
       - .julia/registries/
     when: always
-  - key:
+
+  - &pip-and-pre-commit
+    key:
+      files:
+        - .constraints/*.txt
+        - .pre-commit-config.yaml
+    paths:
+      - .cache/pip
+      - .cache/pre-commit
+    when: always
+
+  - &sphinx
+    key:
       prefix: myst-nb
       files:
         - .constraints/*.txt
@@ -24,7 +41,9 @@ cache:
       - docs/_static/images
       - docs/appendix/export
     when: always
-  - key:
+
+  - &sympy
+    key:
       prefix: sympy
       files:
         - .constraints/*.txt
@@ -35,6 +54,8 @@ cache:
 
 pre-commit:
   stage: test
+  cache:
+    - *pip-and-pre-commit
   before_script:
     - python3 -m pip install -e .[sty] -c .constraints/py3.8.txt
   script:
@@ -42,6 +63,9 @@ pre-commit:
 
 pytest:
   stage: test
+  cache:
+    - *pip-and-pre-commit
+    - *sympy
   before_script:
     - python3 -m pip install .[test] tox -c .constraints/py3.8.txt
   script:
@@ -49,6 +73,11 @@ pytest:
 
 documentation:
   stage: build
+  cache:
+    - *julia
+    - *pip-and-pre-commit
+    - *sphinx
+    - *sympy
   before_script:
     - apt-get update
     - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
