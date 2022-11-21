@@ -9,6 +9,7 @@ image: python:3.8
         - julia/Project.toml
     paths:
       - .julia/
+      - julia-*/
     when: always
 
   - &pip
@@ -97,10 +98,17 @@ documentation:
     - apt-get update
     - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
     - python3 -m pip install .[doc] tox -c .constraints/py3.8.txt
-    - wget -q https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz
-    - tar xzf julia-1.7.3-linux-x86_64.tar.gz
-    - mv julia-1.7.3 /opt/
-    - ln -s /opt/julia-1.7.3/bin/julia /usr/local/bin/julia
+    - version=$(sed -n '3p' julia/Manifest.toml)
+    - version=${version:17:-1}
+    - major_version=${version:0:-2}
+    - filename=julia-${version}-linux-x86_64.tar.gz
+    - |
+      if [ ! -d julia-${version} ]; then
+        wget -q https://julialang-s3.julialang.org/bin/linux/x64/${major_version}/${filename}
+        tar xzf ${filename}
+      fi
+    - mv julia-${version} /opt/
+    - ln -s /opt/julia-${version}/bin/julia /usr/local/bin/julia
     - julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
   script:
     - tox -e pdfnb
