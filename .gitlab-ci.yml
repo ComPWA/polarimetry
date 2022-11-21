@@ -3,6 +3,7 @@ image: python:3.8
 cache:
   - paths:
       - .cache/pip
+    when: always
   - key:
       prefix: myst-nb
       files:
@@ -17,6 +18,7 @@ cache:
       - docs/_static/export
       - docs/_static/images
       - docs/appendix/export
+    when: always
   - key:
       prefix: sympy
       files:
@@ -30,8 +32,10 @@ pre-commit:
   cache:
     - paths:
         - .cache/pip
+      when: always
     - paths:
         - .cache/pre-commit
+      when: always
   before_script:
     - python3 -m pip install -e .[sty] -c .constraints/py3.8.txt
   script:
