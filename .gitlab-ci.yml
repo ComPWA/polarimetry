@@ -1,6 +1,16 @@
 image: python:3.8
 
 .cache-definitions:
+  - &julia
+    key:
+      prefix: julia
+      files:
+        - julia/Manifest.toml
+        - julia/Project.toml
+    paths:
+      - .julia/
+    when: always
+
   - &pip
     key:
       prefix: pip
@@ -79,6 +89,7 @@ pytest-slow:
 documentation:
   stage: build
   cache:
+    - *julia
     - *pip
     - *sphinx
     - *sympy
@@ -122,6 +133,7 @@ stages:
 # https://docs.gitlab.com/ee/ci/caching/#cache-python-dependencies
 variables:
   JULIA_CI: "true"
+  JULIA_DEPOT_PATH: "$CI_PROJECT_DIR/.julia/"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   PRE_COMMIT_HOME: "$CI_PROJECT_DIR/.cache/pre-commit"
   PYTHONHASHSEED: "0"
