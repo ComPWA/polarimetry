@@ -1,25 +1,33 @@
 image: python:3.8
 
-.caches:
+.cache-definitions:
   - &julia
     key:
+      prefix: julia
       files:
         - julia/Manifest.toml
         - julia/Project.toml
     paths:
-      - .julia/artifacts/
-      - .julia/compiled/
-      - .julia/packages/
-      - .julia/registries/
+      - .julia/
     when: always
 
-  - &pip-and-pre-commit
+  - &pip
     key:
+      prefix: pip
+      files:
+        - .constraints/*.txt
+    paths:
+      - .cache/pip/
+    when: always
+
+  - &pre-commit
+    key:
+      prefix: pre-commit
       files:
         - .constraints/*.txt
         - .pre-commit-config.yaml
     paths:
-      - .cache/*
+      - .cache/pre-commit/
     when: always
 
   - &sphinx
@@ -52,7 +60,8 @@ image: python:3.8
 pre-commit:
   stage: test
   cache:
-    - *pip-and-pre-commit
+    - *pip
+    - *pre-commit
   before_script:
     - python3 -m pip install -e .[sty] -c .constraints/py3.8.txt
   script:
@@ -61,7 +70,7 @@ pre-commit:
 pytest:
   stage: test
   cache:
-    - *pip-and-pre-commit
+    - *pip
     - *sympy
   before_script:
     - python3 -m pip install .[test] tox -c .constraints/py3.8.txt
@@ -72,7 +81,7 @@ documentation:
   stage: build
   cache:
     - *julia
-    - *pip-and-pre-commit
+    - *pip
     - *sphinx
     - *sympy
   before_script:
