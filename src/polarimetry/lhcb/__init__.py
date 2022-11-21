@@ -356,7 +356,7 @@ def _to_symbol_value_mapping(
             real = _to_value_with_uncertainty(str_value)
             imag = _to_value_with_uncertainty(str_imag)
             parameter = _form_complex_parameter(real, imag)
-            key_to_value[f"A{identifier}"] = attrs.evolve(
+            key_to_value[key] = attrs.evolve(
                 parameter,
                 value=conversion_factor * parameter.value,
             )
