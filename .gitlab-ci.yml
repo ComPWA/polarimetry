@@ -7,8 +7,6 @@ image: python:3.8
         - julia/Manifest.toml
         - julia/Project.toml
     paths:
-      - .cache/pip
-      - .cache/pre-commit
       - .julia/artifacts/
       - .julia/compiled/
       - .julia/packages/
