@@ -1,4 +1,5 @@
 # pyright: reportMissingImports=false
+# pyright: reportMissingModuleSource=false
 from pybtex.database import Entry
 from pybtex.plugin import register_plugin
 from pybtex.richtext import Tag, Text
