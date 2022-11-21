@@ -4,6 +4,10 @@ cache:
   - paths:
       - .cache/pip
       - .cache/pre-commit
+      - .julia/artifacts/
+      - .julia/compiled/
+      - .julia/packages/
+      - .julia/registries/
     when: always
   - key:
       prefix: myst-nb
@@ -84,6 +88,7 @@ stages:
 
 # https://docs.gitlab.com/ee/ci/caching/#cache-python-dependencies
 variables:
+  JULIA_DEPOT_PATH: "$CI_PROJECT_DIR/.julia/"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   PRE_COMMIT_HOME: "$CI_PROJECT_DIR/.cache/pre-commit"
   PYTHONHASHSEED: "0"
