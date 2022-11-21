@@ -25,7 +25,14 @@ cache:
       - .sympy-cache-jax
       - .sympy-cache
 
-build-documentation:
+pytest:
+  stage: test
+  before_script:
+    - python3 -m pip install .[test] tox -c .constraints/py3.8.txt
+  script:
+    - pytest
+
+documentation:
   stage: build
   before_script:
     - apt-get update
@@ -59,6 +66,7 @@ pages:
     when: always
 
 stages:
+  - test
   - build
   - deploy
 
