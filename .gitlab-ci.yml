@@ -25,10 +25,8 @@ cache:
       - .sympy-cache-jax
       - .sympy-cache
 
-pages:
-  only:
-    - main
-    - tags
+build-documentation:
+  stage: build
   before_script:
     - apt-get update
     - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
@@ -47,6 +45,22 @@ pages:
     paths:
       - public
     when: always
+
+pages:
+  stage: deploy
+  only:
+    - main
+    - tags
+  script:
+    - Deploying to GitLab pages
+  artifacts:
+    paths:
+      - public
+    when: always
+
+stages:
+  - build
+  - deploy
 
 # https://docs.gitlab.com/ee/ci/caching/#cache-python-dependencies
 variables:
