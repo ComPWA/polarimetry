@@ -19,8 +19,7 @@ image: python:3.8
         - .constraints/*.txt
         - .pre-commit-config.yaml
     paths:
-      - .cache/pip
-      - .cache/pre-commit
+      - .cache/*
     when: always
 
   - &sphinx
