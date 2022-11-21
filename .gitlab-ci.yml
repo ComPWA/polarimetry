@@ -1,14 +1,10 @@
 image: python:3.8
 
-.pip-cache: &pip-cache
-  key:
-    prefix: pip
-  paths:
-    - .cache/pip
-  when: always
-
 cache:
-  - *pip-cache
+  - paths:
+      - .cache/pip
+      - .cache/pre-commit
+    when: always
   - key:
       prefix: myst-nb
       files:
@@ -31,16 +27,10 @@ cache:
     paths:
       - .sympy-cache-jax
       - .sympy-cache
+    when: always
 
 pre-commit:
   stage: test
-  cache:
-    - *pip-cache
-    - key:
-        prefix: pip
-      paths:
-        - .cache/pre-commit
-      when: always
   before_script:
     - python3 -m pip install -e .[sty] -c .constraints/py3.8.txt
   script:
