@@ -75,7 +75,7 @@ pytest:
   before_script:
     - python3 -m pip install .[test] -c .constraints/py3.8.txt
   script:
-    - pytest
+    - pytest -n auto
 
 pytest-slow:
   stage: build
@@ -85,7 +85,7 @@ pytest-slow:
   before_script:
     - python3 -m pip install .[test] -c .constraints/py3.8.txt
   script:
-    - pytest -m slow
+    - pytest -n auto -m slow
 
 documentation:
   stage: build
