@@ -1,4 +1,6 @@
 # cspell:ignore bibtex latexcodec pybtex sphinxcontrib ulatex
+# pyright: reportMissingImports=false
+# pyright: reportMissingModuleSource=false
 """Enable math mode in `sphinxcontrib-bibtex`.
 
 .. note:: The source code below is inspired by

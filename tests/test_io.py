@@ -80,27 +80,28 @@ def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture
     assert caplog.text == ""
 
 
+@pytest.mark.slow()
 @pytest.mark.parametrize(
     ("model_id", "intensity_hash", "polarimetry_hash"),
     [
-        (0, 55901977, 26197362),
-        (1, 55901977, 26197362),
-        (2, 55901977, 26197362),
-        (3, 55901977, 26197362),
-        (4, 55901977, 26197362),
-        (5, 55901977, 26197362),
-        (6, 55901977, 26197362),
-        (7, 67954769, 19984376),
-        (8, 26414467, 40233122),
-        (9, 78888679, 12500606),
-        (10, 43331666, 27303837),
-        (11, 55901977, 26197362),
-        (12, 55885058, 68738708),
-        (13, 14855507, 48169132),
-        (14, 55901977, 26197362),
-        (15, 62960341, 24711378),
-        (16, 55901977, 26197362),
-        # 17: No dynamics implemented for lineshape "Flatte1405_LS"
+        (0, 22280271, 33322092),
+        (1, 22280271, 33322092),
+        (2, 22280271, 33322092),
+        (3, 22280271, 33322092),
+        (4, 22280271, 33322092),
+        (5, 22280271, 33322092),
+        (6, 22280271, 33322092),
+        (7, 21170486, 82478999),
+        (8, 84314069, 10809627),
+        (9, 57893100, 12766508),
+        (10, 97621809, 15885652),
+        (11, 22280271, 33322092),
+        (12, 14785489, 56034405),
+        (13, 87547025, 38143557),
+        (14, 22280271, 33322092),
+        (15, 90746888, 33929793),
+        (16, 22280271, 33322092),
+        (17, 63839931, 41166578),
     ],
 )
 def test_get_readable_hash_large(model_id, intensity_hash, polarimetry_hash):
@@ -111,10 +112,12 @@ def test_get_readable_hash_large(model_id, intensity_hash, polarimetry_hash):
     builder = __get_model_builder(model_id)
     model = builder.formulate(reference_subsystem=1)
     h = get_readable_hash(model.full_expression)
-    assert int(h[17:25]) == intensity_hash
+    short_hash = int(h[17:25])
+    assert short_hash == intensity_hash
     polarimetry_exprs = formulate_polarimetry(builder, reference_subsystem=1)
     h = get_readable_hash(polarimetry_exprs[0].doit().xreplace(model.amplitudes))
-    assert int(h[17:25]) == polarimetry_hash
+    short_hash = int(h[17:25])
+    assert short_hash == polarimetry_hash
 
 
 def __get_model_builder(model_id: int | str) -> DalitzPlotDecompositionBuilder:

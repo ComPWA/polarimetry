@@ -22,6 +22,7 @@ nbformat
 pdfnb
 phsp
 pushd
+pytest
 PYTHONHASHSEED
 Remco
 texlive

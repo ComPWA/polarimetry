@@ -1,9 +1,37 @@
 image: python:3.8
 
-cache:
-  - paths:
-      - .cache/pip
-  - key:
+.cache-definitions:
+  - &julia
+    key:
+      prefix: julia
+      files:
+        - julia/Manifest.toml
+        - julia/Project.toml
+    paths:
+      - .julia/
+      - julia-*/
+    when: always
+
+  - &pip
+    key:
+      prefix: pip
+      files:
+        - .constraints/*.txt
+    paths:
+      - .cache/pip/
+    when: always
+
+  - &pre-commit
+    key:
+      prefix: pre-commit
+      files:
+        - .pre-commit-config.yaml
+    paths:
+      - .cache/pre-commit/
+    when: always
+
+  - &sphinx
+    key:
       prefix: myst-nb
       files:
         - .constraints/*.txt
@@ -17,39 +45,105 @@ cache:
       - docs/_static/export
       - docs/_static/images
       - docs/appendix/export
-  - key:
+    when: always
+
+  - &sympy
+    key:
       prefix: sympy
       files:
         - .constraints/*.txt
     paths:
       - .sympy-cache-jax
       - .sympy-cache
+    when: always
 
-pages:
-  only:
-    - main
-    - tags
+pre-commit:
+  stage: test
+  cache:
+    - *pip
+    - *pre-commit
+  before_script:
+    - python3 -m pip install -e .[sty] -c .constraints/py3.8.txt
+  script:
+    - pre-commit run -a --color always
+
+pytest:
+  stage: test
+  cache:
+    - *pip
+    - *sympy
+  before_script:
+    - python3 -m pip install .[test] -c .constraints/py3.8.txt
+  script:
+    - pytest -n auto
+
+pytest-slow:
+  stage: build
+  cache:
+    - *pip
+    - *sympy
+  before_script:
+    - python3 -m pip install .[test] -c .constraints/py3.8.txt
+  script:
+    - pytest -n auto -m slow
+
+documentation:
+  stage: build
+  cache:
+    - *julia
+    - *pip
+    - *sphinx
+    - *sympy
   before_script:
     - apt-get update
     - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
     - python3 -m pip install .[doc] tox -c .constraints/py3.8.txt
-    - wget -q https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz
-    - tar xzf julia-1.7.3-linux-x86_64.tar.gz
-    - mv julia-1.7.3 /opt/
-    - ln -s /opt/julia-1.7.3/bin/julia /usr/local/bin/julia
+    - version=$(sed -n '3p' julia/Manifest.toml)
+    - version=${version:17:-1}
+    - major_version=${version:0:-2}
+    - filename=julia-${version}-linux-x86_64.tar.gz
+    - |
+      if [ ! -d julia-${version} ]; then
+        wget -q https://julialang-s3.julialang.org/bin/linux/x64/${major_version}/${filename}
+        tar xzf ${filename}
+      fi
+    - mv julia-${version} /opt/
+    - ln -s /opt/julia-${version}/bin/julia /usr/local/bin/julia
+    - julia --version
     - julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
   script:
     - tox -e pdfnb
     - EXECUTE_PLUTO="YES" tox -e docnb
+  artifacts:
+    paths:
+      - docs/_build/html
+      - docs/_build/latex
+    when: always
+
+pages:
+  stage: deploy
+  dependencies:
+    - documentation
+  only:
+    - main
+    - tags
+  script:
     - mv docs/_build/html/ public/
-    - tar czf public/latex.tar.gz -C docs/_build/ latex/
   artifacts:
     paths:
       - public
     when: always
 
+stages:
+  - test
+  - build
+  - deploy
+
 # https://docs.gitlab.com/ee/ci/caching/#cache-python-dependencies
 variables:
+  JULIA_CI: "true"
+  JULIA_DEPOT_PATH: "$CI_PROJECT_DIR/.julia/"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PRE_COMMIT_HOME: "$CI_PROJECT_DIR/.cache/pre-commit"
   PYTHONHASHSEED: "0"
   SYMPY_CACHE_DIR: "$CI_PROJECT_DIR"
