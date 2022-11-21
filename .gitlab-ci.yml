@@ -77,6 +77,16 @@ pytest:
   script:
     - pytest
 
+pytest-slow:
+  stage: build
+  cache:
+    - *pip
+    - *sympy
+  before_script:
+    - python3 -m pip install .[test] tox -c .constraints/py3.8.txt
+  script:
+    - pytest -m slow
+
 documentation:
   stage: build
   cache:

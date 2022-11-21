@@ -80,6 +80,7 @@ def test_get_readable_hash(assumptions, expected_hash, caplog: LogCaptureFixture
     assert caplog.text == ""
 
 
+@pytest.mark.slow()
 @pytest.mark.parametrize(
     ("model_id", "intensity_hash", "polarimetry_hash"),
     [
