@@ -25,6 +25,18 @@ cache:
       - .sympy-cache-jax
       - .sympy-cache
 
+pre-commit:
+  stage: test
+  cache:
+    - paths:
+        - .cache/pip
+    - paths:
+        - .cache/pre-commit
+  before_script:
+    - python3 -m pip install -e .[sty] -c .constraints/py3.8.txt
+  script:
+    - pre-commit run -a
+
 pytest:
   stage: test
   before_script:
@@ -73,5 +85,6 @@ stages:
 # https://docs.gitlab.com/ee/ci/caching/#cache-python-dependencies
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PRE_COMMIT_HOME: "$CI_PROJECT_DIR/.cache/pre-commit"
   PYTHONHASHSEED: "0"
   SYMPY_CACHE_DIR: "$CI_PROJECT_DIR"
