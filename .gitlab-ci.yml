@@ -109,6 +109,7 @@ documentation:
       fi
     - mv julia-${version} /opt/
     - ln -s /opt/julia-${version}/bin/julia /usr/local/bin/julia
+    - julia --version
     - julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
   script:
     - tox -e pdfnb
