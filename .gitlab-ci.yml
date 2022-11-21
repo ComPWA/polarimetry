@@ -35,7 +35,7 @@ pre-commit:
   before_script:
     - python3 -m pip install -e .[sty] -c .constraints/py3.8.txt
   script:
-    - pre-commit run -a
+    - pre-commit run -a --color always
 
 pytest:
   stage: test
