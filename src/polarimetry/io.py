@@ -314,7 +314,14 @@ def perform_cached_lambdify(
     if directory is None:
         main_cache_dir = _get_main_cache_dir()
         directory = abspath(f"{main_cache_dir}/.sympy-cache-{backend}")
-    h = get_readable_hash(expr)
+    if parameters is None:
+        hash_obj = expr
+    else:
+        hash_obj = (
+            expr,
+            tuple((s, parameters[s]) for s in sorted(parameters, key=str)),
+        )
+    h = get_readable_hash(hash_obj)
     filename = f"{directory}/{h}.pkl"
     if os.path.exists(filename):
         with open(filename, "rb") as f:
