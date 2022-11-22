@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from os.path import dirname
 
+import sympy as sp
+from sympy.core.symbol import Str
+
 from polarimetry.amplitude import DalitzPlotDecompositionBuilder
 from polarimetry.lhcb import (
     get_conversion_factor_ls,
@@ -57,33 +60,24 @@ def test_get_conversion_factor_ls():
 
 def test_load_model_parameters():
     parameters = _load_parameters("Default amplitude model")
+    H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
+    gamma = sp.Symbol(R"\gamma_{K(700)}")
+    half = sp.Rational(1, 2)
     assert len(parameters) == 53
-    assert parameters[R"\mathcal{H}^\mathrm{production}[K(892), 0, -1/2]"] == 1
-    assert parameters[R"\gamma_{K(700)}"] == 0.94106
-    assert (
-        parameters[R"\mathcal{H}^\mathrm{production}[K(700), 0, 1/2]"]
-        == 0.068908 + 2.521444j  # conversion factor +1
-    )
-    assert (
-        parameters[R"\mathcal{H}^\mathrm{production}[K(700), 0, -1/2]"]
-        == -2.685630 + 0.038490j  # conversion factor +1
-    )
+    assert parameters[H_prod[Str("K(892)"), 0, -half]] == 1
+    assert parameters[gamma] == 0.94106
+    assert parameters[H_prod[Str("K(700)"), 0, +half]] == 0.068908 + 2.521444j
+    assert parameters[H_prod[Str("K(700)"), 0, -half]] == -2.685630 + 0.038490j
 
     parameters = _load_parameters(
         "Alternative amplitude model with L(1810) contribution added with free mass and"
         " width"
     )
     assert len(parameters) == 59
-    assert parameters[R"\mathcal{H}^\mathrm{production}[K(892), 0, -1/2]"] == 1
-    assert parameters[R"\gamma_{K(700)}"] == 0.857489
-    assert (
-        parameters[R"\mathcal{H}^\mathrm{production}[L(1810), -1/2, 0]"]
-        == 0.865366 - 4.993321j  # conversion factor -1
-    )
-    assert (
-        parameters[R"\mathcal{H}^\mathrm{production}[L(1810), 1/2, 0]"]
-        == -1.179995 - 4.413438j  # conversion factor -1
-    )
+    assert parameters[H_prod[Str("K(892)"), 0, -half]] == 1
+    assert parameters[gamma] == 0.857489
+    assert parameters[H_prod[Str("L(1810)"), -half, 0]] == 0.865366 - 4.993321j
+    assert parameters[H_prod[Str("L(1810)"), +half, 0]] == -1.179995 - 4.413438j
 
 
 def _load_builder(model_choice: int | str) -> DalitzPlotDecompositionBuilder:
@@ -91,15 +85,12 @@ def _load_builder(model_choice: int | str) -> DalitzPlotDecompositionBuilder:
     return load_model_builder(MODEL_FILE, particles, model_choice)
 
 
-def _load_parameters(model_choice: int | str) -> dict[str, complex | float | int]:
+def _load_parameters(
+    model_choice: int | str,
+) -> dict[sp.Indexed | sp.Symbol, complex | float]:
     model_builder = _load_builder(model_choice)
-    symbol_parameters = load_model_parameters(
+    return load_model_parameters(
         filename=MODEL_FILE,
         decay=model_builder.decay,
         model_id=model_choice,
     )
-    parameters = {str(par): value for par, value in symbol_parameters.items()}
-    print()
-    print("Run pytest -s to view these parameter names:")
-    print("  ", "\n  ".join(sorted(parameters)))
-    return parameters
