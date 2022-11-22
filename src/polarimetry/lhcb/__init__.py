@@ -229,7 +229,7 @@ def load_model_parameters_with_uncertainties(
     min_ls = "LS couplings" not in model_title
     parameter_definitions = model_definitions[model_title]["parameters"]
     parameters = _to_symbol_value_mapping(
-        parameter_definitions, decay, min_ls, particle_definitions
+        parameter_definitions, min_ls, particle_definitions
     )
     decay_couplings = compute_decay_couplings(decay)
     parameters.update(decay_couplings)
@@ -336,9 +336,8 @@ def compute_decay_couplings(
 
 def _to_symbol_value_mapping(
     parameter_dict: dict[str, str],
-    decay: ThreeBodyDecay,
     min_ls: bool,
-    particle_definitions: dict[str, Particle] | None = None,
+    particle_definitions: dict[str, Particle],
 ) -> dict[sp.Basic, complex | float]:
     key_to_value: dict[str, MeasuredParameter] = {}
     for key, str_value in parameter_dict.items():
@@ -349,11 +348,13 @@ def _to_symbol_value_mapping(
             indexed_symbol: sp.Indexed = parameter_key_to_symbol(
                 key, min_ls, particle_definitions
             )
-            chain = decay.find_chain(resonance_name=str(indexed_symbol.indices[0]))
+            resonance_name = str(indexed_symbol.indices[0])
+            resonance = particle_definitions[resonance_name]
             if min_ls:
-                conversion_factor = get_conversion_factor(chain.resonance)
+                conversion_factor = get_conversion_factor(resonance)
             else:
-                conversion_factor = get_conversion_factor_ls(chain.decay)
+                _, L, S = indexed_symbol.indices
+                conversion_factor = get_conversion_factor_ls(resonance, L, S)
             real = _to_value_with_uncertainty(str_value)
             imag = _to_value_with_uncertainty(str_imag)
             parameter = _form_complex_parameter(real, imag)
@@ -467,15 +468,11 @@ def get_conversion_factor(
     raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
 
 
-def get_conversion_factor_ls(production_node: IsobarNode) -> Literal[-1, 1]:
-    # https://github.com/ComPWA/polarimetry/issues/122#issuecomment-1252334099
-    assert production_node.interaction is not None, "LS-values required"
-    assert isinstance(production_node.child1, IsobarNode)
-    resonance = production_node.child1.parent
-    L = production_node.interaction.L
-    S = production_node.interaction.S
+def get_conversion_factor_ls(
+    resonance: Particle, L: sp.Rational, S: sp.Rational
+) -> Literal[-1, 1]:
+    # https://github.com/ComPWA/polarimetry/issues/192#issuecomment-1321892494
     if resonance.name.startswith("K"):
-        # https://github.com/ComPWA/polarimetry/issues/192#issuecomment-1321892494
         return int((-1) ** (L + S - sp.Rational(1, 2)))
     if resonance.name.startswith("L"):
         return int(-resonance.parity * (-1) ** (L + S - resonance.spin))
