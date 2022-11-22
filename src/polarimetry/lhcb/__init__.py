@@ -356,7 +356,7 @@ def _to_symbol_value_mapping(
             real = _to_value_with_uncertainty(str_value)
             imag = _to_value_with_uncertainty(str_imag)
             parameter = _form_complex_parameter(real, imag)
-            key_to_value[f"A{identifier}"] = attrs.evolve(
+            key_to_value[key] = attrs.evolve(
                 parameter,
                 value=conversion_factor * parameter.value,
             )
@@ -466,12 +466,13 @@ def get_conversion_factor(
     raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
 
 
-def get_conversion_factor_ls(isobar: IsobarNode) -> Literal[-1, 1]:
+def get_conversion_factor_ls(production_node: IsobarNode) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/122#issuecomment-1252334099
-    assert isobar.interaction is not None, "LS-values required"
-    resonance = isobar.parent
-    L = isobar.interaction.L
-    S = isobar.interaction.S
+    assert production_node.interaction is not None, "LS-values required"
+    assert isinstance(production_node.child1, IsobarNode)
+    resonance = production_node.child1.parent
+    L = production_node.interaction.L
+    S = production_node.interaction.S
     if resonance.name.startswith("K"):
         return 1  # see https://github.com/ComPWA/polarimetry/issues/179
     if resonance.name.startswith("L"):
