@@ -451,20 +451,15 @@ class MeasuredParameter(Generic[ParameterType]):
         )
 
 
-def get_conversion_factor(
-    resonance: Particle, proton_helicity: sp.Rational | None = None
-) -> Literal[-1, 1]:
+def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
     half = sp.Rational(1, 2)
-    factor = 1
-    if proton_helicity is not None:
-        factor = int((-1) ** (half - proton_helicity))  # two-particle convention
     if resonance.name.startswith("D"):
-        return int(-resonance.parity * factor * (-1) ** (resonance.spin - half))
+        return int(-resonance.parity * (-1) ** (resonance.spin - half))
     if resonance.name.startswith("K"):
-        return factor
+        return 1
     if resonance.name.startswith("L"):
-        return int(-resonance.parity * factor)
+        return int(-resonance.parity)
     raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
 
 
@@ -472,13 +467,11 @@ def get_conversion_factor_ls(
     resonance: Particle, L: sp.Rational, S: sp.Rational
 ) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/192#issuecomment-1321892494
-    if resonance.name.startswith("K"):
-        return int((-1) ** (L + S - sp.Rational(1, 2)))
-    if resonance.name.startswith("L"):
-        return int(-resonance.parity * (-1) ** (L + S - resonance.spin))
-    if resonance.name.startswith("D"):
-        return int(-resonance.parity * (-1) ** (L + S - sp.Rational(1, 2)))
-    raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
+    if resonance.name.startswith("K") and resonance.spin == 0:
+        return 1
+    half = sp.Rational(1, 2)
+    CG_flip_factor = int((-1) ** (L + S - half))
+    return get_conversion_factor(resonance) * CG_flip_factor
 
 
 def parameter_key_to_symbol(
