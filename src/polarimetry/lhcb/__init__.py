@@ -454,7 +454,6 @@ class MeasuredParameter(Generic[ParameterType]):
 def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
     half = sp.Rational(1, 2)
-    factor = 1
     if resonance.name.startswith("D"):
         return int(-resonance.parity * (-1) ** (resonance.spin - half))
     if resonance.name.startswith("K"):
@@ -468,12 +467,10 @@ def get_conversion_factor_ls(
     resonance: Particle, L: sp.Rational, S: sp.Rational
 ) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/192#issuecomment-1321892494
-    half = sp.Rational(1, 2)
-    # https://github.com/ComPWA/polarimetry/issues/122#issuecomment-1252334099
-    CG_flip_factor = int((-1) ** (L + S - half))
     if resonance.name.startswith("K") and resonance.spin == 0:
         return 1
-    #
+    half = sp.Rational(1, 2)
+    CG_flip_factor = int((-1) ** (L + S - half))
     return get_conversion_factor(resonance) * CG_flip_factor
 
 
