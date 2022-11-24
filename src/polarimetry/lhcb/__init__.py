@@ -455,11 +455,11 @@ def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
     half = sp.Rational(1, 2)
     factor = 1
     if resonance.name.startswith("D"):
-        return int(-resonance.parity * factor * (-1) ** (resonance.spin - half))
+        return int(-resonance.parity * (-1) ** (resonance.spin - half))
     if resonance.name.startswith("K"):
-        return factor
+        return 1
     if resonance.name.startswith("L"):
-        return int(-resonance.parity * factor)
+        return int(-resonance.parity)
     raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
 
 
