@@ -3,7 +3,13 @@ from __future__ import annotations
 import sympy as sp
 
 from polarimetry.decay import Particle, ThreeBodyDecayChain
-from polarimetry.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave, Q
+from polarimetry.dynamics import (
+    BlattWeisskopf,
+    BreitWignerMinL,
+    BuggBreitWigner,
+    FlattéSWave,
+    Q,
+)
 
 from .particle import PARTICLE_TO_ID, K, Σ, p, π
 
@@ -48,21 +54,33 @@ def formulate_flatte_1405(
 ) -> tuple[FlattéSWave, dict[sp.Symbol, float]]:
     s = _get_mandelstam_s(decay)
     m1, m2 = map(_to_mass_symbol, decay.decay_products)
-    mass = sp.Symbol(f"m_{{{decay.resonance.name}}}")
+    m_res = sp.Symbol(f"m_{{{decay.resonance.name}}}")
     Γ1 = sp.Symbol(Rf"\Gamma_{{{decay.resonance.name} \to {p.latex} {K.latex}}}")
     Γ2 = sp.Symbol(Rf"\Gamma_{{{decay.resonance.name} \to {Σ.latex} {π.latex}}}")
+    m_top = _to_mass_symbol(decay.parent)
+    m_spec = _to_mass_symbol(decay.spectator)
     mπ = _to_mass_symbol(π)
     mΣ = sp.Symbol(f"m_{{{Σ.name}}}")
     parameter_defaults = {
-        mass: decay.resonance.mass,
+        m_res: decay.resonance.mass,
         Γ1: decay.resonance.width,
         Γ2: decay.resonance.width,
         m1: decay.decay_products[0].mass,
         m2: decay.decay_products[1].mass,
+        m_top: decay.parent.mass,
+        m_spec: decay.spectator.mass,
         mπ: π.mass,
         mΣ: Σ.mass,
     }
-    dynamics = FlattéSWave(s, mass, (Γ1, Γ2), (m1, m2), (mπ, mΣ))
+    l_prod = decay.incoming_ls.L
+    R_prod = sp.Symbol(R"R_{\Lambda_c}")
+    q = Q(s, m_top, m_spec)
+    q0 = Q(m_res**2, m_top, m_spec)
+    dynamics = sp.Mul(
+        (q / q0) ** l_prod,
+        BlattWeisskopf(q * R_prod, l_prod) / BlattWeisskopf(q0 * R_prod, l_prod),
+        FlattéSWave(s, m_res, (Γ1, Γ2), (m1, m2), (mπ, mΣ)),
+    )
     return dynamics, parameter_defaults
 
 
