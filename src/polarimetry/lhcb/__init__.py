@@ -467,7 +467,7 @@ def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
 def get_conversion_factor_ls(
     resonance: Particle, L: sp.Rational, S: sp.Rational
 ) -> Literal[-1, 1]:
-    # https://github.com/ComPWA/polarimetry/issues/122#issuecomment-1252334099
+    # https://github.com/ComPWA/polarimetry/issues/192#issuecomment-1321892494
     half = sp.Rational(1, 2)
     if resonance.name.startswith("K"):
         return int((-1) ** (L + S - half))
