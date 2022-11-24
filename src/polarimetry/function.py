@@ -16,7 +16,7 @@ def compute_sub_function(
     non_zero_couplings: list[Pattern],
 ):
     old_parameters = dict(func.parameters)
-    pattern = rf"\\mathcal{{H}}.*\[(?!{'|'.join(non_zero_couplings)})"
+    pattern = rf"\\mathcal{{H}}.*\[(LS,)?(?!{'|'.join(non_zero_couplings)})"
     set_parameter_to_zero(func, pattern)
     array = func(input_data)
     func.update_parameters(old_parameters)
