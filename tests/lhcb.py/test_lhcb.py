@@ -83,7 +83,7 @@ def test_load_model_parameters():
         "Alternative amplitude model obtained using LS couplings"
     )
     H_prod = get_indexed_base("production", min_ls=False)
-    assert len(parameters) == 49
+    assert len(parameters) == 53
     assert parameters[gamma] == 0.847475
     assert parameters[H_prod[Str("K(892)"), 0, +h]] == (1.0 + 0.0j) * +1
     assert parameters[H_prod[Str("K(700)"), 0, +h]] == (-0.000167 - 0.68489j) * +1
