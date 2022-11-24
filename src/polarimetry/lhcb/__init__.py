@@ -468,13 +468,11 @@ def get_conversion_factor_ls(
 ) -> Literal[-1, 1]:
     half = sp.Rational(1, 2)
     # https://github.com/ComPWA/polarimetry/issues/122#issuecomment-1252334099
-    if resonance.name.startswith("K"):
-        return int((-1) ** (L + S - half))
-    if resonance.name.startswith("L"):
-        return int(-resonance.parity * (-1) ** (L + S - resonance.spin))
-    if resonance.name.startswith("D"):
-        return int(-resonance.parity * (-1) ** (L + S - sp.Rational(1, 2)))
-    raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
+    CG_flip_factor = int((-1) ** (L + S - half))
+    if resonance.name.startswith("K") and resonance.spin == 0:
+        return 1
+    #
+    return get_conversion_factor(resonance) * CG_flip_factor
 
 
 def parameter_key_to_symbol(
