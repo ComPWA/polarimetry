@@ -25,6 +25,7 @@ from polarimetry.amplitude import (
     AmplitudeModel,
     DalitzPlotDecompositionBuilder,
     DynamicsBuilder,
+    get_indexed_base,
 )
 from polarimetry.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 from polarimetry.spin import filter_parity_violating_ls, generate_ls_couplings
@@ -305,7 +306,7 @@ def flip_production_coupling_signs(model, subsystem_names):
 def compute_decay_couplings(
     decay: ThreeBodyDecay,
 ) -> dict[sp.Indexed, MeasuredParameter[int]]:
-    H_dec = sp.IndexedBase(R"\mathcal{H}^\mathrm{decay}")
+    H_dec = get_indexed_base("decay")
     half = sp.Rational(1, 2)
     decay_couplings = {}
     for chain in decay.chains:
@@ -470,9 +471,9 @@ def get_conversion_factor(
 def get_conversion_factor_ls(
     resonance: Particle, L: sp.Rational, S: sp.Rational
 ) -> Literal[-1, 1]:
-    # https://github.com/ComPWA/polarimetry/issues/122#issuecomment-1252334099
+    # https://github.com/ComPWA/polarimetry/issues/192#issuecomment-1321892494
     if resonance.name.startswith("K"):
-        return 1  # see https://github.com/ComPWA/polarimetry/issues/179
+        return int((-1) ** (L + S - sp.Rational(1, 2)))
     if resonance.name.startswith("L"):
         return int(-resonance.parity * (-1) ** (L + S - resonance.spin))
     if resonance.name.startswith("D"):
@@ -485,10 +486,7 @@ def parameter_key_to_symbol(
     min_ls: bool = True,
     particle_definitions: dict[str, Particle] | None = None,
 ) -> sp.Indexed | sp.Symbol:
-    if min_ls:
-        H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
-    else:
-        H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{LS,production}")
+    H_prod = get_indexed_base("production", min_ls)
     half = sp.Rational(1, 2)
     if key.startswith("A"):
         # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993

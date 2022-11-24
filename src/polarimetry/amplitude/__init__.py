@@ -116,11 +116,8 @@ class DalitzPlotDecompositionBuilder:
             self.decay.final_state[2].spin,
             self.decay.final_state[3].spin,
         ]
-        if self.min_ls:
-            H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
-        else:
-            H_prod = sp.IndexedBase(R"\mathcal{H}^\mathrm{LS,production}")
-        H_dec = sp.IndexedBase(R"\mathcal{H}^\mathrm{decay}")
+        H_prod = get_indexed_base("production", self.min_ls)
+        H_dec = get_indexed_base("decay")
         λR = sp.Symbol(R"\lambda_R", rational=True)
         terms = []
         parameter_defaults = {}
@@ -211,6 +208,17 @@ class DalitzPlotDecompositionBuilder:
             (_λ3, create_spin_range(j3)),
         )
         return amp_expr, wigner_generator.angle_definitions
+
+
+def get_indexed_base(
+    typ: Literal["production", "decay"], min_ls: bool = True
+) -> sp.IndexedBase:
+    """Get a basis to generate coupling symbols for the production or decay node."""
+    if typ == "decay":
+        return sp.IndexedBase(R"\mathcal{H}^\mathrm{decay}")
+    if min_ls:
+        return sp.IndexedBase(R"\mathcal{H}^\mathrm{production}")
+    return sp.IndexedBase(R"\mathcal{H}^\mathrm{LS,production}")
 
 
 @lru_cache(maxsize=None)
