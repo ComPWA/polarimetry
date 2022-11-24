@@ -450,14 +450,10 @@ class MeasuredParameter(Generic[ParameterType]):
         )
 
 
-def get_conversion_factor(
-    resonance: Particle, proton_helicity: sp.Rational | None = None
-) -> Literal[-1, 1]:
+def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
     half = sp.Rational(1, 2)
     factor = 1
-    if proton_helicity is not None:
-        factor = int((-1) ** (half - proton_helicity))  # two-particle convention
     if resonance.name.startswith("D"):
         return int(-resonance.parity * factor * (-1) ** (resonance.spin - half))
     if resonance.name.startswith("K"):
@@ -470,9 +466,10 @@ def get_conversion_factor(
 def get_conversion_factor_ls(
     resonance: Particle, L: sp.Rational, S: sp.Rational
 ) -> Literal[-1, 1]:
+    half = sp.Rational(1, 2)
     # https://github.com/ComPWA/polarimetry/issues/122#issuecomment-1252334099
     if resonance.name.startswith("K"):
-        return 1  # see https://github.com/ComPWA/polarimetry/issues/179
+        return int((-1) ** (L + S - half))
     if resonance.name.startswith("L"):
         return int(-resonance.parity * (-1) ** (L + S - resonance.spin))
     if resonance.name.startswith("D"):
