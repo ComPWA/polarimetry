@@ -12,7 +12,7 @@ import sys
 from copy import deepcopy
 from math import sqrt
 from pathlib import Path
-from typing import Generic, Iterable, TypeVar, overload
+from typing import Generic, Iterable, Pattern, TypeVar
 
 import attrs
 import numpy as np
@@ -267,40 +267,40 @@ def _create_gaussian_distribution(
     raise NotImplementedError
 
 
-@overload
-def flip_production_coupling_signs(
-    model: AmplitudeModel, subsystem_names: list[str]
-) -> AmplitudeModel:
-    ...
+_T = TypeVar("_T")
+_K = TypeVar("_K")
+_V = TypeVar("_V")
 
 
-@overload
-def flip_production_coupling_signs(
-    model: ParameterBootstrap, subsystem_names: list[str]
-) -> ParameterBootstrap:
-    ...
+def flip_production_coupling_signs(obj: _T, subsystem_names: Iterable[Pattern]) -> _T:
+    if isinstance(obj, AmplitudeModel):
+        return attrs.evolve(
+            obj,
+            parameter_defaults=_flip_signs(obj.parameter_defaults, subsystem_names),
+        )
+    if isinstance(obj, ParameterBootstrap):
+        bootstrap = deepcopy(obj)
+        bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # type: ignore[reportPrivateUsage]
+        return bootstrap
+    if isinstance(obj, dict):
+        return _flip_signs(obj)
+    raise NotImplementedError
 
 
-def flip_production_coupling_signs(model, subsystem_names):
-    if isinstance(model, AmplitudeModel):
-        new_parameters = dict(model.parameter_defaults)
-    else:
-        # pyright: reportPrivateUsage=false
-        new_parameters = dict(model._parameters)
-    name_pattern = rf".*\\mathrm{{production}}\[[{''.join(subsystem_names)}].*"
-    for symbol in new_parameters:
-        if re.match(name_pattern, str(symbol)) is None:
-            continue
-        if isinstance(model, AmplitudeModel):
-            new_parameters[symbol] *= -1
-        else:
-            par = new_parameters[symbol]
-            new_parameters[symbol] = attrs.evolve(par, value=-1 * par.value)
-    if isinstance(model, AmplitudeModel):
-        return attrs.evolve(model, parameter_defaults=new_parameters)
-    bootstrap = deepcopy(model)
-    bootstrap._parameters = new_parameters
-    return bootstrap
+def _flip_signs(
+    parameters: dict[_K, _V], subsystem_names: Iterable[Pattern]
+) -> dict[_K, _V]:
+    pattern = rf".*\\mathrm{{production}}\[[{''.join(subsystem_names)}].*"
+    return {
+        key: _flip(value) if re.match(pattern, str(key)) else value
+        for key, value in parameters.items()
+    }
+
+
+def _flip(obj: _V) -> _V:
+    if isinstance(obj, MeasuredParameter):
+        return attrs.evolve(obj, value=_flip(obj.value))
+    return -obj
 
 
 def compute_decay_couplings(
