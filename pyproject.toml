@@ -43,7 +43,7 @@ black = [
     "--line-length=85",
 ]
 flake8 = [
-    "--extend-ignore=E501,E731",
+    "--extend-ignore=E501,E731,W293",
     "--per-file-ignores=docs/appendix/homomorphism*:E402,docs/zz.polarization-fit*:E741",
 ]
 isort = [
