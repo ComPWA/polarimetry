@@ -55,7 +55,7 @@ def generate_meshgrid_sample(
     y_mandelstam: Literal[1, 2, 3] = 2,
 ) -> DataSample:
     """Generate a `numpy.meshgrid` sample for plotting with `matplotlib.pyplot`."""
-    boundaries = __compute_dalitz_boundaries(decay)
+    boundaries = compute_dalitz_boundaries(decay)
     return generate_sub_meshgrid_sample(
         decay,
         resolution,
@@ -94,7 +94,7 @@ def generate_phasespace_sample(
     decay: ThreeBodyDecay, n_events: int, seed: int | None = None
 ) -> DataSample:
     r"""Generate a uniform distribution over Dalitz variables :math:`\sigma_{1,2,3}`."""
-    boundaries = __compute_dalitz_boundaries(decay)
+    boundaries = compute_dalitz_boundaries(decay)
     domain_generator = NumpyDomainGenerator(
         boundaries={
             "sigma1": boundaries[0],
@@ -110,7 +110,7 @@ def generate_phasespace_sample(
     return phsp
 
 
-def __compute_dalitz_boundaries(
+def compute_dalitz_boundaries(
     decay: ThreeBodyDecay,
 ) -> tuple[tuple[float, float], tuple[float, float], tuple[float, float]]:
     m0, m1, m2, m3 = create_mass_symbol_mapping(decay).values()
