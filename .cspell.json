@@ -117,6 +117,7 @@
     "einsum",
     "hangle",
     "iminuit",
+    "isfinite",
     "lc2pkpi",
     "mathbf",
     "mystnb",
