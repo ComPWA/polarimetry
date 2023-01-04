@@ -32,7 +32,8 @@ import cloudpickle
 import jax.numpy as jnp
 import sympy as sp
 from ampform.sympy import UnevaluatedExpression
-from IPython.display import Math, display
+from IPython.core.display import Math
+from IPython.display import display
 from tensorwaves.function.sympy import create_function, create_parametrized_function
 from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
 
