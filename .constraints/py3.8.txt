@@ -32,7 +32,7 @@ comm==0.1.2
 contourpy==1.0.6
 cssselect2==0.7.0
 cycler==0.11.0
-debugpy==1.6.4
+debugpy==1.6.5
 decorator==5.1.1
 defusedxml==0.7.1
 distlib==0.3.6
@@ -68,7 +68,7 @@ jsonschema==4.17.3
 jupyter-cache==0.5.0
 jupyter-client==7.4.8
 jupyter-core==5.1.2
-jupyter-resource-usage==0.6.4
+jupyter-resource-usage==0.7.0
 jupyter-server==1.23.4
 jupyterlab==3.5.2
 jupyterlab-code-formatter==1.5.3
@@ -108,7 +108,7 @@ packaging==22.0
 pandas==1.5.2
 pandocfilters==1.5.0
 parso==0.8.3
-particle==0.21.0
+particle==0.21.1
 pathspec==0.10.3
 pexpect==4.8.0
 pickleshare==0.7.5
@@ -130,7 +130,7 @@ pydantic==1.10.4
 pydata-sphinx-theme==0.8.1
 pygments==2.14.0
 pyparsing==3.0.9
-pyproject-api==1.3.0
+pyproject-api==1.4.0
 pyrsistent==0.19.3
 pytest==7.2.0
 pytest-xdist==3.1.0
@@ -174,7 +174,7 @@ terminado==0.17.1
 tinycss2==1.2.1
 tomli==2.0.1
 tornado==6.2
-tox==4.2.1
+tox==4.2.6
 tqdm==4.64.1
 traitlets==5.8.0
 typing-extensions==4.4.0
