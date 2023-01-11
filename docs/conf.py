@@ -17,10 +17,10 @@ sys.path.insert(0, os.path.abspath("extensions"))
 
 def download_paper_figures() -> str:
     files = [
-        "_static/images/total-polarimetry-field.svg",
-        "_static/images/polarimetry-field-L1520-unaligned.svg",
-        "_static/images/polarimetry-field-L1520-aligned.svg",
-        "_static/images/polarimetry-field-norm-uncertainties.png",
+        "_static/images/total-polarimetry-field-watermark.svg",
+        "_static/images/polarimetry-field-L1520-unaligned-watermark.svg",
+        "_static/images/polarimetry-field-L1520-aligned-watermark.svg",
+        "_static/images/polarimetry-field-norm-uncertainties-watermark.png",
     ]
     for file in files:
         if not os.path.exists(file):
