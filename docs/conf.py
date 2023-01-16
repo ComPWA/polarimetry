@@ -217,6 +217,9 @@ extensions = [
     "support_bibtex_math",
     "unsrt_et_al",
 ]
+html_css_files = [
+    "custom.css",
+]
 html_js_files = [
     # https://github.com/requirejs/requirejs/tags
     "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js",
@@ -225,6 +228,11 @@ html_sourcelink_suffix = ""
 html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
+    "announcement": (
+        "⚠️This webpage has been frozen in the state that was used for the publication"
+        " on arXiv. For the latest version of the codebase, go to"
+        ' <a href="https://github.com/ComPWA/polarimetry">github.com/ComPWA/polarimetry</a>⚠️'
+    ),
     "extra_navbar": f"<p>Version {get_version()} ({get_timestamp()})</p>",
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
