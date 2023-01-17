@@ -15,7 +15,7 @@ This webpage shows all analysis results that led to the publication of [LHCb-PAP
 
 - Publication on arXiv: [arXiv:xxxx.yyyyy](https://arxiv.org/abs/xxxx.yyyyy)
 - Record on CDS: [cds.cern.ch/record/2838694](https://cds.cern.ch/record/2838694)
-- Record for the source code on Zenodo: [10.5281/zenodo.xxxxxxx](https://doi.org/10.5281/zenodo.xxxxxxx)
+- Record for the source code on Zenodo: [10.5281/zenodo.7544989](https://doi.org/10.5281/zenodo.7544989)
 - Frozen documentation on GitLab Pages: [lc2pkpi-polarimetry.docs.cern.ch](https://lc2pkpi-polarimetry.docs.cern.ch)
 - Frozen repository on CERN GitLab: [gitlab.cern.ch/polarimetry/Lc2pKpi](https://gitlab.cern.ch/polarimetry/Lc2pKpi)
 
