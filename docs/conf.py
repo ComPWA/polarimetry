@@ -16,17 +16,23 @@ sys.path.insert(0, os.path.abspath("extensions"))
 
 
 def download_paper_figures() -> str:
-    files = [
-        "_static/images/total-polarimetry-field-watermark.svg",
-        "_static/images/polarimetry-field-L1520-unaligned-watermark.svg",
-        "_static/images/polarimetry-field-L1520-aligned-watermark.svg",
-        "_static/images/polarimetry-field-norm-uncertainties-watermark.png",
-    ]
-    for file in files:
-        if not os.path.exists(file):
-            print_missing_file_warning(file)
+    figures = {
+        "2": "_static/images/total-polarimetry-field-watermark.svg",
+        "3a": "_static/images/polarimetry-field-L1520-unaligned-watermark.svg",
+        "3b": "_static/images/polarimetry-field-L1520-aligned-watermark.svg",
+        "4": "_static/images/polarimetry-field-norm-uncertainties-watermark.png",
+    }
+    for path in figures.values():
+        if not os.path.exists(path):
+            print_missing_file_warning(path)
             return ""
-    list_of_figures = indent("\n".join(_to_download_link(f) for f in files), "    - ")
+    list_of_figures = indent(
+        "\n".join(
+            f":Figure {name}: {_to_download_link(path)}"
+            for name, path in figures.items()
+        ),
+        4 * " ",
+    )
     src = f"""
     ::::{{only}} html
     :::{{tip}}
@@ -300,6 +306,7 @@ linkcheck_ignore = [
 myst_enable_extensions = [
     "colon_fence",
     "dollarmath",
+    "fieldlist",
     "html_image",
     "substitution",
 ]
