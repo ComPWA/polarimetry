@@ -5,6 +5,8 @@ myst:
 
 # Polarimetry in Λ<sub>c</sub> → p π K
 
+[![10.5281/zenodo.7544989](https://zenodo.org/badge/doi/10.5281/zenodo.7544989.svg)](https://doi.org/10.5281/zenodo.7544989)
+
 <!-- cspell:disable -->
 
 > **$\Lambda^+_\mathrm{c}$ polarimetry using the dominant hadronic mode**
