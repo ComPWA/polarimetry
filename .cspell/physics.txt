@@ -7,6 +7,7 @@ Flatté
 Gordan
 helicities
 helicity
+Indico
 JPAC
 Källén
 lineshape
@@ -14,3 +15,4 @@ lineshapes
 ls
 SymPy
 Weisskopf
+Zenodo

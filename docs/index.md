@@ -5,6 +5,21 @@ myst:
 
 # Polarimetry in Λ<sub>c</sub> → p π K
 
+This webpage shows all analysis results that led to the publication of [LHCb-PAPER-2022-044](https://cds.cern.ch/record/2838694). More information on this publication can be found on the following pages:
+
+- Publication on arXiv: [arXiv:xxxx.yyyyy](https://arxiv.org/abs/xxxx.yyyyy)
+- Record on CDS: [cds.cern.ch/record/2838694](https://cds.cern.ch/record/2838694)
+- Record for the source code on Zenodo: [10.5281/zenodo.xxxxxxx](https://doi.org/10.5281/zenodo.xxxxxxx)
+- Frozen documentation on GitLab Pages: [lc2pkpi-polarimetry.docs.cern.ch](https://lc2pkpi-polarimetry.docs.cern.ch)
+- Frozen repository on CERN GitLab: [gitlab.cern.ch/polarimetry/Lc2pKpi](https://gitlab.cern.ch/polarimetry/Lc2pKpi)
+
+:::{dropdown} Behind SSO login (LHCb members only)
+
+- LHCb TWiki page: [twiki.cern.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi](https://twiki.cern.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi)
+- [Indico page for the _silent approval_ to submit](https://indico.cern.ch/event/1242323)
+
+:::
+
 {{ DOWNLOAD_SINGLE_PDF }}
 
 ::::{only} latex
