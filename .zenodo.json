@@ -1,0 +1,70 @@
+{
+  "access_right": "open",
+  "creators": [
+    {
+      "affiliation": "Ruhr University Bochum",
+      "name": "Remco de Remco",
+      "orcid": "0000-0001-5846-2206"
+    },
+    {
+      "affiliation": "Excellence Cluster ORIGINS, Munich, Germany",
+      "name": "Mikhail Mikhasenko",
+      "orcid": "0000-0002-6969-2063"
+    },
+    {
+      "affiliation": "Ruhr University Bochum",
+      "name": "Miriam Fritsch",
+      "orcid": "0000-0002-6463-8295"
+    }
+  ],
+  "description": "<p>The polarimeter vector field for multibody decays of a spin-half baryon is introduced as a generalisation of the baryon asymmetry parameters. Using a recent amplitude analysis of the <span class=\"math-tex\">(Lambda^+_mathrm{c} \to p K^- pi^+)</span>&nbsp;decay performed at the LHCb experiment, we compute the distribution of the kinematic-dependent polarimeter vector for this process in the space of Mandelstam variables to express the polarised decay rate in a model-agnostic form. The obtained representation can facilitate polarisation measurements of the <span class=\"math-tex\">\\(\\Lambda^+_\\mathrm{c}\\)</span>&nbsp;baryon and eases inclusion of the <span class=\"math-tex\">\\(\\Lambda^+_\\mathrm{c} \\to p K^- \\pi^+\\)</span>&nbsp;decay mode in hadronic amplitude analyses.</p>",
+  "keywords": [
+    "amplitude analysis",
+    "computer algebra system",
+    "LHCb",
+    "partial wave analysis",
+    "particle physics",
+    "polarimetry",
+    "polarization"
+  ],
+  "language": "eng",
+  "license": "GPL-3.0-or-later",
+  "references": [
+    "Fritsch et al. (2022). \"Common Partial Wave Analysis: a collaboration-independent organisation for amplitude analysis software\". https://doi.org/10.5281/zenodo.6908149.",
+    "Mikhasenko (2022). \"ThreeBodyDecay.jl: Julia implementation of the Dalitz-plot decomposition\". https://doi.org/10.5281/zenodo.7256812."
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.48550/arXiv.2208.03262",
+      "relation": "references",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1103/PhysRevD.101.034033",
+      "relation": "references",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.6908149",
+      "relation": "references",
+      "resource_type": "software",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.7256812",
+      "relation": "references",
+      "resource_type": "software",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.594254",
+      "relation": "references",
+      "resource_type": "software",
+      "scheme": "doi"
+    }
+  ],
+  "title": "\\(\\Lambda^+_\\mathrm{c}\\) polarimetry using the dominant hadronic mode",
+  "upload_type": "software"
+}
