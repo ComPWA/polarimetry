@@ -58,6 +58,7 @@
     ".pre-commit-config.yaml",
     ".prettierignore",
     ".vscode/*",
+    ".zenodo.json",
     "LICENSE",
     "Makefile",
     "Manifest.toml",
