@@ -1,3 +1,9 @@
+ci:
+  autoupdate_commit_msg: "MAINT: update pip constraints and pre-commit"
+  autoupdate_schedule: quarterly # already done by requirements-cron.yml
+  skip:
+    - pyright # doesn't work on pre-commit.ci
+
 repos:
   - repo: meta
     hooks:
