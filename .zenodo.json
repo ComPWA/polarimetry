@@ -17,7 +17,7 @@
       "orcid": "0000-0002-6463-8295"
     }
   ],
-  "description": "The polarimeter vector field for multibody decays of a spin-half baryon is introduced as a generalisation of the baryon asymmetry parameters. Using a recent amplitude analysis of the $\\Lambda^+_\\mathrm{c} \\to p K^- \\pi^+$ decay performed at the LHCb experiment, we compute the distribution of the kinematic-dependent polarimeter vector for this process in the space of Mandelstam variables to express the polarised decay rate in a model-agnostic form. The obtained representation can facilitate polarisation measurements of the $\\Lambda^+_\\mathrm{c}$ baryon and eases inclusion of the $\\Lambda^+_\\mathrm{c} \\to p K^- \\pi^+$ decay mode in hadronic amplitude analyses.",
+  "description": "<p>The polarimeter vector field for multibody decays of a spin-half baryon is introduced as a generalisation of the baryon asymmetry parameters. Using a recent amplitude analysis of the <span class=\"math-tex\">(Lambda^+_mathrm{c} \to p K^- pi^+)</span>&nbsp;decay performed at the LHCb experiment, we compute the distribution of the kinematic-dependent polarimeter vector for this process in the space of Mandelstam variables to express the polarised decay rate in a model-agnostic form. The obtained representation can facilitate polarisation measurements of the <span class=\"math-tex\">\\(\\Lambda^+_\\mathrm{c}\\)</span>&nbsp;baryon and eases inclusion of the <span class=\"math-tex\">\\(\\Lambda^+_\\mathrm{c} \\to p K^- \\pi^+\\)</span>&nbsp;decay mode in hadronic amplitude analyses.</p>",
   "keywords": [
     "amplitude analysis",
     "computer algebra system",
@@ -65,6 +65,6 @@
       "scheme": "doi"
     }
   ],
-  "title": "$Lambda^+_mathrm{c}$ polarimetry using the dominant hadronic mode",
+  "title": "\\(\\Lambda^+_\\mathrm{c}\\) polarimetry using the dominant hadronic mode",
   "upload_type": "software"
 }
