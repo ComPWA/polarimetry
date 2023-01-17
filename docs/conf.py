@@ -39,7 +39,7 @@ def download_paper_figures() -> str:
     Figures for the paper can be downloaded here:
     {list_of_figures.strip()}
 
-    All other exported figures can be [here](./_static/images/).
+    All other exported figures can be found [here](./_static/images/).
     :::
     ::::
     """
