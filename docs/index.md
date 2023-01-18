@@ -5,6 +5,10 @@ myst:
 
 # Polarimetry in Λ<sub>c</sub>⁺&nbsp;→&nbsp;p&nbsp;K⁻&nbsp;π⁺
 
+```{title} Welcome
+
+```
+
 [![10.48550/arXiv.2301.07010](https://zenodo.org/badge/doi/10.48550/arXiv.2301.07010.svg)](https://doi.org/10.48550/arXiv.2301.07010)
 [![10.5281/zenodo.7544989](https://zenodo.org/badge/doi/10.5281/zenodo.7544989.svg)](https://doi.org/10.5281/zenodo.7544989)
 
@@ -56,7 +60,7 @@ Learn how to determine the polarization vector using the polarimeter field.
 ::::
 :::::
 
-This webpage shows all analysis results that led to the publication of [LHCb-PAPER-2022-044](https://cds.cern.ch/record/2838694). More information on this publication can be found on the following pages:
+This website shows all analysis results that led to the publication of [LHCb-PAPER-2022-044](https://cds.cern.ch/record/2838694). More information on this publication can be found on the following pages:
 
 - Publication on arXiv: [arXiv:2301.07010](https://arxiv.org/abs/2301.07010)
 - Record on CDS: [cds.cern.ch/record/2838694](https://cds.cern.ch/record/2838694)
@@ -115,7 +119,7 @@ hidden:
 ---
 arXiv:2301.07010 <https://arxiv.org/abs/2301.07010>
 ComPWA <https://compwa-org.readthedocs.io>
-GitHub (active) <https://github.com/ComPWA/polarimetry>
+GitHub (further development) <https://github.com/ComPWA/polarimetry>
 CERN GitLab (frozen) <https://gitlab.cern.ch/polarimetry/Lc2pKpi>
 ```
 

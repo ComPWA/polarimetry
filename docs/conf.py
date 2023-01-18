@@ -1,9 +1,12 @@
 import os
+import re
 import shutil
 import subprocess
 import sys
 from datetime import datetime
 from textwrap import dedent, indent
+
+import requests
 
 if sys.version_info < (3, 8):
     from importlib_metadata import PackageNotFoundError
@@ -115,7 +118,7 @@ def get_timestamp() -> str:
     return now.strftime("%d/%m/%Y %H:%M:%S")
 
 
-def get_version() -> str:
+def get_polarimetry_package_version() -> str:
     try:
         return get_package_version("polarimetry")
     except PackageNotFoundError:
@@ -158,6 +161,60 @@ def get_link_to_single_pdf() -> str:
     return ""
 
 
+def get_minor_version(package_name: str) -> str:
+    installed_version = get_version(package_name)
+    if installed_version == "stable":
+        return installed_version
+    matches = re.match(r"^([0-9]+\.[0-9]+).*$", installed_version)
+    if matches is None:
+        raise ValueError(
+            f"Could not find documentation for {package_name} v{installed_version}"
+        )
+    return matches[1]
+
+
+def get_scipy_url() -> str:
+    url = f"https://docs.scipy.org/doc/scipy-{get_version('scipy')}/"
+    r = requests.get(url)
+    if r.status_code != 200:
+        return "https://docs.scipy.org/doc/scipy"
+    return url
+
+
+def get_version(package_name: str) -> str:
+    python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    constraints_path = f"../.constraints/py{python_version}.txt"
+    package_name = package_name.lower()
+    with open(constraints_path) as stream:
+        constraints = stream.read()
+    version_remapping = {
+        "ipywidgets": {
+            "8.0.3": "8.0.2",
+            "8.0.4": "8.0.2",
+        },
+    }
+    for line in constraints.split("\n"):
+        line = line.split("#")[0]  # remove comments
+        line = line.strip()
+        line = line.lower()
+        if not line.startswith(package_name):
+            continue
+        if not line:
+            continue
+        line_segments = tuple(line.split("=="))
+        if len(line_segments) != 2:
+            continue
+        _, installed_version, *_ = line_segments
+        installed_version = installed_version.strip()
+        remapped_versions = version_remapping.get(package_name)
+        if remapped_versions is not None:
+            existing_version = remapped_versions.get(installed_version)
+            if existing_version is not None:
+                return existing_version
+        return installed_version
+    return "stable"
+
+
 def print_missing_file_warning(filename: str) -> None:
     print(f"\033[93;1m{filename} not found, so cannot create download links\033[0m")
 
@@ -193,7 +250,7 @@ bibtex_bibfiles = [
     "_static/references.bib",
 ]
 codeautolink_concat_default = True
-copyright = "2022"
+copyright = "2023"
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
@@ -233,12 +290,16 @@ html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "announcement": (
-        "⚠️This webpage has been frozen in the state that was used for <a"
-        ' href="https://arxiv.org/abs/2301.07010v1">arXiv:2301.07010v1</a>⚠️<br>Visit'
-        ' <a href="https://github.com/ComPWA/polarimetry">github.com/ComPWA/polarimetry</a>'
-        " for the latest version of the codebase!"
+        "⚠️ This website has been frozen at <a"
+        ' href="https://github.com/ComPWA/polarimetry/releases/tag/0.0.9">v0.0.9</a>,'
+        " which was used for <a"
+        ' href="https://arxiv.org/abs/2301.07010v1">arXiv:2301.07010v1</a>. Visit <a'
+        ' href="https://compwa.github.io/polarimetry">compwa.github.io/polarimetry</a>'
+        " for the latest version! ⚠️"
     ),
-    "extra_navbar": f"<p>Version {get_version()} ({get_timestamp()})</p>",
+    "extra_navbar": (
+        f"<p>Version {get_polarimetry_package_version()} ({get_timestamp()})</p>"
+    ),
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
     },
@@ -251,21 +312,27 @@ html_theme_options = {
     "use_edit_page_button": True,
     "use_issues_button": True,
 }
-html_title = "Λ<sub>c</sub>&nbsp;→&nbsp;p&nbsp;K&nbsp;π polarimetry"
+html_title = "Λ<sub>c</sub> → p K π polarimetry"
 intersphinx_mapping = {
-    "IPython": ("https://ipython.readthedocs.io/en/stable", None),
-    "ampform": ("https://ampform.readthedocs.io/en/stable", None),
-    "attrs": ("https://www.attrs.org/en/stable", None),
+    "IPython": (f"https://ipython.readthedocs.io/en/{get_version('IPython')}", None),
+    "ampform": (f"https://ampform.readthedocs.io/en/{get_version('ampform')}", None),
+    "attrs": (f"https://www.attrs.org/en/{get_version('attrs')}", None),
     "iminuit": ("https://iminuit.readthedocs.io/en/stable", None),
-    "ipywidgets": ("https://ipywidgets.readthedocs.io/en/stable", None),
+    "ipywidgets": (
+        f"https://ipywidgets.readthedocs.io/en/{get_version('ipywidgets')}",
+        None,
+    ),
     "jax": ("https://jax.readthedocs.io/en/latest", None),
-    "matplotlib": ("https://matplotlib.org/stable", None),
-    "numpy": ("https://numpy.org/doc/stable", None),
+    "matplotlib": (f"https://matplotlib.org/{get_version('matplotlib')}", None),
+    "numpy": (f"https://numpy.org/doc/{get_minor_version('numpy')}", None),
     "plotly": ("https://plotly.com/python-api-reference", None),
     "python": ("https://docs.python.org/3", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy", None),
+    "scipy": (get_scipy_url(), None),
     "sympy": ("https://docs.sympy.org/latest", None),
-    "tensorwaves": ("https://tensorwaves.readthedocs.io/en/stable", None),
+    "tensorwaves": (
+        f"https://tensorwaves.readthedocs.io/en/{get_version('tensorwaves')}",
+        None,
+    ),
 }
 latex_documents = [
     # https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-latex_documents
@@ -300,7 +367,7 @@ latex_elements = {
   },
 }
 """,
-    "releasename": f"{get_version()} ({get_timestamp()})",
+    "releasename": f"{get_polarimetry_package_version()} ({get_timestamp()})",
 }
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 latex_show_pagerefs = True
@@ -386,5 +453,5 @@ suppress_warnings = [
     "mystnb.unknown_mime_type",
 ]
 use_multitoc_numbering = True
-version = get_version()
+version = get_polarimetry_package_version()
 viewcode_follow_imported_members = True
