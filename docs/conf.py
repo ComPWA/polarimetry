@@ -250,7 +250,7 @@ bibtex_bibfiles = [
     "_static/references.bib",
 ]
 codeautolink_concat_default = True
-copyright = "2022"
+copyright = "2023"
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
