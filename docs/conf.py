@@ -305,7 +305,7 @@ html_theme_options = {
     },
     "path_to_docs": "docs",
     "repository_url": "https://github.com/ComPWA/polarimetry",
-    "repository_branch": "main",
+    "repository_branch": "0.0.9",
     "show_navbar_depth": 1,
     "show_toc_level": 2,
     "use_repository_button": True,
