@@ -264,6 +264,7 @@ extensions = [
     "relink_references",
     "sphinx_reredirects",
     "sphinx.ext.autosectionlabel",
+    "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
