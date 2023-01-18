@@ -254,7 +254,7 @@ html_theme_options = {
     "use_edit_page_button": True,
     "use_issues_button": True,
 }
-html_title = "Polarimetry Λ<sub>c</sub> → p K π"
+html_title = "Λ<sub>c</sub>&nbsp;→&nbsp;p&nbsp;K&nbsp;π polarimetry"
 intersphinx_mapping = {
     "IPython": ("https://ipython.readthedocs.io/en/stable", None),
     "ampform": ("https://ampform.readthedocs.io/en/stable", None),
