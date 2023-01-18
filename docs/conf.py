@@ -309,7 +309,7 @@ html_theme_options = {
     "show_navbar_depth": 1,
     "show_toc_level": 2,
     "use_repository_button": True,
-    "use_edit_page_button": True,
+    "use_edit_page_button": False,
     "use_issues_button": True,
 }
 html_title = "Λ<sub>c</sub> → p K π polarimetry"
