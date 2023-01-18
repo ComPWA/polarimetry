@@ -53,6 +53,7 @@ This document is a PDF rendering of the supplemental material hosted behind SSO-
 
 ```{toctree}
 ---
+caption: Table of contents
 maxdepth: 2
 numbered:
 ---
