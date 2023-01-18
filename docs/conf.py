@@ -187,7 +187,12 @@ def get_version(package_name: str) -> str:
     package_name = package_name.lower()
     with open(constraints_path) as stream:
         constraints = stream.read()
-    version_remapping = {}
+    version_remapping = {
+        "ipywidgets": {
+            "8.0.3": "8.0.2",
+            "8.0.4": "8.0.2",
+        },
+    }
     for line in constraints.split("\n"):
         line = line.split("#")[0]  # remove comments
         line = line.strip()
