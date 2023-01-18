@@ -2,6 +2,7 @@
 
 <!-- cspell:ignore semileptonic -->
 
+[![10.48550/arXiv.2301.07010](https://zenodo.org/badge/doi/10.48550/arXiv.2301.07010.svg)](https://doi.org/10.48550/arXiv.2301.07010)
 [![10.5281/zenodo.7544989](https://zenodo.org/badge/doi/10.5281/zenodo.7544989.svg)](https://doi.org/10.5281/zenodo.7544989)
 [![GPLv3+ license](https://img.shields.io/badge/License-GPLv3+-blue.svg)](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
 
