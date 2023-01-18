@@ -19,7 +19,6 @@ jobs:
       - name: Push main branch to GitLab
         run: |
           git remote add gitlab "https://oauth2:${token}@gitlab.cern.ch/polarimetry/Lc2pKpi.git"
-          git push gitlab main
-          git push gitlab --tags
+          git push gitlab main || git push gitlab --tags
         env:
           token: ${{ secrets.GITLAB_TOKEN }}
