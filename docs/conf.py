@@ -16,24 +16,30 @@ sys.path.insert(0, os.path.abspath("extensions"))
 
 
 def download_paper_figures() -> str:
-    files = [
-        "_static/images/total-polarimetry-field-watermark.svg",
-        "_static/images/polarimetry-field-L1520-unaligned-watermark.svg",
-        "_static/images/polarimetry-field-L1520-aligned-watermark.svg",
-        "_static/images/polarimetry-field-norm-uncertainties-watermark.png",
-    ]
-    for file in files:
-        if not os.path.exists(file):
-            print_missing_file_warning(file)
+    figures = {
+        "2": "_static/images/total-polarimetry-field-watermark.svg",
+        "3a": "_static/images/polarimetry-field-L1520-unaligned-watermark.svg",
+        "3b": "_static/images/polarimetry-field-L1520-aligned-watermark.svg",
+        "4": "_static/images/polarimetry-field-norm-uncertainties-watermark.png",
+    }
+    for path in figures.values():
+        if not os.path.exists(path):
+            print_missing_file_warning(path)
             return ""
-    list_of_figures = indent("\n".join(_to_download_link(f) for f in files), "    - ")
+    list_of_figures = indent(
+        "\n".join(
+            f":Figure {name}: {_to_download_link(path)}"
+            for name, path in figures.items()
+        ),
+        4 * " ",
+    )
     src = f"""
     ::::{{only}} html
     :::{{tip}}
     Figures for the paper can be downloaded here:
     {list_of_figures.strip()}
 
-    All other exported figures can be [here](./_static/images/).
+    All other exported figures can be found [here](./_static/images/).
     :::
     ::::
     """
@@ -142,13 +148,10 @@ def get_link_to_single_pdf() -> str:
         shutil.copy(build_file, embedded_file)
     if os.path.exists(embedded_file):
         src = f"""
-        ::::{{only}} html
-        :::{{button-link}} {embedded_file}
-        :color: primary
-        :shadow:
-        Download this website as a **report**
+        :::{{grid-item-card}} {{octicon}}`download` Download this website as a single PDF file
+        :columns: 12
+        :link: {embedded_file}
         :::
-        ::::
         """
         return dedent(src)
     print(f"\033[91;1mSingle PDF has not yet been built.\033[0m")
@@ -224,6 +227,7 @@ html_js_files = [
     # https://github.com/requirejs/requirejs/tags
     "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js",
 ]
+html_logo = "_static/lhcb-logo.svg"
 html_sourcelink_suffix = ""
 html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
@@ -241,13 +245,13 @@ html_theme_options = {
     "path_to_docs": "docs",
     "repository_url": "https://github.com/ComPWA/polarimetry",
     "repository_branch": "main",
-    "show_navbar_depth": 2,
+    "show_navbar_depth": 1,
     "show_toc_level": 2,
     "use_repository_button": True,
     "use_edit_page_button": True,
     "use_issues_button": True,
 }
-html_title = "Polarimetry Λ<sub>c</sub> → p K π"
+html_title = "Λ<sub>c</sub>&nbsp;→&nbsp;p&nbsp;K&nbsp;π polarimetry"
 intersphinx_mapping = {
     "IPython": ("https://ipython.readthedocs.io/en/stable", None),
     "ampform": ("https://ampform.readthedocs.io/en/stable", None),
@@ -309,6 +313,7 @@ linkcheck_ignore = [
 myst_enable_extensions = [
     "colon_fence",
     "dollarmath",
+    "fieldlist",
     "html_image",
     "substitution",
 ]
