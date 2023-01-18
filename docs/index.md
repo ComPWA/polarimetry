@@ -19,6 +19,43 @@ The polarimeter vector field for multibody decays of a spin-half baryon is intro
 
 :::
 
+:::::{only} html
+::::{grid} 1 2 2 2
+:margin: 4 4 0 0
+:gutter: 1
+
+:::{grid-item-card} {material-regular}`functions` Symbolic expressions
+:link: amplitude-model
+:link-type: doc
+
+Compute the amplitude model over large data samples with symbolic expressions.
+:::
+
+:::{grid-item-card} {octicon}`file-code` JSON grids
+:link: exported-distributions
+:link-type: ref
+
+Reuse the computed polarimeter field in any amplitude analysis involving $\Lambda_\mathrm{c}^+$.
+:::
+
+:::{grid-item-card} {material-regular}`ads_click` Inspect interactively
+:link: appendix/widget
+:link-type: doc
+
+Investigate how parameters in the amplitude model affect the polarimeter field.
+:::
+
+:::{grid-item-card} {octicon}`book` Compute polarization
+:link: zz.polarization-fit
+:link-type: doc
+
+Learn how to determine the polarization vector using the polarimeter field.
+:::
+
+{{ DOWNLOAD_SINGLE_PDF }}
+::::
+:::::
+
 This webpage shows all analysis results that led to the publication of [LHCb-PAPER-2022-044](https://cds.cern.ch/record/2838694). More information on this publication can be found on the following pages:
 
 - Publication on arXiv: [arXiv:2301.07010](https://arxiv.org/abs/2301.07010)
@@ -35,8 +72,6 @@ This webpage shows all analysis results that led to the publication of [LHCb-PAP
 - [Indico page for the _silent approval_ to submit](https://indico.cern.ch/event/1242323)
 
 :::
-
-{{ DOWNLOAD_SINGLE_PDF }}
 
 ::::{only} latex
 

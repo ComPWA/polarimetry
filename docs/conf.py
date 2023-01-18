@@ -148,13 +148,10 @@ def get_link_to_single_pdf() -> str:
         shutil.copy(build_file, embedded_file)
     if os.path.exists(embedded_file):
         src = f"""
-        ::::{{only}} html
-        :::{{button-link}} {embedded_file}
-        :color: primary
-        :shadow:
-        Download this website as a **report**
+        :::{{grid-item-card}} {{octicon}}`download` Download this website as a single PDF file
+        :columns: 12
+        :link: {embedded_file}
         :::
-        ::::
         """
         return dedent(src)
     print(f"\033[91;1mSingle PDF has not yet been built.\033[0m")
