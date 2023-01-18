@@ -262,7 +262,6 @@ exclude_patterns = [
 extensions = [
     "myst_nb",
     "relink_references",
-    "sphinx_reredirects",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
@@ -272,6 +271,7 @@ extensions = [
     "sphinx_codeautolink",
     "sphinx_copybutton",
     "sphinx_design",
+    "sphinx_reredirects",
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
     "sphinxcontrib.inkscapeconverter",
