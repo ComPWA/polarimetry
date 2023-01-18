@@ -119,7 +119,7 @@ hidden:
 ---
 arXiv:2301.07010 <https://arxiv.org/abs/2301.07010>
 ComPWA <https://compwa-org.readthedocs.io>
-GitHub (further development) <https://github.com/ComPWA/polarimetry>
+GitHub repository <https://github.com/ComPWA/polarimetry>
 CERN GitLab (frozen) <https://gitlab.cern.ch/polarimetry/Lc2pKpi>
 ```
 

@@ -290,12 +290,10 @@ html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "announcement": (
-        "⚠️ This website has been frozen at <a"
-        ' href="https://github.com/ComPWA/polarimetry/releases/tag/0.0.9">v0.0.9</a>,'
-        " which was used for <a"
-        ' href="https://arxiv.org/abs/2301.07010v1">arXiv:2301.07010v1</a>. Visit <a'
-        ' href="https://compwa.github.io/polarimetry">compwa.github.io/polarimetry</a>'
-        " for the latest version! ⚠️"
+        "⚠️ This version of the analysis was used for <a"
+        ' href="https://arxiv.org/abs/2301.07010v1">arXiv:2301.07010v1</a>, but the'
+        " codebase is further developed <a"
+        ' href="https://github.com/ComPWA/polarimetry">here</a> ⚠️'
     ),
     "extra_navbar": (
         f"<p>Version {get_polarimetry_package_version()} ({get_timestamp()})</p>"
