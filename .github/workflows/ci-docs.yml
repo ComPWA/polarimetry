@@ -1,5 +1,6 @@
 name: CI-docs
 env:
+  JULIA_CI: "true"
   PYTHONHASHSEED: "0"
 
 on:
@@ -24,10 +25,16 @@ jobs:
       - uses: actions/cache@v3
         with:
           key: |
-            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg', 'src/**') }}
+            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'data/**', 'julia/Manifest.toml', 'julia/Project.toml', 'setup.cfg', 'src/**') }}
           path: |
-            ./docs/_build
+            ./docs/_build/.jupyter_cache
+            ./docs/_images
+            ./docs/_static/export
+            ./docs/_static/images
+            ./docs/appendix/export
+            ./julia-*/
             ~/.cache/pip/
+            ~/.julia/
             ~/.sympy-cache*/
       - uses: actions/setup-python@v4
         with:
@@ -47,8 +54,7 @@ jobs:
             wget -q https://julialang-s3.julialang.org/bin/linux/x64/${major_version}/${filename}
             tar xzf ${filename}
           fi
-          mv julia-${version} /opt/
-          ln -s /opt/julia-${version}/bin/julia /usr/local/bin/julia
+          sudo ln -s $(pwd)/julia-${version}/bin/julia /usr/local/bin/julia
           julia --version
           julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
       - run: tox -e pdfnb
