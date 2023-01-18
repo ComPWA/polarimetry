@@ -17,7 +17,7 @@ myst:
 
 This webpage shows all analysis results that led to the publication of [LHCb-PAPER-2022-044](https://cds.cern.ch/record/2838694). More information on this publication can be found on the following pages:
 
-- Publication on arXiv: [arXiv:xxxx.yyyyy](https://arxiv.org/abs/xxxx.yyyyy)
+- Publication on arXiv: [arXiv:2301.07010](https://arxiv.org/abs/2301.07010)
 - Record on CDS: [cds.cern.ch/record/2838694](https://cds.cern.ch/record/2838694)
 - Record for the source code on Zenodo: [10.5281/zenodo.7544989](https://doi.org/10.5281/zenodo.7544989)
 - Frozen documentation on GitLab Pages: [lc2pkpi-polarimetry.docs.cern.ch](https://lc2pkpi-polarimetry.docs.cern.ch)
