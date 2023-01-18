@@ -300,6 +300,7 @@ html_theme_options = {
     ),
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
+        "notebook_interface": "jupyterlab",
     },
     "path_to_docs": "docs",
     "repository_url": "https://github.com/ComPWA/polarimetry",
