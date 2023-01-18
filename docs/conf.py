@@ -285,7 +285,7 @@ html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "announcement": (
-        "⚠️This webpage has been frozen in the state that was used for <a"
+        "⚠️This website has been frozen in the state that was used for <a"
         ' href="https://arxiv.org/abs/2301.07010v1">arXiv:2301.07010v1</a>⚠️<br>Visit'
         ' <a href="https://github.com/ComPWA/polarimetry">github.com/ComPWA/polarimetry</a>'
         " for the latest version of the codebase!"

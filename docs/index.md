@@ -56,7 +56,7 @@ Learn how to determine the polarization vector using the polarimeter field.
 ::::
 :::::
 
-This webpage shows all analysis results that led to the publication of [LHCb-PAPER-2022-044](https://cds.cern.ch/record/2838694). More information on this publication can be found on the following pages:
+This website shows all analysis results that led to the publication of [LHCb-PAPER-2022-044](https://cds.cern.ch/record/2838694). More information on this publication can be found on the following pages:
 
 - Publication on arXiv: [arXiv:2301.07010](https://arxiv.org/abs/2301.07010)
 - Record on CDS: [cds.cern.ch/record/2838694](https://cds.cern.ch/record/2838694)
