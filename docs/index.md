@@ -69,7 +69,9 @@ This webpage shows all analysis results that led to the publication of [LHCb-PAP
 :class: toggle
 
 - LHCb TWiki page: [twiki.cern.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi](https://twiki.cern.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi)
-- [Indico page for the _silent approval_ to submit](https://indico.cern.ch/event/1242323)
+- Charm WG meeting: [indico.cern.ch/event/1187317](https://indico.cern.ch/event/1187317)
+- RC approval presentation: [indico.cern.ch/event/1213570](https://indico.cern.ch/event/1213570)
+- Silent approval to submit: [indico.cern.ch/event/1242323](https://indico.cern.ch/event/1242323)
 
 :::
 
