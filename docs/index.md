@@ -28,7 +28,8 @@ This webpage shows all analysis results that led to the publication of [LHCb-PAP
 - Frozen repository on CERN GitLab: [gitlab.cern.ch/polarimetry/Lc2pKpi](https://gitlab.cern.ch/polarimetry/Lc2pKpi)
 - Active repository on GitHub containing discussions: [github.com/ComPWA/polarimetry](https://github.com/ComPWA/polarimetry)
 
-:::{dropdown} Behind SSO login (LHCb members only)
+:::{admonition} Behind SSO login (LHCb members only)
+:class: toggle
 
 - LHCb TWiki page: [twiki.cern.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi](https://twiki.cern.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi)
 - [Indico page for the _silent approval_ to submit](https://indico.cern.ch/event/1242323)
