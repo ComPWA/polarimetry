@@ -293,7 +293,7 @@ html_theme_options = {
         "⚠️ This version of the analysis was used for <a"
         ' href="https://arxiv.org/abs/2301.07010v1">arXiv:2301.07010v1</a>, but the'
         " codebase is further developed <a"
-        ' href="https://github.com/ComPWA/polarimetry">here</a> ⚠️'
+        ' href="https://github.com/ComPWA/polarimetry">here</a>! ⚠️'
     ),
     "extra_navbar": (
         f"<p>Version {get_polarimetry_package_version()} ({get_timestamp()})</p>"
