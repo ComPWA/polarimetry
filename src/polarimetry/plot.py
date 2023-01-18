@@ -1,6 +1,8 @@
 """Helper functions for `matplotlib`."""
 from __future__ import annotations
 
+import os
+
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.collections import LineCollection, PathCollection
@@ -25,11 +27,19 @@ def get_contour_line(contour_set: QuadContourSet) -> LineCollection:
 
 def use_mpl_latex_fonts(reset_mpl: bool = True) -> None:
     # cspell:ignore dejavusans fontset mathtext usetex
+    if not _is_latex_allowed():
+        return
     if reset_mpl:
         _wake_up_matplotlib()
     plt.rc("font", family="serif", serif="Helvetica")
     plt.rc("mathtext", fontset="dejavusans")
     plt.rc("text", usetex=True)
+
+
+def _is_latex_allowed() -> bool:
+    if "BINDER_LAUNCH_HOST" in os.environ:
+        return False
+    return True
 
 
 def _wake_up_matplotlib() -> None:
