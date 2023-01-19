@@ -1,4 +1,4 @@
-name: Requirements (scheduled)
+name: Requirements
 
 on:
   schedule:
