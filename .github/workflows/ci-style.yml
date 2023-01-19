@@ -30,7 +30,7 @@ jobs:
           path: |
             ~/.cache/pip/
             ~/.cache/pre-commit/
-      - run: pip install -e .[sty] -c .constraints/py${PYTHON_VERSION}.txt
+      - run: pip install -e .[sty] -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - name: Run pre-commit hooks that don't work on pre-commit.ci
         run: |-
           pre-commit run pyright -a --color always
