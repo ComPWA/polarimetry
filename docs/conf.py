@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import os
 import re
 import shutil
 import subprocess
 import sys
 from datetime import datetime
+from pathlib import Path
 from textwrap import dedent, indent
 
 import requests
@@ -113,6 +116,55 @@ def get_nb_remove_code_source():
     return False
 
 
+def get_figure_link(
+    rel_path: str, cwd: str | None = None, full_width: bool = False
+) -> str:
+    abs_path = Path(rel_path)
+    if cwd is not None:
+        abs_path = Path(cwd) / rel_path
+    if not abs_path.exists():
+        print_missing_file_warning(abs_path.resolve().relative_to(Path.cwd()))
+        return ""
+    if full_width:
+        src = f"""
+        ```{{container}} full-width
+        {get_figure_link(rel_path, cwd, full_width=False)}
+        ```
+        """
+        return dedent(src).strip()
+    return f"![]({rel_path}"
+
+
+def get_polarimeter_figures_side_by_side() -> str:
+    paths = (
+        "_static/images/polarimetry-field-K-inset.svg",
+        "_static/images/polarimetry-field-L-inset.svg",
+        "_static/images/polarimetry-field-D-inset.svg",
+    )
+    if any(not os.path.exists(p) for p in paths):
+        return ""
+    src = "```{container} full-width\n"
+    for p in paths:
+        src += f'<img src="{p}" width="33%">'
+    src += "```\n"
+    return src
+
+
+def get_polarimeter_chain_figures() -> str:
+    paths = (
+        "_static/images/polarimetry-K-chains.svg",
+        "_static/images/polarimetry-L-chains.svg",
+        "_static/images/polarimetry-D-chains.svg",
+    )
+    if any(not os.path.exists(p) for p in paths):
+        return ""
+    src = "```{container} full-width\n"
+    for p in paths:
+        src += get_figure_link(p) + "\n"
+    src += "```\n"
+    return src
+
+
 def get_timestamp() -> str:
     now = datetime.now()
     return now.strftime("%d/%m/%Y %H:%M:%S")
@@ -215,8 +267,10 @@ def get_version(package_name: str) -> str:
     return "stable"
 
 
-def print_missing_file_warning(filename: str) -> None:
-    print(f"\033[93;1m{filename} not found, so cannot create download links\033[0m")
+def print_missing_file_warning(path: str | Path) -> None:
+    path = Path(path)
+    rel_path = path.resolve().relative_to(Path.cwd())
+    print(f"\033[93;1m{rel_path} not found, so cannot embed\033[0m")
 
 
 execute_pluto_notebooks()
@@ -383,6 +437,42 @@ myst_substitutions = {
     "DOWNLOAD_INTENSITY_DISTRIBUTION": download_intensity_distribution(),
     "DOWNLOAD_PAPER_FIGURES": download_paper_figures(),
     "DOWNLOAD_SINGLE_PDF": get_link_to_single_pdf(),
+    "FIG_ALPHA_Z_STAT": get_figure_link(
+        "_images/alpha-z-per-resonance-statistical.svg"
+    ),
+    "FIG_ALPHA_Z_SYST": get_figure_link(
+        "_images/alpha-z-per-resonance-systematics.svg"
+    ),
+    "FIG_ALPHA_XZ_STAT": get_figure_link("_images/alpha-xz-statistics.svg"),
+    "FIG_ALPHA_XZ_SYST": get_figure_link("_images/alpha-xz-systematics.svg"),
+    "FIG_ALPHA_XZ_STAT_PLOTLY": get_figure_link(
+        "_images/alpha-xz-statistics-plotly.svg"
+    ),
+    "FIG_ALPHA_XZ_SYST_PLOTLY": get_figure_link(
+        "_images/alpha-xz-systematics-plotly.svg"
+    ),
+    "FIG_CORRELATION_STAT": get_figure_link("_images/correlation-statistics.svg"),
+    "FIG_CORRELATION_SYST": get_figure_link("_images/correlation-systematics.svg"),
+    "FIG_CORRELATION_MAT": get_figure_link("_images/correlation-matrices.svg"),
+    "FIG_INTENSITY": get_figure_link("_images/intensity-distributions-1D.svg"),
+    "FIG_INTENSITY_SIG1": get_figure_link("_images/intensity-distributions-sigma1.svg"),
+    "FIG_INTENSITY_SIG2": get_figure_link("_images/intensity-distributions-sigma2.svg"),
+    "FIG_INTENSITY_SIG3": get_figure_link("_images/intensity-distributions-sigma3.svg"),
+    "FIG_PHASE_SPACE": get_figure_link(
+        "../_images/phase-space-boundary.svg",
+        cwd="appendix",
+    ),
+    "FIG_POLARIMETER_CHAIN": get_polarimeter_chain_figures(),
+    "FIG_POLARIMETER_SUBSYSTEM": get_figure_link(
+        "_static/images/polarimetry-per-subsystem.svg"
+    ),
+    "FIG_POLARIZATION_SYST": get_figure_link(
+        "_static/images/polarization-distribution-systematics.svg"
+    ),
+    "FIG_POLARIMETER_TOTAL": get_polarimeter_figures_side_by_side(),
+    "FIG_RATE_MATRIX": get_figure_link("_images/rate-matrix.svg"),
+    "FIG_RATE_MATRIX_SUB": get_figure_link("_images/rate-matrix-sub-region.svg"),
+    "FIG_SUB_REGIONS": get_figure_link("_images/sub-regions.svg"),
     "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
 }
 relink_ref_types = {
