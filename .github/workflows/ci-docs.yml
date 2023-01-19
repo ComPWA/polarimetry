@@ -107,8 +107,11 @@ jobs:
       - name: Fetch Julia cache
         uses: actions/cache@v3
         with:
-          key: julia-${{hashFiles('julia/Manifest.toml')}}
-          restore-keys: julia
+          key: |
+            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**.jl')}}
+          restore-keys: |
+            julia-${{hashFiles('julia/Manifest.toml')}}
+            julia
           path: |
             ./julia-*/
             ~/.julia/
