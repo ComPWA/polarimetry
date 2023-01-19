@@ -1,4 +1,4 @@
-name: Requirements
+name: Requirements (PR)
 
 on:
   pull_request:

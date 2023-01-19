@@ -28,7 +28,10 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          key: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
+          restore-keys: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
           path: ~/.cache/pip/
       - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: tox -e doc
@@ -48,7 +51,10 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          key: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
+          restore-keys: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
           path: ~/.cache/pip/
       - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
@@ -69,17 +75,16 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          key: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
+          restore-keys: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
           path: ~/.cache/pip/
       - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: tox -e linkcheck
 
   documentation:
     name: Run notebooks and build documentation
-    needs:
-      - fast-html
-      - fast-pdf
-      - linkcheck
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-22.04
     steps:
@@ -89,23 +94,24 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          key: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
+          restore-keys: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
           path: ~/.cache/pip/
       - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
-      - uses: actions/cache@v3
+      - name: Fetch Julia cache
+        uses: actions/cache@v3
         with:
           key: |
-            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'data/**', 'julia/Manifest.toml', 'julia/Project.toml', 'setup.cfg', 'src/**') }}
+            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**.jl')}}
+          restore-keys: |
+            julia-${{hashFiles('julia/Manifest.toml')}}
+            julia
           path: |
-            ./docs/_build/.jupyter_cache
-            ./docs/_images
-            ./docs/_static/export
-            ./docs/_static/images
-            ./docs/appendix/export
             ./julia-*/
             ~/.julia/
-            ~/.sympy-cache*/
       - name: Install Julia
         run: |
           version=$(sed -n '3p' julia/Manifest.toml)
@@ -119,7 +125,43 @@ jobs:
           sudo ln -s $(pwd)/julia-${version}/bin/julia /usr/local/bin/julia
           julia --version
           julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
+      - name: Fetch SymPy cache
+        uses: actions/cache@v3
+        with:
+          key: |
+            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}-${{hashFiles('src/**')}}-${{hashFiles('docs/**.ipynb')}}
+          restore-keys: |
+            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}-${{hashFiles('src/**')}}
+            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
+          path: ~/.sympy-cache*/
+      - name: Fetch Jupyter cache
+        uses: actions/cache@v3
+        with:
+          key: |
+            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}-${{hashFiles('docs/**')}}
+          restore-keys: |
+            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}
+          path: |
+            ./docs/_build/.jupyter_cache
+      - name: Fetch output files
+        uses: actions/cache@v3
+        with:
+          key: |
+            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}-${{hashFiles('docs/**')}}
+          restore-keys: |
+            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}
+            output-files
+          path: |
+            ./docs/_images
+            ./docs/_static/export
+            ./docs/_static/images
+            ./docs/appendix/export
       - run: tox -e pdfnb
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: latex
+          path: docs/_build/latex
       - run: tox -e docnb
         env:
           EXECUTE_PLUTO: "YES"
@@ -127,9 +169,7 @@ jobs:
         if: ${{ always() }}
         with:
           name: html
-          path: |
-            docs/_build/html
-            docs/_build/latex
+          path: docs/_build/html
 
   gh-pages:
     name: Upload to GitHub Pages
