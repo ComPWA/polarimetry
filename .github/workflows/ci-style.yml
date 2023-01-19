@@ -26,15 +26,14 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: |
-            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', '.pre-commit-config.yaml') }}
+          key: pip-sty-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', '.pre-commit-config.yaml') }}
           path: |
             ~/.cache/pip/
             ~/.cache/pre-commit/
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -c .constraints/py${PYTHON_VERSION}.txt -e .[sty]
+          pip install -e .[sty] -c .constraints/py${PYTHON_VERSION}.txt
       - name: Run pre-commit hooks that don't work on pre-commit.ci
         run: |-
           pre-commit run pyright -a --color always

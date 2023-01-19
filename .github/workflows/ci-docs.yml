@@ -28,14 +28,12 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: |
-            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
-          path: |
-            ~/.cache/pip/
+          key: pip-doc-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          path: ~/.cache/pip/
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -c .constraints/py${PYTHON_VERSION}.txt .[doc] tox
+          pip install .[doc] tox -c .constraints/py${PYTHON_VERSION}.txt
       - run: tox -e doc
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
@@ -53,14 +51,12 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: |
-            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
-          path: |
-            ~/.cache/pip/
+          key: pip-doc-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          path: ~/.cache/pip/
       - name: Install Python and APT dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -c .constraints/py${PYTHON_VERSION}.txt .[doc] tox
+          pip install .[doc] tox -c .constraints/py${PYTHON_VERSION}.txt
           sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
       - run: tox -e pdf
       - uses: actions/upload-artifact@v3
@@ -79,14 +75,12 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: |
-            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
-          path: |
-            ~/.cache/pip/
+          key: pip-doc-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          path: ~/.cache/pip/
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -c .constraints/py${PYTHON_VERSION}.txt -e .[doc] tox
+          pip install .[doc] tox -c .constraints/py${PYTHON_VERSION}.txt
       - run: tox -e linkcheck
 
   documentation:
@@ -119,7 +113,7 @@ jobs:
       - name: Install Python and APT dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -c .constraints/py${PYTHON_VERSION}.txt .[doc] tox
+          pip install .[doc] tox -c .constraints/py${PYTHON_VERSION}.txt
           sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Install Julia
         run: |
