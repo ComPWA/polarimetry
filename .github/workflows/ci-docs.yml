@@ -157,6 +157,11 @@ jobs:
             ./docs/_static/images
             ./docs/appendix/export
       - run: tox -e pdfnb
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: latex
+          path: docs/_build/latex
       - run: tox -e docnb
         env:
           EXECUTE_PLUTO: "YES"
@@ -164,9 +169,7 @@ jobs:
         if: ${{ always() }}
         with:
           name: html
-          path: |
-            docs/_build/html
-            docs/_build/latex
+          path: docs/_build/html
 
   gh-pages:
     name: Upload to GitHub Pages
