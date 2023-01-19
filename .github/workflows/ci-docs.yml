@@ -104,7 +104,7 @@ jobs:
           path: ~/.cache/pip/
       - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
-      - name: fetch Julia cache
+      - name: Fetch Julia cache
         uses: actions/cache@v3
         with:
           key: julia-${{hashFiles('julia/Manifest.toml')}}
@@ -125,7 +125,7 @@ jobs:
           sudo ln -s $(pwd)/julia-${version}/bin/julia /usr/local/bin/julia
           julia --version
           julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
-      - name: fetch SymPy cache
+      - name: Fetch SymPy cache
         uses: actions/cache@v3
         with:
           key: |
@@ -134,7 +134,7 @@ jobs:
             sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}-${{hashFiles('src/**')}}
             sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
           path: ~/.sympy-cache*/
-      - name: fetch Jupyter cache
+      - name: Fetch Jupyter cache
         uses: actions/cache@v3
         with:
           key: |
@@ -143,7 +143,7 @@ jobs:
             jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}
           path: |
             ./docs/_build/.jupyter_cache
-      - name: fetch output files
+      - name: Fetch output files
         uses: actions/cache@v3
         with:
           key: |
