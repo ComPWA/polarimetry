@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  html-fast:
+  fast-html:
     name: Build HTML (fast)
     runs-on: ubuntu-22.04
     steps:
@@ -42,7 +42,7 @@ jobs:
           name: html
           path: docs/_build/html
 
-  pdf-fast:
+  fast-pdf:
     name: Build PDF (fast)
     runs-on: ubuntu-22.04
     steps:
@@ -91,8 +91,8 @@ jobs:
   documentation:
     name: Run notebooks and build documentation
     needs:
-      - html-fast
-      - pdf-fast
+      - fast-html
+      - fast-pdf
       - linkcheck
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-22.04
