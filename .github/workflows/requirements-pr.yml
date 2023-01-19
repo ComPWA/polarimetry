@@ -1,4 +1,4 @@
-name: Requirements (PR)
+name: Requirements
 
 on:
   pull_request:
@@ -49,7 +49,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
   pre-commit:
-    name: pre-commit autoupdate
+    name: Update pre-commit config
     needs: diff
     if: >
       github.event.pull_request.head.repo.full_name == github.repository &&
