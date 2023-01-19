@@ -29,7 +29,7 @@ jobs:
       - uses: actions/cache@v3
         with:
           key: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
           restore-keys: |
             pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
           path: ~/.cache/pip/
@@ -52,7 +52,7 @@ jobs:
       - uses: actions/cache@v3
         with:
           key: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
           restore-keys: |
             pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
           path: ~/.cache/pip/
@@ -76,7 +76,7 @@ jobs:
       - uses: actions/cache@v3
         with:
           key: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
           restore-keys: |
             pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
           path: ~/.cache/pip/
@@ -98,25 +98,20 @@ jobs:
       - uses: actions/cache@v3
         with:
           key: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
           restore-keys: |
             pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
           path: ~/.cache/pip/
       - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
-      - uses: actions/cache@v3
+      - name: fetch Julia cache
+        uses: actions/cache@v3
         with:
-          key: |
-            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'data/**', 'julia/Manifest.toml', 'julia/Project.toml', 'setup.cfg', 'src/**') }}
+          key: julia-${{hashFiles('julia/Manifest.toml')}}
+          restore-keys: julia
           path: |
-            ./docs/_build/.jupyter_cache
-            ./docs/_images
-            ./docs/_static/export
-            ./docs/_static/images
-            ./docs/appendix/export
             ./julia-*/
             ~/.julia/
-            ~/.sympy-cache*/
       - name: Install Julia
         run: |
           version=$(sed -n '3p' julia/Manifest.toml)
@@ -130,6 +125,37 @@ jobs:
           sudo ln -s $(pwd)/julia-${version}/bin/julia /usr/local/bin/julia
           julia --version
           julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
+      - name: fetch SymPy cache
+        uses: actions/cache@v3
+        with:
+          key: |
+            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}-${{hashFiles('src/**')}}-${{hashFiles('docs/**.ipynb')}}
+          restore-keys: |
+            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}-${{hashFiles('src/**')}}
+            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
+          path: ~/.sympy-cache*/
+      - name: fetch Jupyter cache
+        uses: actions/cache@v3
+        with:
+          key: |
+            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}-${{hashFiles('docs/**')}}
+          restore-keys: |
+            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}
+          path: |
+            ./docs/_build/.jupyter_cache
+      - name: fetch output files
+        uses: actions/cache@v3
+        with:
+          key: |
+            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}-${{hashFiles('docs/**')}}
+          restore-keys: |
+            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}
+            output-files
+          path: |
+            ./docs/_images
+            ./docs/_static/export
+            ./docs/_static/images
+            ./docs/appendix/export
       - run: tox -e pdfnb
       - run: tox -e docnb
         env:
