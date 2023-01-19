@@ -10,6 +10,7 @@ from pathlib import Path
 from textwrap import dedent, indent
 
 import requests
+from attrs import define, field
 
 if sys.version_info < (3, 8):
     from importlib_metadata import PackageNotFoundError
@@ -30,7 +31,7 @@ def download_paper_figures() -> str:
     }
     for path in figures.values():
         if not os.path.exists(path):
-            print_missing_file_warning(path)
+            MISSING_FILES.add(path)
             return ""
     list_of_figures = indent(
         "\n".join(
@@ -55,7 +56,7 @@ def download_paper_figures() -> str:
 def download_intensity_distribution() -> str:
     filename = "_static/images/intensity-distribution.png"
     if not os.path.exists(filename):
-        print_missing_file_warning(filename)
+        MISSING_FILES.add(filename)
         return ""
     src = f"""
     ```{{only}} html
@@ -123,7 +124,7 @@ def get_figure_link(
     if cwd is not None:
         abs_path = Path(cwd) / rel_path
     if not abs_path.exists():
-        print_missing_file_warning(abs_path.resolve().relative_to(Path.cwd()))
+        MISSING_FILES.add(abs_path)
         return ""
     if full_width:
         src = f"""
@@ -267,15 +268,26 @@ def get_version(package_name: str) -> str:
     return "stable"
 
 
-def print_missing_file_warning(path: str | Path) -> None:
-    path = Path(path)
-    rel_path = path.resolve().relative_to(Path.cwd())
-    print(f"\033[93;1m{rel_path} not found, so cannot embed\033[0m")
+@define
+class MissingFileCollector:
+    paths: list[Path] = field(factory=list)
+
+    def add(self, path: str | Path) -> None:
+        path = Path(path)
+        rel_path = path.resolve().relative_to(Path.cwd())
+        self.paths.append(rel_path)
+
+    def print(self) -> None:
+        if len(self.paths) == 0:
+            return
+        print(f"\033[93;1mFollowing files are missing and cannot be embeded:\033[0m")
+        for path in sorted(self.paths):
+            print(f"  \033[93;1m {path} \033[0m")
 
 
 execute_pluto_notebooks()
 generate_api()
-
+MISSING_FILES = MissingFileCollector()
 
 add_module_names = False
 author = "Mikhail Mikhasenko, Remco de Boer, Miriam Fritsch"
@@ -539,3 +551,5 @@ suppress_warnings = [
 use_multitoc_numbering = True
 version = get_polarimetry_package_version()
 viewcode_follow_imported_members = True
+
+MISSING_FILES.print()
