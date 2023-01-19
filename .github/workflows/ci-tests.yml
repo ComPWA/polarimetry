@@ -36,8 +36,6 @@ jobs:
         with:
           key: pip-test-${{matrix.os}}-py${{matrix.python-version}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
           path: ~/.cache/pip/
-      - name: Install dependencies
-        run: |
-          pip install -e .[test] -c .constraints/py${{ matrix.python-version }}.txt
+      - run: pip install -e .[test] -c .constraints/py${{matrix.python-version}}.txt
       - name: Run unit tests and doctests with pytest
         run: pytest -n auto
