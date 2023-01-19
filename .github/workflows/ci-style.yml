@@ -26,7 +26,7 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-sty-${{runner.os}}-${{hashFiles(.constraints/py${{env.PYTHON_VERSION}}.txt, .pre-commit-config.yaml)}}
+          key: pip-sty-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', '.pre-commit-config.yaml') }}
           path: |
             ~/.cache/pip/
             ~/.cache/pre-commit/

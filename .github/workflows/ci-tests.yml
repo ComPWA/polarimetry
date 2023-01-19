@@ -34,7 +34,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: actions/cache@v3
         with:
-          key: pip-test-${{matrix.os}}-${{hashFiles(.constraints/py${{matrix.python-version}}.txt, setup.cfg)}}
+          key: pip-test-${{matrix.os}}-py${{matrix.python-version}}-${{hashFiles(.constraints/py3.*.txt, setup.cfg)}}
           path: ~/.cache/pip/
       - run: pip install -e .[test] -c .constraints/py${{matrix.python-version}}.txt
       - name: Run unit tests and doctests with pytest
