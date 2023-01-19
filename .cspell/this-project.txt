@@ -14,6 +14,7 @@ latexmk
 LATEXMKOPTS
 LATEXOPTS
 latexpdf
+linkcheck
 lualatex
 MAINT
 Mikhasenko
