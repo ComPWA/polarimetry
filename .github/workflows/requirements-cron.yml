@@ -24,7 +24,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
   pre-commit:
-    name: pre-commit autoupdate
+    name: Update pre-commit config
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
