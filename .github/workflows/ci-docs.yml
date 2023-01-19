@@ -28,7 +28,7 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles(.constraints/py3.*.txt, setup.cfg)}}
+          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
           path: ~/.cache/pip/
       - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: tox -e doc
@@ -48,7 +48,7 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles(.constraints/py3.*.txt, setup.cfg)}}
+          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
           path: ~/.cache/pip/
       - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
@@ -69,7 +69,7 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles(.constraints/py3.*.txt, setup.cfg)}}
+          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
           path: ~/.cache/pip/
       - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: tox -e linkcheck
@@ -89,7 +89,7 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles(.constraints/py3.*.txt, setup.cfg)}}
+          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
           path: ~/.cache/pip/
       - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
