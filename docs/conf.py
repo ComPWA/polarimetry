@@ -380,10 +380,10 @@ myst_enable_extensions = [
 ]
 myst_render_markdown_format = "myst"
 myst_substitutions = {
+    "DOWNLOAD_INTENSITY_DISTRIBUTION": download_intensity_distribution(),
+    "DOWNLOAD_PAPER_FIGURES": download_paper_figures(),
     "DOWNLOAD_SINGLE_PDF": get_link_to_single_pdf(),
     "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
-    "DOWNLOAD_PAPER_FIGURES": download_paper_figures(),
-    "DOWNLOAD_INTENSITY_DISTRIBUTION": download_intensity_distribution(),
 }
 relink_ref_types = {
     "jax.numpy.ndarray": "obj",
