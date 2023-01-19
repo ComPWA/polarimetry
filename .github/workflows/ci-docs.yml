@@ -85,9 +85,6 @@ jobs:
 
   documentation:
     name: Run notebooks and build documentation
-    needs:
-      - fast-html
-      - linkcheck
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-22.04
     steps:
