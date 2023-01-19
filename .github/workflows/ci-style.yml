@@ -1,4 +1,4 @@
-name: pre-commit
+name: Style
 
 on:
   push:
@@ -14,9 +14,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  style:
-    name: Style checks
-    runs-on: ubuntu-20.04
+  pre-commit:
+    name: Run local pre-commit hooks
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
