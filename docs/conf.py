@@ -280,7 +280,7 @@ class MissingFileCollector:
     def print(self) -> None:
         if len(self.paths) == 0:
             return
-        print(f"\033[93;1mFollowing files are missing and cannot be embeded:\033[0m")
+        print(f"\033[93;1mFollowing files are missing and cannot be embedded:\033[0m")
         for path in sorted(self.paths):
             print(f"  \033[93;1m {path} \033[0m")
 
