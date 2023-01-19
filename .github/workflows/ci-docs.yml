@@ -17,8 +17,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  documentation-fast:
-    name: Build documentation (fast)
+  html-fast:
+    name: Build HTML (fast)
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -42,9 +42,37 @@ jobs:
           name: html
           path: docs/_build/html
 
+  pdf-fast:
+    name: Build PDF (fast)
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          key: |
+            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          path: |
+            ~/.cache/pip/
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+      - name: Install Python and APT dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -c .constraints/py3.8.txt .[doc] tox
+          sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
+      - run: tox -e pdf
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: latex
+          path: docs/_build/latex
+
   documentation:
     name: Run notebooks and build documentation
-    needs: documentation-fast
+    needs:
+      - html-fast
+      - pdf-fast
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-20.04
     steps:
