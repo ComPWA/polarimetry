@@ -52,14 +52,10 @@ jobs:
         with:
           key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
           path: ~/.cache/pip/
-      - name: Install Python dependencies
+      - name: Install Python and APT dependencies
         run: |
           pip install .[doc] tox -c .constraints/py${PYTHON_VERSION}.txt
-      # cspell:ignore awalsh pkgs
-      - uses: awalsh128/cache-apt-pkgs-action@v1
-        with:
-          packages: inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
-          version: 1.0
+          sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
       - run: tox -e pdf
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
