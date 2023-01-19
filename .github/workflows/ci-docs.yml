@@ -45,7 +45,7 @@ jobs:
   documentation:
     name: Run notebooks and build documentation
     needs: documentation-fast
-    if: github.event_name == 'pull_request'
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
