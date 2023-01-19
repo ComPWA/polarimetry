@@ -28,7 +28,7 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
           path: ~/.cache/pip/
       - name: Install Python dependencies
         run: |
@@ -51,7 +51,7 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
           path: ~/.cache/pip/
       - name: Install Python dependencies
         run: |
@@ -79,7 +79,7 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
           path: ~/.cache/pip/
       - name: Install Python dependencies
         run: |
@@ -102,7 +102,7 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: actions/cache@v3
         with:
-          key: pip-doc-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          key: pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
           path: ~/.cache/pip/
       - name: Install Python and APT dependencies
         run: |
