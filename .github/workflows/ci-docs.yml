@@ -17,8 +17,34 @@ on:
   workflow_dispatch:
 
 jobs:
+  documentation-fast:
+    name: Build documentation (fast)
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          key: |
+            ${{ github.workflow }}-${{ github.job }}-${{ runner.os }}-${{ hashFiles('.constraints/py3.*.txt', 'setup.cfg') }}
+          path: |
+            ~/.cache/pip/
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+      - name: Install Python and APT dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -c .constraints/py3.8.txt .[doc] tox
+      - run: tox -e doc
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: html
+          path: docs/_build/html
+
   documentation:
-    name: Build documentation and run notebooks
+    name: Run notebooks and build documentation
+    needs: documentation-fast
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
