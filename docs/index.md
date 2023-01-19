@@ -65,8 +65,8 @@ This website shows all analysis results that led to the publication of [LHCb-PAP
 - Publication on arXiv: [arXiv:2301.07010](https://arxiv.org/abs/2301.07010)
 - Record on CDS: [cds.cern.ch/record/2838694](https://cds.cern.ch/record/2838694)
 - Record for the source code on Zenodo: [10.5281/zenodo.7544989](https://doi.org/10.5281/zenodo.7544989)
-- Frozen documentation on GitLab Pages: [lc2pkpi-polarimetry.docs.cern.ch](https://lc2pkpi-polarimetry.docs.cern.ch)
-- Frozen repository on CERN GitLab: [gitlab.cern.ch/polarimetry/Lc2pKpi](https://gitlab.cern.ch/polarimetry/Lc2pKpi)
+- Archived documentation on GitLab Pages: [lc2pkpi-polarimetry.docs.cern.ch](https://lc2pkpi-polarimetry.docs.cern.ch)
+- Archived repository on CERN GitLab: [gitlab.cern.ch/polarimetry/Lc2pKpi](https://gitlab.cern.ch/polarimetry/Lc2pKpi)
 - Active repository on GitHub containing discussions: [github.com/ComPWA/polarimetry](https://github.com/ComPWA/polarimetry)
 
 :::{admonition} Behind SSO login (LHCb members only)
@@ -120,7 +120,7 @@ hidden:
 arXiv:2301.07010 <https://arxiv.org/abs/2301.07010>
 ComPWA <https://compwa-org.readthedocs.io>
 GitHub repository <https://github.com/ComPWA/polarimetry>
-CERN GitLab (frozen) <https://gitlab.cern.ch/polarimetry/Lc2pKpi>
+CERN GitLab (archived) <https://gitlab.cern.ch/polarimetry/Lc2pKpi>
 ```
 
 :::
