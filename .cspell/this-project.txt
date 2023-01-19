@@ -5,6 +5,7 @@ bibtex
 ComPWA
 Conda
 docnb
+doctests
 dvipng
 heli
 ifhyphenaverage
