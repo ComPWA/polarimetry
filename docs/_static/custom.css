@@ -1,0 +1,22 @@
+.announcement a:link {
+  color: LightBlue;
+  background-color: transparent;
+}
+
+.announcement a:hover {
+  color: LightBlue;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+.announcement a:active {
+  color: LightSkyBlue;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+.announcement a:visited {
+  color: Plum;
+  background-color: transparent;
+  text-decoration: none;
+}

@@ -1,0 +1,178 @@
+env:
+  JULIA_CI: "true"
+  PYTHONHASHSEED: "0"
+  PYTHON_VERSION: "3.8"
+
+on:
+  workflow_call:
+    inputs:
+      specific-pip-packages:
+        required: false
+        type: string
+
+jobs:
+  fast-html:
+    if: inputs.specific-pip-packages == ''
+    name: Build HTML (fast)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ComPWA/actions/pip-install@v1
+        with:
+          additional-packages: tox
+          extras: doc
+          python-version: ${{env.PYTHON_VERSION}}
+      - run: tox -e doc
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: html
+          path: docs/_build/html
+
+  fast-pdf:
+    if: inputs.specific-pip-packages == ''
+    name: Build PDF (fast)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ComPWA/actions/pip-install@v1
+        with:
+          additional-packages: tox
+          extras: doc
+          python-version: ${{env.PYTHON_VERSION}}
+      - run: sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
+      - run: tox -e pdf
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: latex
+          path: docs/_build/latex
+
+  linkcheck:
+    if: inputs.specific-pip-packages == ''
+    name: Check external links
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ComPWA/actions/pip-install@v1
+        with:
+          additional-packages: tox
+          extras: doc
+          python-version: ${{env.PYTHON_VERSION}}
+      - run: tox -e linkcheck
+
+  documentation:
+    name: Run notebooks and build documentation
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ComPWA/actions/pip-install@v1
+        with:
+          additional-packages: tox
+          extras: doc
+          python-version: ${{env.PYTHON_VERSION}}
+          specific-pip-packages: ${{ inputs.specific-pip-packages }}
+      - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
+      - name: Fetch Julia cache
+        uses: actions/cache@v3
+        with:
+          key: |
+            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**.jl')}}
+          restore-keys: |
+            julia-${{hashFiles('julia/Manifest.toml')}}
+            julia
+          path: |
+            ./julia-*/
+            ~/.julia/
+      - name: Install Julia
+        run: |
+          version=$(sed -n '3p' julia/Manifest.toml)
+          version=${version:17:-1}
+          major_version=${version:0:-2}
+          filename=julia-${version}-linux-x86_64.tar.gz
+          if [ ! -d julia-${version} ]; then
+            wget -q https://julialang-s3.julialang.org/bin/linux/x64/${major_version}/${filename}
+            tar xzf ${filename}
+          fi
+          sudo ln -s $(pwd)/julia-${version}/bin/julia /usr/local/bin/julia
+          julia --version
+          julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
+      - name: Fetch SymPy cache
+        uses: actions/cache@v3
+        with:
+          key: |
+            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}-${{hashFiles('src/**')}}-${{hashFiles('docs/**.ipynb')}}
+          restore-keys: |
+            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}-${{hashFiles('src/**')}}
+            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
+          path: ~/.sympy-cache*/
+      - name: Fetch Jupyter cache
+        uses: actions/cache@v3
+        with:
+          key: |
+            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}-${{hashFiles('docs/**')}}
+          restore-keys: |
+            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}
+          path: |
+            ./docs/_build/.jupyter_cache
+      - name: Fetch output files
+        uses: actions/cache@v3
+        with:
+          key: |
+            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}-${{hashFiles('docs/**')}}
+          restore-keys: |
+            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}
+            output-files
+          path: |
+            ./docs/_images
+            ./docs/_static/export
+            ./docs/_static/images
+            ./docs/appendix/export
+      - run: tox -e pdfnb
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: latex
+          path: docs/_build/latex
+      - run: tox -e docnb
+        env:
+          EXECUTE_PLUTO: "YES"
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: html
+          path: docs/_build/html
+
+  gh-pages:
+    name: Upload to GitHub Pages
+    needs:
+      - documentation
+      - linkcheck
+    if: >
+      github.repository == 'ComPWA/polarimetry'
+      && format('refs/heads/{0}', github.ref) == github.event.repository.default_branch
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT }}
+      - name: Remove all existing files
+        run: find . ! -regex '^./.git\(/.*\)?' -delete | true
+      - uses: actions/download-artifact@v3
+        with:
+          name: html
+          path: .
+      - name: Commit to gh-pages orphan branch
+        run: |
+          git checkout --orphan gh-pages
+          git add -A
+          git config --global user.name "GitHub"
+          git config --global user.email "noreply@github.com"
+          git status -s
+          git commit -m "Upload documentation build files"
+      - name: Force-push changes
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}
+          git push origin gh-pages --force

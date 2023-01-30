@@ -21,15 +21,6 @@ image: python:3.8
       - .cache/pip/
     when: always
 
-  - &pre-commit
-    key:
-      prefix: pre-commit
-      files:
-        - .pre-commit-config.yaml
-    paths:
-      - .cache/pre-commit/
-    when: always
-
   - &sphinx
     key:
       prefix: myst-nb
@@ -56,26 +47,6 @@ image: python:3.8
       - .sympy-cache-jax
       - .sympy-cache
     when: always
-
-pre-commit:
-  stage: test
-  cache:
-    - *pip
-    - *pre-commit
-  before_script:
-    - python3 -m pip install -e .[sty] -c .constraints/py3.8.txt
-  script:
-    - pre-commit run -a --color always
-
-pytest:
-  stage: test
-  cache:
-    - *pip
-    - *sympy
-  before_script:
-    - python3 -m pip install .[test] -c .constraints/py3.8.txt
-  script:
-    - pytest -n auto -m 'slow or not slow'
 
 documentation:
   stage: build
@@ -125,7 +96,6 @@ pages:
     when: always
 
 stages:
-  - test
   - build
   - deploy
 
@@ -134,6 +104,5 @@ variables:
   JULIA_CI: "true"
   JULIA_DEPOT_PATH: "$CI_PROJECT_DIR/.julia/"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  PRE_COMMIT_HOME: "$CI_PROJECT_DIR/.cache/pre-commit"
   PYTHONHASHSEED: "0"
   SYMPY_CACHE_DIR: "$CI_PROJECT_DIR"

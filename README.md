@@ -2,6 +2,8 @@
 
 <!-- cspell:ignore semileptonic -->
 
+[![10.48550/arXiv.2301.07010](https://zenodo.org/badge/doi/10.48550/arXiv.2301.07010.svg)](https://doi.org/10.48550/arXiv.2301.07010)
+[![10.5281/zenodo.7544989](https://zenodo.org/badge/doi/10.5281/zenodo.7544989.svg)](https://doi.org/10.5281/zenodo.7544989)
 [![GPLv3+ license](https://img.shields.io/badge/License-GPLv3+-blue.svg)](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
 
 This repository a symbolic amplitude model for the decay $\Lambda^+_c \to p \pi^+ K^-$ that is aligned with [Dalitz-plot decomposition](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033) and computes an align polarimeter vector field $\vec\alpha$. Helicity couplings and other parameter values are taken from a recent study by the LHCb Collaboration[^1] and its [supplementary material](https://cds.cern.ch/record/2824328/files).

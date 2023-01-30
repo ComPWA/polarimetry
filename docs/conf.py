@@ -1,9 +1,16 @@
+from __future__ import annotations
+
 import os
+import re
 import shutil
 import subprocess
 import sys
 from datetime import datetime
+from pathlib import Path
 from textwrap import dedent, indent
+
+import requests
+from attrs import define, field
 
 if sys.version_info < (3, 8):
     from importlib_metadata import PackageNotFoundError
@@ -16,24 +23,30 @@ sys.path.insert(0, os.path.abspath("extensions"))
 
 
 def download_paper_figures() -> str:
-    files = [
-        "_static/images/total-polarimetry-field-watermark.svg",
-        "_static/images/polarimetry-field-L1520-unaligned-watermark.svg",
-        "_static/images/polarimetry-field-L1520-aligned-watermark.svg",
-        "_static/images/polarimetry-field-norm-uncertainties-watermark.png",
-    ]
-    for file in files:
-        if not os.path.exists(file):
-            print_missing_file_warning(file)
+    figures = {
+        "2": "_static/images/total-polarimetry-field-watermark.svg",
+        "3a": "_static/images/polarimetry-field-L1520-unaligned-watermark.svg",
+        "3b": "_static/images/polarimetry-field-L1520-aligned-watermark.svg",
+        "4": "_static/images/polarimetry-field-norm-uncertainties-watermark.png",
+    }
+    for path in figures.values():
+        if not os.path.exists(path):
+            MISSING_FILES.add(path)
             return ""
-    list_of_figures = indent("\n".join(_to_download_link(f) for f in files), "    - ")
+    list_of_figures = indent(
+        "\n".join(
+            f":Figure {name}: {_to_download_link(path)}"
+            for name, path in figures.items()
+        ),
+        4 * " ",
+    )
     src = f"""
     ::::{{only}} html
     :::{{tip}}
     Figures for the paper can be downloaded here:
     {list_of_figures.strip()}
 
-    All other exported figures can be [here](./_static/images/).
+    All other exported figures can be found [here](./_static/images/).
     :::
     ::::
     """
@@ -43,7 +56,7 @@ def download_paper_figures() -> str:
 def download_intensity_distribution() -> str:
     filename = "_static/images/intensity-distribution.png"
     if not os.path.exists(filename):
-        print_missing_file_warning(filename)
+        MISSING_FILES.add(filename)
         return ""
     src = f"""
     ```{{only}} html
@@ -104,12 +117,61 @@ def get_nb_remove_code_source():
     return False
 
 
+def get_figure_link(
+    rel_path: str, cwd: str | None = None, full_width: bool = False
+) -> str:
+    abs_path = Path(rel_path)
+    if cwd is not None:
+        abs_path = Path(cwd) / rel_path
+    if not abs_path.exists():
+        MISSING_FILES.add(abs_path)
+        return ""
+    if full_width:
+        src = f"""
+        ```{{container}} full-width
+        {get_figure_link(rel_path, cwd, full_width=False)}
+        ```
+        """
+        return dedent(src).strip()
+    return f"![]({rel_path}"
+
+
+def get_polarimeter_figures_side_by_side() -> str:
+    paths = (
+        "_static/images/polarimetry-field-K-inset.svg",
+        "_static/images/polarimetry-field-L-inset.svg",
+        "_static/images/polarimetry-field-D-inset.svg",
+    )
+    if any(not os.path.exists(p) for p in paths):
+        return ""
+    src = "```{container} full-width\n"
+    for p in paths:
+        src += f'<img src="{p}" width="33%">'
+    src += "```\n"
+    return src
+
+
+def get_polarimeter_chain_figures() -> str:
+    paths = (
+        "_static/images/polarimetry-K-chains.svg",
+        "_static/images/polarimetry-L-chains.svg",
+        "_static/images/polarimetry-D-chains.svg",
+    )
+    if any(not os.path.exists(p) for p in paths):
+        return ""
+    src = "```{container} full-width\n"
+    for p in paths:
+        src += get_figure_link(p) + "\n"
+    src += "```\n"
+    return src
+
+
 def get_timestamp() -> str:
     now = datetime.now()
     return now.strftime("%d/%m/%Y %H:%M:%S")
 
 
-def get_version() -> str:
+def get_polarimetry_package_version() -> str:
     try:
         return get_package_version("polarimetry")
     except PackageNotFoundError:
@@ -142,26 +204,90 @@ def get_link_to_single_pdf() -> str:
         shutil.copy(build_file, embedded_file)
     if os.path.exists(embedded_file):
         src = f"""
-        ::::{{only}} html
-        :::{{button-link}} {embedded_file}
-        :color: primary
-        :shadow:
-        Download this website as a **report**
+        :::{{grid-item-card}} {{octicon}}`download` Download this website as a single PDF file
+        :columns: 12
+        :link: {embedded_file}
         :::
-        ::::
         """
         return dedent(src)
     print(f"\033[91;1mSingle PDF has not yet been built.\033[0m")
     return ""
 
 
-def print_missing_file_warning(filename: str) -> None:
-    print(f"\033[93;1m{filename} not found, so cannot create download links\033[0m")
+def get_minor_version(package_name: str) -> str:
+    installed_version = get_version(package_name)
+    if installed_version == "stable":
+        return installed_version
+    matches = re.match(r"^([0-9]+\.[0-9]+).*$", installed_version)
+    if matches is None:
+        raise ValueError(
+            f"Could not find documentation for {package_name} v{installed_version}"
+        )
+    return matches[1]
+
+
+def get_scipy_url() -> str:
+    url = f"https://docs.scipy.org/doc/scipy-{get_version('scipy')}/"
+    r = requests.get(url)
+    if r.status_code != 200:
+        return "https://docs.scipy.org/doc/scipy"
+    return url
+
+
+def get_version(package_name: str) -> str:
+    python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    constraints_path = f"../.constraints/py{python_version}.txt"
+    package_name = package_name.lower()
+    with open(constraints_path) as stream:
+        constraints = stream.read()
+    version_remapping = {
+        "ipywidgets": {
+            "8.0.3": "8.0.2",
+            "8.0.4": "8.0.2",
+        },
+    }
+    for line in constraints.split("\n"):
+        line = line.split("#")[0]  # remove comments
+        line = line.strip()
+        line = line.lower()
+        if not line.startswith(package_name):
+            continue
+        if not line:
+            continue
+        line_segments = tuple(line.split("=="))
+        if len(line_segments) != 2:
+            continue
+        _, installed_version, *_ = line_segments
+        installed_version = installed_version.strip()
+        remapped_versions = version_remapping.get(package_name)
+        if remapped_versions is not None:
+            existing_version = remapped_versions.get(installed_version)
+            if existing_version is not None:
+                return existing_version
+        return installed_version
+    return "stable"
+
+
+@define
+class MissingFileCollector:
+    paths: list[Path] = field(factory=list)
+
+    def add(self, path: str | Path) -> None:
+        path = Path(path)
+        rel_path = path.resolve().relative_to(Path.cwd())
+        self.paths.append(rel_path)
+
+    def print(self) -> None:
+        if len(self.paths) == 0:
+            return
+        print(f"\033[93;1mFollowing files are missing and cannot be embedded:\033[0m")
+        for path in sorted(self.paths):
+            print(f"  \033[93;1m {path} \033[0m")
 
 
 execute_pluto_notebooks()
 generate_api()
-
+MISSING_FILES = MissingFileCollector()
 
 add_module_names = False
 author = "Mikhail Mikhasenko, Remco de Boer, Miriam Fritsch"
@@ -190,7 +316,7 @@ bibtex_bibfiles = [
     "_static/references.bib",
 ]
 codeautolink_concat_default = True
-copyright = "2022"
+copyright = "2023"
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
@@ -202,8 +328,8 @@ exclude_patterns = [
 extensions = [
     "myst_nb",
     "relink_references",
-    "sphinx_reredirects",
     "sphinx.ext.autosectionlabel",
+    "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
@@ -211,48 +337,62 @@ extensions = [
     "sphinx_codeautolink",
     "sphinx_copybutton",
     "sphinx_design",
+    "sphinx_reredirects",
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
     "sphinxcontrib.inkscapeconverter",
     "support_bibtex_math",
     "unsrt_et_al",
 ]
+html_css_files = [
+    "custom.css",
+]
 html_js_files = [
     # https://github.com/requirejs/requirejs/tags
     "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js",
 ]
+html_logo = "_static/lhcb-logo.svg"
 html_sourcelink_suffix = ""
 html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
-    "extra_navbar": f"<p>Version {get_version()} ({get_timestamp()})</p>",
+    "extra_navbar": (
+        f"<p>Version {get_polarimetry_package_version()} ({get_timestamp()})</p>"
+    ),
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
+        "notebook_interface": "jupyterlab",
     },
     "path_to_docs": "docs",
     "repository_url": "https://github.com/ComPWA/polarimetry",
-    "repository_branch": "main",
-    "show_navbar_depth": 2,
+    "repository_branch": "0.0.9",
+    "show_navbar_depth": 1,
     "show_toc_level": 2,
     "use_repository_button": True,
-    "use_edit_page_button": True,
+    "use_edit_page_button": False,
     "use_issues_button": True,
 }
-html_title = "Polarimetry Λ<sub>c</sub> → p K π"
+html_title = "Λ<sub>c</sub> → p K π polarimetry"
 intersphinx_mapping = {
-    "IPython": ("https://ipython.readthedocs.io/en/stable", None),
-    "ampform": ("https://ampform.readthedocs.io/en/stable", None),
-    "attrs": ("https://www.attrs.org/en/stable", None),
+    "IPython": (f"https://ipython.readthedocs.io/en/{get_version('IPython')}", None),
+    "ampform": (f"https://ampform.readthedocs.io/en/{get_version('ampform')}", None),
+    "attrs": (f"https://www.attrs.org/en/{get_version('attrs')}", None),
     "iminuit": ("https://iminuit.readthedocs.io/en/stable", None),
-    "ipywidgets": ("https://ipywidgets.readthedocs.io/en/stable", None),
+    "ipywidgets": (
+        f"https://ipywidgets.readthedocs.io/en/{get_version('ipywidgets')}",
+        None,
+    ),
     "jax": ("https://jax.readthedocs.io/en/latest", None),
-    "matplotlib": ("https://matplotlib.org/stable", None),
-    "numpy": ("https://numpy.org/doc/stable", None),
+    "matplotlib": (f"https://matplotlib.org/{get_version('matplotlib')}", None),
+    "numpy": (f"https://numpy.org/doc/{get_minor_version('numpy')}", None),
     "plotly": ("https://plotly.com/python-api-reference", None),
     "python": ("https://docs.python.org/3", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy", None),
+    "scipy": (get_scipy_url(), None),
     "sympy": ("https://docs.sympy.org/latest", None),
-    "tensorwaves": ("https://tensorwaves.readthedocs.io/en/stable", None),
+    "tensorwaves": (
+        f"https://tensorwaves.readthedocs.io/en/{get_version('tensorwaves')}",
+        None,
+    ),
 }
 latex_documents = [
     # https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-latex_documents
@@ -287,28 +427,64 @@ latex_elements = {
   },
 }
 """,
-    "releasename": f"{get_version()} ({get_timestamp()})",
+    "releasename": f"{get_polarimetry_package_version()} ({get_timestamp()})",
 }
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 latex_show_pagerefs = True
 linkcheck_ignore = [
     "https://arxiv.org/pdf/2208.03262.pdf",
     "https://arxiv.org/pdf/hep-ex/0510019.pdf",
-    "https://github.com/ComPWA/polarimetry",
     "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033",
 ]
 myst_enable_extensions = [
     "colon_fence",
     "dollarmath",
+    "fieldlist",
     "html_image",
     "substitution",
 ]
 myst_render_markdown_format = "myst"
 myst_substitutions = {
-    "DOWNLOAD_SINGLE_PDF": get_link_to_single_pdf(),
-    "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
-    "DOWNLOAD_PAPER_FIGURES": download_paper_figures(),
     "DOWNLOAD_INTENSITY_DISTRIBUTION": download_intensity_distribution(),
+    "DOWNLOAD_PAPER_FIGURES": download_paper_figures(),
+    "DOWNLOAD_SINGLE_PDF": get_link_to_single_pdf(),
+    "FIG_ALPHA_Z_STAT": get_figure_link(
+        "_images/alpha-z-per-resonance-statistical.svg"
+    ),
+    "FIG_ALPHA_Z_SYST": get_figure_link(
+        "_images/alpha-z-per-resonance-systematics.svg"
+    ),
+    "FIG_ALPHA_XZ_STAT": get_figure_link("_images/alpha-xz-statistics.svg"),
+    "FIG_ALPHA_XZ_SYST": get_figure_link("_images/alpha-xz-systematics.svg"),
+    "FIG_ALPHA_XZ_STAT_PLOTLY": get_figure_link(
+        "_images/alpha-xz-statistics-plotly.svg"
+    ),
+    "FIG_ALPHA_XZ_SYST_PLOTLY": get_figure_link(
+        "_images/alpha-xz-systematics-plotly.svg"
+    ),
+    "FIG_CORRELATION_STAT": get_figure_link("_images/correlation-statistics.svg"),
+    "FIG_CORRELATION_SYST": get_figure_link("_images/correlation-systematics.svg"),
+    "FIG_CORRELATION_MAT": get_figure_link("_images/correlation-matrices.svg"),
+    "FIG_INTENSITY": get_figure_link("_images/intensity-distributions-1D.svg"),
+    "FIG_INTENSITY_SIG1": get_figure_link("_images/intensity-distributions-sigma1.svg"),
+    "FIG_INTENSITY_SIG2": get_figure_link("_images/intensity-distributions-sigma2.svg"),
+    "FIG_INTENSITY_SIG3": get_figure_link("_images/intensity-distributions-sigma3.svg"),
+    "FIG_PHASE_SPACE": get_figure_link(
+        "../_images/phase-space-boundary.svg",
+        cwd="appendix",
+    ),
+    "FIG_POLARIMETER_CHAIN": get_polarimeter_chain_figures(),
+    "FIG_POLARIMETER_SUBSYSTEM": get_figure_link(
+        "_static/images/polarimetry-per-subsystem.svg"
+    ),
+    "FIG_POLARIZATION_SYST": get_figure_link(
+        "_static/images/polarization-distribution-systematics.svg"
+    ),
+    "FIG_POLARIMETER_TOTAL": get_polarimeter_figures_side_by_side(),
+    "FIG_RATE_MATRIX": get_figure_link("_images/rate-matrix.svg"),
+    "FIG_RATE_MATRIX_SUB": get_figure_link("_images/rate-matrix-sub-region.svg"),
+    "FIG_SUB_REGIONS": get_figure_link("_images/sub-regions.svg"),
+    "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
 }
 relink_ref_types = {
     "jax.numpy.ndarray": "obj",
@@ -372,5 +548,7 @@ suppress_warnings = [
     "mystnb.unknown_mime_type",
 ]
 use_multitoc_numbering = True
-version = get_version()
+version = get_polarimetry_package_version()
 viewcode_follow_imported_members = True
+
+MISSING_FILES.print()
