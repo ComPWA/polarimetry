@@ -1,27 +1,22 @@
-# https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows#force-deleting-cache-entries
-name: Clean cache
+name: Clean caches
+
 on:
   pull_request:
     types:
       - closed
   workflow_dispatch:
+    inputs:
+      ref:
+        description: Clean caches for this branch name or ref
+        required: false
+        type: string
 
 jobs:
   cleanup:
-    name: Remove PR caches
-    runs-on: ubuntu-latest
+    name: Remove caches
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - run: gh extension install actions/gh-actions-cache
-      - name: Delete caches of latest PR
-        env:
-          REPO: ${{ github.repository }}
-          BRANCH: ${{ github.ref }}
+      - uses: ComPWA/actions/clean-caches@v1
+        with:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set +e
-          echo "Deleting caches..."
-          for CACHE_KEY in $(gh actions-cache list -R $REPO -B $BRANCH | cut -f 1); do
-            gh actions-cache delete $CACHE_KEY -R $REPO -B $BRANCH --confirm
-          done
-          echo "Done"
+          ref: ${{ inputs.ref }}

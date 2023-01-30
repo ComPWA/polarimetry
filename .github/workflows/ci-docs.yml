@@ -1,39 +1,27 @@
-name: Documentation
 env:
   JULIA_CI: "true"
   PYTHONHASHSEED: "0"
   PYTHON_VERSION: "3.8"
 
 on:
-  push:
-    branches:
-      - main
-      - epic/*
-      - "[0-9]+.[0-9]+.x"
-  pull_request:
-    branches:
-      - main
-      - epic/*
-      - "[0-9]+.[0-9]+.x"
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      specific-pip-packages:
+        required: false
+        type: string
 
 jobs:
   fast-html:
+    if: inputs.specific-pip-packages == ''
     name: Build HTML (fast)
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: ComPWA/actions/pip-install@v1
         with:
+          additional-packages: tox
+          extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-      - uses: actions/cache@v3
-        with:
-          key: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
-          restore-keys: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
-          path: ~/.cache/pip/
-      - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: tox -e doc
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
@@ -42,21 +30,16 @@ jobs:
           path: docs/_build/html
 
   fast-pdf:
+    if: inputs.specific-pip-packages == ''
     name: Build PDF (fast)
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: ComPWA/actions/pip-install@v1
         with:
+          additional-packages: tox
+          extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-      - uses: actions/cache@v3
-        with:
-          key: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
-          restore-keys: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
-          path: ~/.cache/pip/
-      - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
       - run: tox -e pdf
       - uses: actions/upload-artifact@v3
@@ -66,21 +49,16 @@ jobs:
           path: docs/_build/latex
 
   linkcheck:
+    if: inputs.specific-pip-packages == ''
     name: Check external links
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: ComPWA/actions/pip-install@v1
         with:
+          additional-packages: tox
+          extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-      - uses: actions/cache@v3
-        with:
-          key: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
-          restore-keys: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
-          path: ~/.cache/pip/
-      - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: tox -e linkcheck
 
   documentation:
@@ -89,17 +67,12 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: ComPWA/actions/pip-install@v1
         with:
+          additional-packages: tox
+          extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-      - uses: actions/cache@v3
-        with:
-          key: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
-          restore-keys: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
-          path: ~/.cache/pip/
-      - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
+          specific-pip-packages: ${{ inputs.specific-pip-packages }}
       - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch Julia cache
         uses: actions/cache@v3
@@ -175,7 +148,9 @@ jobs:
     name: Upload to GitHub Pages
     needs: documentation
     if: >
-      github.repository == 'ComPWA/polarimetry' && github.ref == 'refs/heads/main'
+      github.repository == 'ComPWA/polarimetry'
+      && format('refs/heads/{0}', github.ref) == github.event.repository.default_branch
+      && inputs.specific-pip-packages == ''
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
