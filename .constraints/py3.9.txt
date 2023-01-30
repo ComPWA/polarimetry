@@ -51,7 +51,7 @@ imagesize==1.4.1
 iminuit==2.18.0
 importlib-metadata==6.0.0
 iniconfig==2.0.0
-ipykernel==6.20.2
+ipykernel==6.21.0
 ipympl==0.9.2
 ipython==8.9.0
 ipython-genutils==0.2.0
