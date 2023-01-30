@@ -24,6 +24,7 @@ nbformat
 pdfnb
 phsp
 pushd
+PyPI
 pyright
 pytest
 PYTHONHASHSEED
