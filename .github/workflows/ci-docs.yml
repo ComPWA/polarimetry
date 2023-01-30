@@ -146,11 +146,12 @@ jobs:
 
   gh-pages:
     name: Upload to GitHub Pages
-    needs: documentation
+    needs:
+      - documentation
+      - linkcheck
     if: >
       github.repository == 'ComPWA/polarimetry'
       && format('refs/heads/{0}', github.ref) == github.event.repository.default_branch
-      && inputs.specific-pip-packages == ''
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
