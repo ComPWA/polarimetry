@@ -72,7 +72,7 @@ jobs:
           additional-packages: tox
           extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-          specific-pip-packages: ${{ inputs.specific-pip-packages }}
+          specific-packages: ${{ inputs.specific-pip-packages }}
       - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch Julia cache
         uses: actions/cache@v3
