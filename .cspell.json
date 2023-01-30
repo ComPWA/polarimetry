@@ -115,6 +115,7 @@
     "avrgd",
     "ccrcr",
     "cmin",
+    "commitlint",
     "einsum",
     "hangle",
     "iminuit",
