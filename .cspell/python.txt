@@ -17,7 +17,6 @@ deepcopy
 edgecolor
 elif
 expanduser
-getcwd
 fontsize
 funcs
 functools
