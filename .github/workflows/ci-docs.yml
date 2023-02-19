@@ -72,7 +72,7 @@ jobs:
           additional-packages: tox
           extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-          specific-pip-packages: ${{ inputs.specific-pip-packages }}
+          specific-packages: ${{ inputs.specific-pip-packages }}
       - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch Julia cache
         uses: actions/cache@v3
@@ -138,41 +138,26 @@ jobs:
       - run: tox -e docnb
         env:
           EXECUTE_PLUTO: "YES"
-      - uses: actions/upload-artifact@v3
-        if: ${{ always() }}
+      - uses: actions/upload-pages-artifact@v1
+        if: always()
         with:
-          name: html
           path: docs/_build/html
 
   gh-pages:
     name: Upload to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    if: >-
+      github.event_name == 'push' &&
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     needs:
       - documentation
       - linkcheck
-    if: >
-      github.repository == 'ComPWA/polarimetry'
-      && format('refs/heads/{0}', github.ref) == github.event.repository.default_branch
+    permissions:
+      pages: write
+      id-token: write
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.PAT }}
-      - name: Remove all existing files
-        run: find . ! -regex '^./.git\(/.*\)?' -delete | true
-      - uses: actions/download-artifact@v3
-        with:
-          name: html
-          path: .
-      - name: Commit to gh-pages orphan branch
-        run: |
-          git checkout --orphan gh-pages
-          git add -A
-          git config --global user.name "GitHub"
-          git config --global user.email "noreply@github.com"
-          git status -s
-          git commit -m "Upload documentation build files"
-      - name: Force-push changes
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}
-          git push origin gh-pages --force
+      - id: deployment
+        uses: actions/deploy-pages@v1
