@@ -171,8 +171,7 @@ def load_three_body_decay(
 
 
 class ParameterBootstrap:
-    """A wrapper for loading parameters from :download:`model-definitions.yaml </../data/model-definitions.yaml>`.
-    """
+    """A wrapper for loading parameters from :download:`model-definitions.yaml </../data/model-definitions.yaml>`."""
 
     def __init__(
         self,
