@@ -357,9 +357,6 @@ html_sourcelink_suffix = ""
 html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
-    "extra_navbar": (
-        f"<p>Version {get_polarimetry_package_version()} ({get_timestamp()})</p>"
-    ),
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
         "notebook_interface": "jupyterlab",
