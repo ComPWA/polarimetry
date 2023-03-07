@@ -351,6 +351,7 @@ html_js_files = [
     # https://github.com/requirejs/requirejs/tags
     "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js",
 ]
+html_last_updated_fmt = "%-d %B %Y"
 html_logo = "_static/lhcb-logo.svg"
 html_sourcelink_suffix = ""
 html_static_path = ["_static"]
