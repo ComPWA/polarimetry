@@ -511,7 +511,6 @@ relink_targets = {
     "QuadContourSet": "matplotlib.contour.QuadContourSet",
     "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
     "implement_doit_method": "ampform.sympy.implement_doit_method",
-    "jnp.ndarray": "jax.numpy.ndarray",
     "polarimetry.lhcb._T": "typing.TypeVar",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
