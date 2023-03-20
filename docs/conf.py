@@ -138,9 +138,9 @@ def get_figure_link(
 
 def get_polarimeter_figures_side_by_side() -> str:
     paths = (
-        "_static/images/polarimetry-field-K-inset.svg",
-        "_static/images/polarimetry-field-L-inset.svg",
-        "_static/images/polarimetry-field-D-inset.svg",
+        "_static/images/polarimetry-field-K-contours-title-watermark-inset.svg",
+        "_static/images/polarimetry-field-L-contours-title-watermark-inset.svg",
+        "_static/images/polarimetry-field-D-contours-title-watermark-inset.svg",
     )
     if any(not os.path.exists(p) for p in paths):
         return ""
