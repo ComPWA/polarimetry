@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-    "setuptools>=36.2.1",  # environment markers
+    "setuptools>=36.2.1", # environment markers
     "setuptools_scm",
     "wheel",
 ]
@@ -25,19 +25,19 @@ exclude = '''
 include = '\.pyi?$'
 preview = true
 target-version = [
+    "py310",
+    "py311",
     "py37",
     "py38",
     "py39",
-    "py310",
-    "py311",
 ]
 
 [tool.isort]
+known_third_party = "THIRDPARTY,sympy"
 profile = "black"
 src_paths = [
     "src",
 ]
-known_third_party = "THIRDPARTY,sympy"
 
 [tool.nbqa.addopts]
 black = [
@@ -64,16 +64,16 @@ addopts = [
     "-m not slow",
 ]
 filterwarnings = [
-  "error",
-  "ignore:.*argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
-  "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
+    "error",
+    "ignore:.*argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
+    "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
 markers = [
     "slow: marks tests as slow (select with '-m slow')",
 ]
 norecursedirs = [
-  ".ipynb_checkpoints",
-  "_build",
+    ".ipynb_checkpoints",
+    "_build",
 ]
 testpaths = [
     "src",
