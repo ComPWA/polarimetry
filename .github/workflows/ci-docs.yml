@@ -67,6 +67,8 @@ jobs:
   documentation:
     name: Run notebooks and build documentation
     runs-on: ubuntu-22.04
+    container:
+      image: compwa/polarimetry-documentation:v1
     steps:
       - uses: actions/checkout@v3
       - uses: ComPWA/actions/pip-install@v1
