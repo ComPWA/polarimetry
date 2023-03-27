@@ -44,7 +44,6 @@ jobs:
         with:
           additional-packages: tox
           extras: doc
-          python-version: ${{env.PYTHON_VERSION}}
       - run: tox -e pdf
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
@@ -79,7 +78,6 @@ jobs:
         with:
           additional-packages: tox
           extras: doc
-          python-version: ${{env.PYTHON_VERSION}}
           specific-packages: ${{ inputs.specific-pip-packages }}
       - name: Fetch Julia cache
         uses: actions/cache@v3
