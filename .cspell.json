@@ -113,6 +113,7 @@
   "version": "0.2",
   "ignoreWords": [
     "Sigmapi",
+    "autopush",
     "avrgd",
     "ccrcr",
     "cmin",

@@ -3,7 +3,7 @@ name: Update Docker images
 on:
   push:
     branches:
-      - docker-images
+      - autopush-docker-images
   workflow_dispatch:
 
 env:
