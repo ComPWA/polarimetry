@@ -35,8 +35,10 @@
   },
   "files.eol": "\n",
   "julia.NumThreads": "auto",
+  "livePreview.defaultPreviewPath": "docs/_build/html",
   "python.analysis.autoImportCompletions": false,
   "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.inlayHints.pytestParameters": true,
   "python.analysis.typeCheckingMode": "strict",
   "python.formatting.provider": "black",
   "python.linting.enabled": true,
@@ -44,7 +46,6 @@
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
   "rewrap.wrappingColumn": 88,
-  "telemetry.telemetryLevel": "off",
   "yaml.schemas": {
     "https://json.schemastore.org/github-workflow.json": "./.github/workflows/requirements.yml"
   }

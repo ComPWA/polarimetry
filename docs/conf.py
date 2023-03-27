@@ -351,14 +351,12 @@ html_js_files = [
     # https://github.com/requirejs/requirejs/tags
     "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js",
 ]
+html_last_updated_fmt = "%-d %B %Y"
 html_logo = "_static/lhcb-logo.svg"
 html_sourcelink_suffix = ""
 html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
-    "extra_navbar": (
-        f"<p>Version {get_polarimetry_package_version()} ({get_timestamp()})</p>"
-    ),
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
         "notebook_interface": "jupyterlab",
@@ -513,7 +511,6 @@ relink_targets = {
     "QuadContourSet": "matplotlib.contour.QuadContourSet",
     "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
     "implement_doit_method": "ampform.sympy.implement_doit_method",
-    "jnp.ndarray": "jax.numpy.ndarray",
     "polarimetry.lhcb._T": "typing.TypeVar",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",

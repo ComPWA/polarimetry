@@ -29,6 +29,7 @@ from textwrap import dedent
 from typing import Iterable, Mapping, Sequence
 
 import cloudpickle
+import jax
 import jax.numpy as jnp
 import sympy as sp
 from ampform.sympy import UnevaluatedExpression
@@ -387,12 +388,12 @@ def mute_jax_warnings() -> None:
 
 
 def export_polarimetry_field(
-    sigma1: jnp.ndarray,
-    sigma2: jnp.ndarray,
-    alpha_x: jnp.ndarray,
-    alpha_y: jnp.ndarray,
-    alpha_z: jnp.ndarray,
-    intensity: jnp.ndarray,
+    sigma1: jax.Array,
+    sigma2: jax.Array,
+    alpha_x: jax.Array,
+    alpha_y: jax.Array,
+    alpha_z: jax.Array,
+    intensity: jax.Array,
     filename: str,
     metadata: dict | None = None,
 ) -> None:
@@ -421,7 +422,7 @@ def export_polarimetry_field(
         json.dump(json_data, f, separators=(",", ":"))
 
 
-def import_polarimetry_field(filename: str, steps: int = 1) -> dict[str, jnp.ndarray]:
+def import_polarimetry_field(filename: str, steps: int = 1) -> dict[str, jax.Array]:
     with open(filename) as f:
         json_data: dict = json.load(f)
     return {

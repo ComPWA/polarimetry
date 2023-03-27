@@ -1,9 +1,6 @@
 {
   "allowCompoundWords": false,
-  "dictionaries": [
-    "physics",
-    "this-project"
-  ],
+  "dictionaries": ["physics", "this-project"],
   "dictionaryDefinitions": [
     {
       "addWords": true,
@@ -31,9 +28,7 @@
       "path": "./.cspell/this-project.txt"
     }
   ],
-  "enableFiletypes": [
-    "julia"
-  ],
+  "enableFiletypes": ["julia"],
   "flagWords": [
     "analyse",
     "colour",
@@ -78,34 +73,21 @@
   "overrides": [
     {
       "allowCompoundWords": true,
-      "dictionaries": [
-        "julia",
-        "latex"
-      ],
+      "dictionaries": ["julia", "latex"],
       "filename": "**/*.jl",
       "languageId": "julia"
     },
     {
       "allowCompoundWords": true,
-      "dictionaries": [
-        "julia",
-        "latex",
-        "python"
-      ],
+      "dictionaries": ["julia", "latex", "python"],
       "filename": "**/*.ipynb"
     },
     {
-      "dictionaries": [
-        "latex",
-        "python"
-      ],
+      "dictionaries": ["latex", "python"],
       "filename": "**/*.py"
     },
     {
-      "dictionaries": [
-        "latex",
-        "python"
-      ],
+      "dictionaries": ["latex", "python"],
       "filename": "**/*.pyi"
     }
   ],
