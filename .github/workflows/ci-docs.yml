@@ -14,6 +14,7 @@ jobs:
   fast-html:
     if: inputs.specific-pip-packages == ''
     name: Build HTML (fast)
+    container: compwa/polarimetry-fast-html:v1
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -32,6 +33,7 @@ jobs:
   fast-pdf:
     if: inputs.specific-pip-packages == ''
     name: Build PDF (fast)
+    container: compwa/polarimetry-fast-pdf:v1
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -40,7 +42,6 @@ jobs:
           additional-packages: tox
           extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-      - run: sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
       - run: tox -e pdf
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
