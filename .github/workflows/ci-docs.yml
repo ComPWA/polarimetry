@@ -14,8 +14,6 @@ jobs:
   fast-html:
     if: inputs.specific-pip-packages == ''
     name: Build HTML (fast)
-    container:
-      image: compwa/polarimetry-fast-html:v1
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -35,7 +33,10 @@ jobs:
     if: inputs.specific-pip-packages == ''
     name: Build PDF (fast)
     container:
-      image: compwa/polarimetry-fast-pdf:v1
+      image: ghcr.io/compwa/polarimetry-fast-pdf:sha-a25a80a
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -71,7 +72,10 @@ jobs:
     name: Run notebooks and build documentation
     runs-on: ubuntu-22.04
     container:
-      image: compwa/polarimetry-documentation:v1
+      image: ghcr.io/compwa/polarimetry-documentation:sha-a25a80a
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -91,19 +95,9 @@ jobs:
             julia-${{hashFiles('julia/Manifest.toml')}}
             julia
           path: |
-            ./julia-*/
             ~/.julia/
-      - name: Install Julia
+      - name: Initialize Julia environment
         run: |
-          version=$(sed -n '3p' julia/Manifest.toml)
-          version=${version:17:-1}
-          major_version=${version:0:-2}
-          filename=julia-${version}-linux-x86_64.tar.gz
-          if [ ! -d julia-${version} ]; then
-            wget -q https://julialang-s3.julialang.org/bin/linux/x64/${major_version}/${filename}
-            tar xzf ${filename}
-          fi
-          sudo ln -s $(pwd)/julia-${version}/bin/julia /usr/local/bin/julia
           julia --version
           julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
       - name: Fetch SymPy cache
