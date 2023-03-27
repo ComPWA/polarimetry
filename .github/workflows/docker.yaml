@@ -1,6 +1,9 @@
 name: Update Docker images
 
 on:
+  push:
+    branches:
+      - docker-images
   workflow_dispatch:
 
 env:
