@@ -1,0 +1,11 @@
+FROM python:3.8
+FROM julia:1.8-alpine
+RUN apt-get -y update
+
+# https://serverfault.com/a/992421
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
+RUN apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
+
+RUN apt-get autoclean -y
+RUN apt-get autoremove -y
+RUN rm -rf /var/lib/apt/lists/*
