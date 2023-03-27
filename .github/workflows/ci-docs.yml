@@ -41,8 +41,8 @@ jobs:
           extras: doc
           python-version: ${{env.PYTHON_VERSION}}
       - run: |
-          sudo apt update -y
-          sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
+          sudo apt-get update -y
+          sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
       - run: tox -e pdf
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
@@ -75,7 +75,7 @@ jobs:
           extras: doc
           python-version: ${{env.PYTHON_VERSION}}
           specific-packages: ${{ inputs.specific-pip-packages }}
-      - run: sudo apt -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
+      - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch Julia cache
         uses: actions/cache@v3
         with:
