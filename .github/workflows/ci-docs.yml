@@ -63,7 +63,6 @@ jobs:
 
   documentation:
     name: Run notebooks and build documentation
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
