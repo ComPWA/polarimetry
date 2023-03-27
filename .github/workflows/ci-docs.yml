@@ -14,7 +14,8 @@ jobs:
   fast-html:
     if: inputs.specific-pip-packages == ''
     name: Build HTML (fast)
-    container: compwa/polarimetry-fast-html:v1
+    container:
+      image: compwa/polarimetry-fast-html:v1
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -33,7 +34,8 @@ jobs:
   fast-pdf:
     if: inputs.specific-pip-packages == ''
     name: Build PDF (fast)
-    container: compwa/polarimetry-fast-pdf:v1
+    container:
+      image: compwa/polarimetry-fast-pdf:v1
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
