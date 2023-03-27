@@ -40,14 +40,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: ComPWA/actions/pip-install@v1
         with:
-          key: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
-          restore-keys: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
-          path: ~/.cache/pip/
-      - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
+          additional-packages: tox
+          extras: doc
+          python-version: ${{env.PYTHON_VERSION}}
       - run: tox -e pdf
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
@@ -78,14 +75,12 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: ComPWA/actions/pip-install@v1
         with:
-          key: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
-          restore-keys: |
-            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
-          path: ~/.cache/pip/
-      - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
+          additional-packages: tox
+          extras: doc
+          python-version: ${{env.PYTHON_VERSION}}
+          specific-packages: ${{ inputs.specific-pip-packages }}
       - name: Fetch Julia cache
         uses: actions/cache@v3
         with:
