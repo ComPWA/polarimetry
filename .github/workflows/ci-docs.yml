@@ -40,7 +40,9 @@ jobs:
           additional-packages: tox
           extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-      - run: sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
       - run: tox -e pdf
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
