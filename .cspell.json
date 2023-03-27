@@ -51,7 +51,6 @@
   ],
   "ignorePaths": [
     "**/.cspell.json",
-    "**/Dockerfile*",
     "*.bib",
     ".constraints/*.txt",
     ".cspell/*.txt",
