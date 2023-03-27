@@ -33,7 +33,7 @@ jobs:
     if: inputs.specific-pip-packages == ''
     name: Build PDF (fast)
     container:
-      image: ghcr.io/compwa/polarimetry-fast-pdf:sha-dd22a9c
+      image: ghcr.io/compwa/polarimetry-fast-pdf:sha-7e50624
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -69,7 +69,7 @@ jobs:
     name: Run notebooks and build documentation
     runs-on: ubuntu-22.04
     container:
-      image: ghcr.io/compwa/polarimetry-documentation:sha-dd22a9c
+      image: ghcr.io/compwa/polarimetry-documentation:sha-7e50624
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
