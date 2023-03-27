@@ -39,11 +39,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: ComPWA/actions/pip-install@v1
+      - uses: actions/cache@v3
         with:
-          additional-packages: tox
-          extras: doc
-          python-version: ${{env.PYTHON_VERSION}}
+          key: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
+          restore-keys: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
+          path: ~/.cache/pip/
+      - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: tox -e pdf
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
@@ -71,12 +74,14 @@ jobs:
       image: compwa/polarimetry-documentation:v1
     steps:
       - uses: actions/checkout@v3
-      - uses: ComPWA/actions/pip-install@v1
+      - uses: actions/cache@v3
         with:
-          additional-packages: tox
-          extras: doc
-          python-version: ${{env.PYTHON_VERSION}}
-          specific-packages: ${{ inputs.specific-pip-packages }}
+          key: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
+          restore-keys: |
+            pip-doc-${{runner.os}}-py${{env.PYTHON_VERSION}}
+          path: ~/.cache/pip/
+      - run: pip install .[doc] tox -c .constraints/py${{env.PYTHON_VERSION}}.txt
       - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch Julia cache
         uses: actions/cache@v3
