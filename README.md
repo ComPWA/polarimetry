@@ -38,13 +38,13 @@ julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
 To build the documentation, you need to install LaTeX and some additional fonts. In Ubuntu, this can be done with:
 
 ```shell
-sudo apt install -y cm-super dvipng texlive-latex-extra
+sudo apt-get install -y cm-super dvipng texlive-latex-extra
 ```
 
 In addition, for [building the documentation as a single PDF file](#building-the-documentation), you need to install XeTeX:
 
 ```shell
-sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
+sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
 ```
 
 <!-- cspell:ignore xetex -->
