@@ -75,7 +75,9 @@ jobs:
           extras: doc
           python-version: ${{env.PYTHON_VERSION}}
           specific-packages: ${{ inputs.specific-pip-packages }}
-      - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch Julia cache
         uses: actions/cache@v3
         with:

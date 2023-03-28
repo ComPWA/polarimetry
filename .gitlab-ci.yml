@@ -56,7 +56,7 @@ documentation:
     - *sphinx
     - *sympy
   before_script:
-    - apt-get update
+    - apt-get update -y
     - apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
     - python3 -m pip install .[doc] tox -c .constraints/py3.8.txt
     - version=$(sed -n '3p' julia/Manifest.toml)
