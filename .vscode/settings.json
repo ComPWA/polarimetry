@@ -34,6 +34,7 @@
     ".cspell/*.txt": "plaintext"
   },
   "files.eol": "\n",
+  "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
   "julia.NumThreads": "auto",
   "livePreview.defaultPreviewPath": "docs/_build/html",
   "python.analysis.autoImportCompletions": false,
