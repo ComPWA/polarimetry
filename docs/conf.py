@@ -242,8 +242,9 @@ def get_version(package_name: str) -> str:
         constraints = stream.read()
     version_remapping = {
         "ipywidgets": {
-            "8.0.3": "8.0.2",
-            "8.0.4": "8.0.2",
+            "8.0.3": "8.0.5",
+            "8.0.4": "8.0.5",
+            "8.0.6": "8.0.5",
         },
     }
     for line in constraints.split("\n"):
