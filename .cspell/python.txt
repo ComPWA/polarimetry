@@ -3,6 +3,7 @@ abspath
 ampform
 arange
 bbox
+cbar
 cairosvg
 caplog
 classmethod
