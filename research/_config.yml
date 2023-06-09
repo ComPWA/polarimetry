@@ -1,0 +1,11 @@
+title: B-matrix
+author: Remco de Boer, Mikhail Mikhasenko
+execute:
+  execute_notebooks: no
+repository:
+  url: https://github.com/ComPWA/polarimetry
+  path_to_book: research
+  branch: B-matrix
+html:
+  use_issues_button: true
+  use_repository_button: true
