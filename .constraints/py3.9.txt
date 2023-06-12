@@ -22,7 +22,7 @@ beautifulsoup4==4.12.2
 black==23.3.0
 bleach==6.0.0
 cachetools==5.3.1
-cairocffi==1.5.1
+cairocffi==1.6.0
 cairosvg==2.7.0
 certifi==2023.5.7
 cffi==1.15.1
@@ -46,8 +46,8 @@ exceptiongroup==1.1.1
 execnet==1.9.0
 executing==1.2.0
 fastjsonschema==2.17.1
-filelock==3.12.0
-fonttools==4.39.4
+filelock==3.12.1
+fonttools==4.40.0
 fqdn==1.5.1
 greenlet==2.0.2
 hepunits==2.3.2
@@ -123,12 +123,12 @@ packaging==23.1
 pandas==2.0.2
 pandocfilters==1.5.0
 parso==0.8.3
-particle==0.22.0
+particle==0.22.1
 pathspec==0.11.1
 pexpect==4.8.0
 pickleshare==0.7.5
 pillow==9.5.0
-platformdirs==3.5.1
+platformdirs==3.5.3
 plotly==5.15.0
 pluggy==1.0.0
 pre-commit==3.3.2
@@ -146,7 +146,7 @@ pygments==2.15.1
 pyparsing==3.0.9
 pyproject-api==1.5.1
 pyrsistent==0.19.3
-pytest==7.3.1
+pytest==7.3.2
 pytest-xdist==3.3.1
 python-constraint==1.4.0
 python-dateutil==2.8.2
@@ -185,7 +185,7 @@ sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
 sphinxcontrib-svg2pdfconverter==1.2.2
-sqlalchemy==2.0.15
+sqlalchemy==2.0.16
 stack-data==0.6.2
 svgutils==0.3.4
 sympy==1.12
@@ -208,7 +208,7 @@ virtualenv==20.23.0
 wcwidth==0.2.6
 webcolors==1.13
 webencodings==0.5.1
-websocket-client==1.5.2
+websocket-client==1.5.3
 wheel==0.40.0
 widgetsnbextension==4.0.7
 wrapt==1.15.0
