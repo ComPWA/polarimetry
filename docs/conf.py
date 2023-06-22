@@ -241,6 +241,9 @@ def get_version(package_name: str) -> str:
     with open(constraints_path) as stream:
         constraints = stream.read()
     version_remapping = {
+        "ipython": {
+            "8.12.2": "8.12.1",
+        },
         "ipywidgets": {
             "8.0.3": "8.0.5",
             "8.0.4": "8.0.5",
