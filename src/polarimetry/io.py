@@ -47,7 +47,7 @@ _LOGGER = logging.getLogger(__name__)
 def as_latex(obj, **kwargs) -> str:
     """Render objects as a LaTeX `str`.
 
-    The resulting `str` can for instance be given to `IPython.display.Math`.
+    The resulting `str` can for instance be given to `IPython.core.display.Math`.
 
     Optional keywords:
 
