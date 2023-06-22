@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from textwrap import dedent, indent
 
-import requests
+import requests  # pyright: ignore[reportMissingModuleSource]
 from attrs import define, field
 
 if sys.version_info < (3, 8):
