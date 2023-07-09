@@ -41,7 +41,7 @@
   "julia.NumThreads": "auto",
   "livePreview.defaultPreviewPath": "docs/_build/html",
   "python.analysis.autoImportCompletions": false,
-  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.diagnosticMode": "openFilesOnly",
   "python.analysis.inlayHints.pytestParameters": true,
   "python.analysis.typeCheckingMode": "strict",
   "python.formatting.provider": "black",
