@@ -54,6 +54,29 @@ isort = [
 [tool.nbqa.exclude]
 flake8 = "^docs/appendix/benchmark.ipynb"
 
+[tool.pyright]
+include = ["src", "tests"]
+reportGeneralTypeIssues = false
+reportImportCycles = true
+reportMissingParameterType = false
+reportMissingTypeArgument = false
+reportMissingTypeStubs = false
+reportPrivateImportUsage = true
+reportUnknownArgumentType = false
+reportUnknownLambdaType = false
+reportUnknownMemberType = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
+reportUnnecessaryContains = true
+reportUnnecessaryIsInstance = false
+reportUntypedBaseClass = false
+reportUntypedFunctionDecorator = false
+reportUnusedClass = true
+reportUnusedFunction = true
+reportUnusedImport = true
+reportUnusedVariable = true
+typeCheckingMode = "strict"
+
 [tool.pytest.ini_options]
 addopts = [
     "--color=yes",
@@ -68,9 +91,7 @@ filterwarnings = [
     "ignore:.*argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
     "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
-markers = [
-    "slow: marks tests as slow (select with '-m slow')",
-]
+markers = ["slow: marks tests as slow (select with '-m slow')"]
 norecursedirs = [
     ".ipynb_checkpoints",
     "_build",
