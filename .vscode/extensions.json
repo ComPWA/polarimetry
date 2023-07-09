@@ -1,9 +1,10 @@
 {
   "recommendations": [
-    "ExecutableBookProject.myst-highlight",
     "eamodio.gitlens",
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
+    "executablebookproject.myst-highlight",
+    "garaioag.garaio-vscode-unwanted-recommendations",
     "github.vscode-github-actions",
     "github.vscode-pull-request-github",
     "julialang.language-julia",
@@ -20,5 +21,11 @@
     "tamasfe.even-better-toml",
     "tyriar.sort-lines",
     "yzhang.markdown-all-in-one"
+  ],
+  "unwantedRecommendations": [
+    "bungcip.better-toml",
+    "ms-python.flake8",
+    "ms-python.pylint",
+    "travisillig.vscode-json-stable-stringify"
   ]
 }
