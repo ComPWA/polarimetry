@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import sympy as sp
 
-from polarimetry.decay import Particle, ThreeBodyDecayChain
 from polarimetry.dynamics import (
     BlattWeisskopf,
     BreitWignerMinL,
@@ -11,14 +12,18 @@ from polarimetry.dynamics import (
     Q,
 )
 
-from .particle import PARTICLE_TO_ID, K, Σ, p, π
+from .particle import PARTICLE_TO_ID, Σ, K, p, π
+
+if TYPE_CHECKING:
+    from polarimetry.decay import Particle, ThreeBodyDecayChain
 
 
 def formulate_bugg_breit_wigner(
     decay_chain: ThreeBodyDecayChain,
 ) -> tuple[BuggBreitWigner, dict[sp.Symbol, float]]:
     if set(decay_chain.decay_products) != {π, K}:
-        raise ValueError("Bugg Breit-Wigner only defined for K* → Kπ")
+        msg = "Bugg Breit-Wigner only defined for K* → Kπ"
+        raise ValueError(msg)
     s = _get_mandelstam_s(decay_chain)
     m2, m3 = sp.symbols("m2 m3", nonnegative=True)
     gamma = sp.Symbol(Rf"\gamma_{{{decay_chain.resonance.name}}}")
@@ -134,9 +139,8 @@ def _get_mandelstam_s(decay: ThreeBodyDecayChain) -> sp.Symbol:
         return s2
     if decay_masses == {m1, m2}:
         return s3
-    raise NotImplementedError(
-        f"Cannot find Mandelstam variable for {''.join(decay_masses)}"
-    )
+    msg = f"Cannot find Mandelstam variable for {''.join(decay_masses)}"
+    raise NotImplementedError(msg)
 
 
 def _to_mass_symbol(particle: Particle) -> sp.Symbol:

@@ -11,8 +11,7 @@ import re
 import sys
 from copy import deepcopy
 from math import sqrt
-from pathlib import Path
-from typing import Generic, Iterable, Pattern, TypeVar
+from typing import TYPE_CHECKING, Generic, Iterable, Pattern, TypeVar
 
 import attrs
 import numpy as np
@@ -36,7 +35,10 @@ from .dynamics import (
     formulate_exponential_bugg_breit_wigner,
     formulate_flatte_1405,
 )
-from .particle import PARTICLE_TO_ID, K, Λc, Σ, p, π
+from .particle import PARTICLE_TO_ID, Σ, K, Λc, p, π
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal
@@ -81,15 +83,17 @@ def load_model_builder(
 def _find_model_title(model_definitions: dict, model_id: int | str) -> str:
     if isinstance(model_id, int):
         if model_id >= len(model_definitions):
-            raise KeyError(
+            msg = (
                 f"Model definition file contains {len(model_definitions)} models, but"
                 f" trying to get number {model_id}."
             )
+            raise KeyError(msg)
         for i, title in enumerate(model_definitions):
             if i == model_id:
                 return title
     if model_id not in model_definitions:
-        raise KeyError(f'Could not find model with title "{model_id}"')
+        msg = f'Could not find model with title "{model_id}"'
+        raise KeyError(msg)
     return model_id
 
 
@@ -102,7 +106,8 @@ def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
         return formulate_bugg_breit_wigner
     if lineshape in {"Flatte1405", "Flatte1405_LS"}:
         return formulate_flatte_1405
-    raise NotImplementedError(f'No dynamics implemented for lineshape "{lineshape}"')
+    msg = f'No dynamics implemented for lineshape "{lineshape}"'
+    raise NotImplementedError(msg)
 
 
 def load_three_body_decay(
@@ -394,7 +399,8 @@ def _to_value_with_uncertainty(str_value: str) -> MeasuredParameter[float]:
             model=float_values[2],
             systematic=float_values[3],
         )
-    raise ValueError(f"Cannot convert '{str_value}' to {MeasuredParameter.__name__}")
+    msg = f"Cannot convert '{str_value}' to {MeasuredParameter.__name__}"
+    raise ValueError(msg)
 
 
 def _form_complex_parameter(
@@ -459,7 +465,8 @@ def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
         return 1
     if resonance.name.startswith("L"):
         return int(-resonance.parity)
-    raise NotImplementedError(f"No conversion factor implemented for {resonance.name}")
+    msg = f"No conversion factor implemented for {resonance.name}"
+    raise NotImplementedError(msg)
 
 
 def get_conversion_factor_ls(
@@ -510,10 +517,11 @@ def parameter_key_to_symbol(
         else:
             # LS-couplings: supplemental material p.1 (https://cds.cern.ch/record/2824328/files)
             if particle_definitions is None:
-                raise ValueError(
+                msg = (
                     "You need to provide particle definitions in order to map the"
                     " coupling IDs to coupling symbols"
                 )
+                raise ValueError(msg)
             resonance = particle_definitions[str(R)]
             if subsystem_identifier in {"D", "L"}:
                 if coupling_number == 1:
@@ -555,9 +563,8 @@ def parameter_key_to_symbol(
         return sp.Symbol(Rf"\Gamma_{{{R}}}")
     if key == "dLc":
         return sp.Symbol(R"R_{\Lambda_c}")
-    raise NotImplementedError(
-        f'Cannot convert key "{key}" in model parameter JSON file to SymPy symbol'
-    )
+    msg = f'Cannot convert key "{key}" in model parameter JSON file to SymPy symbol'
+    raise NotImplementedError(msg)
 
 
 def _stringify(obj) -> Str:

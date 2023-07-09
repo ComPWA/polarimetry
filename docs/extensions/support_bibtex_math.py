@@ -12,7 +12,7 @@ from __future__ import annotations
 import codecs
 
 import docutils.nodes
-import latexcodec  # pyright:ignore[reportUnusedImport]
+import latexcodec  # pyright:ignore[reportUnusedImport]  # noqa: F401
 from pybtex.markup import LaTeXParser
 from pybtex.richtext import Protected, String, Text
 from pybtex.scanner import Literal, PybtexSyntaxError
@@ -62,14 +62,16 @@ class LaTeXMathParser(LaTeXParser):
                 if remainder:
                     yield String(remainder)
                 if level != 0:
-                    raise PybtexSyntaxError("unbalanced braces", self)
+                    msg = "unbalanced braces"
+                    raise PybtexSyntaxError(msg, self)
                 break
 
             elif token.pattern is self.DOLLAR:
                 if in_math:
                     yield String(token.value[:-1])
                     if level == 0:
-                        raise PybtexSyntaxError("unbalanced math", self)
+                        msg = "unbalanced math"
+                        raise PybtexSyntaxError(msg, self)
                     break
                 else:
                     yield String(token.value[:-1])
@@ -81,5 +83,6 @@ class LaTeXMathParser(LaTeXParser):
             else:
                 yield String(token.value[:-1])
                 if level == 0:
-                    raise PybtexSyntaxError("unbalanced braces", self)
+                    msg = "unbalanced braces"
+                    raise PybtexSyntaxError(msg, self)
                 break

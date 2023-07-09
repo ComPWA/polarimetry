@@ -75,17 +75,19 @@ def execute_pluto_notebooks() -> None:
     if "EXECUTE_PLUTO" not in os.environ:
         return
     if shutil.which("julia") is None:
-        raise ValueError(
+        msg = (
             "Julia is not installed. Please download it at`"
             " https://julialang.org/downloads"
         )
+        raise ValueError(msg)
     result = subprocess.call(
         "julia --project=. ./exportnotebooks.jl",
         cwd="../julia",
         shell=True,
     )
     if result != 0:
-        raise ValueError("Failed to execute pluto notebooks")
+        msg = "Failed to execute pluto notebooks"
+        raise ValueError(msg)
 
 
 def get_execution_mode() -> str:
@@ -112,7 +114,7 @@ def get_link_to_julia_pages() -> str:
 
 def get_nb_remove_code_source():
     if "latex" in sys.argv[2]:
-        print(f"\033[91;1mCell input will not be rendered\033[0m")
+        print("\033[91;1mCell input will not be rendered\033[0m")
         return True
     return False
 
@@ -184,8 +186,8 @@ def generate_api() -> None:
         " ".join(
             [
                 "sphinx-apidoc",
-                f"../src/polarimetry/",
-                f"../src/polarimetry/version.py",
+                "../src/polarimetry/",
+                "../src/polarimetry/version.py",
                 "-o api/",
                 "--force",
                 "--no-toc",
@@ -210,7 +212,7 @@ def get_link_to_single_pdf() -> str:
         :::
         """
         return dedent(src)
-    print(f"\033[91;1mSingle PDF has not yet been built.\033[0m")
+    print("\033[91;1mSingle PDF has not yet been built.\033[0m")
     return ""
 
 
@@ -220,9 +222,8 @@ def get_minor_version(package_name: str) -> str:
         return installed_version
     matches = re.match(r"^([0-9]+\.[0-9]+).*$", installed_version)
     if matches is None:
-        raise ValueError(
-            f"Could not find documentation for {package_name} v{installed_version}"
-        )
+        msg = f"Could not find documentation for {package_name} v{installed_version}"
+        raise ValueError(msg)
     return matches[1]
 
 
@@ -284,7 +285,7 @@ class MissingFileCollector:
     def print(self) -> None:
         if len(self.paths) == 0:
             return
-        print(f"\033[93;1mFollowing files are missing and cannot be embedded:\033[0m")
+        print("\033[93;1mFollowing files are missing and cannot be embedded:\033[0m")
         for path in sorted(self.paths):
             print(f"  \033[93;1m {path} \033[0m")
 
@@ -501,6 +502,7 @@ relink_targets = {
     "Axes": "matplotlib.axes.Axes",
     "DataSample": "tensorwaves.interface.DataSample",
     "Function": "tensorwaves.interface.Function",
+    "LineCollection": "matplotlib.collections.LineCollection",
     "Literal[(-1, 1)]": "typing.Literal",
     "Literal[- 1, 1]": "typing.Literal",
     "Literal[-1, 1]": "typing.Literal",
@@ -513,6 +515,7 @@ relink_targets = {
     "PoolSum": "ampform.sympy.PoolSum",
     "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
     "QuadContourSet": "matplotlib.contour.QuadContourSet",
+    "SympyDataTransformer": "tensorwaves.data.transform.SympyDataTransformer",
     "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
     "implement_doit_method": "ampform.sympy.implement_doit_method",
     "polarimetry.lhcb._T": "typing.TypeVar",

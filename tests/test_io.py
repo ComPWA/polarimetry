@@ -10,7 +10,6 @@ import pytest
 import sympy as sp
 
 from polarimetry import formulate_polarimetry
-from polarimetry.amplitude import DalitzPlotDecompositionBuilder
 from polarimetry.decay import IsobarNode, Particle
 from polarimetry.io import _warn_about_unsafe_hash, as_latex, get_readable_hash
 from polarimetry.lhcb import load_model_builder
@@ -18,6 +17,8 @@ from polarimetry.lhcb.particle import load_particles
 
 if TYPE_CHECKING:
     from _pytest.logging import LogCaptureFixture
+
+    from polarimetry.amplitude import DalitzPlotDecompositionBuilder
 
 THIS_DIR = dirname(abspath(__file__))
 

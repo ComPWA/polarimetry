@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import os
+from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
-from matplotlib.axes import Axes
-from matplotlib.collections import LineCollection, PathCollection
-from matplotlib.contour import QuadContourSet
+
+if TYPE_CHECKING:
+    from matplotlib.axes import Axes
+    from matplotlib.collections import LineCollection, PathCollection
+    from matplotlib.contour import QuadContourSet
 
 
 def add_watermark(
