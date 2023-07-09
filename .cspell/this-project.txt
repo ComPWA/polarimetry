@@ -25,6 +25,7 @@ pdfnb
 phsp
 pushd
 PyPI
+pyproject
 pyright
 pytest
 PYTHONHASHSEED

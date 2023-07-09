@@ -203,4 +203,5 @@ wrapt==1.15.0
 zipp==3.16.0
 
 # The following packages are considered to be unsafe in a requirements file:
+# polarimetry
 # setuptools

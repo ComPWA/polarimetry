@@ -1,9 +1,122 @@
 [build-system]
+build-backend = "setuptools.build_meta"
 requires = [
-    "setuptools>=36.2.1", # environment markers
+    "setuptools>=61.2",
     "setuptools_scm",
     "wheel",
 ]
+
+[project]
+authors = [
+    { name = "Mikhail Mikhasenko" },
+    { name = "Remco de Boer" },
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering",
+    "Typing :: Typed",
+]
+dependencies = [
+    "IPython",
+    "PyYAML",
+    "ampform >=0.14.1",
+    "attrs >=20.1.0",
+    "cloudpickle",
+    "matplotlib",
+    "numpy",
+    "sympy >=1.10",
+    "tensorwaves[jax] >=0.4.5",
+    'typing-extensions; python_version <"3.8.0"',
+]
+description = "Symbolic expressions that describe an aligned polarimeter vector field"
+dynamic = ["version"]
+license = { text = "GPLv3 or later" }
+name = "polarimetry"
+requires-python = ">=3.7"
+
+[project.optional-dependencies]
+dev = [
+    "polarimetry[doc]",
+    "polarimetry[jupyter]",
+    "polarimetry[sty]",
+    "polarimetry[test]",
+    "sphinx-autobuild",
+    "tox >=1.9",
+]
+doc = [
+    "cairosvg",
+    "ipympl",
+    "ipywidgets",
+    "kaleido",
+    "matplotlib-inline !=0.1.5",
+    "myst-nb >=0.14",
+    "pandas",
+    "plotly",
+    "psutil",
+    "scipy",
+    "sphinx-book-theme",
+    "sphinx-codeautolink[ipython]",
+    "sphinx-copybutton",
+    "sphinx-design",
+    "sphinx-reredirects",
+    "sphinx-togglebutton",
+    "sphinxcontrib-bibtex >=2.2",
+    "sphinxcontrib-svg2pdfconverter",
+    "svgutils",
+    "tqdm",
+    'importlib-metadata; python_version <"3.8.0"',
+]
+jupyter = [
+    "jupyterlab >=3.0",
+    "jupyterlab-code-formatter",
+    "jupyterlab-myst",
+    "polarimetry[doc]",
+    'ypy-websocket <0.8.3; python_version <"3.8.0"',
+]
+sty = [
+    "black",
+    "pre-commit >=1.4.0",
+    "pytest",
+    "ruff",
+]
+test = [
+    "nbmake",
+    "pytest >=6.0",
+    "pytest-xdist",
+    'nbmake <1.3; python_version<"3.8.0"',
+]
+
+[project.readme]
+content-type = "text/markdown"
+file = "README.md"
+
+[tool.setuptools]
+include-package-data = false
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+namespaces = false
+where = ["src"]
+
+[tool.setuptools.package-data]
+"polarimetry.lhcb" = [
+    "model-definitions.yaml",
+    "particle-definitions.yaml",
+]
+
 
 [tool.setuptools_scm]
 write_to = "src/polarimetry/version.py"
