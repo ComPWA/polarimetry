@@ -30,6 +30,9 @@
   "cSpell.enabled": true,
   "editor.formatOnSave": true,
   "editor.rulers": [88],
+  "editor.unicodeHighlight.allowedCharacters": {
+    "σ": true
+  },
   "files.associations": {
     ".cspell/*.txt": "plaintext"
   },
