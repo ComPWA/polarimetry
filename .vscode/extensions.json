@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "charliermarsh.ruff",
     "eamodio.gitlens",
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
@@ -24,6 +25,7 @@
   "unwantedRecommendations": [
     "bungcip.better-toml",
     "ms-python.flake8",
+    "ms-python.isort",
     "ms-python.pylint",
     "ms-vscode.cpptools",
     "travisillig.vscode-json-stable-stringify"
