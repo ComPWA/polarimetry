@@ -50,7 +50,7 @@ class Math(Protected):
 class LaTeXMathParser(LaTeXParser):
     DOLLAR = Literal("$")
 
-    def iter_string_parts(self, level=0, in_math=False):
+    def iter_string_parts(self, level=0, in_math=False):  # noqa: C901, PLR0912
         while True:
             if in_math:
                 token = self.skip_to([self.DOLLAR])

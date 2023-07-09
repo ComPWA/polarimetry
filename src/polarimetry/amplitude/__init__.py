@@ -146,8 +146,8 @@ class DalitzPlotDecompositionBuilder:
             else:
                 production_isobar = chain.decay
                 resonance_isobar = chain.decay.child1
-                assert production_isobar.interaction is not None
-                assert resonance_isobar.interaction is not None
+                assert production_isobar.interaction is not None  # noqa: S101
+                assert resonance_isobar.interaction is not None  # noqa: S101
                 sub_amp_expr *= H_prod[
                     R,
                     production_isobar.interaction.L,
@@ -288,7 +288,7 @@ class DynamicsBuilder(Protocol):
 def simplify_latex_rendering() -> None:
     """Improve LaTeX rendering of an `~sympy.tensor.indexed.Indexed` object."""
 
-    def _print_Indexed_latex(self, printer, *args):
+    def _print_Indexed_latex(self, printer, *args):  # noqa: N802
         base = printer._print(self.base)
         indices = ", ".join(map(printer._print, self.indices))
         return f"{base}_{{{indices}}}"

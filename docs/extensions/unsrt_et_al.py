@@ -63,11 +63,11 @@ class UnsrtEtAl(UnsrtStyle):
 @node
 def names(children, context, role, **kwargs):
     """Return formatted names."""
-    assert not children
+    assert not children  # noqa: S101
     try:
         persons = context["entry"].persons[role]
     except KeyError:
-        raise FieldIsMissing(role, context["entry"])
+        raise FieldIsMissing(role, context["entry"]) from None
 
     style: UnsrtStyle = context["style"]
     formatted_names = [

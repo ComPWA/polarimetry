@@ -19,7 +19,7 @@ def add_watermark(
     fontsize: int | None = None,
     **kwargs,
 ) -> None:
-    text = "LHCb\n" R"$1.7\mathrm{~fb}^{-1}$"
+    text = "LHCb\n" + R"$1.7\mathrm{~fb}^{-1}$"
     ax.text(x, y, text, size=fontsize, transform=ax.transAxes, **kwargs)
 
 

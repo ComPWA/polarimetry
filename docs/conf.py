@@ -81,9 +81,9 @@ def execute_pluto_notebooks() -> None:
         )
         raise ValueError(msg)
     result = subprocess.call(
-        "julia --project=. ./exportnotebooks.jl",
+        "julia --project=. ./exportnotebooks.jl",  # noqa: S607
         cwd="../julia",
-        shell=True,
+        shell=True,  # noqa: S602
     )
     if result != 0:
         msg = "Failed to execute pluto notebooks"
@@ -195,7 +195,7 @@ def generate_api() -> None:
                 "--templatedir _templates",
             ]
         ),
-        shell=True,
+        shell=True,  # noqa: S602
     )
 
 
@@ -229,7 +229,7 @@ def get_minor_version(package_name: str) -> str:
 
 def get_scipy_url() -> str:
     url = f"https://docs.scipy.org/doc/scipy-{get_version('scipy')}/"
-    r = requests.get(url)
+    r = requests.get(url)  # noqa: S113
     if r.status_code != 200:
         return "https://docs.scipy.org/doc/scipy"
     return url

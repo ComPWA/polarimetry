@@ -476,11 +476,11 @@ def get_conversion_factor_ls(
     if resonance.name.startswith("K") and resonance.spin == 0:
         return 1
     half = sp.Rational(1, 2)
-    CG_flip_factor = int((-1) ** (L + S - half))
-    return get_conversion_factor(resonance) * CG_flip_factor
+    cg_flip_factor = int((-1) ** (L + S - half))
+    return get_conversion_factor(resonance) * cg_flip_factor
 
 
-def parameter_key_to_symbol(
+def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
     key: str,
     min_ls: bool = True,
     particle_definitions: dict[str, Particle] | None = None,
