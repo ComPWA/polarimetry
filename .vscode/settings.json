@@ -30,6 +30,9 @@
   "cSpell.enabled": true,
   "editor.formatOnSave": true,
   "editor.rulers": [88],
+  "editor.unicodeHighlight.allowedCharacters": {
+    "σ": true
+  },
   "files.associations": {
     ".cspell/*.txt": "plaintext"
   },
@@ -38,7 +41,7 @@
   "julia.NumThreads": "auto",
   "livePreview.defaultPreviewPath": "docs/_build/html",
   "python.analysis.autoImportCompletions": false,
-  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.diagnosticMode": "openFilesOnly",
   "python.analysis.inlayHints.pytestParameters": true,
   "python.analysis.typeCheckingMode": "strict",
   "python.formatting.provider": "black",
@@ -47,6 +50,8 @@
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
   "rewrap.wrappingColumn": 88,
+  "ruff.enable": true,
+  "ruff.organizeImports": true,
   "yaml.schemas": {
     "https://json.schemastore.org/github-workflow.json": "./.github/workflows/requirements.yml"
   }

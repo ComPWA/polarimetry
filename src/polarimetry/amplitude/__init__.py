@@ -146,8 +146,8 @@ class DalitzPlotDecompositionBuilder:
             else:
                 production_isobar = chain.decay
                 resonance_isobar = chain.decay.child1
-                assert production_isobar.interaction is not None
-                assert resonance_isobar.interaction is not None
+                assert production_isobar.interaction is not None  # noqa: S101
+                assert resonance_isobar.interaction is not None  # noqa: S101
                 sub_amp_expr *= H_prod[
                     R,
                     production_isobar.interaction.L,
@@ -265,15 +265,13 @@ class DynamicsConfigurator:
         if isinstance(identifier, ThreeBodyDecayChain):
             chain = identifier
             if chain not in set(self.__decay.chains):
-                raise ValueError(
-                    f"Decay does not have chain with resonance {chain.resonance.name}"
-                )
+                msg = f"Decay does not have chain with resonance {chain.resonance.name}"
+                raise ValueError(msg)
             return chain
         if isinstance(identifier, str):
             return self.__decay.find_chain(identifier)
-        raise NotImplementedError(
-            f"Cannot get decay chain for identifier type {type(identifier)}"
-        )
+        msg = f"Cannot get decay chain for identifier type {type(identifier)}"
+        raise NotImplementedError(msg)
 
     @property
     def decay(self) -> ThreeBodyDecay:
@@ -290,7 +288,7 @@ class DynamicsBuilder(Protocol):
 def simplify_latex_rendering() -> None:
     """Improve LaTeX rendering of an `~sympy.tensor.indexed.Indexed` object."""
 
-    def _print_Indexed_latex(self, printer, *args):
+    def _print_Indexed_latex(self, printer, *args):  # noqa: N802
         base = printer._print(self.base)
         indices = ", ".join(map(printer._print, self.indices))
         return f"{base}_{{{indices}}}"
@@ -304,9 +302,8 @@ def _formulate_clebsch_gordan_factor(
     child2_helicity: sp.Rational | sp.Symbol,
 ) -> sp.Expr:
     if isobar.interaction is None:
-        raise ValueError(
-            "Cannot formulate amplitude model in LS-basis if LS-couplings are missing"
-        )
+        msg = "Cannot formulate amplitude model in LS-basis if LS-couplings are missing"
+        raise ValueError(msg)
     # https://github.com/ComPWA/ampform/blob/65b4efa/src/ampform/helicity/__init__.py#L785-L802
     # and supplementary material p.1 (https://cds.cern.ch/record/2824328/files)
     cg_ss = CG(

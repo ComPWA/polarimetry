@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from typing import TYPE_CHECKING
 
 import sympy as sp
 from ampform.sympy import PoolSum
@@ -8,7 +9,8 @@ from sympy.physics.matrices import msigma
 
 from polarimetry.spin import create_spin_range
 
-from .amplitude import DalitzPlotDecompositionBuilder
+if TYPE_CHECKING:
+    from .amplitude import DalitzPlotDecompositionBuilder
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal
@@ -21,10 +23,11 @@ def formulate_polarimetry(
 ) -> tuple[PoolSum, PoolSum, PoolSum]:
     half = sp.Rational(1, 2)
     if builder.decay.initial_state.spin != half:
-        raise ValueError(
+        msg = (
             "Can only formulate polarimetry for an initial state with spin 1/2, but"
             f" got {builder.decay.initial_state.spin}"
         )
+        raise ValueError(msg)
     model = builder.formulate(reference_subsystem)
     λ0, λ0_prime = sp.symbols(R"lambda \lambda^{\prime}", rational=True)
     λ = {
