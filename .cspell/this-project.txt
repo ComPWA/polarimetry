@@ -10,6 +10,7 @@ dvipng
 heli
 ifhyphenaverage
 inkscape
+JHEP
 latexmk
 LATEXMKOPTS
 LATEXOPTS
