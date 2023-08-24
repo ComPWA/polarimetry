@@ -6,8 +6,8 @@ abstract: |-
   The polarimeter vector field for multibody decays of a spin-half baryon is introduced as a generalisation of the baryon asymmetry parameters. Using a recent amplitude analysis of the (Lambda^+_mathrm{c} o p K^- pi^+) decay performed at the LHCb experiment, we compute the distribution of the kinematic-dependent polarimeter vector for this process in the space of Mandelstam variables to express the polarised decay rate in a model-agnostic form. The obtained representation can facilitate polarisation measurements of the \\(\Lambda^+_\mathrm{c}\\) baryon and eases inclusion of the \\(\Lambda^+_\mathrm{c} \to p K^- \pi^+\\) decay mode in hadronic amplitude analyses.
 
 authors:
-  - family-names: Boer
-    given-names: Remco E. de
+  - family-names: de Boer
+    given-names: Remco E.
     affiliation: Ruhr University Bochum
     orcid: https://orcid.org/0000-0001-5846-2206
   - family-names: Mikhasenko
