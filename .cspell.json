@@ -54,6 +54,7 @@
     ".prettierignore",
     ".vscode/*",
     ".zenodo.json",
+    "CITATION.cff",
     "LICENSE",
     "Makefile",
     "Manifest.toml",
