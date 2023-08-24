@@ -37,7 +37,7 @@ repos:
       - id: black
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v6.31.0
+    rev: v7.0.1
     hooks:
       - id: cspell
 
@@ -75,30 +75,30 @@ repos:
             metadata.vscode
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0
+    rev: v3.0.2
     hooks:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.316
+    rev: v1.1.324
     hooks:
       - id: pyright
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.9.0
+    rev: v3.10.1
     hooks:
       - id: pyupgrade
         args:
           - --py37-plus
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.277
+    rev: v0.0.285
     hooks:
       - id: ruff
         args:
           - --fix
 
   - repo: https://github.com/ComPWA/mirrors-taplo
-    rev: v0.8.0
+    rev: v0.8.1
     hooks:
       - id: taplo
