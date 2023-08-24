@@ -480,7 +480,7 @@ def get_conversion_factor_ls(
     return get_conversion_factor(resonance) * cg_flip_factor
 
 
-def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
+def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912, PLR0915
     key: str,
     min_ls: bool = True,
     particle_definitions: dict[str, Particle] | None = None,
