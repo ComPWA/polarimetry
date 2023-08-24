@@ -29,4 +29,5 @@ keywords:
   - polarization
 license: GPL-3.0-or-later
 repository-code: https://github.com/ComPWA/polarimetry
+type: software
 url: https://lc2pkpi-polarimetry.docs.cern.ch
