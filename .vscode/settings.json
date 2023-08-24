@@ -53,6 +53,7 @@
   "ruff.enable": true,
   "ruff.organizeImports": true,
   "yaml.schemas": {
+    "https://citation-file-format.github.io/1.2.0/schema.json": "CITATION.cff",
     "https://json.schemastore.org/github-workflow.json": "./.github/workflows/requirements.yml"
   }
 }
