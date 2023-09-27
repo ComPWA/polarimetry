@@ -281,8 +281,7 @@ class DynamicsConfigurator:
 class DynamicsBuilder(Protocol):
     def __call__(
         self, decay_chain: ThreeBodyDecayChain
-    ) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
-        ...
+    ) -> tuple[sp.Expr, dict[sp.Symbol, float]]: ...
 
 
 def simplify_latex_rendering() -> None:
