@@ -41,6 +41,9 @@ repos:
     rev: 23.9.1
     hooks:
       - id: black
+      - id: black-jupyter
+        args: [--line-length=85]
+        types_or: [jupyter]
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.27.0
@@ -63,7 +66,6 @@ repos:
   - repo: https://github.com/nbQA-dev/nbQA
     rev: 1.7.0
     hooks:
-      - id: nbqa-black
       - id: nbqa-pyupgrade
         args:
           - --py37-plus
