@@ -94,6 +94,7 @@
   "version": "0.2",
   "ignoreWords": [
     "Sigmapi",
+    "Colab",
     "avrgd",
     "ccrcr",
     "cmin",
