@@ -33,9 +33,30 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ComPWA/repo-maintenance
-    rev: 0.1.0rc4
+    rev: 0.1.0rc5
     hooks:
+      - id: check-dev-files
+        args:
+          - --ignore-author
+          - --no-cspell-update
+          - --no-github-actions
+          - --no-gitpod
+          - --no-prettierrc
+          - --no-pypi
+          - --no-ruff
+          - --no-version-branches
+          - --repo-name=polarimetry
       - id: colab-toc-visible
+
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.7.0
+    hooks:
+      - id: nbqa-pyupgrade
+        args:
+          - --py37-plus
+      - id: nbqa-ruff
+        args:
+          - --fix
 
   - repo: https://github.com/psf/black
     rev: 23.9.1
@@ -63,15 +84,16 @@ repos:
     hooks:
       - id: cspell
 
-  - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.7.0
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: 2.7.2
     hooks:
-      - id: nbqa-pyupgrade
-        args:
-          - --py37-plus
-      - id: nbqa-ruff
-        args:
-          - --fix
+      - id: editorconfig-checker
+        name: editorconfig
+        alias: ec
+        exclude: >-
+          (?x)^(
+            .*\.py
+          )$
 
   - repo: https://github.com/kynan/nbstripout
     rev: 0.6.1
@@ -80,8 +102,11 @@ repos:
         args:
           - --extra-keys
           - |
+            cell.attachments
             cell.metadata.code_folding
             cell.metadata.id
+            cell.metadata.pycharm
+            cell.metadata.user_expressions
             metadata.celltoolbar
             metadata.colab.name
             metadata.colab.provenance
@@ -123,3 +148,10 @@ repos:
     rev: v0.8.1
     hooks:
       - id: taplo
+
+  - repo: https://github.com/pappasam/toml-sort
+    rev: v0.23.1
+    hooks:
+      - id: toml-sort
+        args:
+          - --in-place

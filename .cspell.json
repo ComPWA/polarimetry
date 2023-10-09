@@ -55,16 +55,16 @@
     ".vscode/*",
     ".zenodo.json",
     "CITATION.cff",
-    "LICENSE",
-    "Makefile",
-    "Manifest.toml",
-    "Project.toml",
     "conf.py",
     "data/**.json",
     "data/**.yaml",
     "docs/_templates/*",
     "julia/**",
+    "LICENSE",
+    "Makefile",
+    "Manifest.toml",
     "miscellchecks/**.C",
+    "Project.toml",
     "pyproject.toml",
     "pytest.ini",
     "tox.ini"
@@ -73,14 +73,14 @@
   "overrides": [
     {
       "allowCompoundWords": true,
-      "dictionaries": ["julia", "latex"],
-      "filename": "**/*.jl",
-      "languageId": "julia"
+      "dictionaries": ["julia", "latex", "python"],
+      "filename": "**/*.ipynb"
     },
     {
       "allowCompoundWords": true,
-      "dictionaries": ["julia", "latex", "python"],
-      "filename": "**/*.ipynb"
+      "dictionaries": ["julia", "latex"],
+      "filename": "**/*.jl",
+      "languageId": "julia"
     },
     {
       "dictionaries": ["latex", "python"],
@@ -93,8 +93,8 @@
   ],
   "version": "0.2",
   "ignoreWords": [
-    "Sigmapi",
     "Colab",
+    "Sigmapi",
     "avrgd",
     "ccrcr",
     "cmin",

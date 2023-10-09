@@ -8,8 +8,8 @@ requires = [
 
 [project]
 authors = [
-    { name = "Mikhail Mikhasenko" },
-    { name = "Remco de Boer" },
+    {name = "Mikhail Mikhasenko"},
+    {name = "Remco de Boer"},
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -43,7 +43,7 @@ dependencies = [
 ]
 description = "Symbolic expressions that describe an aligned polarimeter vector field"
 dynamic = ["version"]
-license = { text = "GPLv3 or later" }
+license = {text = "GPLv3 or later"}
 name = "polarimetry"
 requires-python = ">=3.7"
 
@@ -105,11 +105,7 @@ file = "README.md"
 
 [tool.setuptools]
 include-package-data = false
-package-dir = { "" = "src" }
-
-[tool.setuptools.packages.find]
-namespaces = false
-where = ["src"]
+package-dir = {"" = "src"}
 
 [tool.setuptools.package-data]
 "polarimetry.lhcb" = [
@@ -117,6 +113,9 @@ where = ["src"]
     "particle-definitions.yaml",
 ]
 
+[tool.setuptools.packages.find]
+namespaces = false
+where = ["src"]
 
 [tool.setuptools_scm]
 write_to = "src/polarimetry/version.py"
@@ -243,8 +242,8 @@ extend-select = [
     "YTT",
 ]
 ignore = [
-    "E501",    # line length handled by black
-    "ISC003",  # allow concatenate \n strings
+    "E501", # line length handled by black
+    "ISC003", # allow concatenate \n strings
     "PLR0913", # sympy classes and functions
     "PLR2004",
     "PLW2901",
@@ -302,3 +301,17 @@ ignore-names = [
     "PLR2004",
     "S101",
 ]
+
+[tool.tomlsort]
+all = false
+ignore_case = true
+in_place = true
+sort_first = [
+    "build-system",
+    "project",
+    "tool.setuptools",
+    "tool.setuptools_scm",
+]
+sort_table_keys = true
+spaces_indent_inline_array = 4
+trailing_comma_inline_array = true
