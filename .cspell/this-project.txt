@@ -10,6 +10,7 @@ dvipng
 heli
 ifhyphenaverage
 inkscape
+JHEP
 latexmk
 LATEXMKOPTS
 LATEXOPTS
@@ -25,6 +26,7 @@ pdfnb
 phsp
 pushd
 PyPI
+pyproject
 pyright
 pytest
 PYTHONHASHSEED

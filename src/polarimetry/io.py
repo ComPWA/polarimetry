@@ -26,18 +26,21 @@ from collections import abc
 from functools import lru_cache, singledispatch
 from os.path import abspath, dirname, expanduser
 from textwrap import dedent
-from typing import Iterable, Mapping, Sequence
+from typing import TYPE_CHECKING, Iterable, Mapping, Sequence
 
 import cloudpickle
+import jax
 import jax.numpy as jnp
 import sympy as sp
-from ampform.sympy import UnevaluatedExpression
 from IPython.core.display import Math
 from IPython.display import display
 from tensorwaves.function.sympy import create_function, create_parametrized_function
-from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
 
 from polarimetry.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
+
+if TYPE_CHECKING:
+    from ampform.sympy import UnevaluatedExpression
+    from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,7 +49,7 @@ _LOGGER = logging.getLogger(__name__)
 def as_latex(obj, **kwargs) -> str:
     """Render objects as a LaTeX `str`.
 
-    The resulting `str` can for instance be given to `IPython.display.Math`.
+    The resulting `str` can for instance be given to `IPython.core.display.Math`.
 
     Optional keywords:
 
@@ -78,7 +81,8 @@ def _(obj: sp.Basic, **kwargs) -> str:
 @as_latex.register(abc.Mapping)
 def _(obj: Mapping, **kwargs) -> str:
     if len(obj) == 0:
-        raise ValueError("Need at least one dictionary item")
+        msg = "Need at least one dictionary item"
+        raise ValueError(msg)
     latex = R"\begin{array}{rcl}" + "\n"
     for lhs, rhs in obj.items():
         latex += Rf"  {as_latex(lhs, **kwargs)} &=& {as_latex(rhs, **kwargs)} \\" + "\n"
@@ -90,7 +94,8 @@ def _(obj: Mapping, **kwargs) -> str:
 def _(obj: Iterable, **kwargs) -> str:
     obj = list(obj)
     if len(obj) == 0:
-        raise ValueError("Need at least one item to render as LaTeX")
+        msg = "Need at least one item to render as LaTeX"
+        raise ValueError(msg)
     latex = R"\begin{array}{c}" + "\n"
     for item in obj:
         item_latex = as_latex(item, **kwargs)
@@ -151,19 +156,22 @@ def as_markdown_table(obj: Sequence) -> str:
         return _as_decay_markdown_table(obj.chains)
     if item_type is ThreeBodyDecayChain:
         return _as_decay_markdown_table(obj)
-    raise NotImplementedError(
+    msg = (
         f"Cannot render a sequence with {item_type.__name__} items as a Markdown table"
     )
+    raise NotImplementedError(msg)
 
 
 def _determine_item_type(obj) -> type:
     if not isinstance(obj, abc.Sequence):
         return type(obj)
     if len(obj) < 1:
-        raise ValueError(f"Need at least one entry to render a table")
+        msg = "Need at least one entry to render a table"
+        raise ValueError(msg)
     item_type = type(obj[0])
-    if not all(map(lambda i: isinstance(i, item_type), obj)):
-        raise ValueError(f"Not all items are of type {item_type.__name__}")
+    if not all(isinstance(i, item_type) for i in obj):
+        msg = f"Not all items are of type {item_type.__name__}"
+        raise ValueError(msg)
     return item_type
 
 
@@ -201,7 +209,7 @@ def _as_decay_markdown_table(decay_chains: Sequence[ThreeBodyDecayChain]) -> str
     for chain in decay_chains:
         child1, child2 = map(as_latex, chain.decay_products)
         row_items = [
-            Rf"${chain.resonance.latex} \to" Rf" {child1} {child2}$",
+            Rf"${chain.resonance.latex} \to {child1} {child2}$",
             Rf"${as_latex(chain.resonance, only_jp=True)}$",
             f"{int(1e3 * chain.resonance.mass):,.0f}",
             f"{int(1e3 * chain.resonance.width):,.0f}",
@@ -219,8 +227,7 @@ def _create_markdown_table_header(column_names: list[str]):
 
 
 def _create_markdown_table_row(items: Iterable):
-    items = map(lambda i: f"{i}", items)
-    return "| " + " | ".join(items) + " |\n"
+    return "| " + " | ".join(f"{i}" for i in items) + " |\n"
 
 
 def display_latex(obj) -> None:
@@ -387,23 +394,26 @@ def mute_jax_warnings() -> None:
 
 
 def export_polarimetry_field(
-    sigma1: jnp.ndarray,
-    sigma2: jnp.ndarray,
-    alpha_x: jnp.ndarray,
-    alpha_y: jnp.ndarray,
-    alpha_z: jnp.ndarray,
-    intensity: jnp.ndarray,
+    sigma1: jax.Array,
+    sigma2: jax.Array,
+    alpha_x: jax.Array,
+    alpha_y: jax.Array,
+    alpha_z: jax.Array,
+    intensity: jax.Array,
     filename: str,
     metadata: dict | None = None,
 ) -> None:
     if len(sigma1.shape) != 1:
-        raise ValueError(f"sigma1 must be a 1D array, got {sigma1.shape}")
+        msg = f"sigma1 must be a 1D array, got {sigma1.shape}"
+        raise ValueError(msg)
     if len(sigma2.shape) != 1:
-        raise ValueError(f"sigma2 must be a 1D array, got {sigma2.shape}")
+        msg = f"sigma2 must be a 1D array, got {sigma2.shape}"
+        raise ValueError(msg)
     expected_shape: tuple[int, int] = (*sigma1.shape, *sigma2.shape)
     for array in [alpha_x, alpha_y, alpha_z, intensity]:
         if array.shape != expected_shape:
-            raise ValueError(f"Expected shape {expected_shape}, got {array.shape}")
+            msg = f"Expected shape {expected_shape}, got {array.shape}"
+            raise ValueError(msg)
     json_data = {
         "m^2_Kpi": sigma1.tolist(),
         "m^2_pK": sigma2.tolist(),
@@ -421,7 +431,7 @@ def export_polarimetry_field(
         json.dump(json_data, f, separators=(",", ":"))
 
 
-def import_polarimetry_field(filename: str, steps: int = 1) -> dict[str, jnp.ndarray]:
+def import_polarimetry_field(filename: str, steps: int = 1) -> dict[str, jax.Array]:
     with open(filename) as f:
         json_data: dict = json.load(f)
     return {

@@ -1,23 +1,36 @@
 {
   "recommendations": [
-    "ExecutableBookProject.myst-highlight",
-    "bungcip.better-toml",
+    "charliermarsh.ruff",
     "eamodio.gitlens",
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
+    "executablebookproject.myst-highlight",
+    "garaioag.garaio-vscode-unwanted-recommendations",
+    "github.vscode-github-actions",
     "github.vscode-pull-request-github",
     "julialang.language-julia",
+    "ms-python.black-formatter",
     "ms-python.python",
     "ms-python.vscode-pylance",
     "ms-toolsai.vscode-jupyter-cell-tags",
-    "ms-vscode.cpptools",
+    "ms-vscode.live-server",
     "ms-vsliveshare.vsliveshare",
     "oijaz.unicode-latex",
     "redhat.vscode-yaml",
     "stkb.rewrap",
     "streetsidesoftware.code-spell-checker",
-    "travisillig.vscode-json-stable-stringify",
+    "tamasfe.even-better-toml",
     "tyriar.sort-lines",
     "yzhang.markdown-all-in-one"
+  ],
+  "unwantedRecommendations": [
+    "bungcip.better-toml",
+    "davidanson.vscode-markdownlint",
+    "ms-python.flake8",
+    "ms-python.isort",
+    "ms-python.mypy-type-checker",
+    "ms-python.pylint",
+    "ms-vscode.cpptools",
+    "travisillig.vscode-json-stable-stringify"
   ]
 }

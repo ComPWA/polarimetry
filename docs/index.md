@@ -15,7 +15,7 @@ myst:
 <!-- cspell:disable -->
 
 :::{card} $\Lambda^+_\mathrm{c}$ polarimetry using the dominant hadronic mode
-:link: https://arxiv.org/abs/2301.07010
+:link: https://doi.org/10.1007/JHEP07(2023)228
 
 The polarimeter vector field for multibody decays of a spin-half baryon is introduced as a generalisation of the baryon asymmetry parameters. Using a recent amplitude analysis of the $\Lambda^+_\mathrm{c} \to p K^- \pi^+$ decay performed at the LHCb experiment, we compute the distribution of the kinematic-dependent polarimeter vector for this process in the space of Mandelstam variables to express the polarised decay rate in a model-agnostic form. The obtained representation can facilitate polarisation measurements of the $\Lambda^+_\mathrm{c}$ baryon and eases inclusion of the $\Lambda^+_\mathrm{c} \to p K^- \pi^+$ decay mode in hadronic amplitude analyses.
 
@@ -62,6 +62,8 @@ Learn how to determine the polarization vector using the polarimeter field.
 
 This website shows all analysis results that led to the publication of [LHCb-PAPER-2022-044](https://cds.cern.ch/record/2838694). More information on this publication can be found on the following pages:
 
+- Publication on JHEP: [J. High Energ. Phys. 2023, 228 (2023)](<https://doi.org/10.1007/JHEP07(2023)228>)
+  <!-- cspell:ignore Energ -->
 - Publication on arXiv: [arXiv:2301.07010](https://arxiv.org/abs/2301.07010)
 - Record on CDS: [cds.cern.ch/record/2838694](https://cds.cern.ch/record/2838694)
 - Record for the source code on Zenodo: [10.5281/zenodo.7544989](https://doi.org/10.5281/zenodo.7544989)
@@ -117,6 +119,7 @@ API <api/polarimetry>
 caption: External links
 hidden:
 ---
+JHEP <https://doi.org/10.1007/JHEP07(2023)228>
 arXiv:2301.07010 <https://arxiv.org/abs/2301.07010>
 ComPWA <https://compwa-org.readthedocs.io>
 GitHub repository <https://github.com/ComPWA/polarimetry>

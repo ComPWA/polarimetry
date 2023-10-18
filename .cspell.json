@@ -1,9 +1,6 @@
 {
   "allowCompoundWords": false,
-  "dictionaries": [
-    "physics",
-    "this-project"
-  ],
+  "dictionaries": ["physics", "this-project"],
   "dictionaryDefinitions": [
     {
       "addWords": true,
@@ -31,9 +28,7 @@
       "path": "./.cspell/this-project.txt"
     }
   ],
-  "enableFiletypes": [
-    "julia"
-  ],
+  "enableFiletypes": ["julia"],
   "flagWords": [
     "analyse",
     "colour",
@@ -59,58 +54,46 @@
     ".prettierignore",
     ".vscode/*",
     ".zenodo.json",
-    "LICENSE",
-    "Makefile",
-    "Manifest.toml",
-    "Project.toml",
+    "CITATION.cff",
     "conf.py",
     "data/**.json",
     "data/**.yaml",
     "docs/_templates/*",
     "julia/**",
+    "LICENSE",
+    "Makefile",
+    "Manifest.toml",
     "miscellchecks/**.C",
+    "Project.toml",
     "pyproject.toml",
     "pytest.ini",
-    "setup.cfg",
     "tox.ini"
   ],
   "language": "en-US",
   "overrides": [
     {
       "allowCompoundWords": true,
-      "dictionaries": [
-        "julia",
-        "latex"
-      ],
+      "dictionaries": ["julia", "latex", "python"],
+      "filename": "**/*.ipynb"
+    },
+    {
+      "allowCompoundWords": true,
+      "dictionaries": ["julia", "latex"],
       "filename": "**/*.jl",
       "languageId": "julia"
     },
     {
-      "allowCompoundWords": true,
-      "dictionaries": [
-        "julia",
-        "latex",
-        "python"
-      ],
-      "filename": "**/*.ipynb"
-    },
-    {
-      "dictionaries": [
-        "latex",
-        "python"
-      ],
+      "dictionaries": ["latex", "python"],
       "filename": "**/*.py"
     },
     {
-      "dictionaries": [
-        "latex",
-        "python"
-      ],
+      "dictionaries": ["latex", "python"],
       "filename": "**/*.pyi"
     }
   ],
   "version": "0.2",
   "ignoreWords": [
+    "Colab",
     "Sigmapi",
     "avrgd",
     "ccrcr",

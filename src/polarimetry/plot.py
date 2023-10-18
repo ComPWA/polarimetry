@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import os
+from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
-from matplotlib.axes import Axes
-from matplotlib.collections import LineCollection, PathCollection
-from matplotlib.contour import QuadContourSet
+
+if TYPE_CHECKING:
+    from matplotlib.axes import Axes
+    from matplotlib.collections import LineCollection, PathCollection
+    from matplotlib.contour import QuadContourSet
 
 
 def add_watermark(
@@ -16,7 +19,7 @@ def add_watermark(
     fontsize: int | None = None,
     **kwargs,
 ) -> None:
-    text = "LHCb\n" R"$1.7\mathrm{~fb}^{-1}$"
+    text = "LHCb\n" + R"$1.7\mathrm{~fb}^{-1}$"
     ax.text(x, y, text, size=fontsize, transform=ax.transAxes, **kwargs)
 
 

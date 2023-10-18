@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Pattern
+from typing import TYPE_CHECKING, Pattern
 
 import jax.numpy as jnp
-from tensorwaves.interface import DataSample, ParametrizedFunction
+
+if TYPE_CHECKING:
+    from tensorwaves.interface import DataSample, ParametrizedFunction
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -3,7 +3,7 @@ channels:
   - defaults
 dependencies:
   - python==3.8.*
-  - pip
+  - pip>=21.3 # pyproject.toml
   - pip:
       - |
         -c .constraints/py3.8.txt

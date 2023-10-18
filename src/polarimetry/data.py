@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from typing import TYPE_CHECKING
 
 import jax.numpy as jnp
 import sympy as sp
@@ -8,12 +9,14 @@ from ampform.kinematics.phasespace import compute_third_mandelstam, is_within_ph
 from tensorwaves.data import IntensityDistributionGenerator, NumpyDomainGenerator
 from tensorwaves.data.rng import NumpyUniformRNG
 from tensorwaves.data.transform import SympyDataTransformer
-from tensorwaves.function import PositionalArgumentFunction
 from tensorwaves.function.sympy import create_function
-from tensorwaves.interface import DataSample
 
-from polarimetry.amplitude import AmplitudeModel
-from polarimetry.decay import ThreeBodyDecay
+if TYPE_CHECKING:
+    from tensorwaves.function import PositionalArgumentFunction
+    from tensorwaves.interface import DataSample
+
+    from polarimetry.amplitude import AmplitudeModel
+    from polarimetry.decay import ThreeBodyDecay
 
 if sys.version_info < (3, 8):
     from typing_extensions import Literal
@@ -144,5 +147,6 @@ def __get_third_mandelstam_index(
     x_mandelstam: Literal[1, 2, 3], y_mandelstam: Literal[1, 2, 3]
 ):
     if x_mandelstam == y_mandelstam:
-        raise ValueError(f"x_mandelstam and y_mandelstam must be different")
+        msg = "x_mandelstam and y_mandelstam must be different"
+        raise ValueError(msg)
     return next(iter({1, 2, 3} - {x_mandelstam, y_mandelstam}))

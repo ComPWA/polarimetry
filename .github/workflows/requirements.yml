@@ -12,7 +12,7 @@ on:
     paths:
       - .constraints/py3.*.txt
       - .pre-commit-config.yaml
-      - setup.cfg
+      - pyproject.toml
   schedule:
     - cron: "0 3 7 */3 *"
   workflow_dispatch:

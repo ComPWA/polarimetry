@@ -4,10 +4,10 @@ from pybtex.database import Entry
 from pybtex.plugin import register_plugin
 from pybtex.richtext import Tag, Text
 from pybtex.style.formatting.unsrt import Style as UnsrtStyle
-from pybtex.style.template import _format_list  # pyright:ignore[reportPrivateUsage]
 from pybtex.style.template import (
     FieldIsMissing,
     Node,
+    _format_list,  # pyright:ignore[reportPrivateUsage]
     field,
     href,
     join,
@@ -63,11 +63,11 @@ class UnsrtEtAl(UnsrtStyle):
 @node
 def names(children, context, role, **kwargs):
     """Return formatted names."""
-    assert not children
+    assert not children  # noqa: S101
     try:
         persons = context["entry"].persons[role]
     except KeyError:
-        raise FieldIsMissing(role, context["entry"])
+        raise FieldIsMissing(role, context["entry"]) from None
 
     style: UnsrtStyle = context["style"]
     formatted_names = [

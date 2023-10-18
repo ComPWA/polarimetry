@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it as below.
+title: >-
+  \(\Lambda^+_\mathrm{c}\) polarimetry using the dominant hadronic mode
+abstract: |-
+  The polarimeter vector field for multibody decays of a spin-half baryon is introduced as a generalisation of the baryon asymmetry parameters. Using a recent amplitude analysis of the (Lambda^+_mathrm{c} o p K^- pi^+) decay performed at the LHCb experiment, we compute the distribution of the kinematic-dependent polarimeter vector for this process in the space of Mandelstam variables to express the polarised decay rate in a model-agnostic form. The obtained representation can facilitate polarisation measurements of the \\(\Lambda^+_\mathrm{c}\\) baryon and eases inclusion of the \\(\Lambda^+_\mathrm{c} \to p K^- \pi^+\\) decay mode in hadronic amplitude analyses.
+
+authors:
+  - family-names: de Boer
+    given-names: Remco E.
+    affiliation: Ruhr University Bochum
+    orcid: https://orcid.org/0000-0001-5846-2206
+  - family-names: Mikhasenko
+    given-names: Mikhail
+    affiliation: Excellence Cluster ORIGINS, Munich, Germany
+    orcid: https://orcid.org/0000-0002-6969-2063
+  - family-names: Fritsch
+    given-names: Miriam
+    affiliation: Ruhr University Bochum
+    orcid: https://orcid.org/0000-0002-6463-8295
+doi: 10.5281/zenodo.7544989
+keywords:
+  - amplitude analysis
+  - computer algebra system
+  - LHCb
+  - partial wave analysis
+  - particle physics
+  - polarimetry
+  - polarization
+license: GPL-3.0-or-later
+repository-code: https://github.com/ComPWA/polarimetry
+type: software
+url: https://lc2pkpi-polarimetry.docs.cern.ch

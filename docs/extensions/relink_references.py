@@ -34,7 +34,7 @@ def _patch_type_to_xref(
     reftype, target, title, refspecific = parse_reftarget(target, suppress_prefix)
     target = target_substitutions.get(target, target)
     reftype = ref_type_substitutions.get(target, reftype)
-    assert env is not None
+    assert env is not None  # noqa: S101
     return pending_xref(
         "",
         *__create_nodes(env, title),

@@ -40,7 +40,9 @@ jobs:
           additional-packages: tox
           extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-      - run: sudo apt install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
       - run: tox -e pdf
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
@@ -73,7 +75,9 @@ jobs:
           extras: doc
           python-version: ${{env.PYTHON_VERSION}}
           specific-packages: ${{ inputs.specific-pip-packages }}
-      - run: sudo apt-get -y install cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch Julia cache
         uses: actions/cache@v3
         with:
@@ -102,27 +106,27 @@ jobs:
         uses: actions/cache@v3
         with:
           key: |
-            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}-${{hashFiles('src/**')}}-${{hashFiles('docs/**.ipynb')}}
+            sympy-${{hashFiles('.constraints/py3.*.txt')}}-${{hashFiles('src/**')}}-${{hashFiles('docs/**.ipynb')}}
           restore-keys: |
-            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}-${{hashFiles('src/**')}}
-            sympy-${{hashFiles('.constraints/py3.*.txt', 'setup.cfg')}}
+            sympy-${{hashFiles('.constraints/py3.*.txt')}}-${{hashFiles('src/**')}}
+            sympy-${{hashFiles('.constraints/py3.*.txt')}}
           path: ~/.sympy-cache*/
       - name: Fetch Jupyter cache
         uses: actions/cache@v3
         with:
           key: |
-            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}-${{hashFiles('docs/**')}}
+            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'src/**')}}-${{hashFiles('docs/**')}}
           restore-keys: |
-            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}
+            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'src/**')}}
           path: |
             ./docs/_build/.jupyter_cache
       - name: Fetch output files
         uses: actions/cache@v3
         with:
           key: |
-            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}-${{hashFiles('docs/**')}}
+            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'src/**')}}-${{hashFiles('docs/**')}}
           restore-keys: |
-            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'setup.cfg', 'src/**')}}
+            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'src/**')}}
             output-files
           path: |
             ./docs/_images

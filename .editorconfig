@@ -11,6 +11,3 @@ indent_style = tab
 
 [*.{py,toml}]
 indent_size = 4
-
-[setup.cfg]
-indent_size = 4
