@@ -7,6 +7,7 @@ appendix/phase-space
 appendix/alignment
 appendix/benchmark
 appendix/serialization
+appendix/model-serialization
 appendix/ls-model
 appendix/homomorphism
 zz.polarization-fit

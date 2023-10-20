@@ -155,6 +155,7 @@ ruff = [
     "--extend-ignore=N8",
     "--extend-ignore=PLR0915",
     "--extend-ignore=S101",
+    "--extend-ignore=S301",
     "--extend-ignore=T201",
     "--line-length=85",
 ]
