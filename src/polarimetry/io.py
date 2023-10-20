@@ -15,6 +15,7 @@ extended as follows:
 This code originates from `ComPWA/ampform#280
 <https://github.com/ComPWA/ampform/pull/280>`_.
 """
+
 from __future__ import annotations
 
 import hashlib
