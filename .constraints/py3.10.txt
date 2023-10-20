@@ -61,8 +61,8 @@ ipython==8.16.1
 ipython-genutils==0.2.0
 ipywidgets==8.1.1
 isoduration==20.11.0
-jax==0.4.18
-jaxlib==0.4.18
+jax==0.4.19
+jaxlib==0.4.19
 jedi==0.19.1
 jinja2==3.1.2
 json5==0.9.14
@@ -148,7 +148,7 @@ requests==2.31.0
 rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1
 rpds-py==0.10.6
-ruff==0.1.0
+ruff==0.1.1
 scipy==1.11.3
 send2trash==1.8.2
 six==1.16.0
