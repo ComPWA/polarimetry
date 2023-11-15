@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import jax.numpy as jnp
 import sympy as sp
@@ -17,11 +16,6 @@ if TYPE_CHECKING:
 
     from polarimetry.amplitude import AmplitudeModel
     from polarimetry.decay import ThreeBodyDecay
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal
-else:
-    from typing import Literal
 
 
 def create_data_transformer(

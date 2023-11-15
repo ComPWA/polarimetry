@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sys
 from os.path import abspath, dirname
 from typing import TYPE_CHECKING
 
@@ -14,10 +13,7 @@ from polarimetry.decay import Particle
 if TYPE_CHECKING:
     from pathlib import Path
 
-if sys.version_info < (3, 8):
-    from typing_extensions import TypedDict
-else:
-    from typing import TypedDict
+from typing import TypedDict
 
 
 def load_particles(filename: Path | str) -> dict[str, Particle]:

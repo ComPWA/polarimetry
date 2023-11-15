@@ -8,10 +8,9 @@ from __future__ import annotations
 
 import itertools
 import re
-import sys
 from copy import deepcopy
 from math import sqrt
-from typing import TYPE_CHECKING, Generic, Iterable, Pattern, TypeVar
+from typing import TYPE_CHECKING, Generic, Iterable, Literal, Pattern, TypeVar
 
 import attrs
 import numpy as np
@@ -39,11 +38,6 @@ from .particle import PARTICLE_TO_ID, Σ, K, Λc, p, π
 
 if TYPE_CHECKING:
     from pathlib import Path
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal
-else:
-    from typing import Literal
 
 
 def load_model(
