@@ -178,18 +178,16 @@ def get_polarimetry_package_version() -> str:
 def generate_api() -> None:
     shutil.rmtree("api", ignore_errors=True)
     subprocess.call(
-        " ".join(
-            [
-                "sphinx-apidoc",
-                "../src/polarimetry/",
-                "../src/polarimetry/version.py",
-                "-o api/",
-                "--force",
-                "--no-toc",
-                "--separate",
-                "--templatedir _templates",
-            ]
-        ),
+        " ".join([
+            "sphinx-apidoc",
+            "../src/polarimetry/",
+            "../src/polarimetry/version.py",
+            "-o api/",
+            "--force",
+            "--no-toc",
+            "--separate",
+            "--templatedir _templates",
+        ]),
         shell=True,  # noqa: S602
     )
 
@@ -294,15 +292,13 @@ MISSING_FILES = MissingFileCollector()
 add_module_names = False
 author = "Mikhail Mikhasenko, Remco de Boer, Miriam Fritsch"
 autodoc_default_options = {
-    "exclude-members": ", ".join(
-        [
-            "default_assumptions",
-            "doit",
-            "evaluate",
-            "is_commutative",
-            "is_extended_real",
-        ]
-    ),
+    "exclude-members": ", ".join([
+        "default_assumptions",
+        "doit",
+        "evaluate",
+        "is_commutative",
+        "is_extended_real",
+    ]),
     "members": True,
     "undoc-members": True,
     "show-inheritance": True,
