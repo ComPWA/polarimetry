@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import sympy as sp
 from ampform.sympy import PoolSum
@@ -11,11 +10,6 @@ from polarimetry.spin import create_spin_range
 
 if TYPE_CHECKING:
     from .amplitude import DalitzPlotDecompositionBuilder
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal
-else:
-    from typing import Literal
 
 
 def formulate_polarimetry(
