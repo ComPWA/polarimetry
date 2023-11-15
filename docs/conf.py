@@ -6,18 +6,13 @@ import shutil
 import subprocess
 import sys
 from datetime import datetime
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as get_package_version
 from pathlib import Path
 from textwrap import dedent, indent
 
 import requests  # pyright: ignore[reportMissingModuleSource]
 from attrs import define, field
-
-if sys.version_info < (3, 8):
-    from importlib_metadata import PackageNotFoundError
-    from importlib_metadata import version as get_package_version
-else:
-    from importlib.metadata import PackageNotFoundError
-    from importlib.metadata import version as get_package_version
 
 sys.path.insert(0, os.path.abspath("extensions"))
 

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import sys
 from functools import lru_cache
 from itertools import product
+from typing import Literal, Protocol
 
 import sympy as sp
 from ampform.sympy import PoolSum
@@ -22,11 +22,6 @@ from polarimetry.decay import (
 from polarimetry.spin import create_spin_range
 
 from .angles import formulate_scattering_angle, formulate_zeta_angle
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal, Protocol
-else:
-    from typing import Literal, Protocol
 
 
 @frozen
