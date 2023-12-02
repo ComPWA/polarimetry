@@ -78,10 +78,16 @@ doc = [
     "tqdm",
 ]
 jupyter = [
+    "isort",
+    "jupyterlab",
     "jupyterlab >=3.0",
     "jupyterlab-code-formatter",
+    "jupyterlab-git",
+    "jupyterlab-lsp",
     "jupyterlab-myst",
     "polarimetry[doc]",
+    "python-lsp-ruff",
+    "python-lsp-server[rope]",
 ]
 sty = [
     "black",
