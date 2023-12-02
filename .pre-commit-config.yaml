@@ -3,6 +3,7 @@ ci:
   autoupdate_schedule: quarterly # already done by requirements-cron.yml
   skip:
     - check-jsonschema
+    - prettier
     - pyright
     - taplo
 
