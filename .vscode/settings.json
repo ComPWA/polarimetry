@@ -31,6 +31,7 @@
   },
   "black-formatter.importStrategy": "fromEnvironment",
   "cSpell.enabled": true,
+  "diffEditor.experimental.showMoves": true,
   "editor.formatOnSave": true,
   "editor.unicodeHighlight.allowedCharacters": {
     "\u03c3": true
