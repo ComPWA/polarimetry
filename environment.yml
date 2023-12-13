@@ -1,7 +1,9 @@
 name: polarimetry
 channels:
   - defaults
+  - conda-forge
 dependencies:
+  - juliaup
   - python==3.8.*
   - pip>=21.3 # pyproject.toml
   - pip:
