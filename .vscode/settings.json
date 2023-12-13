@@ -43,6 +43,7 @@
   "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
   "julia.NumThreads": "auto",
   "livePreview.defaultPreviewPath": "docs/_build/html",
+  "multiDiffEditor.experimental.enabled": true,
   "notebook.gotoSymbols.showAllSymbols": true,
   "python.analysis.autoImportCompletions": false,
   "python.analysis.inlayHints.pytestParameters": true,
