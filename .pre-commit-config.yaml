@@ -13,26 +13,6 @@ repos:
       - id: check-hooks-apply
       - id: check-useless-excludes
 
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
-    hooks:
-      - id: check-ast
-      - id: check-case-conflict
-      - id: check-json
-      - id: check-merge-conflict
-      - id: check-toml
-      - id: check-vcs-permalinks
-      - id: check-yaml
-      - id: debug-statements
-      - id: end-of-file-fixer
-        exclude: >
-          (?x)^(
-            .*\.bib|
-            .*\.svg
-          )$
-      - id: mixed-line-ending
-      - id: trailing-whitespace
-
   - repo: https://github.com/ComPWA/repo-maintenance
     rev: 0.1.11
     hooks:
@@ -58,6 +38,26 @@ repos:
       - id: nbqa-ruff
         args:
           - --fix
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: check-yaml
+      - id: debug-statements
+      - id: end-of-file-fixer
+        exclude: >
+          (?x)^(
+            .*\.bib|
+            .*\.svg
+          )$
+      - id: mixed-line-ending
+      - id: trailing-whitespace
 
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 23.12.0
@@ -154,5 +154,5 @@ repos:
     rev: v0.23.1
     hooks:
       - id: toml-sort
-        args:
-          - --in-place
+        args: [--in-place]
+        exclude: (?x)^(.*(Manifest|Project)\.toml)$
