@@ -28,7 +28,7 @@ begin
     using ThreeBodyDecay
     using ThreeBodyDecay.PartialWaveFunctions
 
-    using Lc2ppiKModelLHCb
+    using Lc2ppiKSemileptonicModelLHCb
 end
 
 # ╔═╡ d3cb114e-ee0c-4cd5-87fb-82289849aceb
@@ -50,11 +50,7 @@ md"""
 """
 
 # ╔═╡ 7cc4c5f9-4392-4b57-88af-59d1cf308162
-isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"));
-
-# ╔═╡ 7ecc65a4-9fe7-4209-ad54-f1c8abe52ee5
-modelparameters =
-    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
+(; modelparameters, particledict) = expose_model_description()
 
 # ╔═╡ 78032115-badb-45b6-b20f-15496d460d57
 modeldict = modelparameters["Default amplitude model"]
@@ -66,7 +62,7 @@ defaultparameters = modeldict["parameters"]
 begin
     isobars = Dict()
     for (key, lineshape) in modeldict["lineshapes"]
-        dict = Dict{String,Any}(isobarsinput[key])
+        dict = Dict{String,Any}(particledict[key])
         dict["lineshape"] = lineshape
         isobars[key] = definechaininputs(key, dict)
     end
@@ -157,7 +153,7 @@ const terms = [
 
 # ╔═╡ 8d8824e8-7809-4368-840c-b8f6d38ad7c2
 const model =
-    LHCbModel(;
+    Lc2ppiKModel(;
         chains=getindex.(terms, 2),
         couplings=getindex.(terms, 1),
         isobarnames=map(x -> x[3:end-1], couplingkeys))
@@ -168,7 +164,7 @@ md"""
 """
 
 # ╔═╡ b833843f-c8b6-44c6-847c-efce0ed989d4
-plot(ms, Base.Fix1(intensity, model), iσx=1, iσy=2, Ngrid=54)
+plot(ms, Base.Fix1(unpolarizedintensity, model), iσx=1, iσy=2, Ngrid=54)
 
 # ╔═╡ ed7f802c-a931-4114-aa30-6d10735520d7
 md"""
@@ -177,7 +173,7 @@ md"""
 
 # ╔═╡ 45843dac-096a-4bd5-82eb-aad4f18b8f86
 begin
-    import Lc2ppiKModelLHCb: expectation
+    import Lc2ppiKSemileptonicModelLHCb: expectation
     expectation(Op, σs) = sum(
         conj(amplitude(model, σs, [two_λ, 0, 0, two_ν′])) *
         Op[twoλ2ind(two_ν′), twoλ2ind(two_ν)] *
@@ -336,12 +332,12 @@ md"""
 
 # ╔═╡ e550eec0-6911-4016-824f-b21f82d10e9a
 DataFrame(
-    :alignment => "confuguration " .* string.([1,2,3]),
-	:components => NamedTuple{(:ᾱx,:ᾱy,:ᾱz)}.(
-		[ᾱ⁽¹⁾,  ᾱ⁽²⁾, ᾱ⁽³⁾] .|> x->round.(x; digits=3))
-) |> df->select(df, Not(:components),
-	:components => AsTable,
-	:components => ByRow(norm) => :norm)
+    :alignment => "confuguration " .* string.([1, 2, 3]),
+    :components => NamedTuple{(:ᾱx, :ᾱy, :ᾱz)}.(
+        [ᾱ⁽¹⁾, ᾱ⁽²⁾, ᾱ⁽³⁾] .|> x -> round.(x; digits=3))
+) |> df -> select(df, Not(:components),
+    :components => AsTable,
+    :components => ByRow(norm) => :norm)
 
 # ╔═╡ 8339a757-9b66-4cb9-9bbb-a7de466fc3bf
 md"""
@@ -364,11 +360,11 @@ const Aiv = ThreadsX.collect(
 
 # ╔═╡ 25a293e0-05c6-44d2-bec0-42649558e1c2
 Iαv = [sum(
-    sum(Aiv[iλ, 1, 1, iν′,e] .* model.couplings)' *
+    sum(Aiv[iλ, 1, 1, iν′, e] .* model.couplings)' *
     σP[3-iν′, 3-iν] *
     sum(Aiv[iλ, 1, 1, iν, e] .* model.couplings)
     for iλ in [1, 2], iν in [1, 2], iν′ in [1, 2],
-    	e in 1:size(Aiv,5)) |> real for σP in σPauli]
+    e in 1:size(Aiv, 5)) |> real for σP in σPauli]
 
 # ╔═╡ 01bbaad2-81e9-436c-b698-d1a16f9da529
 md"""
@@ -415,10 +411,10 @@ end
 
 # ╔═╡ 0a976167-b074-4694-ab97-aecfcd67cc25
 begin
-	sξnames = collect(Set(model.isobarnames)) |>
-		c->sort(c; by=x->eval(Meta.parse(x[3:end-1]))) |>
-		c->sort(c; by=x->findfirst(x[1], "LDK"))
-	#
+    sξnames = collect(Set(model.isobarnames)) |>
+              c -> sort(c; by=x -> eval(Meta.parse(x[3:end-1]))) |>
+                   c -> sort(c; by=x -> findfirst(x[1], "LDK"))
+    #
     rates = DataFrame()
     for s in sξnames
         couplingsmap = (model.isobarnames .== s)
@@ -436,9 +432,9 @@ begin
         push!(rates, (isobarname=s, rate=sum(Iξv) / I0 * 100,
             αz, αy, αx, α_abs=sqrt(αz^2 + αy^2 + αx^2)))
     end
-	#
-	transform(rates, [:rate, :αz, :α_abs] .=> ByRow(x -> round(x; digits=2));
-		renamecols=false)
+    #
+    transform(rates, [:rate, :αz, :α_abs] .=> ByRow(x -> round(x; digits=2));
+        renamecols=false)
 end
 
 # ╔═╡ Cell order:
@@ -447,7 +443,6 @@ end
 # ╠═e04157cc-7697-41e5-8e4e-3556332929ef
 # ╟─877f6aab-d0ff-44d7-9ce0-e43d895be297
 # ╠═7cc4c5f9-4392-4b57-88af-59d1cf308162
-# ╠═7ecc65a4-9fe7-4209-ad54-f1c8abe52ee5
 # ╠═78032115-badb-45b6-b20f-15496d460d57
 # ╠═3f9e1ed7-b308-4cbe-805d-cbe3f22e3d1f
 # ╠═b0f5c181-dcb2-48f8-a510-57eac44ca4d9

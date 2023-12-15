@@ -1,0 +1,66 @@
+name: Julia
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  JULIA_CI: "true"
+  JULIA_COLOR: "yes"
+
+on:
+  push:
+    branches:
+      - main
+      - epic/*
+      - "[0-9]+.[0-9]+.x"
+    paths:
+      - "**.jl"
+      - "**/Manifest.toml"
+      - "**/Project.toml"
+      - "!**/exportnotebooks.jl"
+  pull_request:
+    branches:
+      - main
+      - epic/*
+      - "[0-9]+.[0-9]+.x"
+    paths:
+      - "**.jl"
+      - "**/Manifest.toml"
+      - "**/Project.toml"
+      - "!**/exportnotebooks.jl"
+
+jobs:
+  build:
+    name: Run scripts
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract locked Julia version
+        id: extract-version
+        run: |
+          VERSION=$(grep 'julia_version = ' julia/Manifest.toml | head -n 1 | cut -d '"' -f 2)
+          echo "version=$VERSION" | tee -a $GITHUB_OUTPUT
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: ${{ steps.extract-version.outputs.version }}
+      - name: Fetch Julia cache
+        uses: actions/cache@v3
+        with:
+          key: |
+            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
+          restore-keys: |
+            julia-${{hashFiles('julia/Manifest.toml')}}
+            julia
+          path: |
+            ./julia-*/
+            ~/.julia/
+      - run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
+        working-directory: julia/
+      - name: Run scripts in julia directory
+        run: |
+          for script in notebooks/*.jl scripts/*.jl; do
+            echo -e "\n\n\033[34m--== Running $script ==--\033[0m\n"
+            julia --color=yes --project=. "$script" && echo -e "\033[32m  SUCCESS\033[0m"
+          done
+        working-directory: julia/

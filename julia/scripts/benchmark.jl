@@ -15,7 +15,7 @@ using DataFrames
 #
 using ThreeBodyDecay
 
-using Lc2ppiKModelLHCb
+using Lc2ppiKSemileptonicModelLHCb
 
 using BenchmarkTools
 using InteractiveUtils
@@ -26,14 +26,7 @@ using InteractiveUtils
 #  _|    _|    _|  _|    _|  _|    _|  _|        _|
 #  _|    _|    _|    _|_|      _|_|_|    _|_|_|  _|
 
-isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"));
-
-modelparameters =
-    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
-
-const model0 = LHCbModel(
-    modelparameters["Default amplitude model"];
-    particledict=isobarsinput)
+const model0 = published_model("Default amplitude model")
 
 const λσs0 = randomPoint(tbs)
 
@@ -41,7 +34,7 @@ const λσs0 = randomPoint(tbs)
 @code_warntype amplitude(λσs0, model0.chains[3])
 
 # run several times, get time
-@btime amplitude.($(Ref(λσs0)), $(model0.chains))
+@btime amplitude.($(model0.chains), $(Ref(λσs0)))
 
 # full information
-@benchmark amplitude.($(Ref(λσs0)), $(model0.chains))
+@benchmark amplitude.($(model0.chains), $(Ref(λσs0)))

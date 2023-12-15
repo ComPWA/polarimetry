@@ -14,7 +14,7 @@ using DataFrames
 #
 using ThreeBodyDecay
 
-using Lc2ppiKModelLHCb
+using Lc2ppiKSemileptonicModelLHCb
 
 
 theme(:wong2, frame=:box, grid=false, minorticks=true,
@@ -32,22 +32,20 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
 
 
 
-isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"));
-
-modelparameters =
-    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
-
+(; particledict, modelparameters) = expose_model_description()
 defaultparameters = modelparameters["Default amplitude model"]
 
-const model = LHCbModel(defaultparameters; particledict=isobarsinput)
+const model = Lc2ppiKModel(;
+    parse_model_dictionaries(defaultparameters; particledict)...)
 
 # unupdated
 shapeparameters = filter(x -> x[1] != 'A', keys(defaultparameters["parameters"]))
 for s in shapeparameters
     pop!(defaultparameters["parameters"], s)
 end
-const model_unupdated = LHCbModel(defaultparameters; particledict=isobarsinput)
 
+const model_unupdated = Lc2ppiKModel(;
+    parse_model_dictionaries(defaultparameters; particledict)...)
 
 # plot shapes vs updates
 whichisobarsmodified =
