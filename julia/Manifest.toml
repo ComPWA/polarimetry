@@ -561,11 +561,11 @@ version = "1.2.2"
 
 [[deps.Lc2ppiKSemileptonicModelLHCb]]
 deps = ["JSON", "LinearAlgebra", "Parameters", "RecipesBase", "StaticArrays", "ThreeBodyDecay", "YAML"]
-git-tree-sha1 = "eab42a4b29582718665314141f12857c41d6c71d"
-repo-rev = "main"
+git-tree-sha1 = "dffc046dc0055fda9c9c7c5fa8f3bcf14d1fba0f"
+repo-rev = "v0.3.0"
 repo-url = "https://github.com/mmikhasenko/Lc2ppiKSemileptonicModelLHCb.jl"
 uuid = "2be14d12-1226-44dd-959e-4e18ae37578d"
-version = "0.1.0"
+version = "0.3.0"
 
 [[deps.LeftChildRightSiblingTrees]]
 deps = ["AbstractTrees"]

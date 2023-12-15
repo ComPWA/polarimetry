@@ -28,7 +28,7 @@ begin
     using ThreeBodyDecay
     using ThreeBodyDecay.PartialWaveFunctions
 
-    using Lc2ppiKModelLHCb
+    using Lc2ppiKSemileptonicModelLHCb
 end
 
 # ╔═╡ 97e2902d-8ea9-4fec-b4d4-25985db069a2
@@ -37,18 +37,8 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
     xlim=(:auto, :auto), ylim=(:auto, :auto),
     lw=1, lab="", colorbar=false)
 
-# ╔═╡ cd70912b-8ca1-4343-bfff-6915bda41ff9
-isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"));
-
-# ╔═╡ 9fb2530c-88fe-4751-b460-6361038e1c6e
-modelparameters =
-    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
-
-# ╔═╡ cfd6b057-eda1-45a3-859f-ebc1cb4dc64e
-defaultparameters = modelparameters["Default amplitude model"]
-
 # ╔═╡ bea43e41-90dd-41cd-8ede-f483c0a2a80e
-const model = LHCbModel(defaultparameters; particledict=isobarsinput)
+const model = published_model("Default amplitude model")
 
 # ╔═╡ 05ac73c0-38e0-477a-b373-63993f618d8c
 md"""
@@ -186,9 +176,6 @@ end
 # ╔═╡ Cell order:
 # ╠═03733bd2-dcf3-11ec-231f-8dab0ad6b19e
 # ╠═97e2902d-8ea9-4fec-b4d4-25985db069a2
-# ╠═cd70912b-8ca1-4343-bfff-6915bda41ff9
-# ╠═9fb2530c-88fe-4751-b460-6361038e1c6e
-# ╠═cfd6b057-eda1-45a3-859f-ebc1cb4dc64e
 # ╠═bea43e41-90dd-41cd-8ede-f483c0a2a80e
 # ╟─05ac73c0-38e0-477a-b373-63993f618d8c
 # ╠═bddbdd76-169a-41f2-ae85-2fd31c4e99f8

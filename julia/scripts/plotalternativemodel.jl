@@ -50,8 +50,8 @@ let
     xv = range((m1 + m2)^2, (m0 - mk)^2, length=300)
     #
     lsh(BW, σ) = abs2(BW(σ)) *
-                 Lc2ppiKModelLHCb.breakup(σ, m1^2, m2^2) *
-                 Lc2ppiKModelLHCb.breakup(m0^2, σ, mk^2) / sqrt(σ)
+                 Lc2ppiKSemileptonicModelLHCb.breakup(σ, m1^2, m2^2) *
+                 Lc2ppiKSemileptonicModelLHCb.breakup(m0^2, σ, mk^2) / sqrt(σ)
     #
     yv = map(xv) do x
         lsh(BW, x)
