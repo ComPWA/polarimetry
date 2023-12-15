@@ -82,7 +82,7 @@ jobs:
         uses: actions/cache@v3
         with:
           key: |
-            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**.jl')}}
+            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
           restore-keys: |
             julia-${{hashFiles('julia/Manifest.toml')}}
             julia
