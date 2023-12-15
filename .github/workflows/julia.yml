@@ -38,6 +38,8 @@ jobs:
           path: |
             ./julia-*/
             ~/.julia/
+      - run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
+        working-directory: julia/
       - name: Run scripts in julia directory
         run: |
           for script in notebooks/*.jl scripts/*.jl; do
