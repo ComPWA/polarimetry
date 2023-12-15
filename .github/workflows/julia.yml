@@ -1,0 +1,48 @@
+env:
+  JULIA_CI: "true"
+
+on:
+  push:
+    branches:
+      - main
+      - epic/*
+      - "[0-9]+.[0-9]+.x"
+    paths:
+      - "**/*.jl"
+      - "**/Manifest.toml"
+      - "**/Project.toml"
+    paths-ignore:
+      - "**/exportnotebooks.jl"
+  pull_request:
+    branches:
+      - main
+      - epic/*
+      - "[0-9]+.[0-9]+.x"
+    paths:
+      - "**/*.jl"
+      - "**/Manifest.toml"
+      - "**/Project.toml"
+    paths-ignore:
+      - "**/exportnotebooks.jl"
+
+jobs:
+  build:
+    name: Run Julia scripts
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract locked Julia version
+        id: extract-version
+        run: |
+          VERSION=$(grep 'julia_version = ' Manifest.toml | head -n 1 | cut -d '"' -f 2)
+          echo "::set-output name=version::$VERSION"
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: ${{ steps.extract-version.outputs.version }}
+      - name: Run scripts in julia directory
+        run: |
+          for script in notebooks/*.jl scripts/*.jl; do
+            echo -e "\n\n--== Running $script ==--\n"
+            julia --project=. "$script"
+          done
+        working-directory: julia/
