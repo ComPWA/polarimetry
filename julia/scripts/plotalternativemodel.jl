@@ -16,7 +16,7 @@ using StaticArrays
 using ThreeBodyDecay
 using ThreadsX
 
-using Lc2ppiKModelLHCb
+using Lc2ppiKSemileptonicModelLHCb
 
 
 theme(:wong2, frame=:box, grid=false, minorticks=true,
@@ -33,19 +33,8 @@ theme(:wong2, frame=:box, grid=false, minorticks=true,
 #  _|    _|    _|    _|_|      _|_|_|    _|_|_|  _|
 
 
-
-isobarsinput = YAML.load_file(joinpath("..", "data", "particle-definitions.yaml"));
-
-modelparameters =
-    YAML.load_file(joinpath("..", "data", "model-definitions.yaml"));
-
-defaultparameters = modelparameters["Default amplitude model"]
-
-const model = LHCbModel(defaultparameters; particledict=isobarsinput)
-
-const model16 = LHCbModel(
-    modelparameters["Alternative amplitude model with K(1430) with free width"];
-    particledict=isobarsinput)
+const model = published_model("Default amplitude model")
+const model16 = published_model("Alternative amplitude model with K(1430) with free width");
 #
 
 let

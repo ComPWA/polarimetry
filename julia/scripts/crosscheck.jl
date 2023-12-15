@@ -14,7 +14,7 @@ using DataFrames
 #
 using ThreeBodyDecay
 
-using Lc2ppiKModelLHCb
+using Lc2ppiKSemileptonicModelLHCb
 
 
 #                                  _|            _|
@@ -110,7 +110,7 @@ crosscheckresult_realpars = filter(kv -> kv[1][2] == 'r', crosscheckresult["chai
 comparison = DataFrame()
 for (parname, adict) in crosscheckresult_realpars
     c, d = parname2decaychain(parname, isobars)
-    M_DPD = [c * amplitude(σs0, [two_λ1, 0, 0, two_λ0], d)
+    M_DPD = [c * amplitude(d, σs0, [two_λ1, 0, 0, two_λ0])
              for (two_λ0, two_λ1) in [(1, 1) (1, -1)
         (-1, 1) (-1, -1)]]
     M_LHCb′ = amplitudeLHCb2DPD(Adict2matrix(adict))
