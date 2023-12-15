@@ -23,7 +23,7 @@ jobs:
         id: extract-version
         run: |
           VERSION=$(grep 'julia_version = ' Manifest.toml | head -n 1 | cut -d '"' -f 2)
-          echo "::set-output name=version::$VERSION"
+          echo "version=$VERSION" | tee -a $GITHUB_OUTPUT
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ steps.extract-version.outputs.version }}
