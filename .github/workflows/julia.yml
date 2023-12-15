@@ -22,7 +22,7 @@ jobs:
       - name: Extract locked Julia version
         id: extract-version
         run: |
-          VERSION=$(grep 'julia_version = ' Manifest.toml | head -n 1 | cut -d '"' -f 2)
+          VERSION=$(grep 'julia_version = ' julia/Manifest.toml | head -n 1 | cut -d '"' -f 2)
           echo "version=$VERSION" | tee -a $GITHUB_OUTPUT
       - uses: julia-actions/setup-julia@v1
         with:
