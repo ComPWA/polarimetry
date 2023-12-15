@@ -27,6 +27,17 @@ jobs:
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ steps.extract-version.outputs.version }}
+      - name: Fetch Julia cache
+        uses: actions/cache@v3
+        with:
+          key: |
+            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**.jl')}}
+          restore-keys: |
+            julia-${{hashFiles('julia/Manifest.toml')}}
+            julia
+          path: |
+            ./julia-*/
+            ~/.julia/
       - name: Run scripts in julia directory
         run: |
           for script in notebooks/*.jl scripts/*.jl; do
