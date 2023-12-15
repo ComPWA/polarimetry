@@ -16,7 +16,7 @@ jobs:
     name: Build HTML (fast)
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ComPWA/actions/pip-install@v1
         with:
           additional-packages: tox
@@ -34,7 +34,7 @@ jobs:
     name: Build PDF (fast)
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ComPWA/actions/pip-install@v1
         with:
           additional-packages: tox
@@ -55,7 +55,7 @@ jobs:
     name: Check external links
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ComPWA/actions/pip-install@v1
         with:
           additional-packages: tox
@@ -68,7 +68,7 @@ jobs:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ComPWA/actions/pip-install@v1
         with:
           additional-packages: tox
