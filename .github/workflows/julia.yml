@@ -6,6 +6,7 @@ concurrency:
 
 env:
   JULIA_CI: "true"
+  JULIA_COLOR: "yes"
 
 on:
   push:
@@ -59,7 +60,7 @@ jobs:
       - name: Run scripts in julia directory
         run: |
           for script in notebooks/*.jl scripts/*.jl; do
-            echo -e "\n\n--== Running $script ==--\n"
-            julia --project=. "$script" && echo -e "\033[32m  SUCCESS\033[0m"
+            echo -e "\n\n\033[34m--== Running $script ==--\033[0m\n"
+            julia --color=yes --project=. "$script" && echo -e "\033[32m  SUCCESS\033[0m"
           done
         working-directory: julia/
