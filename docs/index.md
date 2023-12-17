@@ -88,6 +88,23 @@ This document is a PDF rendering of the supplemental material hosted behind SSO-
 :::
 ::::
 
+Each of the pages contain code examples for how to reproduce the results with the Python package hosted at [github.com/ComPWA/polarimetry](https://github.com/ComPWA/polarimetry). However, to quickly get import the model in another package, it is possible to install the package from PyPI:
+
+```bash
+pip install lc2pkpi-polarimetry
+```
+
+:::{autolink-concat}
+:::
+
+Each of the models can then simply be imported as
+
+```python
+import polarimetry
+
+model = polarimetry.published_model()
+```
+
 <!-- cspell:ignore maxdepth -->
 
 ```{toctree}
