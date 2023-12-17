@@ -1155,7 +1155,7 @@ Alternative amplitude model with K(1430) with free width:
     ArD(1700)2: 12.985398 ± 0.110004
     AiD(1700)2: 2.228074 ± 0.258859
 
-Alternative amplitude model with an additional overall exponential form factor exp(-alpha q^2) multiplying Bugg lineshapes. The exponential parameter is indicated as ``alpha'':
+Alternative amplitude model with an additional overall exponential form factor exp(-alpha q^2) multiplying Bugg lineshapes. The exponential parameter is indicated as alpha:
   lineshapes:
     L(1405): Flatte1405
     L(1520): BreitWignerMinL

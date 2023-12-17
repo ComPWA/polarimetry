@@ -10,7 +10,15 @@ import itertools
 import re
 from copy import deepcopy
 from math import sqrt
-from typing import TYPE_CHECKING, Generic, Iterable, Literal, Pattern, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Generic,
+    Iterable,
+    Literal,
+    Pattern,
+    TypedDict,
+    TypeVar,
+)
 
 import attrs
 import numpy as np
@@ -40,10 +48,71 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
+# fmt: off
+ModelName = Literal[
+    "Default amplitude model",
+    "Alternative amplitude model with K(892) with free mass and width",
+    "Alternative amplitude model with L(1670) with free mass and width",
+    "Alternative amplitude model with L(1690) with free mass and width",
+    "Alternative amplitude model with D(1232) with free mass and width",
+    "Alternative amplitude model with L(1600), D(1600), D(1700) with free mass and width",
+    "Alternative amplitude model with free L(1405) Flatt'e widths, indicated as G1 (pK channel) and G2 (Sigmapi)",
+    "Alternative amplitude model with L(1800) contribution added with free mass and width",
+    "Alternative amplitude model with L(1810) contribution added with free mass and width",
+    "Alternative amplitude model with D(1620) contribution added with free mass and width",
+    "Alternative amplitude model in which a Relativistic Breit-Wigner is used for the K(700) contribution",
+    "Alternative amplitude model with K(700) with free mass and width",
+    "Alternative amplitude model with K(1410) contribution added with mass and width from PDG2020",
+    "Alternative amplitude model in which a Relativistic Breit-Wigner is used for the K(1430) contribution",
+    "Alternative amplitude model with K(1430) with free width",
+    "Alternative amplitude model with an additional overall exponential form factor exp(-alpha q^2) multiplying Bugg lineshapes. The exponential parameter is indicated as alpha",
+    "Alternative amplitude model with free radial parameter d for the Lc resonance, indicated as dLc",
+    "Alternative amplitude model obtained using LS couplings",
+]
+"""The names of the published models."""
+# fmt: on
+LineshapeName = Literal[
+    "BreitWignerMinL",
+    "BreitWignerMinL_LS",
+    "BuggBreitWignerExpFF",
+    "BuggBreitWignerMinL",
+    "BuggBreitWignerMinL_LS",
+    "Flatte1405",
+    "Flatte1405_LS",
+]
+"""Allowed lineshape names in the model definition file."""
+
+
+ResonanceName = Literal[
+    "D(1232)",
+    "D(1600)",
+    "D(1620)",
+    "D(1700)",
+    "K(1410)",
+    "K(1430)",
+    "K(700)",
+    "K(892)",
+    "L(1405)",
+    "L(1520)",
+    "L(1600)",
+    "L(1670)",
+    "L(1690)",
+    "L(1800)",
+    "L(1810)",
+    "L(2000)",
+]
+"""Allowed resonance names in the model definition file."""
+
+
+class ModelDefinition(TypedDict):
+    parameters: dict[str, str]
+    lineshapes: dict[ResonanceName, LineshapeName]
+
+
 def load_model(
     model_file: Path | str,
     particle_definitions: dict[str, Particle],
-    model_id: int | str = 0,
+    model_id: int | ModelName = 0,
 ) -> AmplitudeModel:
     builder = load_model_builder(model_file, particle_definitions, model_id)
     model = builder.formulate()
@@ -57,13 +126,12 @@ def load_model(
 def load_model_builder(
     model_file: Path | str,
     particle_definitions: dict[str, Particle],
-    model_id: int | str = 0,
+    model_id: int | ModelName = 0,
 ) -> DalitzPlotDecompositionBuilder:
-    with open(model_file) as f:
-        model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
+    model_definitions = _load_model_definitions(model_file)
     model_title = _find_model_title(model_definitions, model_id)
     model_def = model_definitions[model_title]
-    lineshapes: dict[str, str] = model_def["lineshapes"]
+    lineshapes = model_def["lineshapes"]
     min_ls = "LS couplings" not in model_title
     decay = load_three_body_decay(lineshapes, particle_definitions, min_ls)
     amplitude_builder = DalitzPlotDecompositionBuilder(decay, min_ls)
@@ -74,7 +142,15 @@ def load_model_builder(
     return amplitude_builder
 
 
-def _find_model_title(model_definitions: dict, model_id: int | str) -> str:
+def _load_model_definitions(model_file: Path | str) -> dict[ModelName, ModelDefinition]:
+    with open(model_file) as f:
+        return yaml.load(f, Loader=yaml.SafeLoader)
+
+
+def _find_model_title(
+    model_definitions: dict[ModelName, ModelDefinition],
+    model_id: int | ModelName,
+) -> ModelName:
     if isinstance(model_id, int):
         if model_id >= len(model_definitions):
             msg = (
@@ -91,7 +167,7 @@ def _find_model_title(model_definitions: dict, model_id: int | str) -> str:
     return model_id
 
 
-def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
+def _get_resonance_builder(lineshape: LineshapeName) -> DynamicsBuilder:
     if lineshape in {"BreitWignerMinL", "BreitWignerMinL_LS"}:
         return formulate_breit_wigner
     if lineshape == "BuggBreitWignerExpFF":
@@ -105,7 +181,7 @@ def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
 
 
 def load_three_body_decay(
-    resonance_names: Iterable[str],
+    resonance_names: Iterable[ResonanceName],
     particle_definitions: dict[str, Particle],
     min_ls: bool = True,
 ) -> ThreeBodyDecay:
@@ -176,7 +252,7 @@ class ParameterBootstrap:
         self,
         filename: Path | str,
         decay: ThreeBodyDecay,
-        model_id: int | str = 0,
+        model_id: int | ModelName = 0,
     ) -> None:
         particle_definitions = extract_particle_definitions(decay)
         symbolic_parameters = load_model_parameters_with_uncertainties(
@@ -206,7 +282,7 @@ class ParameterBootstrap:
 def load_model_parameters(
     filename: Path | str,
     decay: ThreeBodyDecay,
-    model_id: int | str = 0,
+    model_id: int | ModelName = 0,
     particle_definitions: dict[str, Particle] | None = None,
 ) -> dict[sp.Indexed | sp.Symbol, complex | float]:
     parameters = load_model_parameters_with_uncertainties(
@@ -218,7 +294,7 @@ def load_model_parameters(
 def load_model_parameters_with_uncertainties(
     filename: Path | str,
     decay: ThreeBodyDecay,
-    model_id: int | str = 0,
+    model_id: int | ModelName = 0,
     particle_definitions: dict[str, Particle] | None = None,
 ) -> dict[sp.Indexed | sp.Symbol, MeasuredParameter]:
     with open(filename) as f:

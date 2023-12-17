@@ -1,15 +1,22 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
 import sympy as sp
 from ampform.sympy import PoolSum
 from sympy.physics.matrices import msigma
 
+from polarimetry.lhcb import ModelDefinition, ModelName, load_model
+from polarimetry.lhcb.particle import (
+    ResonanceJSON,
+    _load_particles_json,  # pyright: ignore[reportPrivateUsage]
+    load_particles,
+)
 from polarimetry.spin import create_spin_range
 
 if TYPE_CHECKING:
-    from .amplitude import DalitzPlotDecompositionBuilder
+    from polarimetry.amplitude import AmplitudeModel, DalitzPlotDecompositionBuilder
 
 
 def formulate_polarimetry(
@@ -49,3 +56,37 @@ def _to_index(helicity):
         (1, sp.LessThan(helicity, 0)),
         (0, True),
     )
+
+
+def published_model(
+    model_id: int | ModelName = 0,
+    model_file: Path | str | None = None,
+    particle_file: Path | str | None = None,
+) -> AmplitudeModel:
+    """Import model data and parameters, perform coupling conversions and return model."""
+    src_dir = Path(__file__).parent
+    if model_file is None:
+        model_file = src_dir / "lhcb/model-definitions.yaml"
+    if particle_file is None:
+        particle_file = src_dir / "lhcb/particle-definitions.yaml"
+    particles = load_particles(particle_file)
+    return load_model(model_file, particles, model_id)
+
+
+def expose_model_description() -> tuple[
+    dict[ModelName, ModelDefinition],
+    dict[str, ResonanceJSON],
+]:
+    """Load all published model and particle definitions.
+
+    Returns a `tuple` of:
+
+    1. all 18 model definitions from :download:`model-definitions.yaml
+       <../../data/model-definitions.yaml>`,
+    2. particle definitions from :download:`particle-definitions.yaml
+       <../../data/particle-definitions.yaml>`.
+    """
+    src_dir = Path(__file__).parent
+    particles = _load_particles_json(src_dir / "lhcb/particle-definitions.yaml")
+    model = load_model(src_dir / "lhcb/model-definitions.yaml", particles, model_id=0)
+    return model, particles

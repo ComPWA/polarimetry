@@ -2,9 +2,9 @@
 
 <!-- cspell:ignore modelstudies -->
 
-The parameters of the LHCb fit are stored in the json files in the folder [`data/`](data/)
+The parameters of the LHCb fit are stored in the json files in the folder [`data/`](./)
 
-## Content of the [`particle-definitions/.yaml`](./data/particle-definitions/.yaml)
+## Content of the [`particle-definitions/.yaml`](./particle-definitions.yaml)
 
 The file provides the description of the characteristics and parameters of the resonances in the decay chains. The resonances are named by `L(XXXX)`, `D(XXXX)`, and `K(XXXX)` for the $\Lambda^{**}$, $\Delta^{**}$, and $K^{**}$ states. The data structure has the fields `jp`, `mass`, `width`, and `lineshape`.
 
@@ -16,7 +16,7 @@ There are three lineshape types:
 
 For most of the resonances, the width field gives a fixed value. However, for a few, an interval is provided. In that case, the width was a parameter of the fit. Its exact value is to be found in the list of parameters
 
-## Content of [`model-definitions.yaml`](./data/model-definitions.yaml)
+## Content of [`model-definitions.yaml`](./model-definitions.yaml)
 
 The fit results is stored in the `first(file["modelstudies"])`. The dictionary contains the list of all floating parameters. `ArF(XXXX)N` and `AiF(XXXX)N` are the real and imaginary part of the coupling `K^{Lc->Fx}`, where
 
