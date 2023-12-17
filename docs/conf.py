@@ -485,6 +485,7 @@ myst_substitutions = {
 relink_ref_types = {
     "jax.numpy.ndarray": "obj",
     "polarimetry.decay.OuterStates": "obj",
+    "polarimetry.lhcb.ModelName": "obj",
     "polarimetry.lhcb.ParameterType": "obj",
     "tensorwaves.interface.DataSample": "obj",
     "tensorwaves.interface.Function": "obj",
