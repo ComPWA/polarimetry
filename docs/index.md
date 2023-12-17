@@ -88,8 +88,8 @@ This document is a PDF rendering of the supplemental material hosted behind SSO-
 :::
 ::::
 
-[![PyPI package](https://badge.fury.io/py/polarimetry-lc2pki.svg)](https://pypi.org/project/polarimetry-lc2pki)
-[![Supported Python versions](https://img.shields.io/pypi/pyversions/polarimetry-lc2pki)](https://pypi.org/project/polarimetry-lc2pki)
+[![PyPI package](https://badge.fury.io/py/polarimetry-lc2pkpi.svg)](https://pypi.org/project/polarimetry-lc2pkpi)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/polarimetry-lc2pkpi)](https://pypi.org/project/polarimetry-lc2pkpi)
 
 Each of the pages contain code examples for how to reproduce the results with the Python package hosted at [github.com/ComPWA/polarimetry](https://github.com/ComPWA/polarimetry). However, to quickly get import the model in another package, it is possible to install the package from PyPI:
 
