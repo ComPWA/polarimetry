@@ -13,9 +13,13 @@ from polarimetry.decay import Particle
 
 def load_particles(filename: Path | str) -> dict[str, Particle]:
     """Load `.Particle` definitions from a YAML file."""
-    with open(filename) as stream:
-        particle_definitions = yaml.load(stream, Loader=yaml.SafeLoader)
+    particle_definitions = _load_particles_json(filename)
     return _to_resonance_dict(particle_definitions)
+
+
+def _load_particles_json(filename: Path | str) -> dict[str, ResonanceJSON]:
+    with open(filename) as stream:
+        return yaml.load(stream, Loader=yaml.SafeLoader)
 
 
 def _to_resonance_dict(definition: dict[str, ResonanceJSON]) -> dict[str, Particle]:

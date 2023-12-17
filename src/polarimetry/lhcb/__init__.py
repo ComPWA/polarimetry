@@ -10,7 +10,15 @@ import itertools
 import re
 from copy import deepcopy
 from math import sqrt
-from typing import TYPE_CHECKING, Generic, Iterable, Literal, Pattern, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Generic,
+    Iterable,
+    Literal,
+    Pattern,
+    TypedDict,
+    TypeVar,
+)
 
 import attrs
 import numpy as np
@@ -63,6 +71,42 @@ ModelName = Literal[
 ]
 """The names of the published models."""
 # fmt: on
+LineshapeName = Literal[
+    "BreitWignerMinL",
+    "BreitWignerMinL_LS",
+    "BuggBreitWignerExpFF",
+    "BuggBreitWignerMinL",
+    "BuggBreitWignerMinL_LS",
+    "Flatte1405",
+    "Flatte1405_LS",
+]
+"""Allowed lineshape names in the model definition file."""
+
+
+ResonanceName = Literal[
+    "D(1232)",
+    "D(1600)",
+    "D(1620)",
+    "D(1700)",
+    "K(1410)",
+    "K(1430)",
+    "K(700)",
+    "K(892)",
+    "L(1405)",
+    "L(1520)",
+    "L(1600)",
+    "L(1670)",
+    "L(1690)",
+    "L(1800)",
+    "L(1810)",
+    "L(2000)",
+]
+"""Allowed resonance names in the model definition file."""
+
+
+class ModelDefinition(TypedDict):
+    parameters: dict[str, str]
+    lineshapes: dict[ResonanceName, LineshapeName]
 
 
 def load_model(
@@ -84,11 +128,10 @@ def load_model_builder(
     particle_definitions: dict[str, Particle],
     model_id: int | ModelName = 0,
 ) -> DalitzPlotDecompositionBuilder:
-    with open(model_file) as f:
-        model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
+    model_definitions = _load_model_definitions(model_file)
     model_title = _find_model_title(model_definitions, model_id)
     model_def = model_definitions[model_title]
-    lineshapes: dict[str, str] = model_def["lineshapes"]
+    lineshapes = model_def["lineshapes"]
     min_ls = "LS couplings" not in model_title
     decay = load_three_body_decay(lineshapes, particle_definitions, min_ls)
     amplitude_builder = DalitzPlotDecompositionBuilder(decay, min_ls)
@@ -99,7 +142,15 @@ def load_model_builder(
     return amplitude_builder
 
 
-def _find_model_title(model_definitions: dict, model_id: int | ModelName) -> str:
+def _load_model_definitions(model_file: Path | str) -> dict[ModelName, ModelDefinition]:
+    with open(model_file) as f:
+        return yaml.load(f, Loader=yaml.SafeLoader)
+
+
+def _find_model_title(
+    model_definitions: dict[ModelName, ModelDefinition],
+    model_id: int | ModelName,
+) -> ModelName:
     if isinstance(model_id, int):
         if model_id >= len(model_definitions):
             msg = (
@@ -116,7 +167,7 @@ def _find_model_title(model_definitions: dict, model_id: int | ModelName) -> str
     return model_id
 
 
-def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
+def _get_resonance_builder(lineshape: LineshapeName) -> DynamicsBuilder:
     if lineshape in {"BreitWignerMinL", "BreitWignerMinL_LS"}:
         return formulate_breit_wigner
     if lineshape == "BuggBreitWignerExpFF":
@@ -130,7 +181,7 @@ def _get_resonance_builder(lineshape: str) -> DynamicsBuilder:
 
 
 def load_three_body_decay(
-    resonance_names: Iterable[str],
+    resonance_names: Iterable[ResonanceName],
     particle_definitions: dict[str, Particle],
     min_ls: bool = True,
 ) -> ThreeBodyDecay:
