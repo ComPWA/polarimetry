@@ -122,12 +122,12 @@ repos:
             metadata.vscode
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.4
+    rev: v4.0.0-alpha.6
     hooks:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.339
+    rev: v1.1.341
     hooks:
       - id: pyright
 
@@ -139,7 +139,7 @@ repos:
           - --py38-plus
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.7
+    rev: v0.1.8
     hooks:
       - id: ruff
         args:
