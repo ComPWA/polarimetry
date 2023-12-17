@@ -40,10 +40,35 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
+# fmt: off
+ModelName = Literal[
+    "Default amplitude model",
+    "Alternative amplitude model with K(892) with free mass and width",
+    "Alternative amplitude model with L(1670) with free mass and width",
+    "Alternative amplitude model with L(1690) with free mass and width",
+    "Alternative amplitude model with D(1232) with free mass and width",
+    "Alternative amplitude model with L(1600), D(1600), D(1700) with free mass and width",
+    "Alternative amplitude model with free L(1405) Flatt'e widths, indicated as G1 (pK channel) and G2 (Sigmapi)",
+    "Alternative amplitude model with L(1800) contribution added with free mass and width",
+    "Alternative amplitude model with L(1810) contribution added with free mass and width",
+    "Alternative amplitude model with D(1620) contribution added with free mass and width",
+    "Alternative amplitude model in which a Relativistic Breit-Wigner is used for the K(700) contribution",
+    "Alternative amplitude model with K(700) with free mass and width",
+    "Alternative amplitude model with K(1410) contribution added with mass and width from PDG2020",
+    "Alternative amplitude model in which a Relativistic Breit-Wigner is used for the K(1430) contribution",
+    "Alternative amplitude model with K(1430) with free width",
+    "Alternative amplitude model with an additional overall exponential form factor exp(-alpha q^2) multiplying Bugg lineshapes. The exponential parameter is indicated as alpha",
+    "Alternative amplitude model with free radial parameter d for the Lc resonance, indicated as dLc",
+    "Alternative amplitude model obtained using LS couplings",
+]
+"""The names of the published models."""
+# fmt: on
+
+
 def load_model(
     model_file: Path | str,
     particle_definitions: dict[str, Particle],
-    model_id: int | str = 0,
+    model_id: int | ModelName = 0,
 ) -> AmplitudeModel:
     builder = load_model_builder(model_file, particle_definitions, model_id)
     model = builder.formulate()
@@ -57,7 +82,7 @@ def load_model(
 def load_model_builder(
     model_file: Path | str,
     particle_definitions: dict[str, Particle],
-    model_id: int | str = 0,
+    model_id: int | ModelName = 0,
 ) -> DalitzPlotDecompositionBuilder:
     with open(model_file) as f:
         model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
@@ -74,7 +99,7 @@ def load_model_builder(
     return amplitude_builder
 
 
-def _find_model_title(model_definitions: dict, model_id: int | str) -> str:
+def _find_model_title(model_definitions: dict, model_id: int | ModelName) -> str:
     if isinstance(model_id, int):
         if model_id >= len(model_definitions):
             msg = (
@@ -176,7 +201,7 @@ class ParameterBootstrap:
         self,
         filename: Path | str,
         decay: ThreeBodyDecay,
-        model_id: int | str = 0,
+        model_id: int | ModelName = 0,
     ) -> None:
         particle_definitions = extract_particle_definitions(decay)
         symbolic_parameters = load_model_parameters_with_uncertainties(
@@ -206,7 +231,7 @@ class ParameterBootstrap:
 def load_model_parameters(
     filename: Path | str,
     decay: ThreeBodyDecay,
-    model_id: int | str = 0,
+    model_id: int | ModelName = 0,
     particle_definitions: dict[str, Particle] | None = None,
 ) -> dict[sp.Indexed | sp.Symbol, complex | float]:
     parameters = load_model_parameters_with_uncertainties(
@@ -218,7 +243,7 @@ def load_model_parameters(
 def load_model_parameters_with_uncertainties(
     filename: Path | str,
     decay: ThreeBodyDecay,
-    model_id: int | str = 0,
+    model_id: int | ModelName = 0,
     particle_definitions: dict[str, Particle] | None = None,
 ) -> dict[sp.Indexed | sp.Symbol, MeasuredParameter]:
     with open(filename) as f:

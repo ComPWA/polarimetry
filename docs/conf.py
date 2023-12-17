@@ -499,6 +499,7 @@ relink_targets = {
     "Literal[(-1, 1)]": "typing.Literal",
     "Literal[- 1, 1]": "typing.Literal",
     "Literal[-1, 1]": "typing.Literal",
+    "ModelName": "polarimetry.lhcb.ModelName",
     "OuterStates": "polarimetry.decay.OuterStates",
     "ParameterType": "polarimetry.lhcb.ParameterType",
     "ParameterValue": "tensorwaves.interface.ParameterValue",
