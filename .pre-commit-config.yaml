@@ -23,7 +23,6 @@ repos:
           - --no-github-actions
           - --no-gitpod
           - --no-prettierrc
-          - --no-pypi
           - --no-ruff
           - --no-version-branches
           - --repo-name=polarimetry
