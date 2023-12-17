@@ -5,9 +5,8 @@ myst:
 
 # Polarimetry in Λ<sub>c</sub>⁺&nbsp;→&nbsp;p&nbsp;K⁻&nbsp;π⁺
 
-```{title} Welcome
-
-```
+:::{title} Welcome
+:::
 
 [![10.48550/arXiv.2301.07010](https://zenodo.org/badge/doi/10.48550/arXiv.2301.07010.svg)](https://doi.org/10.48550/arXiv.2301.07010)
 [![10.5281/zenodo.7544989](https://zenodo.org/badge/doi/10.5281/zenodo.7544989.svg)](https://doi.org/10.5281/zenodo.7544989)
@@ -81,17 +80,33 @@ This website shows all analysis results that led to the publication of [LHCb-PAP
 
 :::
 
-::::{only} latex
-
 <!-- cspell:ignore lc2pkpi -->
 
+::::{only} latex
 :::{note}
-
 This document is a PDF rendering of the supplemental material hosted behind SSO-login on [lc2pkpi‑polarimetry.docs.cern.ch](https://lc2pkpi-polarimetry.docs.cern.ch). Go to this webpage for a more extensive and interactive experience.
+:::
+::::
 
+[![PyPI package](https://badge.fury.io/py/polarimetry-lc2pki.svg)](https://pypi.org/project/polarimetry-lc2pki)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/polarimetry-lc2pki)](https://pypi.org/project/polarimetry-lc2pki)
+
+Each of the pages contain code examples for how to reproduce the results with the Python package hosted at [github.com/ComPWA/polarimetry](https://github.com/ComPWA/polarimetry). However, to quickly get import the model in another package, it is possible to install the package from PyPI:
+
+```bash
+pip install lc2pkpi-polarimetry
+```
+
+:::{autolink-concat}
 :::
 
-::::
+Each of the models can then simply be imported as
+
+```python
+import polarimetry
+
+model = polarimetry.published_model()
+```
 
 <!-- cspell:ignore maxdepth -->
 
@@ -132,10 +147,7 @@ CERN GitLab (archived) <https://gitlab.cern.ch/polarimetry/Lc2pKpi>
 
 {{ DOWNLOAD_PAPER_FIGURES }}
 
-:::{dropdown} Notebook execution times
-
-```{nb-exec-table}
-
-```
-
+::::{dropdown} Notebook execution times
+:::{nb-exec-table}
 :::
+::::

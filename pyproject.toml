@@ -43,15 +43,15 @@ dependencies = [
 description = "Symbolic expressions that describe an aligned polarimeter vector field"
 dynamic = ["version"]
 license = {text = "GPLv3 or later"}
-name = "polarimetry"
+name = "polarimetry-lc2pkpi"
 requires-python = ">=3.8"
 
 [project.optional-dependencies]
 dev = [
-    "polarimetry[doc]",
-    "polarimetry[jupyter]",
-    "polarimetry[sty]",
-    "polarimetry[test]",
+    "polarimetry-lc2pkpi[doc]",
+    "polarimetry-lc2pkpi[jupyter]",
+    "polarimetry-lc2pkpi[sty]",
+    "polarimetry-lc2pkpi[test]",
     "sphinx-autobuild",
     "tox >=1.9",
 ]
@@ -85,7 +85,7 @@ jupyter = [
     "jupyterlab-git",
     "jupyterlab-lsp",
     "jupyterlab-myst",
-    "polarimetry[doc]",
+    "polarimetry-lc2pkpi[doc]",
     "python-lsp-ruff",
     "python-lsp-server[rope]",
 ]
