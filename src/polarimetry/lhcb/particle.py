@@ -2,18 +2,13 @@
 
 from __future__ import annotations
 
-from os.path import abspath, dirname
-from typing import TYPE_CHECKING
+from pathlib import Path
+from typing import TypedDict
 
 import sympy as sp
 import yaml
 
 from polarimetry.decay import Particle
-
-if TYPE_CHECKING:
-    from pathlib import Path
-
-from typing import TypedDict
 
 
 def load_particles(filename: Path | str) -> dict[str, Particle]:
@@ -75,7 +70,7 @@ class ResonanceJSON(TypedDict):
 
 
 __PARTICLE_DATABASE = load_particles(
-    f"{abspath(dirname(__file__))}/particle-definitions.yaml"
+    Path(__file__).parent.parent / "data/particle-definitions.yaml"
 )
 
 Λc = __PARTICLE_DATABASE["Lambda_c+"]
