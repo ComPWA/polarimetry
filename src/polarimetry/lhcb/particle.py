@@ -74,7 +74,7 @@ class ResonanceJSON(TypedDict):
 
 
 __PARTICLE_DATABASE = load_particles(
-    Path(__file__).parent.parent / "data/particle-definitions.yaml"
+    Path(__file__).parent.parent / "lhcb/particle-definitions.yaml"
 )
 
 Λc = __PARTICLE_DATABASE["Lambda_c+"]
