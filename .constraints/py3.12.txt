@@ -44,7 +44,7 @@ execnet==2.0.2
 executing==2.0.1
 fastjsonschema==2.19.1
 filelock==3.13.1
-fonttools==4.47.0
+fonttools==4.47.2
 fqdn==1.5.1
 gitdb==4.0.11
 gitpython==3.1.41
@@ -76,7 +76,7 @@ jupyter-client==8.6.0
 jupyter-core==5.7.1
 jupyter-events==0.9.0
 jupyter-lsp==2.2.1
-jupyter-server==2.12.3
+jupyter-server==2.12.4
 jupyter-server-mathjax==0.2.6
 jupyter-server-terminals==0.5.1
 jupyterlab==4.0.10
@@ -106,7 +106,7 @@ mypy-extensions==1.0.0
 myst-nb==1.0.0
 myst-parser==2.0.0
 nbclient==0.6.8
-nbconvert==7.14.0
+nbconvert==7.14.1
 nbdime==4.0.1
 nbformat==5.9.2
 nbmake==1.4.6
