@@ -40,7 +40,6 @@ from tensorwaves.function.sympy import create_function, create_parametrized_func
 from polarimetry.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 
 if TYPE_CHECKING:
-    from ampform.sympy import UnevaluatedExpression
     from tensorwaves.interface import Function, ParameterValue, ParametrizedFunction
 
 _LOGGER = logging.getLogger(__name__)
@@ -236,9 +235,7 @@ def display_latex(obj) -> None:
     display(Math(latex))
 
 
-def display_doit(
-    expr: UnevaluatedExpression, deep=False, terms_per_line: int | None = None
-) -> None:
+def display_doit(expr: sp.Expr, deep=False, terms_per_line: int | None = None) -> None:
     if terms_per_line is None:
         latex = as_latex({expr: expr.doit(deep=deep)})
     else:
