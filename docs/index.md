@@ -94,7 +94,7 @@ This document is a PDF rendering of the supplemental material hosted behind SSO-
 Each of the pages contain code examples for how to reproduce the results with the Python package hosted at [github.com/ComPWA/polarimetry](https://github.com/ComPWA/polarimetry). However, to quickly get import the model in another package, it is possible to install the package from PyPI:
 
 ```bash
-pip install lc2pkpi-polarimetry
+pip install polarimetry-lc2pkpi
 ```
 
 :::{autolink-concat}
