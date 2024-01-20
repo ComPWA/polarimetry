@@ -4,10 +4,10 @@ channels:
   - conda-forge
 dependencies:
   - juliaup
-  - python==3.8.*
+  - python==3.9.*
   - pip>=21.3 # pyproject.toml
   - pip:
-      - -c .constraints/py3.8.txt -e .[dev]
+      - -c .constraints/py3.9.txt -e .[dev]
 variables:
   PRETTIER_LEGACY_CLI: "1"
   PYTHONHASHSEED: 0
