@@ -30,7 +30,8 @@ Style checks are enforced with [Pre-commit](https://pre-commit.com). To activate
 pre-commit install
 ```
 
-For more information about local Python set-up, see [here](https://compwa-org.readthedocs.io/develop.html#local-set-up).
+> [!TIP]
+> For more information about the local Python developer environment, see [here](https://compwa.github.io/develop#local-set-up).
 
 This repository also contains Julia source code and Pluto notebooks. Julia can be downloaded [here](https://julialang.org/downloads). You then have to activate and instantiated the Julia environment provided in the [`julia`](./julia) folder. This can be done as follows from the root directory:
 
