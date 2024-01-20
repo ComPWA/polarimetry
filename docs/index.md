@@ -136,7 +136,7 @@ hidden:
 ---
 JHEP <https://doi.org/10.1007/JHEP07(2023)228>
 arXiv:2301.07010 <https://arxiv.org/abs/2301.07010>
-ComPWA <https://compwa-org.readthedocs.io>
+ComPWA Project <https://compwa.github.io>
 GitHub repository <https://github.com/ComPWA/polarimetry>
 CERN GitLab (archived) <https://gitlab.cern.ch/polarimetry/Lc2pKpi>
 ```
