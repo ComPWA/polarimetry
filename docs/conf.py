@@ -364,9 +364,11 @@ html_theme_options = {
     "repository_url": "https://github.com/ComPWA/polarimetry",
     "show_navbar_depth": 1,
     "show_toc_level": 2,
-    "use_edit_page_button": False,
+    "use_download_button": False,
+    "use_edit_page_button": True,
     "use_issues_button": True,
     "use_repository_button": True,
+    "use_source_button": True,
 }
 html_title = "Λ<sub>c</sub> → p K π polarimetry"
 intersphinx_mapping = {
