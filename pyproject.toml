@@ -93,14 +93,19 @@ jupyter = [
 ]
 sty = [
     "black",
+    "polarimetry-lc2pkpi[types]",
     "pre-commit >=1.4.0",
-    "pytest",
     "ruff",
 ]
 test = [
     "nbmake",
     "pytest >=6.0",
     "pytest-xdist",
+]
+types = [
+    "pytest",
+    "sphinx-api-relink",
+    "types-requests",
 ]
 
 [project.readme]
