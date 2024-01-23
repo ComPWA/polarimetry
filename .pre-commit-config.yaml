@@ -13,6 +13,31 @@ repos:
       - id: check-hooks-apply
       - id: check-useless-excludes
 
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.6.1
+    hooks:
+      - id: nbstripout
+        args:
+          - --extra-keys
+          - |
+            cell.attachments
+            cell.metadata.code_folding
+            cell.metadata.id
+            cell.metadata.pycharm
+            cell.metadata.user_expressions
+            metadata.celltoolbar
+            metadata.colab.name
+            metadata.colab.provenance
+            metadata.interpreter
+            metadata.notify_time
+            metadata.toc
+            metadata.toc-autonumbering
+            metadata.toc-showcode
+            metadata.toc-showmarkdowntxt
+            metadata.toc-showtags
+            metadata.varInspector
+            metadata.vscode
+
   - repo: https://github.com/ComPWA/policy
     rev: 0.2.3
     hooks:
@@ -66,6 +91,22 @@ repos:
         args: [--line-length=85]
         types_or: [jupyter]
 
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+
+  - repo: https://github.com/ComPWA/mirrors-taplo
+    rev: v0.8.1
+    hooks:
+      - id: taplo
+
+  - repo: https://github.com/pappasam/toml-sort
+    rev: v0.23.1
+    hooks:
+      - id: toml-sort
+        args: [--in-place]
+        exclude: (?x)^(.*(Manifest|Project)\.toml)$
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.27.3
     hooks:
@@ -95,36 +136,6 @@ repos:
             .*\.py
           )$
 
-  - repo: https://github.com/kynan/nbstripout
-    rev: 0.6.1
-    hooks:
-      - id: nbstripout
-        args:
-          - --extra-keys
-          - |
-            cell.attachments
-            cell.metadata.code_folding
-            cell.metadata.id
-            cell.metadata.pycharm
-            cell.metadata.user_expressions
-            metadata.celltoolbar
-            metadata.colab.name
-            metadata.colab.provenance
-            metadata.interpreter
-            metadata.notify_time
-            metadata.toc
-            metadata.toc-autonumbering
-            metadata.toc-showcode
-            metadata.toc-showmarkdowntxt
-            metadata.toc-showtags
-            metadata.varInspector
-            metadata.vscode
-
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
-    hooks:
-      - id: prettier
-
   - repo: https://github.com/ComPWA/mirrors-pyright
     rev: v1.1.347
     hooks:
@@ -143,15 +154,3 @@ repos:
       - id: ruff
         args:
           - --fix
-
-  - repo: https://github.com/ComPWA/mirrors-taplo
-    rev: v0.8.1
-    hooks:
-      - id: taplo
-
-  - repo: https://github.com/pappasam/toml-sort
-    rev: v0.23.1
-    hooks:
-      - id: toml-sort
-        args: [--in-place]
-        exclude: (?x)^(.*(Manifest|Project)\.toml)$
