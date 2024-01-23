@@ -14,7 +14,7 @@ repos:
       - id: check-useless-excludes
 
   - repo: https://github.com/ComPWA/policy
-    rev: 0.2.2
+    rev: 0.2.3
     hooks:
       - id: check-dev-files
         args:
@@ -126,7 +126,7 @@ repos:
       - id: prettier
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.345
+    rev: v1.1.347
     hooks:
       - id: pyright
 
@@ -138,7 +138,7 @@ repos:
           - --py38-plus
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.13
+    rev: v0.1.14
     hooks:
       - id: ruff
         args:
