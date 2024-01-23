@@ -66,10 +66,12 @@ doc = [
     "plotly",
     "psutil",
     "scipy",
+    "sphinx-api-relink",
     "sphinx-book-theme",
     "sphinx-codeautolink[ipython]",
     "sphinx-copybutton",
     "sphinx-design",
+    "sphinx-pybtex-etal-style",
     "sphinx-reredirects",
     "sphinx-togglebutton",
     "sphinxcontrib-bibtex >=2.2",
@@ -91,14 +93,19 @@ jupyter = [
 ]
 sty = [
     "black",
+    "polarimetry-lc2pkpi[types]",
     "pre-commit >=1.4.0",
-    "pytest",
     "ruff",
 ]
 test = [
     "nbmake",
     "pytest >=6.0",
     "pytest-xdist",
+]
+types = [
+    "pytest",
+    "sphinx-api-relink",
+    "types-requests",
 ]
 
 [project.readme]

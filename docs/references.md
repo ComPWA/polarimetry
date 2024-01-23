@@ -12,7 +12,6 @@ Download BibTeX
 
 ```{bibliography} /_static/references.bib
 ---
-style: unsrt_et_al
 cited:
 ---
 ```

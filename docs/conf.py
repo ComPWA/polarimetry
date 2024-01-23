@@ -1,18 +1,21 @@
 from __future__ import annotations
 
 import os
-import re
 import shutil
 import subprocess
 import sys
 from datetime import datetime
-from importlib.metadata import PackageNotFoundError
-from importlib.metadata import version as get_package_version
 from pathlib import Path
 from textwrap import dedent, indent
 
-import requests  # pyright: ignore[reportMissingModuleSource]
+import requests
 from attrs import define, field
+from sphinx_api_relink.helpers import (
+    get_package_version,
+    pin,
+    pin_minor,
+    set_intersphinx_version_remapping,
+)
 
 sys.path.insert(0, os.path.abspath("extensions"))
 
@@ -168,30 +171,6 @@ def get_timestamp() -> str:
     return now.strftime("%d/%m/%Y %H:%M:%S")
 
 
-def get_polarimetry_package_version() -> str:
-    try:
-        return get_package_version("polarimetry")
-    except PackageNotFoundError:
-        return ""
-
-
-def generate_api() -> None:
-    shutil.rmtree("api", ignore_errors=True)
-    subprocess.call(
-        " ".join([
-            "sphinx-apidoc",
-            "../src/polarimetry/",
-            "../src/polarimetry/version.py",
-            "-o api/",
-            "--force",
-            "--no-toc",
-            "--separate",
-            "--templatedir _templates",
-        ]),
-        shell=True,  # noqa: S602
-    )
-
-
 def get_link_to_single_pdf() -> str:
     build_file = "_build/latex/polarimetry.pdf"
     embedded_file = "_static/polarimetry.pdf"
@@ -209,63 +188,12 @@ def get_link_to_single_pdf() -> str:
     return ""
 
 
-def get_minor_version(package_name: str) -> str:
-    installed_version = get_version(package_name)
-    if installed_version == "stable":
-        return installed_version
-    matches = re.match(r"^([0-9]+\.[0-9]+).*$", installed_version)
-    if matches is None:
-        msg = f"Could not find documentation for {package_name} v{installed_version}"
-        raise ValueError(msg)
-    return matches[1]
-
-
 def get_scipy_url() -> str:
-    url = f"https://docs.scipy.org/doc/scipy-{get_version('scipy')}/"
+    url = f"https://docs.scipy.org/doc/scipy-{pin('scipy')}/"
     r = requests.get(url)  # noqa: S113
     if r.status_code != 200:
         return "https://docs.scipy.org/doc/scipy"
     return url
-
-
-def get_version(package_name: str) -> str:
-    python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
-    constraints_path = f"../.constraints/py{python_version}.txt"
-    package_name = package_name.lower()
-    with open(constraints_path) as stream:
-        constraints = stream.read()
-    version_remapping = {
-        "ipython": {
-            "8.12.2": "8.12.1",
-            "8.12.3": "8.12.1",
-        },
-        "ipywidgets": {
-            "8.0.3": "8.0.5",
-            "8.0.4": "8.0.5",
-            "8.0.6": "8.0.5",
-            "8.1.1": "8.1.2",
-        },
-    }
-    for line in constraints.split("\n"):
-        line = line.split("#")[0]  # remove comments
-        line = line.strip()
-        line = line.lower()
-        if not line.startswith(package_name):
-            continue
-        if not line:
-            continue
-        line_segments = tuple(line.split("=="))
-        if len(line_segments) != 2:
-            continue
-        _, installed_version, *_ = line_segments
-        installed_version = installed_version.strip()
-        remapped_versions = version_remapping.get(package_name)
-        if remapped_versions is not None:
-            existing_version = remapped_versions.get(installed_version)
-            if existing_version is not None:
-                return existing_version
-        return installed_version
-    return "stable"
 
 
 @define
@@ -286,10 +214,57 @@ class MissingFileCollector:
 
 
 execute_pluto_notebooks()
-generate_api()
+set_intersphinx_version_remapping({
+    "ipywidgets": {
+        "8.1.1": "8.1.2",
+    },
+})
+
 MISSING_FILES = MissingFileCollector()
 
+BRANCH = "main"
+PACKAGE = "polarimetry-lc2pkpi"
+PACKAGE_NAME = "polarimetry"
+ORGANIZATION = "ComPWA"
+REPO_NAME = "polarimetry"
+
 add_module_names = False
+api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
+api_target_substitutions = {
+    "Axes": "matplotlib.axes.Axes",
+    "DataSample": ("obj", "tensorwaves.interface.DataSample"),
+    "Function": ("obj", "tensorwaves.interface.Function"),
+    "LineCollection": "matplotlib.collections.LineCollection",
+    "LineshapeName": ("obj", "polarimetry.lhcb.LineshapeName"),
+    "Literal[(-1, 1)]": "typing.Literal",
+    "Literal[- 1, 1]": "typing.Literal",
+    "Literal[-1, 1]": "typing.Literal",
+    "ModelName": ("obj", "polarimetry.lhcb.ModelName"),
+    "OuterStates": ("obj", "polarimetry.decay.OuterStates"),
+    "ParameterType": ("obj", "polarimetry.lhcb.ParameterType"),
+    "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
+    "ParametrizedFunction": ("obj", "tensorwaves.interface.ParametrizedFunction"),
+    "Path": "pathlib.Path",
+    "Pattern": "typing.Pattern",
+    "PoolSum": "ampform.sympy.PoolSum",
+    "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
+    "QuadContourSet": "matplotlib.contour.QuadContourSet",
+    "ResonanceName": ("obj", "polarimetry.lhcb.ResonanceName"),
+    "SympyDataTransformer": "tensorwaves.data.transform.SympyDataTransformer",
+    "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
+    "implement_doit_method": "ampform.sympy.implement_doit_method",
+    "polarimetry.lhcb._T": "typing.TypeVar",
+    "sp.Expr": "sympy.core.expr.Expr",
+    "sp.Indexed": "sympy.tensor.indexed.Indexed",
+    "sp.Mul": "sympy.core.mul.Mul",
+    "sp.Rational": "sympy.core.numbers.Rational",
+    "sp.Symbol": "sympy.core.symbol.Symbol",
+    "sp.acos": "sympy.functions.elementary.trigonometric.acos",
+    "typing.Literal[-1, 1]": "typing.Literal",
+}
+api_target_types = {
+    "jax.numpy.ndarray": "obj",
+}
 author = "Mikhail Mikhasenko, Remco de Boer, Miriam Fritsch"
 autodoc_default_options = {
     "exclude-members": ", ".join([
@@ -313,6 +288,7 @@ autosectionlabel_maxdepth = 2
 bibtex_bibfiles = [
     "_static/references.bib",
 ]
+bibtex_default_style = "unsrt_et_al"
 codeautolink_concat_default = True
 copyright = "2023"
 default_role = "py:obj"
@@ -325,23 +301,23 @@ exclude_patterns = [
 ]
 extensions = [
     "myst_nb",
-    "relink_references",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
-    "sphinx.ext.viewcode",
+    "sphinx_api_relink",
     "sphinx_book_theme",
     "sphinx_codeautolink",
     "sphinx_copybutton",
     "sphinx_design",
+    "sphinx_pybtex_etal_style",
     "sphinx_reredirects",
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
     "sphinxcontrib.inkscapeconverter",
     "support_bibtex_math",
-    "unsrt_et_al",
 ]
+generate_apidoc_package_path = f"../src/{PACKAGE_NAME}"
 html_css_files = [
     "custom.css",
 ]
@@ -355,40 +331,69 @@ html_sourcelink_suffix = ""
 html_static_path = ["_static"]
 html_theme = "sphinx_book_theme"
 html_theme_options = {
+    "icon_links": [
+        {
+            "name": "Common Partial Wave Analysis",
+            "url": "https://compwa.github.io/_static/favicon.ico",
+            "icon": "_static/favicon.ico",
+            "type": "local",
+        },
+        {
+            "name": "GitHub",
+            "url": f"https://github.com/{ORGANIZATION}/{REPO_NAME}",
+            "icon": "fa-brands fa-github",
+        },
+        {
+            "name": "PyPI",
+            "url": f"https://pypi.org/project/{PACKAGE}",
+            "icon": "fa-brands fa-python",
+        },
+        {
+            "name": "Launch on Binder",
+            "url": f"https://mybinder.org/v2/gh/{ORGANIZATION}/{REPO_NAME}/{BRANCH}?filepath=docs",
+            "icon": "https://mybinder.readthedocs.io/en/latest/_static/favicon.png",
+            "type": "url",
+        },
+        {
+            "name": "Launch on Colaboratory",
+            "url": f"https://colab.research.google.com/github/{ORGANIZATION}/{REPO_NAME}/blob/{BRANCH}",
+            "icon": "https://avatars.githubusercontent.com/u/33467679?s=100",
+            "type": "url",
+        },
+    ],
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
+        "colab_url": "https://colab.research.google.com",
+        "deepnote_url": "https://deepnote.com",
         "notebook_interface": "jupyterlab",
     },
+    "logo": {"text": "Λ<sub>c</sub>⁺&nbsp;→&nbsp;p&nbsp;K⁻&nbsp;π⁺"},
     "path_to_docs": "docs",
-    "repository_url": "https://github.com/ComPWA/polarimetry",
-    "repository_branch": "0.0.9",
+    "repository_branch": BRANCH,
+    "repository_url": f"https://github.com/{ORGANIZATION}/{REPO_NAME}",
     "show_navbar_depth": 1,
     "show_toc_level": 2,
-    "use_repository_button": True,
-    "use_edit_page_button": False,
+    "use_download_button": False,
+    "use_edit_page_button": True,
     "use_issues_button": True,
+    "use_repository_button": True,
+    "use_source_button": True,
 }
 html_title = "Λ<sub>c</sub> → p K π polarimetry"
 intersphinx_mapping = {
-    "IPython": (f"https://ipython.readthedocs.io/en/{get_version('IPython')}", None),
-    "ampform": (f"https://ampform.readthedocs.io/en/{get_version('ampform')}", None),
-    "attrs": (f"https://www.attrs.org/en/{get_version('attrs')}", None),
+    "IPython": (f"https://ipython.readthedocs.io/en/{pin('IPython')}", None),
+    "ampform": (f"https://ampform.readthedocs.io/en/{pin('ampform')}", None),
+    "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
     "iminuit": ("https://iminuit.readthedocs.io/en/stable", None),
-    "ipywidgets": (
-        f"https://ipywidgets.readthedocs.io/en/{get_version('ipywidgets')}",
-        None,
-    ),
+    "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/{pin('ipywidgets')}", None),
     "jax": ("https://jax.readthedocs.io/en/latest", None),
-    "matplotlib": (f"https://matplotlib.org/{get_version('matplotlib')}", None),
-    "numpy": (f"https://numpy.org/doc/{get_minor_version('numpy')}", None),
+    "matplotlib": (f"https://matplotlib.org/{pin('matplotlib')}", None),
+    "numpy": (f"https://numpy.org/doc/{pin_minor('numpy')}", None),
     "plotly": ("https://plotly.com/python-api-reference", None),
     "python": ("https://docs.python.org/3", None),
     "scipy": (get_scipy_url(), None),
     "sympy": ("https://docs.sympy.org/latest", None),
-    "tensorwaves": (
-        f"https://tensorwaves.readthedocs.io/en/{get_version('tensorwaves')}",
-        None,
-    ),
+    "tensorwaves": (f"https://tensorwaves.rtfd.io/en/{pin('tensorwaves')}", None),
 }
 latex_documents = [
     # https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-latex_documents
@@ -423,7 +428,7 @@ latex_elements = {
   },
 }
 """,
-    "releasename": f"{get_polarimetry_package_version()} ({get_timestamp()})",
+    "releasename": f"{get_package_version(PACKAGE)} ({get_timestamp()})",
 }
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 latex_show_pagerefs = True
@@ -431,6 +436,7 @@ linkcheck_ignore = [
     "https://arxiv.org/pdf/2208.03262.pdf",
     "https://arxiv.org/pdf/hep-ex/0510019.pdf",
     "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033",
+    "https://www.bookfinder.com",
 ]
 myst_enable_extensions = [
     "colon_fence",
@@ -482,50 +488,6 @@ myst_substitutions = {
     "FIG_SUB_REGIONS": get_figure_link("_images/sub-regions.svg"),
     "LINK_TO_JULIA_PAGES": get_link_to_julia_pages(),
 }
-relink_ref_types = {
-    "jax.numpy.ndarray": "obj",
-    "polarimetry.decay.OuterStates": "obj",
-    "polarimetry.lhcb.LineshapeName": "obj",
-    "polarimetry.lhcb.ModelName": "obj",
-    "polarimetry.lhcb.ParameterType": "obj",
-    "polarimetry.lhcb.ResonanceName": "obj",
-    "tensorwaves.interface.DataSample": "obj",
-    "tensorwaves.interface.Function": "obj",
-    "tensorwaves.interface.ParameterValue": "obj",
-    "tensorwaves.interface.ParametrizedFunction": "obj",
-}
-relink_targets = {
-    "Axes": "matplotlib.axes.Axes",
-    "DataSample": "tensorwaves.interface.DataSample",
-    "Function": "tensorwaves.interface.Function",
-    "LineCollection": "matplotlib.collections.LineCollection",
-    "LineshapeName": "polarimetry.lhcb.LineshapeName",
-    "Literal[(-1, 1)]": "typing.Literal",
-    "Literal[- 1, 1]": "typing.Literal",
-    "Literal[-1, 1]": "typing.Literal",
-    "ModelName": "polarimetry.lhcb.ModelName",
-    "OuterStates": "polarimetry.decay.OuterStates",
-    "ParameterType": "polarimetry.lhcb.ParameterType",
-    "ParameterValue": "tensorwaves.interface.ParameterValue",
-    "ParametrizedFunction": "tensorwaves.interface.ParametrizedFunction",
-    "Path": "pathlib.Path",
-    "Pattern": "typing.Pattern",
-    "PoolSum": "ampform.sympy.PoolSum",
-    "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
-    "QuadContourSet": "matplotlib.contour.QuadContourSet",
-    "ResonanceName": "polarimetry.lhcb.ResonanceName",
-    "SympyDataTransformer": "tensorwaves.data.transform.SympyDataTransformer",
-    "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
-    "implement_doit_method": "ampform.sympy.implement_doit_method",
-    "polarimetry.lhcb._T": "typing.TypeVar",
-    "sp.Expr": "sympy.core.expr.Expr",
-    "sp.Indexed": "sympy.tensor.indexed.Indexed",
-    "sp.Mul": "sympy.core.mul.Mul",
-    "sp.Rational": "sympy.core.numbers.Rational",
-    "sp.Symbol": "sympy.core.symbol.Symbol",
-    "sp.acos": "sympy.functions.elementary.trigonometric.acos",
-    "typing.Literal[-1, 1]": "typing.Literal",
-}
 nb_execution_allow_errors = False
 nb_execution_mode = get_execution_mode()
 nb_execution_show_tb = True
@@ -551,7 +513,6 @@ suppress_warnings = [
     "mystnb.unknown_mime_type",
 ]
 use_multitoc_numbering = True
-version = get_polarimetry_package_version()
-viewcode_follow_imported_members = True
+version = get_package_version(PACKAGE)
 
 MISSING_FILES.print()
