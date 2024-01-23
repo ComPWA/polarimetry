@@ -436,6 +436,7 @@ linkcheck_ignore = [
     "https://arxiv.org/pdf/2208.03262.pdf",
     "https://arxiv.org/pdf/hep-ex/0510019.pdf",
     "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033",
+    "https://www.bookfinder.com",
 ]
 myst_enable_extensions = [
     "colon_fence",
