@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import os
+import shutil
 from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
@@ -41,7 +41,7 @@ def use_mpl_latex_fonts(reset_mpl: bool = True) -> None:
 
 
 def _is_latex_allowed() -> bool:
-    if "BINDER_LAUNCH_HOST" in os.environ:
+    if shutil.which("latex") is None:
         return False
     return True
 
