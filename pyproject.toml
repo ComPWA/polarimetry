@@ -292,6 +292,7 @@ ignore-names = [
 ]
 
 [tool.ruff.per-file-ignores]
+"**/benchmark.ipynb" = ["F821"]
 "*.ipynb" = [
     "B018",
     "C408",

@@ -1,3 +1,5 @@
+"""Helper functions for creating numerical functions from symbolic expressions."""
+
 from __future__ import annotations
 
 import logging

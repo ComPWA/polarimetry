@@ -190,7 +190,7 @@ def get_link_to_single_pdf() -> str:
 
 def get_scipy_url() -> str:
     url = f"https://docs.scipy.org/doc/scipy-{pin('scipy')}/"
-    r = requests.get(url)  # noqa: S113
+    r = requests.get(url)
     if r.status_code != 200:
         return "https://docs.scipy.org/doc/scipy"
     return url

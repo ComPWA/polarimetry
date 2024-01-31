@@ -43,7 +43,8 @@ def _to_resonance(name: str, definition: ResonanceJSON) -> Particle:
 
 
 def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
-    """
+    """Convert a string defining J^PC to a tuple of spin and parity.
+
     >>> _to_jp_pair("3/2^-")
     (3/2, -1)
     >>> _to_jp_pair("0^+")
@@ -54,7 +55,8 @@ def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
 
 
 def _average_float(input_str: float | str) -> tuple[float, float]:
-    """
+    """Generate float value from a string or range.
+
     >>> _average_float("1405.1")
     1405.1
     >>> _average_float("1900-2100")
