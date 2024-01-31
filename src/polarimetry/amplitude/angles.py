@@ -1,3 +1,5 @@
+"""Formulate expressions for scattering and alignment angles."""
+
 from __future__ import annotations
 
 import sympy as sp

@@ -92,8 +92,10 @@ jupyter = [
     "python-lsp-ruff",
     "python-lsp-server[rope]",
 ]
+lint = ["ruff"]
 sty = [
     "black",
+    "polarimetry-lc2pkpi[lint]",
     "polarimetry-lc2pkpi[types]",
     "pre-commit >=1.4.0",
     "ruff",
@@ -154,29 +156,6 @@ target-version = [
     "py39",
 ]
 
-[tool.nbqa.addopts]
-ruff = [
-    "--extend-ignore=B018",
-    "--extend-ignore=C408",
-    "--extend-ignore=C901",
-    "--extend-ignore=E402",
-    "--extend-ignore=E741",
-    "--extend-ignore=ISC001",
-    "--extend-ignore=N8",
-    "--extend-ignore=PGH001",
-    "--extend-ignore=PLR0915",
-    "--extend-ignore=S101",
-    "--extend-ignore=S102",
-    "--extend-ignore=S301",
-    "--extend-ignore=S307",
-    "--extend-ignore=S310",
-    "--extend-ignore=T201",
-    "--line-length=85",
-]
-
-[tool.nbqa.exclude]
-ruff = "^docs/appendix/benchmark.ipynb"
-
 [tool.pyright]
 include = ["src", "tests"]
 reportGeneralTypeIssues = false
@@ -225,12 +204,15 @@ testpaths = [
 ]
 
 [tool.ruff]
+extend-exclude = ["typings"]
+extend-include = ["*.ipynb"]
 extend-select = [
     "A",
     "B",
     "BLE",
     "C4",
     "C90",
+    "D",
     "EM",
     "ERA",
     "FA",
@@ -257,19 +239,29 @@ extend-select = [
     "YTT",
 ]
 ignore = [
-    "E501", # line length handled by black
-    "ISC003", # allow concatenate \n strings
-    "PLR0913", # sympy classes and functions
+    "D101",
+    "D102",
+    "D103",
+    "D105",
+    "D107",
+    "D203",
+    "D213",
+    "D407",
+    "D416",
+    "E501",
+    "ISC003",
+    "PLR0913",
     "PLR2004",
     "PLW2901",
     "RUF001",
+    "SIM108",
 ]
 show-fixes = true
 src = [
     "src",
     "tests",
 ]
-target-version = "py37"
+target-version = "py38"
 task-tags = ["cspell"]
 
 [tool.ruff.isort]
@@ -301,21 +293,55 @@ ignore-names = [
 ]
 
 [tool.ruff.per-file-ignores]
+"**/benchmark.ipynb" = ["F821"]
+"*.ipynb" = [
+    "B018",
+    "C408",
+    "C90",
+    "D",
+    "E402",
+    "E703",
+    "E741",
+    "ISC001",
+    "N8",
+    "PGH001",
+    "PLR09",
+    "PLR2004",
+    "PLW0602",
+    "PLW0603",
+    "S101",
+    "S102",
+    "S301",
+    "S307",
+    "T20",
+    "TCH00",
+]
 "docs/*" = [
+    "E402",
     "INP001",
+    "S101",
+    "S113",
+    "S310",
     "TCH00",
 ]
 "docs/conf.py" = [
     "A00",
+    "D100",
     "T201",
 ]
 "src/polarimetry/io.py" = ["S301"] # pickle
 "tests/*" = [
     "C408",
+    "D",
     "INP001",
+    "PGH001",
     "PLR2004",
     "S101",
+    "T20",
 ]
+
+[tool.ruff.pydocstyle]
+convention = "google"
 
 [tool.tomlsort]
 all = false
