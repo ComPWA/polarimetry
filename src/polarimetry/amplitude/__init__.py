@@ -1,3 +1,5 @@
+"""Module for formulating the amplitude model for a three-body decay using DPD."""
+
 from __future__ import annotations
 
 from functools import lru_cache

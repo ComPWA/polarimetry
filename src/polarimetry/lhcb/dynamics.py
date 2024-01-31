@@ -1,3 +1,5 @@
+"""Dynamics lineshape definitions for the LHCb amplitude model."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

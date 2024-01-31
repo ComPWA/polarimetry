@@ -190,7 +190,7 @@ def get_link_to_single_pdf() -> str:
 
 def get_scipy_url() -> str:
     url = f"https://docs.scipy.org/doc/scipy-{pin('scipy')}/"
-    r = requests.get(url)  # noqa: S113
+    r = requests.get(url)
     if r.status_code != 200:
         return "https://docs.scipy.org/doc/scipy"
     return url
@@ -334,9 +334,9 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "Common Partial Wave Analysis",
-            "url": "https://compwa.github.io/_static/favicon.ico",
-            "icon": "_static/favicon.ico",
-            "type": "local",
+            "url": "https://compwa.github.io",
+            "icon": "https://compwa.github.io/_static/favicon.ico",
+            "type": "url",
         },
         {
             "name": "GitHub",
