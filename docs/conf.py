@@ -334,9 +334,9 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "Common Partial Wave Analysis",
-            "url": "https://compwa.github.io/_static/favicon.ico",
-            "icon": "_static/favicon.ico",
-            "type": "local",
+            "url": "https://compwa.github.io",
+            "icon": "https://compwa.github.io/_static/favicon.ico",
+            "type": "url",
         },
         {
             "name": "GitHub",
