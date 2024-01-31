@@ -78,6 +78,7 @@ doc = [
     "sphinxcontrib-svg2pdfconverter",
     "svgutils",
     "tqdm",
+    "uproot",
 ]
 jupyter = [
     "isort",
@@ -168,6 +169,7 @@ ruff = [
     "--extend-ignore=S102",
     "--extend-ignore=S301",
     "--extend-ignore=S307",
+    "--extend-ignore=S310",
     "--extend-ignore=T201",
     "--line-length=85",
 ]
