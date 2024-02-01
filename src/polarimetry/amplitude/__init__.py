@@ -68,13 +68,7 @@ class DalitzPlotDecompositionBuilder:
             *helicity_symbols, reference_subsystem
         )
         angle_definitions.update(zeta_defs)
-        m0, m1, m2, m3 = sp.symbols("m:4", nonnegative=True)
-        masses = {
-            m0: self.decay.states[0].mass,
-            m1: self.decay.states[1].mass,
-            m2: self.decay.states[2].mass,
-            m3: self.decay.states[3].mass,
-        }
+        masses = create_mass_symbol_mapping(self.decay)
         parameter_defaults.update(masses)
         if cleanup_summations:
             aligned_amp = aligned_amp.cleanup()
@@ -326,3 +320,10 @@ def _get_particle(isobar: IsobarNode | Particle) -> Particle:
     if isinstance(isobar, IsobarNode):
         return isobar.parent
     return isobar
+
+
+def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
+    return {
+        sp.Symbol(f"m{i}"): decay.states[i].mass
+        for i in sorted(decay.states)  # ensure that dict keys are sorted by state ID
+    }

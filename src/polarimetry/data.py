@@ -12,6 +12,8 @@ from tensorwaves.data.rng import NumpyUniformRNG
 from tensorwaves.data.transform import SympyDataTransformer
 from tensorwaves.function.sympy import create_function
 
+from polarimetry.amplitude import create_mass_symbol_mapping
+
 if TYPE_CHECKING:
     from tensorwaves.function import PositionalArgumentFunction
     from tensorwaves.interface import DataSample
@@ -130,13 +132,6 @@ def __create_compute_compute_sigma_z(
     sigma_y = sp.Symbol(f"sigma{y_mandelstam}", nonnegative=True)
     sigma_k = compute_third_mandelstam(sigma_x, sigma_y, m0, m1, m2, m3)
     return create_function(sigma_k, backend="jax", use_cse=True)
-
-
-def create_mass_symbol_mapping(decay: ThreeBodyDecay) -> dict[sp.Symbol, float]:
-    return {
-        sp.Symbol(f"m{i}"): decay.states[i].mass
-        for i in sorted(decay.states)  # ensure that dict keys are sorted by state ID
-    }
 
 
 def __get_third_mandelstam_index(
