@@ -127,7 +127,7 @@ def __create_compute_compute_sigma_z(
     x_mandelstam: Literal[1, 2, 3] = 1,
     y_mandelstam: Literal[1, 2, 3] = 2,
 ) -> PositionalArgumentFunction:
-    masses = create_mass_symbol_mapping()
+    masses = create_mass_symbol_mapping(decay)
     sigma_k = formulate_third_mandelstam(decay, x_mandelstam, y_mandelstam)
     return create_function(sigma_k.xreplace(masses), backend="jax", use_cse=True)
 
