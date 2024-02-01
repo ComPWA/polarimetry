@@ -79,7 +79,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch Julia cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: |
             julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
@@ -103,7 +103,7 @@ jobs:
           julia --version
           julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
       - name: Fetch SymPy cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: |
             sympy-${{hashFiles('.constraints/py3.*.txt')}}-${{hashFiles('src/**')}}-${{hashFiles('docs/**.ipynb')}}
@@ -112,7 +112,7 @@ jobs:
             sympy-${{hashFiles('.constraints/py3.*.txt')}}
           path: ~/.sympy-cache*/
       - name: Fetch Jupyter cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: |
             jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'src/**')}}-${{hashFiles('docs/**')}}
@@ -121,7 +121,7 @@ jobs:
           path: |
             ./docs/_build/.jupyter_cache
       - name: Fetch output files
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: |
             output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'src/**')}}-${{hashFiles('docs/**')}}
