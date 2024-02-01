@@ -1,5 +1,6 @@
 *.csv
 *.json
+*.root
 *.zip
 /api/
 

@@ -78,6 +78,7 @@ doc = [
     "sphinxcontrib-svg2pdfconverter",
     "svgutils",
     "tqdm",
+    "uproot",
 ]
 jupyter = [
     "isort",
@@ -293,6 +294,7 @@ ignore-names = [
 
 [tool.ruff.per-file-ignores]
 "**/benchmark.ipynb" = ["F821"]
+"**/model-serialization.ipynb" = ["S310"]
 "*.ipynb" = [
     "B018",
     "C408",
@@ -320,6 +322,7 @@ ignore-names = [
     "INP001",
     "S101",
     "S113",
+    "S310",
     "TCH00",
 ]
 "docs/conf.py" = [

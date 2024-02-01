@@ -64,6 +64,7 @@ def published_model(
     model_id: int | ModelName = 0,
     model_file: Path | str | None = None,
     particle_file: Path | str | None = None,
+    cleanup_summations: bool = True,
 ) -> AmplitudeModel:
     """Import model data and parameters, perform coupling conversions and return model."""
     src_dir = Path(__file__).parent
@@ -72,7 +73,7 @@ def published_model(
     if particle_file is None:
         particle_file = src_dir / "lhcb/particle-definitions.yaml"
     particles = load_particles(particle_file)
-    return load_model(model_file, particles, model_id)
+    return load_model(model_file, particles, model_id, cleanup_summations)
 
 
 def expose_model_description() -> tuple[
