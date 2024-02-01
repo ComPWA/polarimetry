@@ -6,13 +6,13 @@ from typing import TYPE_CHECKING, Literal
 
 import jax.numpy as jnp
 import sympy as sp
-from ampform.kinematics.phasespace import compute_third_mandelstam, is_within_phasespace
+from ampform.kinematics.phasespace import is_within_phasespace
 from tensorwaves.data import IntensityDistributionGenerator, NumpyDomainGenerator
 from tensorwaves.data.rng import NumpyUniformRNG
 from tensorwaves.data.transform import SympyDataTransformer
 from tensorwaves.function.sympy import create_function
 
-from polarimetry.amplitude import create_mass_symbol_mapping
+from polarimetry.amplitude import create_mass_symbol_mapping, formulate_third_mandelstam
 
 if TYPE_CHECKING:
     from tensorwaves.function import PositionalArgumentFunction
@@ -127,11 +127,9 @@ def __create_compute_compute_sigma_z(
     x_mandelstam: Literal[1, 2, 3] = 1,
     y_mandelstam: Literal[1, 2, 3] = 2,
 ) -> PositionalArgumentFunction:
-    m0, m1, m2, m3 = create_mass_symbol_mapping(decay).values()
-    sigma_x = sp.Symbol(f"sigma{x_mandelstam}", nonnegative=True)
-    sigma_y = sp.Symbol(f"sigma{y_mandelstam}", nonnegative=True)
-    sigma_k = compute_third_mandelstam(sigma_x, sigma_y, m0, m1, m2, m3)
-    return create_function(sigma_k, backend="jax", use_cse=True)
+    masses = create_mass_symbol_mapping()
+    sigma_k = formulate_third_mandelstam(decay, x_mandelstam, y_mandelstam)
+    return create_function(sigma_k.xreplace(masses), backend="jax", use_cse=True)
 
 
 def __get_third_mandelstam_index(
