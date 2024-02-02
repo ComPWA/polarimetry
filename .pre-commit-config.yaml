@@ -48,7 +48,6 @@ repos:
           - --no-github-actions
           - --no-gitpod
           - --no-prettierrc
-          - --no-version-branches
           - --repo-name=polarimetry
       - id: colab-toc-visible
 
