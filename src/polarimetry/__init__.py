@@ -76,10 +76,12 @@ def published_model(
     return load_model(model_file, particles, model_id, cleanup_summations)
 
 
-def expose_model_description() -> tuple[
-    dict[ModelName, ModelDefinition],
-    dict[str, ResonanceJSON],
-]:
+def expose_model_description() -> (
+    tuple[
+        dict[ModelName, ModelDefinition],
+        dict[str, ResonanceJSON],
+    ]
+):
     """Load all published model and particle definitions.
 
     Returns a `tuple` of:

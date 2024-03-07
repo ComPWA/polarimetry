@@ -67,7 +67,7 @@ def generate_meshgrid_sample(
     )
 
 
-def generate_sub_meshgrid_sample(
+def generate_sub_meshgrid_sample(  # noqa: PLR0917
     decay: ThreeBodyDecay,
     resolution: int,
     x_range: tuple[float, float],
