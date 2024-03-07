@@ -1,5 +1,6 @@
 # pyright: reportImportCycles=false
 """Helper functions for constructing `attrs` decorated classes."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, SupportsFloat
@@ -19,7 +20,7 @@ def assert_spin_value(instance, attribute: Attribute, value: sp.Rational) -> Non
 
 
 def to_ls(obj: LSCoupling | tuple[int, SupportsFloat] | None) -> LSCoupling:
-    from polarimetry.decay import LSCoupling
+    from polarimetry.decay import LSCoupling  # noqa: PLC0415
 
     if obj is None:
         return None

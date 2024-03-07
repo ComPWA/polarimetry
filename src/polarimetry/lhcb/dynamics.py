@@ -56,7 +56,7 @@ def formulate_exponential_bugg_breit_wigner(
     return expr, parameter_defaults
 
 
-def formulate_flatte_1405(
+def formulate_flatte_1405(  # noqa: PLR0914
     decay: ThreeBodyDecayChain,
 ) -> tuple[FlattéSWave, dict[sp.Symbol, float]]:
     s = _get_mandelstam_s(decay)

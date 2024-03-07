@@ -147,7 +147,7 @@ def _render_jp(particle: Particle) -> str:
     return f"{spin}^{parity}"
 
 
-def as_markdown_table(obj: Sequence) -> str:
+def as_markdown_table(obj) -> str:
     """Render objects a `str` suitable for generating a table."""
     item_type = _determine_item_type(obj)
     if item_type is Particle:
@@ -391,7 +391,7 @@ def mute_jax_warnings() -> None:
     jax_logger.setLevel(logging.ERROR)
 
 
-def export_polarimetry_field(
+def export_polarimetry_field(  # noqa: PLR0917
     sigma1: jax.Array,
     sigma2: jax.Array,
     alpha_x: jax.Array,

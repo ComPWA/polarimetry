@@ -134,12 +134,18 @@ write_to = "src/polarimetry/version.py"
 
 [tool.pyright]
 include = ["src", "tests"]
+reportArgumentType = false
+reportAssignmentType = false
+reportAttributeAccessIssue = false
+reportCallIssue = false
 reportGeneralTypeIssues = false
 reportImportCycles = true
 reportMissingParameterType = false
 reportMissingTypeArgument = false
 reportMissingTypeStubs = false
+reportOperatorIssue = false
 reportPrivateImportUsage = true
+reportReturnType = false
 reportUnknownArgumentType = false
 reportUnknownLambdaType = false
 reportUnknownMemberType = false
@@ -240,11 +246,14 @@ ignore = [
     "E501",
     "ISC001",
     "ISC003",
+    "PLC2401",
+    "PLC2403",
     "PLR0913",
     "PLR2004",
     "PLW1514",
     "PLW2901",
     "RUF001",
+    "S403",
     "SIM108",
 ]
 task-tags = ["cspell"]
@@ -252,6 +261,31 @@ task-tags = ["cspell"]
 [tool.ruff.lint.isort]
 known-third-party = ["sympy"]
 split-on-trailing-comma = false
+
+[tool.ruff.lint.pep8-naming]
+ignore-names = [
+    "*_I",
+    "*_I_*",
+    "A",
+    "Dx",
+    "I0",
+    "I_*",
+    "L",
+    "P[xyz]",
+    "R",
+    "S",
+    "U_*",
+    "[RH]_*",
+    "abs_Δα",
+    "l_*",
+    "mK",
+    "mKπ",
+    "max_L",
+    "mΣ",
+    "s_A",
+    "Γ*",
+    "λ*",
+]
 
 [tool.ruff.lint.per-file-ignores]
 "**/benchmark.ipynb" = ["F821"]
@@ -289,6 +323,7 @@ split-on-trailing-comma = false
 "docs/conf.py" = [
     "A00",
     "D100",
+    "S404",
     "T201",
 ]
 "src/polarimetry/io.py" = ["S301"] # pickle
@@ -306,31 +341,6 @@ split-on-trailing-comma = false
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
-
-[tool.ruff.pep8-naming]
-ignore-names = [
-    "*_I",
-    "*_I_*",
-    "A",
-    "Dx",
-    "I0",
-    "I_*",
-    "L",
-    "P[xyz]",
-    "R",
-    "S",
-    "U_*",
-    "[RH]_*",
-    "abs_Δα",
-    "l_*",
-    "mK",
-    "mKπ",
-    "max_L",
-    "mΣ",
-    "s_A",
-    "Γ*",
-    "λ*",
-]
 
 [tool.tomlsort]
 all = false

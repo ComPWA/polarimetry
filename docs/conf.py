@@ -214,13 +214,11 @@ class MissingFileCollector:
 
 
 execute_pluto_notebooks()
-set_intersphinx_version_remapping(
-    {
-        "ipywidgets": {
-            "8.1.1": "8.1.2",
-        },
-    }
-)
+set_intersphinx_version_remapping({
+    "ipywidgets": {
+        "8.1.1": "8.1.2",
+    },
+})
 
 MISSING_FILES = MissingFileCollector()
 
@@ -269,15 +267,13 @@ api_target_types = {
 }
 author = "Mikhail Mikhasenko, Remco de Boer, Miriam Fritsch"
 autodoc_default_options = {
-    "exclude-members": ", ".join(
-        [
-            "default_assumptions",
-            "doit",
-            "evaluate",
-            "is_commutative",
-            "is_extended_real",
-        ]
-    ),
+    "exclude-members": ", ".join([
+        "default_assumptions",
+        "doit",
+        "evaluate",
+        "is_commutative",
+        "is_extended_real",
+    ]),
     "members": True,
     "undoc-members": True,
     "show-inheritance": True,

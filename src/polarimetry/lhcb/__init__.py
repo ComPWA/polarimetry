@@ -4,6 +4,7 @@
 
 .. seealso:: :doc:`/cross-check`
 """
+
 from __future__ import annotations
 
 import itertools
@@ -450,9 +451,9 @@ def _to_symbol_value_mapping(
 def _to_value_with_uncertainty(str_value: str) -> MeasuredParameter[float]:
     """Convert a string to a `.MeasuredParameter` object.
 
-    >>> _to_value_with_uncertainty('1.5 ± 0.2')
+    >>> _to_value_with_uncertainty("1.5 ± 0.2")
     MeasuredParameter(value=1.5, hesse=0.2, model=None, systematic=None)
-    >>> par = _to_value_with_uncertainty('0.94 ± 0.042 ± 0.35 ± 0.04')
+    >>> par = _to_value_with_uncertainty("0.94 ± 0.042 ± 0.35 ± 0.04")
     >>> par
     MeasuredParameter(value=0.94, hesse=0.042, model=0.35, systematic=0.04)
     >>> par.uncertainty
