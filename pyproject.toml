@@ -93,9 +93,7 @@ jupyter = [
     "python-lsp-ruff",
     "python-lsp-server[rope]",
 ]
-lint = ["ruff"]
 sty = [
-    "polarimetry-lc2pkpi[lint]",
     "polarimetry-lc2pkpi[types]",
     "pre-commit >=1.4.0",
     "ruff",
