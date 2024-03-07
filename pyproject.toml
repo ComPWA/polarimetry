@@ -83,8 +83,8 @@ doc = [
 jupyter = [
     "black",
     "isort",
-    "jupyterlab",
     "jupyterlab >=3.0",
+    "jupyterlab",
     "jupyterlab-code-formatter",
     "jupyterlab-git",
     "jupyterlab-lsp",
