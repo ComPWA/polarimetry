@@ -81,9 +81,10 @@ doc = [
     "uproot",
 ]
 jupyter = [
+    "black",
     "isort",
-    "jupyterlab >=3.0",
     "jupyterlab",
+    "jupyterlab >=3.0",
     "jupyterlab-code-formatter",
     "jupyterlab-git",
     "jupyterlab-lsp",
@@ -94,7 +95,6 @@ jupyter = [
 ]
 lint = ["ruff"]
 sty = [
-    "black",
     "polarimetry-lc2pkpi[lint]",
     "polarimetry-lc2pkpi[types]",
     "pre-commit >=1.4.0",
@@ -131,30 +131,6 @@ where = ["src"]
 
 [tool.setuptools_scm]
 write_to = "src/polarimetry/version.py"
-
-[tool.black]
-exclude = '''
-/(
-    .*\.egg-info
-    | .*build
-    | \.eggs
-    | \.git
-    | \.pytest_cache
-    | \.tox
-    | \.venv
-    | \.vscode
-    | dist
-)/
-'''
-include = '\.pyi?$'
-preview = true
-target-version = [
-    "py310",
-    "py311",
-    "py312",
-    "py38",
-    "py39",
-]
 
 [tool.pyright]
 include = ["src", "tests"]
@@ -206,6 +182,19 @@ testpaths = [
 [tool.ruff]
 extend-exclude = ["typings"]
 extend-include = ["*.ipynb"]
+preview = true
+show-fixes = true
+src = [
+    "src",
+    "tests",
+]
+target-version = "py38"
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"
+
+[tool.ruff.lint]
 extend-select = [
     "A",
     "B",
@@ -249,50 +238,22 @@ ignore = [
     "D407",
     "D416",
     "E501",
+    "ISC001",
     "ISC003",
     "PLR0913",
     "PLR2004",
+    "PLW1514",
     "PLW2901",
     "RUF001",
     "SIM108",
 ]
-show-fixes = true
-src = [
-    "src",
-    "tests",
-]
-target-version = "py38"
 task-tags = ["cspell"]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-third-party = ["sympy"]
+split-on-trailing-comma = false
 
-[tool.ruff.pep8-naming]
-ignore-names = [
-    "*_I",
-    "*_I_*",
-    "A",
-    "Dx",
-    "I0",
-    "I_*",
-    "L",
-    "P[xyz]",
-    "R",
-    "S",
-    "U_*",
-    "[RH]_*",
-    "abs_Δα",
-    "l_*",
-    "mK",
-    "mKπ",
-    "max_L",
-    "mΣ",
-    "s_A",
-    "Γ*",
-    "λ*",
-]
-
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "**/benchmark.ipynb" = ["F821"]
 "**/model-serialization.ipynb" = ["S310"]
 "*.ipynb" = [
@@ -336,13 +297,40 @@ ignore-names = [
     "D",
     "INP001",
     "PGH001",
+    "PLC2701",
     "PLR2004",
+    "PLR6301",
     "S101",
     "T20",
 ]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.pep8-naming]
+ignore-names = [
+    "*_I",
+    "*_I_*",
+    "A",
+    "Dx",
+    "I0",
+    "I_*",
+    "L",
+    "P[xyz]",
+    "R",
+    "S",
+    "U_*",
+    "[RH]_*",
+    "abs_Δα",
+    "l_*",
+    "mK",
+    "mKπ",
+    "max_L",
+    "mΣ",
+    "s_A",
+    "Γ*",
+    "λ*",
+]
 
 [tool.tomlsort]
 all = false
