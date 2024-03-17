@@ -106,27 +106,27 @@ jobs:
         uses: actions/cache@v4
         with:
           key: |
-            sympy-${{hashFiles('.constraints/py3.*.txt')}}-${{hashFiles('src/**')}}-${{hashFiles('docs/**.ipynb')}}
+            sympy-${{hashFiles('.constraints/py3.*.txt')}}-${{hashFiles('src/**/*.py')}}-${{hashFiles('docs/**.ipynb')}}
           restore-keys: |
-            sympy-${{hashFiles('.constraints/py3.*.txt')}}-${{hashFiles('src/**')}}
+            sympy-${{hashFiles('.constraints/py3.*.txt')}}-${{hashFiles('src/**/*.py')}}
             sympy-${{hashFiles('.constraints/py3.*.txt')}}
           path: ~/.sympy-cache*/
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
         with:
           key: |
-            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'src/**')}}-${{hashFiles('docs/**')}}
+            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
           restore-keys: |
-            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'src/**')}}
+            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
           path: |
             ./docs/_build/.jupyter_cache
       - name: Fetch output files
         uses: actions/cache@v4
         with:
           key: |
-            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'src/**')}}-${{hashFiles('docs/**')}}
+            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
           restore-keys: |
-            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/**', 'src/**')}}
+            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
             output-files
           path: |
             ./docs/_images
