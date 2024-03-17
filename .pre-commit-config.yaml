@@ -43,6 +43,7 @@ repos:
     hooks:
       - id: check-dev-files
         args:
+          - --dependabot=keep
           - --no-cspell-update
           - --no-github-actions
           - --no-gitpod
