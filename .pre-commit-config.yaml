@@ -43,7 +43,6 @@ repos:
     hooks:
       - id: check-dev-files
         args:
-          - --ignore-author
           - --no-cspell-update
           - --no-github-actions
           - --no-gitpod
@@ -95,7 +94,7 @@ repos:
     hooks:
       - id: toml-sort
         args: [--in-place]
-        exclude: (?x)^(.*(Manifest|Project)\.toml)$
+        exclude: (?x)^(.*/Manifest\.toml|.*/Project\.toml)$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.28.0
