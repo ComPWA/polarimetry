@@ -170,7 +170,6 @@ addopts = [
 ]
 filterwarnings = [
     "error",
-    "ignore:.*argument to NotebookFile is deprecated.*:pytest.PytestRemovedIn8Warning",
     "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
 markers = ["slow: marks tests as slow (select with '-m slow')"]
