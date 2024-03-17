@@ -23,7 +23,7 @@ jobs:
           extras: doc
           python-version: ${{env.PYTHON_VERSION}}
       - run: tox -e doc
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: html
@@ -44,7 +44,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
       - run: tox -e pdf
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: latex
@@ -134,7 +134,7 @@ jobs:
             ./docs/_static/images
             ./docs/appendix/export
       - run: tox -e pdfnb
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: latex
@@ -142,7 +142,7 @@ jobs:
       - run: tox -e docnb
         env:
           EXECUTE_PLUTO: "YES"
-      - uses: actions/upload-pages-artifact@v1
+      - uses: actions/upload-pages-artifact@v3
         if: always()
         with:
           path: docs/_build/html
@@ -164,4 +164,4 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
