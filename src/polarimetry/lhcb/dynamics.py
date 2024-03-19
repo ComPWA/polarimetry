@@ -141,7 +141,8 @@ def _get_mandelstam_s(decay: ThreeBodyDecayChain) -> sp.Symbol:
         return s2
     if decay_masses == {m1, m2}:
         return s3
-    msg = f"Cannot find Mandelstam variable for {''.join(decay_masses)}"
+    decay_masses_str = "".join(str(s) for s in sorted(decay_masses, key=str))
+    msg = f"Cannot find Mandelstam variable for {''.join(decay_masses_str)}"
     raise NotImplementedError(msg)
 
 

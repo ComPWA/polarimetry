@@ -121,7 +121,7 @@ def load_model(
     imported_parameter_values = load_model_parameters(
         model_file, builder.decay, model_id, particle_definitions
     )
-    model.parameter_defaults.update(imported_parameter_values)
+    model.parameter_defaults.update(imported_parameter_values)  # pyright:ignore[reportCallIssue]
     return model
 
 
@@ -308,7 +308,7 @@ def load_model_parameters_with_uncertainties(
         parameter_definitions, min_ls, particle_definitions
     )
     decay_couplings = compute_decay_couplings(decay)
-    parameters.update(decay_couplings)
+    parameters.update(decay_couplings)  # pyright:ignore[reportCallIssue]
     return parameters
 
 
@@ -359,12 +359,12 @@ def flip_production_coupling_signs(obj: _T, subsystem_names: Iterable[Pattern]) 
         bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # type: ignore[reportPrivateUsage]
         return bootstrap
     if isinstance(obj, dict):
-        return _flip_signs(obj)
+        return _flip_signs(obj, subsystem_names)
     raise NotImplementedError
 
 
 def _flip_signs(
-    parameters: dict[_K, _V], subsystem_names: Iterable[Pattern]
+    parameters: dict[_K, _V], subsystem_names: Iterable[str]
 ) -> dict[_K, _V]:
     pattern = rf".*\\mathrm{{production}}\[[{''.join(subsystem_names)}].*"
     return {
