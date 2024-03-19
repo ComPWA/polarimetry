@@ -8,7 +8,7 @@ import logging
 import jax
 import jax.numpy as jnp
 import sympy as sp
-from ampform_dpd.io import aslatex  # pyright:ignore[reportPrivateImportUsage]
+from ampform_dpd.io import aslatex
 from IPython.core.display import Math
 from IPython.display import display
 
