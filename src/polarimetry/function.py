@@ -20,14 +20,16 @@ def compute_sub_function(
     non_zero_couplings: list[str],
 ):
     old_parameters = dict(func.parameters)
-    pattern = rf"\\mathcal{{H}}.*\[(LS,)?(?!{'|'.join(non_zero_couplings)})"
+    pattern = _get_coupling_regex(non_zero_couplings)
     set_parameter_to_zero(func, pattern)
     array = func(input_data)
     func.update_parameters(old_parameters)
     return array
 
 
-def set_parameter_to_zero(func: ParametrizedFunction, search_term: Pattern) -> None:
+def set_parameter_to_zero(
+    func: ParametrizedFunction, search_term: str | Pattern[str]
+) -> None:
     new_parameters = dict(func.parameters)
     no_parameters_selected = True
     for par_name in func.parameters:
@@ -55,3 +57,25 @@ def integrate_intensity(intensities) -> float:
     flattened_intensities = intensities.flatten()
     non_nan_intensities = flattened_intensities[~jnp.isnan(flattened_intensities)]
     return float(jnp.sum(non_nan_intensities) / len(non_nan_intensities))
+
+
+def _get_coupling_regex(non_zero_couplings: list[str]) -> Pattern[str]:
+    r"""Create regex pattern to match all couplings that should not be zero.
+
+    >>> pat = _get_coupling_regex(["D", "K"])
+    >>> print(pat)
+    ^\\mathcal{H}\^\\mathrm{(LS,)?(decay|production)}\[(?!\\?(D|K)).*$
+    >>> couplings = [
+    ...     R"\mathcal{H}^\mathrm{decay}[\Delta(1232), -1/2, 0]",
+    ...     R"\mathcal{H}^\mathrm{LS,production}[\Delta(1232), 1, 3/2]",
+    ...     R"\mathcal{H}^\mathrm{decay}[K(700), 0, 0]",
+    ...     R"\mathcal{H}^\mathrm{LS,production}[\Lambda(1405), 0, 1/2]",
+    ... ]
+    >>> [re.match(pat, coupling) is None for coupling in couplings]
+    [True, True, True, False]
+    """
+    # https://regex101.com/r/BOGYEz
+    non_zero_couplings = [re.escape(coupling) for coupling in non_zero_couplings]
+    H = r"\\mathcal{H}\^\\mathrm{(LS,)?(decay|production)}"  # noqa: N806
+    group = rf"({'|'.join(non_zero_couplings)})"
+    return rf"^{H}\[(?!\\?{group}).*$"

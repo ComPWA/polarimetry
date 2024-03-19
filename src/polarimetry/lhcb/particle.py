@@ -7,8 +7,7 @@ from typing import TypedDict
 
 import sympy as sp
 import yaml
-
-from polarimetry.decay import Particle
+from ampform_dpd.decay import Particle
 
 
 def load_particles(filename: Path | str) -> dict[str, Particle]:

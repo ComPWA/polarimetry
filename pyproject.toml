@@ -33,6 +33,7 @@ dependencies = [
     "IPython",
     "PyYAML",
     "ampform >=0.14.8", # @unevaluated decorator
+    "ampform-dpd @ git+https://github.com/ComPWA/ampform-dpd@f5e91ed",
     "attrs >=20.1.0",
     "cloudpickle",
     "matplotlib",
@@ -132,7 +133,12 @@ where = ["src"]
 write_to = "src/polarimetry/version.py"
 
 [tool.pyright]
-include = ["src", "tests"]
+include = [
+    "**/*.ipynb",
+    "docs",
+    "src",
+    "tests",
+]
 reportArgumentType = false
 reportAssignmentType = false
 reportAttributeAccessIssue = false
@@ -289,7 +295,6 @@ ignore-names = [
 
 [tool.ruff.lint.per-file-ignores]
 "**/benchmark.ipynb" = ["F821"]
-"**/model-serialization.ipynb" = ["S310"]
 "*.ipynb" = [
     "B018",
     "C408",
@@ -301,6 +306,7 @@ ignore-names = [
     "ISC001",
     "N8",
     "PGH001",
+    "PLC2701",
     "PLR09",
     "PLR2004",
     "PLW0602",
@@ -309,6 +315,7 @@ ignore-names = [
     "S102",
     "S301",
     "S307",
+    "S310",
     "T20",
     "TCH00",
 ]
@@ -331,6 +338,7 @@ ignore-names = [
     "C408",
     "D",
     "INP001",
+    "N806",
     "PGH001",
     "PLC2701",
     "PLR2004",

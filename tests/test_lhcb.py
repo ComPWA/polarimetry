@@ -3,9 +3,12 @@ from __future__ import annotations
 from os.path import dirname
 
 import sympy as sp
+from ampform_dpd import (
+    DalitzPlotDecompositionBuilder,
+    _get_coupling_base,  # pyright:ignore[reportPrivateUsage]
+)
 from sympy.core.symbol import Str
 
-from polarimetry.amplitude import DalitzPlotDecompositionBuilder, get_indexed_base
 from polarimetry.lhcb import (
     get_conversion_factor_ls,
     load_model_builder,
@@ -14,7 +17,7 @@ from polarimetry.lhcb import (
 from polarimetry.lhcb.particle import load_particles
 
 THIS_DIR = dirname(__file__)
-DATA_DIR = f"{THIS_DIR}/../../data"
+DATA_DIR = f"{THIS_DIR}/../data"
 MODEL_FILE = f"{DATA_DIR}/model-definitions.yaml"
 
 
@@ -59,44 +62,42 @@ def test_get_conversion_factor_ls():
 
 
 def test_load_model_parameters():
-    parameters = _load_parameters("Default amplitude model")
-    H_prod = get_indexed_base("production", min_ls=True)
+    pars = _load_parameters("Default amplitude model")
+    H = _get_coupling_base(helicity_coupling=True, typ="production")
     gamma = sp.Symbol(R"\gamma_{K(700)}")
     h = sp.Rational(1, 2)
-    assert len(parameters) == 53
-    assert parameters[gamma] == 0.94106
-    assert parameters[H_prod[Str("K(892)"), 0, -h]] == (1) * +1
-    assert parameters[H_prod[Str("K(700)"), 0, +h]] == (0.068908 + 2.521444j) * +1
-    assert parameters[H_prod[Str("K(700)"), 0, -h]] == (-2.685630 + 0.038490j) * +1
+    assert len(pars) == 53
+    assert pars[gamma] == 0.94106
+    assert pars[H[Str("K(892)"), 0, -h]] == (1) * +1
+    assert pars[H[Str("K(700)"), 0, +h]] == (0.068908 + 2.521444j) * +1
+    assert pars[H[Str("K(700)"), 0, -h]] == (-2.685630 + 0.038490j) * +1
 
-    parameters = _load_parameters(
+    pars = _load_parameters(
         "Alternative amplitude model with L(1810) contribution added with free mass and"
         " width"
     )
-    assert len(parameters) == 59
-    assert parameters[gamma] == 0.857489
-    assert parameters[H_prod[Str("K(892)"), 0, -h]] == (1) * +1
-    assert parameters[H_prod[Str("L(1810)"), -h, 0]] == (-0.865366 + 4.993321j) * -1
-    assert parameters[H_prod[Str("L(1810)"), +h, 0]] == (1.179995 + 4.413438j) * -1
+    assert len(pars) == 59
+    assert pars[gamma] == 0.857489
+    assert pars[H[Str("K(892)"), 0, -h]] == (1) * +1
+    assert pars[H[Str(R"\Lambda(1810)"), -h, 0]] == (-0.865366 + 4.993321j) * -1
+    assert pars[H[Str(R"\Lambda(1810)"), +h, 0]] == (1.179995 + 4.413438j) * -1
 
-    parameters = _load_parameters(
-        "Alternative amplitude model obtained using LS couplings"
-    )
-    H_prod = get_indexed_base("production", min_ls=False)
-    assert len(parameters) == 53
-    assert parameters[gamma] == 0.847475
-    assert parameters[H_prod[Str("K(892)"), 0, +h]] == (1.0 + 0.0j) * +1
-    assert parameters[H_prod[Str("K(700)"), 0, +h]] == (-0.000167 - 0.68489j) * +1
-    assert parameters[H_prod[Str("K(700)"), 1, +h]] == (-0.631117 + 0.040435j) * +1
-    assert parameters[H_prod[Str("K(892)"), 1, +h]] == (0.341792 - 0.064047j) * -1
-    assert parameters[H_prod[Str("K(892)"), 1, 3 * h]] == (-0.755199 - 0.592176j) * +1
-    assert parameters[H_prod[Str("K(892)"), 2, 3 * h]] == (0.093754 + 0.379956j) * -1
-    assert parameters[H_prod[Str("K(1430)"), 0, +h]] == (-1.352114 - 3.150814j) * +1
-    assert parameters[H_prod[Str("K(1430)"), 1, +h]] == (0.598156 - 0.955655j) * +1
-    assert parameters[H_prod[Str("L(1405)"), 0, +h]] == (-1.224670 - 0.039521j) * +1
-    assert parameters[H_prod[Str("L(1405)"), 1, +h]] == (-1.811842 + 1.625622j) * -1
-    assert parameters[H_prod[Str("L(1520)"), 1, 3 * h]] == (0.191708 + 0.167003j) * +1
-    assert parameters[H_prod[Str("L(1520)"), 2, 3 * h]] == (0.115638 + 0.242542j) * -1
+    pars = _load_parameters("Alternative amplitude model obtained using LS couplings")
+    H = _get_coupling_base(helicity_coupling=False, typ="production")  # pyright:ignore[reportConstantRedefinition]
+    assert len(pars) == 53
+    assert pars[gamma] == 0.847475
+    assert pars[H[Str("K(892)"), 0, +h]] == (1.0 + 0.0j) * +1
+    assert pars[H[Str("K(700)"), 0, +h]] == (-0.000167 - 0.68489j) * +1
+    assert pars[H[Str("K(700)"), 1, +h]] == (-0.631117 + 0.040435j) * +1
+    assert pars[H[Str("K(892)"), 1, +h]] == (0.341792 - 0.064047j) * -1
+    assert pars[H[Str("K(892)"), 1, 3 * h]] == (-0.755199 - 0.592176j) * +1
+    assert pars[H[Str("K(892)"), 2, 3 * h]] == (0.093754 + 0.379956j) * -1
+    assert pars[H[Str("K(1430)"), 0, +h]] == (-1.352114 - 3.150814j) * +1
+    assert pars[H[Str("K(1430)"), 1, +h]] == (0.598156 - 0.955655j) * +1
+    assert pars[H[Str(R"\Lambda(1405)"), 0, +h]] == (-1.224670 - 0.039521j) * +1
+    assert pars[H[Str(R"\Lambda(1405)"), 1, +h]] == (-1.811842 + 1.625622j) * -1
+    assert pars[H[Str(R"\Lambda(1520)"), 1, 3 * h]] == (0.191708 + 0.167003j) * +1
+    assert pars[H[Str(R"\Lambda(1520)"), 2, 3 * h]] == (0.115638 + 0.242542j) * -1
 
 
 def _load_builder(model_choice: int | str) -> DalitzPlotDecompositionBuilder:

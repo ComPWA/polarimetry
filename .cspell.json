@@ -95,6 +95,7 @@
   "ignoreWords": [
     "Colab",
     "Sigmapi",
+    "allclose",
     "avrgd",
     "ccrcr",
     "cmin",
