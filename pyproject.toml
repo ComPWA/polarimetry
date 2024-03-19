@@ -57,6 +57,7 @@ dev = [
 ]
 doc = [
     "cairosvg",
+    "deepdiff",
     "ipympl",
     "ipywidgets",
     "kaleido",
