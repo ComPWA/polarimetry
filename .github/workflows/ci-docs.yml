@@ -47,7 +47,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
-          name: latex
+          name: latex-fast-pdf
           path: docs/_build/latex
 
   linkcheck:
