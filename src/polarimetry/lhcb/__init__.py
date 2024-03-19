@@ -443,7 +443,7 @@ def _to_symbol_value_mapping(
         else:
             key_to_value[key] = _to_value_with_uncertainty(str_value)
     return {
-        parameter_key_to_symbol(key, min_ls, particle_definitions): value
+        parameter_key_to_symbol(key, particle_definitions, min_ls): value
         for key, value in key_to_value.items()
     }
 
@@ -553,10 +553,10 @@ def get_conversion_factor_ls(
     return get_conversion_factor(resonance) * cg_flip_factor
 
 
-def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912, PLR0915
+def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
     key: str,
+    particle_definitions: dict[str, Particle],
     min_ls: bool = True,
-    particle_definitions: dict[str, Particle] | None = None,
 ) -> sp.Indexed | sp.Symbol:
     H_prod = get_indexed_base("production", min_ls)
     half = sp.Rational(1, 2)
@@ -589,12 +589,6 @@ def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912, PLR0915
                         return H_prod[R, 0, +half]
         else:
             # LS-couplings: supplemental material p.1 (https://cds.cern.ch/record/2824328/files)
-            if particle_definitions is None:
-                msg = (
-                    "You need to provide particle definitions in order to map the"
-                    " coupling IDs to coupling symbols"
-                )
-                raise ValueError(msg)
             resonance = particle_definitions[str(R)]
             if subsystem_identifier in {"D", "L"}:
                 if coupling_number == 1:
