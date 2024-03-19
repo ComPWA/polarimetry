@@ -17,7 +17,7 @@ _LOGGER = logging.getLogger(__name__)
 def compute_sub_function(
     func: ParametrizedFunction,
     input_data: DataSample,
-    non_zero_couplings: list[Pattern],
+    non_zero_couplings: list[str],
 ):
     old_parameters = dict(func.parameters)
     pattern = rf"\\mathcal{{H}}.*\[(LS,)?(?!{'|'.join(non_zero_couplings)})"

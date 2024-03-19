@@ -40,9 +40,9 @@ def formulate_polarimetry(
     ref = reference_subsystem
     return tuple(
         PoolSum(
-            builder.formulate_aligned_amplitude(λ0, *λ, ref)[0].conjugate()
+            builder.formulate_aligned_amplitude(λ0, *λ, ref)[0].conjugate()  # pyright:ignore[reportCallIssue]
             * pauli_matrix[_to_index(λ0), _to_index(λ0_prime)]
-            * builder.formulate_aligned_amplitude(λ0_prime, *λ, ref)[0],
+            * builder.formulate_aligned_amplitude(λ0_prime, *λ, ref)[0],  # pyright:ignore[reportCallIssue]
             (λ0, [-half, +half]),
             (λ0_prime, [-half, +half]),
             *λ.items(),

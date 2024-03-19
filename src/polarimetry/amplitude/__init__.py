@@ -63,12 +63,13 @@ class DalitzPlotDecompositionBuilder:
         parameter_defaults = {}
         for args in product(*allowed_helicities.values()):
             for sub_system in [1, 2, 3]:
-                chain_model = self.formulate_subsystem_amplitude(*args, sub_system)
+                chain_model = self.formulate_subsystem_amplitude(*args, sub_system)  # pyright:ignore[reportCallIssue]
                 amplitude_definitions.update(chain_model.amplitudes)
                 angle_definitions.update(chain_model.variables)
                 parameter_defaults.update(chain_model.parameter_defaults)
         aligned_amp, zeta_defs = self.formulate_aligned_amplitude(
-            *helicity_symbols, reference_subsystem
+            *helicity_symbols,
+            reference_subsystem,  # pyright:ignore[reportCallIssue]
         )
         angle_definitions.update(zeta_defs)
         masses = create_mass_symbol_mapping(self.decay)
