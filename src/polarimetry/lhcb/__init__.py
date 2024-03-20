@@ -11,31 +11,22 @@ import itertools
 import re
 from copy import deepcopy
 from math import sqrt
-from typing import (
-    TYPE_CHECKING,
-    Generic,
-    Iterable,
-    Literal,
-    Pattern,
-    TypedDict,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Generic, Iterable, Literal, TypedDict, TypeVar
 
 import attrs
 import numpy as np
 import sympy as sp
 import yaml
-from attrs import frozen
-from sympy.core.symbol import Str
-
-from polarimetry.amplitude import (
+from ampform_dpd import (
     AmplitudeModel,
     DalitzPlotDecompositionBuilder,
     DynamicsBuilder,
-    get_indexed_base,
+    _get_coupling_base,  # pyright:ignore[reportPrivateUsage]  # noqa: PLC2701
 )
-from polarimetry.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
-from polarimetry.spin import filter_parity_violating_ls, generate_ls_couplings
+from ampform_dpd.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
+from ampform_dpd.spin import filter_parity_violating_ls, generate_ls_couplings
+from attrs import frozen
+from sympy.core.symbol import Str
 
 from .dynamics import (
     formulate_breit_wigner,
@@ -136,7 +127,7 @@ def load_model_builder(
     lineshapes = model_def["lineshapes"]
     min_ls = "LS couplings" not in model_title
     decay = load_three_body_decay(lineshapes, particle_definitions, min_ls)
-    amplitude_builder = DalitzPlotDecompositionBuilder(decay, min_ls)
+    amplitude_builder = DalitzPlotDecompositionBuilder(decay, min_ls=(min_ls, True))
     for chain in decay.chains:
         lineshape_choice = lineshapes[chain.resonance.name]
         dynamics_builder = _get_resonance_builder(lineshape_choice)
@@ -348,7 +339,9 @@ _K = TypeVar("_K")
 _V = TypeVar("_V")
 
 
-def flip_production_coupling_signs(obj: _T, subsystem_names: Iterable[Pattern]) -> _T:
+def flip_production_coupling_signs(
+    obj: _T, subsystem_names: Iterable[Literal["D", "K", "L"]]
+) -> _T:
     if isinstance(obj, AmplitudeModel):
         return attrs.evolve(
             obj,
@@ -364,11 +357,23 @@ def flip_production_coupling_signs(obj: _T, subsystem_names: Iterable[Pattern]) 
 
 
 def _flip_signs(
-    parameters: dict[_K, _V], subsystem_names: Iterable[str]
+    parameters: dict[_K, _V], subsystem_names: Iterable[Literal["D", "K", "L"]]
 ) -> dict[_K, _V]:
-    pattern = rf".*\\mathrm{{production}}\[[{''.join(subsystem_names)}].*"
+    r"""Flip the signs of the production couplings for the given subsystems.
+
+    >>> from pprint import pprint
+    >>> parameters = {
+    ...     R"\mathcal{H}^\mathrm{LS,production}[\Delta(1232), 1, 3/2]": +1,
+    ...     R"\mathcal{H}^\mathrm{LS,production}[\Lambda(1405), 0, 1/2]": -1,
+    ... }
+    >>> flipped_parameters = _flip_signs(parameters, subsystem_names=["D"])
+    >>> pprint(flipped_parameters)
+    {'\\mathcal{H}^\\mathrm{LS,production}[\\Delta(1232), 1, 3/2]': -1,
+     '\\mathcal{H}^\\mathrm{LS,production}[\\Lambda(1405), 0, 1/2]': -1}
+    """
+    pattern = r"\\mathrm{(LS,)?production}\[\\?" f"[{''.join(subsystem_names)}]"
     return {
-        key: _flip(value) if re.match(pattern, str(key)) else value
+        key: _flip(value) if re.search(pattern, str(key)) else value
         for key, value in parameters.items()
     }
 
@@ -382,11 +387,11 @@ def _flip(obj: _V) -> _V:
 def compute_decay_couplings(
     decay: ThreeBodyDecay,
 ) -> dict[sp.Indexed, MeasuredParameter[int]]:
-    H_dec = get_indexed_base("decay")
+    H_dec = _get_coupling_base(helicity_coupling=True, typ="decay")
     half = sp.Rational(1, 2)
     decay_couplings = {}
     for chain in decay.chains:
-        R = Str(chain.resonance.name)
+        R = _stringify(chain.resonance)
         if chain.resonance.name.startswith("K"):
             decay_couplings[H_dec[R, 0, 0]] = 1
         if chain.resonance.name[0] in {"D", "L"}:
@@ -422,10 +427,12 @@ def _to_symbol_value_mapping(
             str_imag = parameter_dict[f"Ai{identifier}"]
             key = f"A{identifier}"
             indexed_symbol: sp.Indexed = parameter_key_to_symbol(
-                key, min_ls, particle_definitions
+                key, particle_definitions, min_ls
             )
-            resonance_name = str(indexed_symbol.indices[0])
-            resonance = particle_definitions[resonance_name]
+            resonance_latex = str(indexed_symbol.indices[0])
+            resonance, *_ = (
+                p for p in particle_definitions.values() if p.latex == resonance_latex
+            )
             if min_ls:
                 conversion_factor = get_conversion_factor(resonance)
             else:
@@ -443,7 +450,7 @@ def _to_symbol_value_mapping(
         else:
             key_to_value[key] = _to_value_with_uncertainty(str_value)
     return {
-        parameter_key_to_symbol(key, min_ls, particle_definitions): value
+        parameter_key_to_symbol(key, particle_definitions, min_ls): value
         for key, value in key_to_value.items()
     }
 
@@ -553,17 +560,19 @@ def get_conversion_factor_ls(
     return get_conversion_factor(resonance) * cg_flip_factor
 
 
-def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912, PLR0915
+def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
     key: str,
+    particle_definitions: dict[str, Particle],
     min_ls: bool = True,
-    particle_definitions: dict[str, Particle] | None = None,
 ) -> sp.Indexed | sp.Symbol:
-    H_prod = get_indexed_base("production", min_ls)
+    H_prod = _get_coupling_base(helicity_coupling=min_ls, typ="production")
     half = sp.Rational(1, 2)
     if key.startswith("A"):
         # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
-        R = _stringify(key[1:-1])
-        subsystem_identifier = str(R)[0]
+        resonance_name = key[1:-1]
+        resonance = particle_definitions[resonance_name]
+        R = _stringify(resonance)
+        subsystem_identifier = resonance.name[0]
         coupling_number = int(key[-1])
         if min_ls:
             # Helicity couplings
@@ -589,13 +598,6 @@ def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912, PLR0915
                         return H_prod[R, 0, +half]
         else:
             # LS-couplings: supplemental material p.1 (https://cds.cern.ch/record/2824328/files)
-            if particle_definitions is None:
-                msg = (
-                    "You need to provide particle definitions in order to map the"
-                    " coupling IDs to coupling symbols"
-                )
-                raise ValueError(msg)
-            resonance = particle_definitions[str(R)]
             if subsystem_identifier in {"D", "L"}:
                 if coupling_number == 1:
                     return H_prod[R, resonance.spin - half, resonance.spin]
@@ -642,7 +644,7 @@ def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912, PLR0915
 
 def _stringify(obj) -> Str:
     if isinstance(obj, Particle):
-        return Str(obj.name)
+        return Str(obj.latex)
     return Str(f"{obj}")
 
 

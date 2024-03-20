@@ -33,6 +33,7 @@ dependencies = [
     "IPython",
     "PyYAML",
     "ampform >=0.14.8", # @unevaluated decorator
+    "ampform-dpd >=0.1.6",
     "attrs >=20.1.0",
     "cloudpickle",
     "matplotlib",
@@ -143,7 +144,7 @@ reportMissingParameterType = false
 reportMissingTypeArgument = false
 reportMissingTypeStubs = false
 reportOperatorIssue = false
-reportPrivateImportUsage = true
+reportPrivateImportUsage = false
 reportReturnType = false
 reportUnknownArgumentType = false
 reportUnknownLambdaType = false
@@ -289,7 +290,6 @@ ignore-names = [
 
 [tool.ruff.lint.per-file-ignores]
 "**/benchmark.ipynb" = ["F821"]
-"**/model-serialization.ipynb" = ["S310"]
 "*.ipynb" = [
     "B018",
     "C408",
@@ -301,6 +301,7 @@ ignore-names = [
     "ISC001",
     "N8",
     "PGH001",
+    "PLC2701",
     "PLR09",
     "PLR2004",
     "PLW0602",
@@ -309,6 +310,7 @@ ignore-names = [
     "S102",
     "S301",
     "S307",
+    "S310",
     "T20",
     "TCH00",
 ]
@@ -331,6 +333,7 @@ ignore-names = [
     "C408",
     "D",
     "INP001",
+    "N806",
     "PGH001",
     "PLC2701",
     "PLR2004",

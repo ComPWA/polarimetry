@@ -7,12 +7,11 @@ from typing import TypedDict
 
 import sympy as sp
 import yaml
-
-from polarimetry.decay import Particle
+from ampform_dpd.decay import Particle
 
 
 def load_particles(filename: Path | str) -> dict[str, Particle]:
-    """Load `.Particle` definitions from a YAML file."""
+    """Load `~ampform_dpd.decay.Particle` definitions from a YAML file."""
     particle_definitions = _load_particles_json(filename)
     return _to_resonance_dict(particle_definitions)
 

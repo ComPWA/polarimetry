@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Literal
 
 import sympy as sp
 from ampform.sympy import PoolSum
+from ampform_dpd.spin import create_spin_range
 from sympy.physics.matrices import msigma
 
 from polarimetry.lhcb import ModelDefinition, ModelName, load_model
@@ -15,10 +16,9 @@ from polarimetry.lhcb.particle import (
     _load_particles_json,  # pyright: ignore[reportPrivateUsage]
     load_particles,
 )
-from polarimetry.spin import create_spin_range
 
 if TYPE_CHECKING:
-    from polarimetry.amplitude import AmplitudeModel, DalitzPlotDecompositionBuilder
+    from ampform_dpd import AmplitudeModel, DalitzPlotDecompositionBuilder
 
 
 def formulate_polarimetry(

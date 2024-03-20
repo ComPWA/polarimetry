@@ -7,19 +7,17 @@ from typing import TYPE_CHECKING, Literal
 import jax.numpy as jnp
 import sympy as sp
 from ampform.kinematics.phasespace import is_within_phasespace
+from ampform_dpd import create_mass_symbol_mapping, formulate_third_mandelstam
 from tensorwaves.data import IntensityDistributionGenerator, NumpyDomainGenerator
 from tensorwaves.data.rng import NumpyUniformRNG
 from tensorwaves.data.transform import SympyDataTransformer
 from tensorwaves.function.sympy import create_function
 
-from polarimetry.amplitude import create_mass_symbol_mapping, formulate_third_mandelstam
-
 if TYPE_CHECKING:
+    from ampform_dpd import AmplitudeModel
+    from ampform_dpd.decay import ThreeBodyDecay
     from tensorwaves.function import PositionalArgumentFunction
     from tensorwaves.interface import DataSample
-
-    from polarimetry.amplitude import AmplitudeModel
-    from polarimetry.decay import ThreeBodyDecay
 
 
 def create_data_transformer(

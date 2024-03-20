@@ -5,8 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import sympy as sp
-
-from polarimetry.dynamics import (
+from ampform_dpd.dynamics import (
     BlattWeisskopf,
     BreitWignerMinL,
     BuggBreitWigner,
@@ -17,7 +16,7 @@ from polarimetry.dynamics import (
 from .particle import PARTICLE_TO_ID, Σ, K, p, π
 
 if TYPE_CHECKING:
-    from polarimetry.decay import Particle, ThreeBodyDecayChain
+    from ampform_dpd.decay import Particle, ThreeBodyDecayChain
 
 
 def formulate_bugg_breit_wigner(
