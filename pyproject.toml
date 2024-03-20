@@ -133,12 +133,7 @@ where = ["src"]
 write_to = "src/polarimetry/version.py"
 
 [tool.pyright]
-include = [
-    "**/*.ipynb",
-    "docs",
-    "src",
-    "tests",
-]
+include = ["src", "tests"]
 reportArgumentType = false
 reportAssignmentType = false
 reportAttributeAccessIssue = false
