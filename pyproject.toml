@@ -33,7 +33,7 @@ dependencies = [
     "IPython",
     "PyYAML",
     "ampform >=0.14.8", # @unevaluated decorator
-    "ampform-dpd @ git+https://github.com/ComPWA/ampform-dpd@f5e91ed",
+    "ampform-dpd >=0.1.6",
     "attrs >=20.1.0",
     "cloudpickle",
     "matplotlib",
