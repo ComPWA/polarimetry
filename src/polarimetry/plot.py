@@ -41,9 +41,7 @@ def use_mpl_latex_fonts(reset_mpl: bool = True) -> None:
 
 
 def _is_latex_allowed() -> bool:
-    if shutil.which("latex") is None:
-        return False
-    return True
+    return shutil.which("latex") is not None
 
 
 def _wake_up_matplotlib() -> None:

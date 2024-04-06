@@ -25,6 +25,7 @@ nbformat
 pdfnb
 phsp
 pushd
+pypa
 PyPI
 pyproject
 pyright
