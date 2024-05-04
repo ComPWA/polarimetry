@@ -232,6 +232,7 @@ add_module_names = False
 api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
 api_target_substitutions = {
     "AmplitudeModel": "ampform_dpd.AmplitudeModel",
+    "Artist": "matplotlib.artist.Artist",
     "Axes": "matplotlib.axes.Axes",
     "BreitWignerMinL": "ampform_dpd.dynamics.BreitWignerMinL",
     "BuggBreitWigner": "ampform_dpd.dynamics.BuggBreitWigner",
@@ -246,6 +247,7 @@ api_target_substitutions = {
     "Literal[-1, 1]": "typing.Literal",
     "Literal[(-1, 1)]": "typing.Literal",
     "ModelName": ("obj", "polarimetry.lhcb.ModelName"),
+    "np.ndarray": ("obj", "numpy.ndarray"),
     "OuterStates": ("obj", "polarimetry.decay.OuterStates"),
     "ParameterType": ("obj", "polarimetry.lhcb.ParameterType"),
     "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
