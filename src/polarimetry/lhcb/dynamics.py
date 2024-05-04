@@ -43,7 +43,7 @@ def formulate_bugg_breit_wigner(
 
 def formulate_exponential_bugg_breit_wigner(
     decay_chain: ThreeBodyDecayChain,
-) -> tuple[sp.Mul, dict[sp.Symbol, float]]:
+) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
     """See `this paper, Eq. (4) <https://arxiv.org/pdf/hep-ex/0510019.pdf#page=3>`_."""
     expr, parameter_defaults = formulate_bugg_breit_wigner(decay_chain)
     alpha = sp.Symbol(Rf"\alpha_{{{decay_chain.resonance.name}}}")
@@ -56,29 +56,29 @@ def formulate_exponential_bugg_breit_wigner(
 
 
 def formulate_flatte_1405(  # noqa: PLR0914
-    decay: ThreeBodyDecayChain,
+    decay_chain: ThreeBodyDecayChain,
 ) -> tuple[FlattéSWave, dict[sp.Symbol, float]]:
-    s = _get_mandelstam_s(decay)
-    m1, m2 = map(_to_mass_symbol, decay.decay_products)
-    m_res = sp.Symbol(f"m_{{{decay.resonance.name}}}")
-    Γ1 = sp.Symbol(Rf"\Gamma_{{{decay.resonance.name} \to {p.latex} {K.latex}}}")
-    Γ2 = sp.Symbol(Rf"\Gamma_{{{decay.resonance.name} \to {Σ.latex} {π.latex}}}")
-    m_top = _to_mass_symbol(decay.parent)
-    m_spec = _to_mass_symbol(decay.spectator)
+    s = _get_mandelstam_s(decay_chain)
+    m1, m2 = map(_to_mass_symbol, decay_chain.decay_products)
+    m_res = sp.Symbol(f"m_{{{decay_chain.resonance.name}}}")
+    Γ1 = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.name} \to {p.latex} {K.latex}}}")
+    Γ2 = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.name} \to {Σ.latex} {π.latex}}}")
+    m_top = _to_mass_symbol(decay_chain.parent)
+    m_spec = _to_mass_symbol(decay_chain.spectator)
     mπ = _to_mass_symbol(π)
     mΣ = sp.Symbol(f"m_{{{Σ.name}}}")
     parameter_defaults = {
-        m_res: decay.resonance.mass,
-        Γ1: decay.resonance.width,
-        Γ2: decay.resonance.width,
-        m1: decay.decay_products[0].mass,
-        m2: decay.decay_products[1].mass,
-        m_top: decay.parent.mass,
-        m_spec: decay.spectator.mass,
+        m_res: decay_chain.resonance.mass,
+        Γ1: decay_chain.resonance.width,
+        Γ2: decay_chain.resonance.width,
+        m1: decay_chain.decay_products[0].mass,
+        m2: decay_chain.decay_products[1].mass,
+        m_top: decay_chain.parent.mass,
+        m_spec: decay_chain.spectator.mass,
         mπ: π.mass,
         mΣ: Σ.mass,
     }
-    l_prod = decay.incoming_ls.L
+    l_prod = decay_chain.incoming_ls.L
     R_prod = sp.Symbol(R"R_{\Lambda_c}")
     q = Q(s, m_top, m_spec)
     q0 = Q(m_res**2, m_top, m_spec)

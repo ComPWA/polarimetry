@@ -10,7 +10,12 @@ from ampform.sympy import PoolSum
 from ampform_dpd.spin import create_spin_range
 from sympy.physics.matrices import msigma
 
-from polarimetry.lhcb import ModelDefinition, ModelName, load_model
+from polarimetry.lhcb import (
+    ModelDefinition,
+    ModelName,
+    _load_model_definitions,  # pyright: ignore[reportPrivateUsage]
+    load_model,
+)
 from polarimetry.lhcb.particle import (
     ResonanceJSON,
     _load_particles_json,  # pyright: ignore[reportPrivateUsage]
@@ -40,9 +45,9 @@ def formulate_polarimetry(
     ref = reference_subsystem
     return tuple(
         PoolSum(
-            builder.formulate_aligned_amplitude(λ0, *λ, ref)[0].conjugate()  # pyright:ignore[reportCallIssue]
+            builder.formulate_aligned_amplitude(λ0, *λ, ref)[0].conjugate()  # type:ignore[arg-type,call-arg]  # pyright:ignore[reportCallIssue]
             * pauli_matrix[_to_index(λ0), _to_index(λ0_prime)]
-            * builder.formulate_aligned_amplitude(λ0_prime, *λ, ref)[0],  # pyright:ignore[reportCallIssue]
+            * builder.formulate_aligned_amplitude(λ0_prime, *λ, ref)[0],  # type:ignore[arg-type,call-arg]  # pyright:ignore[reportCallIssue]
             (λ0, [-half, +half]),
             (λ0_prime, [-half, +half]),
             *λ.items(),
@@ -92,6 +97,6 @@ def expose_model_description() -> (
        <../../data/particle-definitions.yaml>`.
     """
     src_dir = Path(__file__).parent
+    model = _load_model_definitions(src_dir / "lhcb/model-definitions.yaml")
     particles = _load_particles_json(src_dir / "lhcb/particle-definitions.yaml")
-    model = load_model(src_dir / "lhcb/model-definitions.yaml", particles, model_id=0)
     return model, particles

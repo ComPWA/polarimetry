@@ -59,7 +59,7 @@ def integrate_intensity(intensities) -> float:
     return float(jnp.sum(non_nan_intensities) / len(non_nan_intensities))
 
 
-def _get_coupling_regex(non_zero_couplings: list[str]) -> Pattern[str]:
+def _get_coupling_regex(non_zero_couplings: list[str]) -> str:
     r"""Create regex pattern to match all couplings that should not be zero.
 
     >>> pat = _get_coupling_regex(["D", "K"])

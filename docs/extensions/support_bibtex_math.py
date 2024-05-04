@@ -26,9 +26,9 @@ def setup(app: Sphinx) -> None:
         Backend.format_math = _patch_format_math
 
 
-@classmethod
+@classmethod  # type:ignore[misc]
 def _patch_from_latex(cls, latex: str) -> LaTeXMathParser:
-    return LaTeXMathParser(codecs.decode(latex, "ulatex")).parse()  # pyright:ignore[reportCallIssue]
+    return LaTeXMathParser(codecs.decode(latex, "ulatex")).parse()  # type:ignore[call-overload]  # pyright:ignore[reportCallIssue]
 
 
 def _patch_format_math(self, text: list[Text]) -> list[docutils.nodes.math]:

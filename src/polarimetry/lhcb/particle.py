@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TypedDict
+from typing import Literal, TypedDict
 
 import sympy as sp
 import yaml
@@ -41,7 +41,7 @@ def _to_resonance(name: str, definition: ResonanceJSON) -> Particle:
     )
 
 
-def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
+def _to_jp_pair(input_str: str) -> tuple[sp.Rational, Literal[-1, 1]]:
     """Convert a string defining J^PC to a tuple of spin and parity.
 
     >>> _to_jp_pair("3/2^-")
@@ -50,10 +50,10 @@ def _to_jp_pair(input_str: str) -> tuple[sp.Rational, int]:
     (0, 1)
     """
     spin, parity_sign = input_str.split("^")
-    return sp.Rational(spin), int(f"{parity_sign}1")
+    return sp.Rational(spin), int(f"{parity_sign}1")  # type:ignore[return-value]
 
 
-def _average_float(input_str: float | str) -> tuple[float, float]:
+def _average_float(input_str: float | str) -> float:
     """Generate float value from a string or range.
 
     >>> _average_float("1405.1")
@@ -82,7 +82,7 @@ __PARTICLE_DATABASE = load_particles(
 p = __PARTICLE_DATABASE["p"]
 K = __PARTICLE_DATABASE["K-"]
 π = __PARTICLE_DATABASE["pi+"]
-PARTICLE_TO_ID = {Λc: 0, p: 1, π: 2, K: 3}
+PARTICLE_TO_ID: dict[Particle, Literal[0, 1, 2, 3]] = {Λc: 0, p: 1, π: 2, K: 3}
 
 # https://github.com/ComPWA/polarimetry/blob/34f5330/julia/notebooks/model0.jl#L43-L47
 Σ = __PARTICLE_DATABASE["Sigma-"]

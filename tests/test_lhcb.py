@@ -10,6 +10,7 @@ from ampform_dpd import (
 from sympy.core.symbol import Str
 
 from polarimetry.lhcb import (
+    ModelName,
     get_conversion_factor_ls,
     load_model_builder,
     load_model_parameters,
@@ -100,13 +101,13 @@ def test_load_model_parameters():
     assert pars[H[Str(R"\Lambda(1520)"), 2, 3 * h]] == (0.115638 + 0.242542j) * -1
 
 
-def _load_builder(model_choice: int | str) -> DalitzPlotDecompositionBuilder:
+def _load_builder(model_choice: int | ModelName) -> DalitzPlotDecompositionBuilder:
     particles = load_particles(f"{DATA_DIR}/particle-definitions.yaml")
     return load_model_builder(MODEL_FILE, particles, model_choice)
 
 
 def _load_parameters(
-    model_choice: int | str,
+    model_choice: int | ModelName,
 ) -> dict[sp.Indexed | sp.Symbol, complex | float]:
     model_builder = _load_builder(model_choice)
     return load_model_parameters(
