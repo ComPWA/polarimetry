@@ -32,7 +32,7 @@ dependencies = [
     "IPython",
     "PyYAML",
     "ampform >=0.14.8", # @unevaluated decorator
-    "ampform-dpd ~=0.1.6",
+    "ampform-dpd~=0.2.0",
     "attrs >=20.1.0",
     "matplotlib",
     "numpy",

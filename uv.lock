@@ -66,19 +66,22 @@ wheels = [
 
 [[package]]
 name = "ampform-dpd"
-version = "0.1.7"
+version = "0.2.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ampform" },
     { name = "attrs" },
     { name = "cloudpickle" },
+    { name = "numpy", version = "2.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "numpy", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "qrules" },
     { name = "sympy" },
     { name = "tensorwaves", extra = ["jax"] },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0e/0e/765edc8113634aea2202e31f2dc2c1acee456b15b96a181bede11f5efb3f/ampform_dpd-0.1.7.tar.gz", hash = "sha256:3a9830a2541804a408393330f69d46210a66fac38af2c3b4e703dc538e28e6bd", size = 72999 }
+sdist = { url = "https://files.pythonhosted.org/packages/79/4d/c7b3656357f587bebcf2883c857611e48be5199c9d512d4105e23cfe253c/ampform_dpd-0.2.1.tar.gz", hash = "sha256:315edf17a75edb4b1972342b0e445f1b7d1f77ac9cf35093e1ec315c8f1f1364", size = 306229 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8c/df/bfbdb76dfcedafc4568c9f5d6c93ec18b7ba03549e265b20e7b2928a7917/ampform_dpd-0.1.7-py3-none-any.whl", hash = "sha256:b7ce48e8dc1d701a30565fa0cec87da314f849f495cbf7390a0a57d7ee3f8317", size = 34132 },
+    { url = "https://files.pythonhosted.org/packages/f7/f9/242eff71b3b7291a1fd91cca8def7937d7bbdd156b261852ff11b9027a7b/ampform_dpd-0.2.1-py3-none-any.whl", hash = "sha256:83c7e9abce14da3978ae5c714a8b484a6e06fc50e41a65b226c417e6884e641f", size = 41084 },
 ]
 
 [[package]]
@@ -3086,7 +3089,7 @@ types = [
 [package.metadata]
 requires-dist = [
     { name = "ampform", specifier = ">=0.14.8" },
-    { name = "ampform-dpd", specifier = "~=0.1.6" },
+    { name = "ampform-dpd", specifier = "~=0.2.0" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "ipython" },
     { name = "matplotlib" },
