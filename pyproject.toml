@@ -281,6 +281,9 @@ ignore = [
 ]
 task-tags = ["cspell"]
 
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
 [tool.ruff.lint.isort]
 known-third-party = ["sympy"]
 split-on-trailing-comma = false

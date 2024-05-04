@@ -28,13 +28,13 @@ from ampform_dpd.spin import filter_parity_violating_ls, generate_ls_couplings
 from attrs import frozen
 from sympy.core.symbol import Str
 
-from .dynamics import (
+from polarimetry.lhcb.dynamics import (
     formulate_breit_wigner,
     formulate_bugg_breit_wigner,
     formulate_exponential_bugg_breit_wigner,
     formulate_flatte_1405,
 )
-from .particle import PARTICLE_TO_ID, Σ, K, Λc, p, π
+from polarimetry.lhcb.particle import PARTICLE_TO_ID, Σ, K, Λc, p, π
 
 if TYPE_CHECKING:
     from pathlib import Path

@@ -13,7 +13,7 @@ from ampform_dpd.dynamics import (
     Q,
 )
 
-from .particle import PARTICLE_TO_ID, Σ, K, p, π
+from polarimetry.lhcb.particle import PARTICLE_TO_ID, Σ, K, p, π
 
 if TYPE_CHECKING:
     from ampform_dpd.decay import Particle, ThreeBodyDecayChain
