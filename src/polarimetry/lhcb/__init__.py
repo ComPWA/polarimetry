@@ -28,13 +28,13 @@ from ampform_dpd.spin import filter_parity_violating_ls, generate_ls_couplings
 from attrs import frozen
 from sympy.core.symbol import Str
 
-from .dynamics import (
+from polarimetry.lhcb.dynamics import (
     formulate_breit_wigner,
     formulate_bugg_breit_wigner,
     formulate_exponential_bugg_breit_wigner,
     formulate_flatte_1405,
 )
-from .particle import PARTICLE_TO_ID, Σ, K, Λc, p, π
+from polarimetry.lhcb.particle import PARTICLE_TO_ID, Σ, K, Λc, p, π
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -112,7 +112,7 @@ def load_model(
     imported_parameter_values = load_model_parameters(
         model_file, builder.decay, model_id, particle_definitions
     )
-    model.parameter_defaults.update(imported_parameter_values)  # pyright:ignore[reportCallIssue]
+    model.parameter_defaults.update(imported_parameter_values)  # type:ignore[arg-type]  # pyright:ignore[reportCallIssue]
     return model
 
 
@@ -129,7 +129,7 @@ def load_model_builder(
     decay = load_three_body_decay(lineshapes, particle_definitions, min_ls)
     amplitude_builder = DalitzPlotDecompositionBuilder(decay, min_ls=(min_ls, True))
     for chain in decay.chains:
-        lineshape_choice = lineshapes[chain.resonance.name]
+        lineshape_choice = lineshapes[chain.resonance.name]  # type:ignore[index]
         dynamics_builder = _get_resonance_builder(lineshape_choice)
         amplitude_builder.dynamics_choices.register_builder(chain, dynamics_builder)
     return amplitude_builder
@@ -145,15 +145,14 @@ def _find_model_title(
     model_id: int | ModelName,
 ) -> ModelName:
     if isinstance(model_id, int):
-        if model_id >= len(model_definitions):
-            msg = (
-                f"Model definition file contains {len(model_definitions)} models, but"
-                f" trying to get number {model_id}."
-            )
-            raise KeyError(msg)
         for i, title in enumerate(model_definitions):
             if i == model_id:
                 return title
+        msg = (
+            f"Model definition file contains {len(model_definitions)} models, but"
+            f" trying to get number {model_id}."
+        )
+        raise KeyError(msg)
     if model_id not in model_definitions:
         msg = f'Could not find model with title "{model_id}"'
         raise KeyError(msg)
@@ -263,7 +262,7 @@ class ParameterBootstrap:
 
     def create_distribution(
         self, sample_size: int, seed: int | None = None
-    ) -> dict[str, complex | float | int]:
+    ) -> dict[str, np.ndarray]:
         return _smear_gaussian(
             parameter_values=self.values,
             parameter_uncertainties=self.uncertainties,
@@ -292,6 +291,9 @@ def load_model_parameters_with_uncertainties(
 ) -> dict[sp.Indexed | sp.Symbol, MeasuredParameter]:
     with open(filename) as f:
         model_definitions = yaml.load(f, Loader=yaml.SafeLoader)
+    if particle_definitions is None:
+        msg = "Need to provide particle definitions"
+        raise ValueError(msg)
     model_title = _find_model_title(model_definitions, model_id)
     min_ls = "LS couplings" not in model_title
     parameter_definitions = model_definitions[model_title]["parameters"]
@@ -299,8 +301,8 @@ def load_model_parameters_with_uncertainties(
         parameter_definitions, min_ls, particle_definitions
     )
     decay_couplings = compute_decay_couplings(decay)
-    parameters.update(decay_couplings)  # pyright:ignore[reportCallIssue]
-    return parameters
+    parameters.update(decay_couplings)  # type:ignore[arg-type]  # pyright:ignore[reportCallIssue]
+    return parameters  # type:ignore[return-value]
 
 
 def _smear_gaussian(
@@ -322,7 +324,7 @@ def _create_gaussian_distribution(
     std: complex | float,
     size: int,
     seed: int | None = None,
-):
+) -> np.ndarray:
     rng = np.random.default_rng(seed)
     if isinstance(mean, complex) and isinstance(std, complex):
         return (
@@ -343,16 +345,16 @@ def flip_production_coupling_signs(
     obj: _T, subsystem_names: Iterable[Literal["D", "K", "L"]]
 ) -> _T:
     if isinstance(obj, AmplitudeModel):
-        return attrs.evolve(
+        return attrs.evolve(  # type:ignore[return-value]
             obj,
             parameter_defaults=_flip_signs(obj.parameter_defaults, subsystem_names),
         )
     if isinstance(obj, ParameterBootstrap):
         bootstrap = deepcopy(obj)
         bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # type: ignore[reportPrivateUsage]
-        return bootstrap
+        return bootstrap  # type:ignore[return-value]
     if isinstance(obj, dict):
-        return _flip_signs(obj, subsystem_names)
+        return _flip_signs(obj, subsystem_names)  # type:ignore[return-value]
     raise NotImplementedError
 
 
@@ -380,8 +382,8 @@ def _flip_signs(
 
 def _flip(obj: _V) -> _V:
     if isinstance(obj, MeasuredParameter):
-        return attrs.evolve(obj, value=_flip(obj.value))
-    return -obj
+        return attrs.evolve(obj, value=_flip(obj.value))  # type:ignore[return-value]
+    return -obj  # type:ignore[operator]
 
 
 def compute_decay_couplings(
@@ -419,14 +421,14 @@ def _to_symbol_value_mapping(
     parameter_dict: dict[str, str],
     min_ls: bool,
     particle_definitions: dict[str, Particle],
-) -> dict[sp.Basic, complex | float]:
+) -> dict[sp.Basic, MeasuredParameter]:
     key_to_value: dict[str, MeasuredParameter] = {}
     for key, str_value in parameter_dict.items():
         if key.startswith("Ar"):
             identifier = key[2:]
             str_imag = parameter_dict[f"Ai{identifier}"]
             key = f"A{identifier}"
-            indexed_symbol: sp.Indexed = parameter_key_to_symbol(
+            indexed_symbol: sp.Indexed = parameter_key_to_symbol(  # type:ignore[assignment]
                 key, particle_definitions, min_ls
             )
             resonance_latex = str(indexed_symbol.indices[0])
@@ -500,7 +502,7 @@ def _form_complex_parameter(
     )
 
 
-ParameterType = TypeVar("ParameterType", complex, float)
+ParameterType = TypeVar("ParameterType", complex, float, int)
 """Template for the parameter type of a for `MeasuredParameter`."""
 
 
@@ -528,8 +530,8 @@ class MeasuredParameter(Generic[ParameterType]):
     def uncertainty(self) -> ParameterType:
         if self.systematic is None:
             return self.hesse
-        if isinstance(self.value, float):
-            return sqrt(self.hesse**2 + self.systematic**2)
+        if isinstance(self.value, (float, int)):
+            return sqrt(self.hesse**2 + self.systematic**2)  # type:ignore[arg-type,return-value]
         return complex(
             sqrt(self.hesse.real**2 + self.systematic.real**2),
             sqrt(self.hesse.imag**2 + self.systematic.imag**2),
@@ -540,11 +542,11 @@ def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
     half = sp.Rational(1, 2)
     if resonance.name.startswith("D"):
-        return int(-resonance.parity * (-1) ** (resonance.spin - half))
+        return int(-resonance.parity * (-1) ** (resonance.spin - half))  # type:ignore[return-value]
     if resonance.name.startswith("K"):
         return 1
     if resonance.name.startswith("L"):
-        return int(-resonance.parity)
+        return int(-resonance.parity)  # type:ignore[return-value]
     msg = f"No conversion factor implemented for {resonance.name}"
     raise NotImplementedError(msg)
 
@@ -557,7 +559,7 @@ def get_conversion_factor_ls(
         return 1
     half = sp.Rational(1, 2)
     cg_flip_factor = int((-1) ** (L + S - half))
-    return get_conversion_factor(resonance) * cg_flip_factor
+    return get_conversion_factor(resonance) * cg_flip_factor  # type:ignore[return-value]
 
 
 def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912

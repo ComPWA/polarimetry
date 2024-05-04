@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+from typing import Any
 
 import jax
 import jax.numpy as jnp
@@ -58,7 +59,7 @@ def export_polarimetry_field(  # noqa: PLR0917
         if array.shape != expected_shape:
             msg = f"Expected shape {expected_shape}, got {array.shape}"
             raise ValueError(msg)
-    json_data = {
+    json_data: dict[str, Any] = {
         "m^2_Kpi": sigma1.tolist(),
         "m^2_pK": sigma2.tolist(),
         "alpha_x": alpha_x.tolist(),

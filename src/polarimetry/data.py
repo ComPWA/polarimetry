@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import jax.numpy as jnp
 import sympy as sp
@@ -77,7 +77,7 @@ def generate_sub_meshgrid_sample(  # noqa: PLR0917
         jnp.linspace(*x_range, num=resolution),
         jnp.linspace(*y_range, num=resolution),
     )
-    phsp = {
+    phsp: dict[str, Any] = {
         f"sigma{x_mandelstam}": sigma_x,
         f"sigma{y_mandelstam}": sigma_y,
     }

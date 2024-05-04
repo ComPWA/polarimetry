@@ -8,8 +8,9 @@ from typing import TYPE_CHECKING
 import matplotlib.pyplot as plt
 
 if TYPE_CHECKING:
+    from matplotlib.artist import Artist
     from matplotlib.axes import Axes
-    from matplotlib.collections import LineCollection, PathCollection
+    from matplotlib.collections import PathCollection
     from matplotlib.contour import QuadContourSet
 
 
@@ -24,7 +25,7 @@ def add_watermark(
     ax.text(x, y, text, size=fontsize, transform=ax.transAxes, **kwargs)
 
 
-def get_contour_line(contour_set: QuadContourSet) -> LineCollection:
+def get_contour_line(contour_set: QuadContourSet) -> Artist:
     (line_collection, *_), _ = contour_set.legend_elements()
     return line_collection
 
