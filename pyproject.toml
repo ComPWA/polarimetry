@@ -96,6 +96,7 @@ jupyter = [
     "python-lsp-server[rope]",
 ]
 sty = [
+    "mypy",
     "polarimetry-lc2pkpi[types]",
     "pre-commit >=1.4.0",
     "ruff",
@@ -108,6 +109,8 @@ test = [
 types = [
     "pytest",
     "sphinx-api-relink",
+    "types-PyYAML",
+    "types-docutils",
     "types-requests",
 ]
 
@@ -131,6 +134,25 @@ where = ["src"]
 
 [tool.setuptools_scm]
 write_to = "src/polarimetry/version.py"
+
+[tool.mypy]
+exclude = "_build"
+show_error_codes = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = ["latexcodec.*"]
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = ["pybtex.*"]
+
+[[tool.mypy.overrides]]
+check_untyped_defs = true
+disallow_incomplete_defs = false
+disallow_untyped_defs = false
+module = ["tests.*"]
 
 [tool.pyright]
 include = ["src", "tests"]
