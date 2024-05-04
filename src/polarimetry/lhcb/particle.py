@@ -7,7 +7,8 @@ from typing import Literal, TypedDict
 
 import sympy as sp
 import yaml
-from ampform_dpd.decay import Particle
+from ampform_dpd.decay import Particle, State
+from attrs import astuple
 
 
 def load_particles(filename: Path | str) -> dict[str, Particle]:
@@ -74,15 +75,18 @@ class ResonanceJSON(TypedDict):
     width: float | str
 
 
+def __particle_to_state(particle: Particle, index: int) -> State:
+    return State(*astuple(particle), index)  # type:ignore[call-arg]  # pyright:ignore[reportCallIssue]
+
+
 __PARTICLE_DATABASE = load_particles(
     Path(__file__).parent.parent / "lhcb/particle-definitions.yaml"
 )
 
-Λc = __PARTICLE_DATABASE["Lambda_c+"]
-p = __PARTICLE_DATABASE["p"]
-K = __PARTICLE_DATABASE["K-"]
-π = __PARTICLE_DATABASE["pi+"]
-PARTICLE_TO_ID: dict[Particle, Literal[0, 1, 2, 3]] = {Λc: 0, p: 1, π: 2, K: 3}
+Λc = __particle_to_state(__PARTICLE_DATABASE["Lambda_c+"], index=0)
+p = __particle_to_state(__PARTICLE_DATABASE["p"], index=1)
+π = __particle_to_state(__PARTICLE_DATABASE["pi+"], index=2)
+K = __particle_to_state(__PARTICLE_DATABASE["K-"], index=3)
 
 # https://github.com/ComPWA/polarimetry/blob/34f5330/julia/notebooks/model0.jl#L43-L47
 Σ = __PARTICLE_DATABASE["Sigma-"]
