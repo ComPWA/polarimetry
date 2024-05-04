@@ -107,6 +107,8 @@ test = [
     "pytest-xdist",
 ]
 types = [
+    "nbformat",
+    "pybtex-docutils",
     "pytest",
     "sphinx-api-relink",
     "types-PyYAML",
