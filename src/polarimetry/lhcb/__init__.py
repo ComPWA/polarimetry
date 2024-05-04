@@ -11,7 +11,15 @@ import itertools
 import re
 from copy import deepcopy
 from math import sqrt
-from typing import TYPE_CHECKING, Generic, Iterable, Literal, TypedDict, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Generic,
+    Iterable,
+    Literal,
+    Sequence,
+    TypedDict,
+    TypeVar,
+)
 
 import attrs
 import numpy as np
@@ -34,10 +42,12 @@ from polarimetry.lhcb.dynamics import (
     formulate_exponential_bugg_breit_wigner,
     formulate_flatte_1405,
 )
-from polarimetry.lhcb.particle import PARTICLE_TO_ID, Σ, K, Λc, p, π
+from polarimetry.lhcb.particle import Σ, K, Λc, p, π
 
 if TYPE_CHECKING:
     from pathlib import Path
+
+    from ampform_dpd.decay import State
 
 
 # fmt: off
@@ -185,7 +195,8 @@ def load_three_body_decay(
         elif resonance.name.startswith("D"):
             child1, child2, spectator = p, π, K
         else:
-            raise NotImplementedError
+            msg = f"Unknown which decay products to assign to {resonance.name}"
+            raise NotImplementedError(msg)
         prod_ls_couplings = generate_ls(Λc, resonance, spectator, conserve_parity=False)
         dec_ls_couplings = generate_ls(resonance, child1, child2, conserve_parity=True)
         if min_ls:
@@ -231,8 +242,16 @@ def load_three_body_decay(
     chains: list[ThreeBodyDecayChain] = []
     for res in resonances:
         chains.extend(create_isobar(res))
+    return __form_three_body_decay(chains)
+
+
+def __form_three_body_decay(chains: Sequence[ThreeBodyDecayChain]) -> ThreeBodyDecay:
+    if not chains:
+        msg = "No decay chains were created"
+        raise ValueError(msg)
+    states: list[State] = [chains[0].initial_state, *chains[0].final_state]
     return ThreeBodyDecay(
-        states={state_id: particle for particle, state_id in PARTICLE_TO_ID.items()},
+        states={s.index: s for s in states},
         chains=tuple(chains),
     )
 

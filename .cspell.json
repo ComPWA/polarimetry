@@ -96,6 +96,7 @@
     "Colab",
     "Sigmapi",
     "allclose",
+    "astuple",
     "avrgd",
     "ccrcr",
     "cmin",

@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any
 
 import jax.numpy as jnp
 import sympy as sp
 from ampform.kinematics.phasespace import is_within_phasespace
 from ampform_dpd import create_mass_symbol_mapping, formulate_third_mandelstam
+from ampform_dpd.decay import ThreeBodyDecay
 from tensorwaves.data import IntensityDistributionGenerator, NumpyDomainGenerator
 from tensorwaves.data.rng import NumpyUniformRNG
 from tensorwaves.data.transform import SympyDataTransformer
@@ -15,7 +16,7 @@ from tensorwaves.function.sympy import create_function
 
 if TYPE_CHECKING:
     from ampform_dpd import AmplitudeModel
-    from ampform_dpd.decay import ThreeBodyDecay
+    from ampform_dpd.decay import FinalStateID, ThreeBodyDecay
     from tensorwaves.function import PositionalArgumentFunction
     from tensorwaves.interface import DataSample
 
@@ -36,8 +37,8 @@ def create_data_transformer(
 
 def create_phase_space_filter(
     decay: ThreeBodyDecay,
-    x_mandelstam: Literal[1, 2, 3] = 1,
-    y_mandelstam: Literal[1, 2, 3] = 2,
+    x_mandelstam: FinalStateID = 1,
+    y_mandelstam: FinalStateID = 2,
     outside_value=sp.nan,
 ) -> PositionalArgumentFunction:
     m0, m1, m2, m3 = create_mass_symbol_mapping(decay).values()
@@ -50,8 +51,8 @@ def create_phase_space_filter(
 def generate_meshgrid_sample(
     decay: ThreeBodyDecay,
     resolution: int,
-    x_mandelstam: Literal[1, 2, 3] = 1,
-    y_mandelstam: Literal[1, 2, 3] = 2,
+    x_mandelstam: FinalStateID = 1,
+    y_mandelstam: FinalStateID = 2,
 ) -> DataSample:
     """Generate a `numpy.meshgrid` sample for plotting with `matplotlib.pyplot`."""
     boundaries = compute_dalitz_boundaries(decay)
@@ -70,8 +71,8 @@ def generate_sub_meshgrid_sample(  # noqa: PLR0917
     resolution: int,
     x_range: tuple[float, float],
     y_range: tuple[float, float],
-    x_mandelstam: Literal[1, 2, 3] = 1,
-    y_mandelstam: Literal[1, 2, 3] = 2,
+    x_mandelstam: FinalStateID = 1,
+    y_mandelstam: FinalStateID = 2,
 ) -> DataSample:
     sigma_x, sigma_y = jnp.meshgrid(
         jnp.linspace(*x_range, num=resolution),
@@ -122,8 +123,8 @@ def compute_dalitz_boundaries(
 
 def __create_compute_compute_sigma_z(
     decay: ThreeBodyDecay,
-    x_mandelstam: Literal[1, 2, 3] = 1,
-    y_mandelstam: Literal[1, 2, 3] = 2,
+    x_mandelstam: FinalStateID = 1,
+    y_mandelstam: FinalStateID = 2,
 ) -> PositionalArgumentFunction:
     masses = create_mass_symbol_mapping(decay)
     sigma_k = formulate_third_mandelstam(decay, x_mandelstam, y_mandelstam)
@@ -131,7 +132,7 @@ def __create_compute_compute_sigma_z(
 
 
 def __get_third_mandelstam_index(
-    x_mandelstam: Literal[1, 2, 3], y_mandelstam: Literal[1, 2, 3]
+    x_mandelstam: FinalStateID, y_mandelstam: FinalStateID
 ):
     if x_mandelstam == y_mandelstam:
         msg = "x_mandelstam and y_mandelstam must be different"

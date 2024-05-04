@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
 import sympy as sp
 from ampform.sympy import PoolSum
@@ -24,10 +24,11 @@ from polarimetry.lhcb.particle import (
 
 if TYPE_CHECKING:
     from ampform_dpd import AmplitudeModel, DalitzPlotDecompositionBuilder
+    from ampform_dpd.decay import FinalStateID
 
 
 def formulate_polarimetry(
-    builder: DalitzPlotDecompositionBuilder, reference_subsystem: Literal[1, 2, 3] = 1
+    builder: DalitzPlotDecompositionBuilder, reference_subsystem: FinalStateID = 1
 ) -> tuple[PoolSum, PoolSum, PoolSum]:
     half = sp.Rational(1, 2)
     if builder.decay.initial_state.spin != half:
