@@ -13,7 +13,7 @@
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/polarimetry-lc2pkpi)](https://pypi.org/project/polarimetry-lc2pkpi)
 [![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ComPWA/polarimetry/stable?urlpath=lab)
 
-This repository a symbolic amplitude model for the decay $\Lambda^+_c \to p \pi^+ K^-$ that is aligned with [Dalitz-plot decomposition](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033) and computes an align polarimeter vector field $\vec\alpha$. Helicity couplings and other parameter values are taken from a recent study by the LHCb Collaboration[^1] and its [supplementary material](https://cds.cern.ch/record/2824328/files).
+This repository contains the source code for "$\Lambda_c^+$ polarimetry using the dominant hadronic mode" (2023) by the LHCb Collaboration ([10.1007/JHEP07(2023)228](<https://doi.org/10.1007/JHEP07(2023)228>)). It uses [`ampform-dpd`](https://github.com/ComPWA/ampform-dpd) to formulate symbolic amplitude models for the decay $\Lambda^+_c \to p \pi^+ K^-$ that are aligned with [Dalitz-plot decomposition](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033). The aligned amplitudes are used to compute polarimeter vector field $\vec\alpha$ over the Dalitz plane. Helicity couplings and other parameter values are taken from a recent study by the LHCb Collaboration[^1] and its [supplementary material](https://cds.cern.ch/record/2824328/files).
 
 <!-- cspell:ignore semileptonic -->
 
@@ -21,7 +21,7 @@ This repository a symbolic amplitude model for the decay $\Lambda^+_c \to p \pi^
 
 ## Installation
 
-It's recommended to develop this code base with [VSCode](https://code.visualstudio.com) and install the developer environment with Conda:
+It's recommended to develop this code base with [VS&nbsp;Code](https://code.visualstudio.com) and install the developer environment with Conda:
 
 ```shell
 conda env create
