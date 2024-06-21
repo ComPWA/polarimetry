@@ -27,7 +27,7 @@ keywords:
   - particle physics
   - polarimetry
   - polarization
-license: GPL-3.0-or-later
+license: Apache-2.0
 repository-code: https://github.com/ComPWA/polarimetry
 type: software
 url: https://lc2pkpi-polarimetry.docs.cern.ch

@@ -16,7 +16,7 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "License :: OSI Approved :: Apache Software License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.10",
@@ -43,7 +43,7 @@ dependencies = [
 ]
 description = "Symbolic expressions that describe an aligned polarimeter vector field"
 dynamic = ["version"]
-license = {text = "GPLv3 or later"}
+license = {file = "LICENSE"}
 name = "polarimetry-lc2pkpi"
 requires-python = ">=3.8"
 
