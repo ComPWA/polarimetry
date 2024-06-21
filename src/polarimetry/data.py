@@ -113,7 +113,7 @@ def compute_dalitz_boundaries(
     decay: ThreeBodyDecay,
 ) -> tuple[tuple[float, float], tuple[float, float], tuple[float, float]]:
     m0, m1, m2, m3 = create_mass_symbol_mapping(decay).values()
-    return (
+    return (  # type:ignore[return-value]
         ((m2 + m3) ** 2, (m0 - m1) ** 2),
         ((m3 + m1) ** 2, (m0 - m2) ** 2),
         ((m1 + m2) ** 2, (m0 - m3) ** 2),

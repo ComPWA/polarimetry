@@ -25,13 +25,15 @@ MODEL_FILE = f"{DATA_DIR}/model-definitions.yaml"
 def test_get_conversion_factor_ls():
     builder = _load_builder("Alternative amplitude model obtained using LS couplings")
     decay = builder.decay
-    items = [
-        f"{c.resonance.name:9s}"
-        f"L={c.incoming_ls.L!r:3s}"
-        f"S={c.incoming_ls.S!r:5s}"
-        f"factor={get_conversion_factor_ls(c.resonance, c.incoming_ls.L, c.incoming_ls.S):+d}"
-        for c in decay.chains
-    ]
+    items = []
+    for chain in decay.chains:
+        assert chain.incoming_ls is not None
+        items.append(
+            f"{chain.resonance.name:9s}"
+            f"L={chain.incoming_ls.L!r:3s}"
+            f"S={chain.incoming_ls.S!r:5s}"
+            f"factor={get_conversion_factor_ls(chain.resonance, chain.incoming_ls.L, chain.incoming_ls.S):+d}"
+        )
     assert items == [
         "L(1405)  L=0  S=1/2  factor=+1",
         "L(1405)  L=1  S=1/2  factor=-1",
