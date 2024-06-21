@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 
 def formulate_bugg_breit_wigner(
     decay_chain: ThreeBodyDecayChain,
-) -> tuple[BuggBreitWigner, dict[sp.Symbol, float]]:
+) -> tuple[BuggBreitWigner, dict[sp.Symbol, float | complex]]:
     if set(decay_chain.decay_products) != {π, K}:
         msg = "Bugg Breit-Wigner only defined for K* → Kπ"
         raise ValueError(msg)
@@ -30,7 +30,7 @@ def formulate_bugg_breit_wigner(
     gamma = sp.Symbol(Rf"\gamma_{{{decay_chain.resonance.name}}}")
     mass = sp.Symbol(f"m_{{{decay_chain.resonance.name}}}")
     width = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.name}}}")
-    parameter_defaults = {
+    parameter_defaults: dict[sp.Symbol, float | complex] = {
         mass: decay_chain.resonance.mass,
         width: decay_chain.resonance.width,
         m2: π.mass,
@@ -43,7 +43,7 @@ def formulate_bugg_breit_wigner(
 
 def formulate_exponential_bugg_breit_wigner(
     decay_chain: ThreeBodyDecayChain,
-) -> tuple[sp.Expr, dict[sp.Symbol, float]]:
+) -> tuple[sp.Expr, dict[sp.Symbol, float | complex]]:
     """See `this paper, Eq. (4) <https://arxiv.org/pdf/hep-ex/0510019.pdf#page=3>`_."""
     expr, parameter_defaults = formulate_bugg_breit_wigner(decay_chain)
     alpha = sp.Symbol(Rf"\alpha_{{{decay_chain.resonance.name}}}")
@@ -57,7 +57,10 @@ def formulate_exponential_bugg_breit_wigner(
 
 def formulate_flatte_1405(  # noqa: PLR0914
     decay_chain: ThreeBodyDecayChain,
-) -> tuple[FlattéSWave, dict[sp.Symbol, float]]:
+) -> tuple[FlattéSWave, dict[sp.Symbol, float | complex]]:
+    if decay_chain.incoming_ls is None:
+        msg = "Incoming L and S couplings are required for L(1405)"
+        raise ValueError(msg)
     s = _get_mandelstam_s(decay_chain)
     m1, m2 = map(_to_mass_symbol, decay_chain.decay_products)
     m_res = sp.Symbol(f"m_{{{decay_chain.resonance.name}}}")
@@ -67,7 +70,7 @@ def formulate_flatte_1405(  # noqa: PLR0914
     m_spec = _to_mass_symbol(decay_chain.spectator)
     mπ = _to_mass_symbol(π)
     mΣ = sp.Symbol(f"m_{{{Σ.name}}}")
-    parameter_defaults = {
+    parameter_defaults: dict[sp.Symbol, float | complex] = {
         m_res: decay_chain.resonance.mass,
         Γ1: decay_chain.resonance.width,
         Γ2: decay_chain.resonance.width,
@@ -92,7 +95,13 @@ def formulate_flatte_1405(  # noqa: PLR0914
 
 def formulate_breit_wigner(
     decay_chain: ThreeBodyDecayChain,
-) -> tuple[BreitWignerMinL, dict[sp.Symbol, float]]:
+) -> tuple[BreitWignerMinL, dict[sp.Symbol, float | complex]]:
+    if decay_chain.incoming_ls is None:
+        msg = "Incoming L and S couplings are required for Breit-Wigner"
+        raise ValueError(msg)
+    if decay_chain.outgoing_ls is None:
+        msg = "Outgoing L and S couplings are required for Breit-Wigner"
+        raise ValueError(msg)
     s = _get_mandelstam_s(decay_chain)
     child1_mass, child2_mass = map(_to_mass_symbol, decay_chain.decay_products)
     l_dec = sp.Rational(decay_chain.outgoing_ls.L)
@@ -103,7 +112,7 @@ def formulate_breit_wigner(
     resonance_width = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.name}}}")
     R_dec = sp.Symbol(R"R_\mathrm{res}")
     R_prod = sp.Symbol(R"R_{\Lambda_c}")
-    parameter_defaults = {
+    parameter_defaults: dict[sp.Symbol, float | complex] = {
         parent_mass: decay_chain.parent.mass,
         spectator_mass: decay_chain.spectator.mass,
         resonance_mass: decay_chain.resonance.mass,
