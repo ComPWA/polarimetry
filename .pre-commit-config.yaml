@@ -53,7 +53,7 @@ repos:
       - id: colab-toc-visible
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.10
+    rev: v0.5.0
     hooks:
       - id: ruff
         args: [--fix]
@@ -99,7 +99,7 @@ repos:
         exclude: (?x)^(.*/Manifest\.toml|.*/Project\.toml)$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.28.5
+    rev: 0.28.6
     hooks:
       - id: check-jsonschema
         name: Check CITATION.cff
@@ -138,6 +138,6 @@ repos:
           - python
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.368
+    rev: v1.1.369
     hooks:
       - id: pyright
