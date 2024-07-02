@@ -81,7 +81,7 @@ def execute_pluto_notebooks() -> None:
     result = subprocess.call(
         "julia --project=. ./exportnotebooks.jl",  # noqa: S607
         cwd="../julia",
-        shell=True,  # noqa: S602
+        shell=True,
     )
     if result != 0:
         msg = "Failed to execute pluto notebooks"
