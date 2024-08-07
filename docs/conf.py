@@ -73,15 +73,12 @@ def execute_pluto_notebooks() -> None:
     if "EXECUTE_PLUTO" not in os.environ:
         return
     if shutil.which("julia") is None:
-        msg = (
-            "Julia is not installed. Please download it at`"
-            " https://julialang.org/downloads"
-        )
+        msg = "Julia is not installed. Please download it at https://julialang.org/downloads"
         raise ValueError(msg)
     result = subprocess.call(
-        "julia --project=. ./exportnotebooks.jl",  # noqa: S607
+        "julia --project=. ./exportnotebooks.jl",
         cwd="../julia",
-        shell=True,  # noqa: S602
+        shell=True,
     )
     if result != 0:
         msg = "Failed to execute pluto notebooks"
@@ -218,6 +215,9 @@ set_intersphinx_version_remapping({
     "ipywidgets": {
         "8.1.1": "8.1.2",
     },
+    "matplotlib": {
+        "3.9.1.post1": "3.9.1",
+    },
 })
 
 MISSING_FILES = MissingFileCollector()
@@ -277,7 +277,7 @@ api_target_types = {
 }
 author = "Mikhail Mikhasenko, Remco de Boer, Miriam Fritsch"
 autodoc_default_options = {
-    "exclude-members": ", ".join([
+    "exclude-members": ", ".join([  # noqa: FLY002
         "default_assumptions",
         "doit",
         "evaluate",

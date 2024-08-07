@@ -83,11 +83,9 @@ doc = [
     "uproot",
 ]
 jupyter = [
-    "black",
-    "isort",
     "jupyterlab >=3.0",
     "jupyterlab",
-    "jupyterlab-code-formatter",
+    "jupyterlab-code-formatter >=3.0.0",
     "jupyterlab-git",
     "jupyterlab-lsp",
     "jupyterlab-myst",
@@ -145,6 +143,10 @@ warn_unused_configs = true
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
 module = ["latexcodec.*"]
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = ["sympy.*"]
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
@@ -226,39 +228,10 @@ docstring-code-format = true
 line-ending = "lf"
 
 [tool.ruff.lint]
-extend-select = [
-    "A",
-    "B",
-    "BLE",
-    "C4",
-    "C90",
-    "D",
-    "EM",
-    "ERA",
-    "FA",
-    "I",
-    "ICN",
-    "INP",
-    "ISC",
-    "N",
-    "NPY",
-    "PGH",
-    "PIE",
-    "PL",
-    "Q",
-    "RET",
-    "RSE",
-    "RUF",
-    "S",
-    "SIM",
-    "T20",
-    "TCH",
-    "TID",
-    "TRY",
-    "UP",
-    "YTT",
-]
 ignore = [
+    "ANN",
+    "COM812",
+    "CPY001",
     "D101",
     "D102",
     "D103",
@@ -268,7 +241,13 @@ ignore = [
     "D213",
     "D407",
     "D416",
+    "DOC",
     "E501",
+    "FBT",
+    "FURB101",
+    "FURB103",
+    "FURB140",
+    "G004",
     "ISC001",
     "ISC003",
     "PLC2401",
@@ -277,11 +256,21 @@ ignore = [
     "PLR2004",
     "PLW1514",
     "PLW2901",
+    "PT001",
+    "PTH",
     "RUF001",
     "S403",
     "SIM108",
 ]
+select = ["ALL"]
 task-tags = ["cspell"]
+
+[tool.ruff.lint.flake8-builtins]
+builtins-allowed-modules = ["io"]
+builtins-ignorelist = ["display"]
+
+[tool.ruff.lint.flake8-comprehensions]
+allow-dict-calls-with-keyword-arguments = true
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
@@ -317,20 +306,24 @@ ignore-names = [
 
 [tool.ruff.lint.per-file-ignores]
 "**/benchmark.ipynb" = ["F821"]
+"**/extensions/*.py" = ["ARG001"]
+"**/polarimetry.ipynb" = ["SLF001"]
+"**/uncertainties.ipynb" = ["ARG001"]
+"**/widget.ipynb" = ["ARG001"]
 "*.ipynb" = [
     "B018",
     "C408",
     "C90",
     "D",
+    "E303",
     "E402",
     "E703",
     "E741",
-    "ISC001",
     "N8",
+    "PD901",
     "PGH001",
     "PLC2701",
     "PLR09",
-    "PLR2004",
     "PLW0602",
     "PLW0603",
     "S101",
@@ -352,7 +345,9 @@ ignore-names = [
 "docs/conf.py" = [
     "A00",
     "D100",
+    "DTZ005",
     "S404",
+    "S60",
     "T201",
 ]
 "src/polarimetry/io.py" = ["S301"] # pickle
@@ -363,9 +358,9 @@ ignore-names = [
     "N806",
     "PGH001",
     "PLC2701",
-    "PLR2004",
     "PLR6301",
     "S101",
+    "SLF001",
     "T20",
 ]
 

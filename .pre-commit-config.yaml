@@ -23,8 +23,10 @@ repos:
           - |
             cell.attachments
             cell.metadata.code_folding
+            cell.metadata.editable
             cell.metadata.id
             cell.metadata.pycharm
+            cell.metadata.slideshow
             cell.metadata.user_expressions
             metadata.celltoolbar
             metadata.colab.name
@@ -40,20 +42,22 @@ repos:
             metadata.vscode
 
   - repo: https://github.com/ComPWA/policy
-    rev: 0.3.9
+    rev: 0.3.18
     hooks:
       - id: check-dev-files
         args:
           - --dependabot=keep
+          - --dev-python-version=3.12
           - --no-cspell-update
           - --no-github-actions
           - --no-gitpod
           - --no-prettierrc
           - --repo-name=polarimetry
       - id: colab-toc-visible
+      - id: remove-empty-tags
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.10
+    rev: v0.5.6
     hooks:
       - id: ruff
         args: [--fix]
@@ -99,7 +103,7 @@ repos:
         exclude: (?x)^(.*/Manifest\.toml|.*/Project\.toml)$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.28.5
+    rev: 0.29.1
     hooks:
       - id: check-jsonschema
         name: Check CITATION.cff
@@ -112,7 +116,7 @@ repos:
         pass_filenames: false
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v8.9.0
+    rev: v8.13.1
     hooks:
       - id: cspell
 
@@ -138,6 +142,6 @@ repos:
           - python
 
   - repo: https://github.com/ComPWA/mirrors-pyright
-    rev: v1.1.368
+    rev: v1.1.374
     hooks:
       - id: pyright

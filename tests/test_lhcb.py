@@ -110,7 +110,7 @@ def _load_builder(model_choice: int | ModelName) -> DalitzPlotDecompositionBuild
 
 def _load_parameters(
     model_choice: int | ModelName,
-) -> dict[sp.Indexed | sp.Symbol, complex | float]:
+) -> dict[sp.Indexed | sp.Symbol, complex]:
     model_builder = _load_builder(model_choice)
     return load_model_parameters(
         filename=MODEL_FILE,
