@@ -53,6 +53,7 @@ repos:
           - --no-prettierrc
           - --repo-name=polarimetry
       - id: colab-toc-visible
+      - id: remove-empty-tags
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.5.6
