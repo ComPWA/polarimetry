@@ -37,6 +37,7 @@
     "\u03c3": true
   },
   "files.associations": {
+    "**/.constraints/py*.txt": "pip-requirements",
     ".cspell/*.txt": "plaintext"
   },
   "files.eol": "\n",
