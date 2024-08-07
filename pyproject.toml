@@ -225,7 +225,7 @@ line-ending = "lf"
 
 [tool.ruff.lint]
 ignore = [
-    "ANN401",
+    "ANN",
     "COM812",
     "CPY001",
     "D101",
@@ -239,6 +239,7 @@ ignore = [
     "D416",
     "DOC",
     "E501",
+    "FBT",
     "FURB101",
     "FURB103",
     "FURB140",
@@ -261,6 +262,7 @@ select = ["ALL"]
 task-tags = ["cspell"]
 
 [tool.ruff.lint.flake8-builtins]
+builtins-allowed-modules = ["io"]
 builtins-ignorelist = ["display"]
 
 [tool.ruff.lint.flake8-comprehensions]
@@ -300,8 +302,11 @@ ignore-names = [
 
 [tool.ruff.lint.per-file-ignores]
 "**/benchmark.ipynb" = ["F821"]
+"**/extensions/*.py" = ["ARG001"]
+"**/polarimetry.ipynb" = ["SLF001"]
+"**/uncertainties.ipynb" = ["ARG001"]
+"**/widget.ipynb" = ["ARG001"]
 "*.ipynb" = [
-    "ANN",
     "B018",
     "C408",
     "C90",
@@ -311,6 +316,7 @@ ignore-names = [
     "E703",
     "E741",
     "N8",
+    "PD901",
     "PGH001",
     "PLC2701",
     "PLR09",
@@ -335,15 +341,15 @@ ignore-names = [
 "docs/conf.py" = [
     "A00",
     "D100",
+    "DTZ005",
     "S404",
+    "S60",
     "T201",
 ]
 "src/polarimetry/io.py" = ["S301"] # pickle
 "tests/*" = [
-    "ANN",
     "C408",
     "D",
-    "FBT001",
     "INP001",
     "N806",
     "PGH001",

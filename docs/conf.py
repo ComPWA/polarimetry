@@ -73,13 +73,10 @@ def execute_pluto_notebooks() -> None:
     if "EXECUTE_PLUTO" not in os.environ:
         return
     if shutil.which("julia") is None:
-        msg = (
-            "Julia is not installed. Please download it at`"
-            " https://julialang.org/downloads"
-        )
+        msg = "Julia is not installed. Please download it at https://julialang.org/downloads"
         raise ValueError(msg)
     result = subprocess.call(
-        "julia --project=. ./exportnotebooks.jl",  # noqa: S607
+        "julia --project=. ./exportnotebooks.jl",
         cwd="../julia",
         shell=True,
     )
@@ -277,7 +274,7 @@ api_target_types = {
 }
 author = "Mikhail Mikhasenko, Remco de Boer, Miriam Fritsch"
 autodoc_default_options = {
-    "exclude-members": ", ".join([
+    "exclude-members": ", ".join([  # noqa: FLY002
         "default_assumptions",
         "doit",
         "evaluate",

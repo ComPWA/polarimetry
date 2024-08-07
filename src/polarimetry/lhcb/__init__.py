@@ -253,11 +253,11 @@ class ParameterBootstrap:
         self._parameters = {str(k): v for k, v in symbolic_parameters.items()}
 
     @property
-    def values(self) -> dict[str, complex | float | int]:
+    def values(self) -> dict[str, complex | int]:
         return {k: v.value for k, v in self._parameters.items()}
 
     @property
-    def uncertainties(self) -> dict[str, complex | float | int]:
+    def uncertainties(self) -> dict[str, complex | int]:
         return {k: v.uncertainty for k, v in self._parameters.items()}
 
     def create_distribution(
@@ -276,7 +276,7 @@ def load_model_parameters(
     decay: ThreeBodyDecay,
     model_id: int | ModelName = 0,
     particle_definitions: dict[str, Particle] | None = None,
-) -> dict[sp.Indexed | sp.Symbol, complex | float]:
+) -> dict[sp.Indexed | sp.Symbol, complex]:
     parameters = load_model_parameters_with_uncertainties(
         filename, decay, model_id, particle_definitions
     )
@@ -306,8 +306,8 @@ def load_model_parameters_with_uncertainties(
 
 
 def _smear_gaussian(
-    parameter_values: dict[str, complex | float],
-    parameter_uncertainties: dict[str, complex | float],
+    parameter_values: dict[str, complex],
+    parameter_uncertainties: dict[str, complex],
     size: int,
     seed: int | None = None,
 ) -> dict[str, np.ndarray]:
@@ -320,8 +320,8 @@ def _smear_gaussian(
 
 
 def _create_gaussian_distribution(
-    mean: complex | float,
-    std: complex | float,
+    mean: complex,
+    std: complex,
     size: int,
     seed: int | None = None,
 ) -> np.ndarray:
@@ -351,7 +351,7 @@ def flip_production_coupling_signs(
         )
     if isinstance(obj, ParameterBootstrap):
         bootstrap = deepcopy(obj)
-        bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # type: ignore[reportPrivateUsage]
+        bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # type: ignore[reportPrivateUsage]  # noqa: SLF001
         return bootstrap  # type:ignore[return-value]
     if isinstance(obj, dict):
         return _flip_signs(obj, subsystem_names)  # type:ignore[return-value]
