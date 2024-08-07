@@ -215,6 +215,9 @@ set_intersphinx_version_remapping({
     "ipywidgets": {
         "8.1.1": "8.1.2",
     },
+    "matplotlib": {
+        "3.9.1.post1": "3.9.1",
+    },
 })
 
 MISSING_FILES = MissingFileCollector()
