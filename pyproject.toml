@@ -146,6 +146,10 @@ module = ["latexcodec.*"]
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
+module = ["sympy.*"]
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
 module = ["pybtex.*"]
 
 [[tool.mypy.overrides]]
