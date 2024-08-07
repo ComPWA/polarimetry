@@ -47,6 +47,7 @@ repos:
       - id: check-dev-files
         args:
           - --dependabot=keep
+          - --dev-python-version=3.12
           - --no-cspell-update
           - --no-github-actions
           - --no-gitpod
