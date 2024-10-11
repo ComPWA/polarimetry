@@ -443,9 +443,13 @@ latex_elements = {
 }
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 latex_show_pagerefs = True
+linkcheck_anchors_ignore_for_url = [
+    "https://github.com/ComPWA/polarimetry/issues",
+]
 linkcheck_ignore = [
     "https://arxiv.org/pdf/2208.03262.pdf",
     "https://arxiv.org/pdf/hep-ex/0510019.pdf",
+    "https://doi.org/10.1103/PhysRevD.101.034033",
     "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033",
     "https://www.bookfinder.com",
 ]
