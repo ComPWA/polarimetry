@@ -55,7 +55,6 @@
   "notebook.gotoSymbols.showAllSymbols": true,
   "python.analysis.autoImportCompletions": false,
   "python.analysis.inlayHints.pytestParameters": true,
-  "python.analysis.typeCheckingMode": "strict",
   "python.terminal.activateEnvironment": false,
   "python.testing.pytestArgs": ["--color=no"],
   "python.testing.pytestEnabled": true,
@@ -65,6 +64,9 @@
   "ruff.enable": true,
   "ruff.importStrategy": "fromEnvironment",
   "ruff.organizeImports": true,
+  "search.exclude": {
+    "**/.constraints/py*.txt": true
+  },
   "telemetry.telemetryLevel": "off",
   "yaml.schemas": {
     "https://citation-file-format.github.io/1.2.0/schema.json": "CITATION.cff",
