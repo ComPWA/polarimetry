@@ -11,7 +11,7 @@ import itertools
 import re
 from copy import deepcopy
 from math import sqrt
-from typing import TYPE_CHECKING, Generic, Iterable, Literal, TypedDict, TypeVar
+from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar
 
 import attrs
 import numpy as np
@@ -37,6 +37,7 @@ from polarimetry.lhcb.dynamics import (
 from polarimetry.lhcb.particle import PARTICLE_TO_ID, Σ, K, Λc, p, π
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
     from pathlib import Path
 
 
