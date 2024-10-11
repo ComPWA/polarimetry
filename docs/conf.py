@@ -231,6 +231,7 @@ REPO_NAME = "polarimetry"
 add_module_names = False
 api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
 api_target_substitutions = {
+    "_T": "typing.TypeVar",
     "AmplitudeModel": "ampform_dpd.AmplitudeModel",
     "Artist": "matplotlib.artist.Artist",
     "Axes": "matplotlib.axes.Axes",
@@ -255,7 +256,6 @@ api_target_substitutions = {
     "Particle": "ampform_dpd.decay.Particle",
     "Path": "pathlib.Path",
     "Pattern": "typing.Pattern",
-    "polarimetry.lhcb._T": "typing.TypeVar",
     "PoolSum": "ampform.sympy.PoolSum",
     "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
     "QuadContourSet": "matplotlib.contour.QuadContourSet",
