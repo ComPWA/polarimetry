@@ -21,6 +21,7 @@ repos:
           - --no-cspell-update
           - --no-github-actions
           - --no-prettierrc
+          - --package-manager=pixi+uv
           - --repo-name=polarimetry
       - id: colab-toc-visible
       - id: remove-empty-tags

@@ -1,0 +1,15 @@
+[project]
+channels = ["conda-forge"]
+name = "polarimetry-lc2pkpi"
+platforms = [
+    "linux-64",
+    "osx-64",
+    "osx-arm64",
+]
+
+[activation]
+env = {PYTHONHASHSEED = "0"}
+scripts = ["julia/install.sh"]
+
+[dependencies]
+juliaup = "*"
