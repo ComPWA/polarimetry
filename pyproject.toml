@@ -95,7 +95,7 @@ jupyter = [
 sty = [
     "mypy",
     "polarimetry-lc2pkpi[types]",
-    "pre-commit >=1.4.0",
+    "pre-commit-uv",
     "ruff",
 ]
 test = [
@@ -132,6 +132,8 @@ namespaces = false
 where = ["src"]
 
 [tool.setuptools_scm]
+local_scheme = "no-local-version"
+version_scheme = "only-version"
 write_to = "src/polarimetry/version.py"
 
 [tool.mypy]
@@ -158,6 +160,7 @@ disallow_untyped_defs = false
 module = ["tests.*"]
 
 [tool.pyright]
+exclude = ["**/.venv/"]
 include = ["src", "tests"]
 reportArgumentType = false
 reportAssignmentType = false
@@ -220,7 +223,6 @@ src = [
     "src",
     "tests",
 ]
-target-version = "py39"
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -304,11 +306,6 @@ ignore-names = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"**/benchmark.ipynb" = ["F821"]
-"**/extensions/*.py" = ["ARG001"]
-"**/polarimetry.ipynb" = ["SLF001"]
-"**/uncertainties.ipynb" = ["ARG001"]
-"**/widget.ipynb" = ["ARG001"]
 "*.ipynb" = [
     "B018",
     "C408",
@@ -333,6 +330,11 @@ ignore-names = [
     "T20",
     "TCH00",
 ]
+"**/benchmark.ipynb" = ["F821"]
+"**/extensions/*.py" = ["ARG001"]
+"**/polarimetry.ipynb" = ["SLF001"]
+"**/uncertainties.ipynb" = ["ARG001"]
+"**/widget.ipynb" = ["ARG001"]
 "docs/*" = [
     "E402",
     "INP001",
@@ -376,6 +378,150 @@ sort_first = [
     "tool.setuptools",
     "tool.setuptools_scm",
 ]
-sort_table_keys = true
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist =
+    pdfnb-force,
+    docnb,
+    linkcheck,
+    py,
+    sty,
+skip_install = True
+skip_missing_interpreters = True
+skipsdist = True
+
+[testenv]
+allowlist_externals =
+    pytest
+commands =
+    pytest {posargs}
+description = Run all unit tests
+passenv = *
+setenv =
+    PYTHONHASHSEED = 0
+
+[testenv:doc]
+allowlist_externals =
+    sphinx-build
+commands =
+    sphinx-build \
+        --builder=html \
+        --fail-on-warning \
+        --keep-going \
+        --nitpicky \
+        --show-traceback \
+        docs/ docs/_build/html
+description = Build documentation with Sphinx
+setenv =
+    PYTHONWARNINGS =
+
+[testenv:docnb]
+base = doc
+description = {[testenv:doc]description} with cached notebook execution
+setenv =
+    {[testenv:doc]setenv}
+    EXECUTE_NB = yes
+
+[testenv:docnb-force]
+base = doc
+description = {[testenv:doc]description} with notebook execution (no cache)
+setenv =
+    {[testenv:doc]setenv}
+    FORCE_EXECUTE_NB = yes
+
+[testenv:doclive]
+allowlist_externals =
+    sphinx-autobuild
+commands =
+    sphinx-autobuild \
+        --ignore=docs/_build/ \
+        --ignore=docs/_images/ \
+        --ignore=docs/_static/export/ \
+        --ignore=docs/_static/images/ \
+        --ignore=docs/_static/julia/ \
+        --ignore=docs/_static/polarimetry.pdf \
+        --ignore=docs/api/ \
+        --ignore=docs/appendix/export/ \
+        --open-browser \
+        --port=0 \
+        --re-ignore='.*/__pycache__/.*' \
+        --re-ignore='.*/.ipynb_checkpoints/.*' \
+        --re-ignore='.*/.virtual_documents/.*' \
+        --re-ignore='.*\\.pdf' \
+        --re-ignore='.*\\.pkl' \
+        --re-ignore='.*\\.png' \
+        --re-ignore='.*\\.svg' \
+        --re-ignore='.*\\.tmp' \
+        --watch=docs \
+        --watch=src \
+        docs/ docs/_build/html
+description = Set up a server to directly preview changes to the HTML pages
+setenv =
+    PYTHONWARNINGS =
+
+[testenv:docnblive]
+base = doclive
+description = {[testenv:doclive]description} with cached notebook execution
+setenv =
+    {[testenv:doclive]setenv}
+    EXECUTE_NB = yes
+
+[testenv:linkcheck]
+allowlist_externals =
+    sphinx-build
+commands =
+    sphinx-build \
+        --builder=linkcheck \
+        --show-traceback \
+        docs/ docs/_build/linkcheck
+description = Check external links in the documentation (requires internet connection)
+setenv =
+    PYTHONWARNINGS =
+
+[testenv:pdf]
+allowlist_externals =
+    make
+changedir = docs
+commands =
+    make latexpdf LATEXOPTS=' -interaction=batchmode'
+description = Create documentation as a single PDF file
+setenv =
+    PYTHONWARNINGS =
+
+[testenv:pdfnb]
+base = pdf
+description = {[testenv:pdf]description} with cached notebook execution
+setenv =
+    {[testenv:pdf]setenv}
+    EXECUTE_NB = yes
+
+[testenv:pdfnb-force]
+base = pdf
+description = {[testenv:pdf]description} with notebook execution (no cache)
+setenv =
+    {[testenv:pdf]setenv}
+    FORCE_EXECUTE_NB = yes
+
+[testenv:nb]
+allowlist_externals =
+    pytest
+commands =
+    pytest --nbmake --nbmake-timeout=3600 {posargs:docs}
+description = Run all notebooks with pytest
+
+[testenv:sty]
+allowlist_externals =
+    pre-commit
+commands =
+    pre-commit run {posargs} --all-files
+description = Perform all linting, formatting, and spelling checks
+setenv =
+    SKIP = pyright
+"""
+
+[tool.uv]
+constraint-dependencies = ["kaleido!=0.2.1.post1"]

@@ -17,7 +17,6 @@ version.py
 
 # Temporary files
 *.pyc
-*condaenv.*
 .cache/
 .coverage
 .coverage.*

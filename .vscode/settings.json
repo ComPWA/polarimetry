@@ -37,7 +37,6 @@
     "\u03c3": true
   },
   "files.associations": {
-    "**/.constraints/py*.txt": "pip-requirements",
     ".cspell/*.txt": "plaintext"
   },
   "files.eol": "\n",
@@ -65,7 +64,7 @@
   "ruff.importStrategy": "fromEnvironment",
   "ruff.organizeImports": true,
   "search.exclude": {
-    "**/.constraints/py*.txt": true
+    "**/uv.lock": true
   },
   "telemetry.telemetryLevel": "off",
   "yaml.schemas": {
