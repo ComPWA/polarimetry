@@ -13,3 +13,4 @@ scripts = ["julia/install.sh"]
 
 [dependencies]
 juliaup = "*"
+uv = "*"
