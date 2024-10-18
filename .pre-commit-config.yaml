@@ -5,6 +5,7 @@ ci:
     - check-jsonschema
     - mypy
     - pyright
+    - uv-lock
 
 repos:
   - repo: meta
@@ -13,14 +14,13 @@ repos:
       - id: check-useless-excludes
 
   - repo: https://github.com/ComPWA/policy
-    rev: 1c3c9e4413eccb97470a426c5d24ec4b10772b64
+    rev: 0.5.0rc10
     hooks:
       - id: check-dev-files
         args:
           - --dependabot=keep
           - --no-cspell-update
           - --no-github-actions
-          - --no-prettierrc
           - --package-manager=pixi+uv
           - --repo-name=polarimetry
       - id: colab-toc-visible
@@ -55,7 +55,7 @@ repos:
             metadata.vscode
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.9
+    rev: v0.7.0
     hooks:
       - id: ruff
         args: [--fix]
@@ -140,11 +140,11 @@ repos:
           - python
 
   - repo: https://github.com/ComPWA/pyright-pre-commit
-    rev: v1.1.384
+    rev: v1.1.385
     hooks:
       - id: pyright
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.4.20
+    rev: 0.4.24
     hooks:
       - id: uv-lock
