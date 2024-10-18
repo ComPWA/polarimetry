@@ -7,6 +7,8 @@ pixi_packages="$(NO_COLOR= pixi list --explicit --no-install | awk 'NR > 1 {prin
 if [[ -n "$pixi_packages" ]]; then
   pixi global install $pixi_packages
 fi
+export PYTHONHASHSEED="0"
+bash julia/install.sh
 pixi clean cache --yes
 
 uv export \
