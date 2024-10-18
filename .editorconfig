@@ -9,5 +9,14 @@ trim_trailing_whitespace = true
 [Makefile]
 indent_style = tab
 
+[*.{C,jl}]
+indent_style = unset
+
+[*.ipynb]
+indent_size = unset
+
 [*.{py,toml}]
+indent_size = 4
+
+[uv.lock]
 indent_size = 4
