@@ -135,7 +135,13 @@ jobs:
             ./docs/_static/images
             ./docs/appendix/export
       - name: Build PDF with notebook execution
-        run: pixi run tox -e pdfnb
+        run: >-
+          pixi run \
+            uv run \
+              --extra doc \
+              --extra notebooks \
+              --with tox \
+              tox -e pdfnb
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
@@ -144,7 +150,13 @@ jobs:
       - name: Build PDF with notebook execution
         env:
           EXECUTE_PLUTO: "YES"
-        run: pixi run tox -e docnb
+        run: >-
+          pixi run \
+            uv run \
+              --extra doc \
+              --extra notebooks \
+              --with tox \
+              tox -e docnb
       - uses: actions/upload-pages-artifact@v3
         if: always()
         with:
