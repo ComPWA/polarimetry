@@ -1,5 +1,8 @@
 [project]
-channels = ["conda-forge"]
+channels = [
+    "conda-forge",
+    "https://repo.prefix.dev/julia-forge",
+]
 name = "polarimetry-lc2pkpi"
 platforms = [
     "linux-64",
@@ -9,8 +12,7 @@ platforms = [
 
 [activation]
 env = {PYTHONHASHSEED = "0"}
-scripts = ["julia/install.sh"]
 
 [dependencies]
-juliaup = "*"
+julia = {channel = "https://repo.prefix.dev/julia-forge", version = "*"}
 uv = "*"

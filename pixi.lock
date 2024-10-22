@@ -3,21 +3,22 @@ environments:
   default:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
+    - url: https://repo.prefix.dev/julia-forge/
     packages:
       linux-64:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-2_gnu.tar.bz2
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/juliaup-1.17.8-h8fae777_0.conda
+      - conda: https://repo.prefix.dev/julia-forge/linux-64/julia-1.10.4-hb0f4dca_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libgcc-14.2.0-h77fa898_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libgomp-14.2.0-h77fa898_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-14.2.0-hc0a3c3a_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/uv-0.4.25-h0f3a69f_0.conda
       osx-64:
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/juliaup-1.17.8-haf69f1c_0.conda
+      - conda: https://repo.prefix.dev/julia-forge/osx-64/julia-1.10.4-h0dc7051_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libcxx-19.1.2-hf95d169_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/uv-0.4.25-h3a35632_0.conda
       osx-arm64:
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/juliaup-1.17.8-h3bba108_0.conda
+      - conda: https://repo.prefix.dev/julia-forge/osx-arm64/julia-1.10.4-h60d57d3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libcxx-19.1.2-ha82da77_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/uv-0.4.25-h41fe3af_0.conda
 packages:
@@ -51,54 +52,41 @@ packages:
   size: 23621
   timestamp: 1650670423406
 - kind: conda
-  name: juliaup
-  version: 1.17.8
-  build: h3bba108_0
-  subdir: osx-arm64
-  url: https://conda.anaconda.org/conda-forge/osx-arm64/juliaup-1.17.8-h3bba108_0.conda
-  sha256: 1c88ef40b2fd8feb3a73517ead9a8c20df5e261d8a6d50142308c72341e6eb13
-  md5: 8a50ed0bd670c4aea6f4a9aa36c3f350
-  depends:
-  - __osx >=11.0
-  constrains:
-  - __osx >=11.0
-  license: MIT
-  license_family: MIT
-  size: 1890644
-  timestamp: 1728340082535
-- kind: conda
-  name: juliaup
-  version: 1.17.8
-  build: h8fae777_0
-  subdir: linux-64
-  url: https://conda.anaconda.org/conda-forge/linux-64/juliaup-1.17.8-h8fae777_0.conda
-  sha256: 66a68fc58e9bf3ab000329c2d4114b0f8eacd2e5812747519a341096ec08135a
-  md5: c8b2e3f18cc0b255c9aaa7ecbaa710b4
-  depends:
-  - __glibc >=2.17,<3.0.a0
-  - libgcc >=13
-  constrains:
-  - __glibc >=2.17
-  license: MIT
-  license_family: MIT
-  size: 2678127
-  timestamp: 1728339971412
-- kind: conda
-  name: juliaup
-  version: 1.17.8
-  build: haf69f1c_0
+  name: julia
+  version: 1.10.4
+  build: h0dc7051_0
   subdir: osx-64
-  url: https://conda.anaconda.org/conda-forge/osx-64/juliaup-1.17.8-haf69f1c_0.conda
-  sha256: 4f9e0151f9991f2461c66a474161fa09313a52fd1cb6bdb16e6e26eb86eaf5ed
-  md5: 0df4610677f381b14b4532cc4574dbe3
-  depends:
-  - __osx >=10.15
-  constrains:
-  - __osx >=10.13
+  url: https://repo.prefix.dev/julia-forge/osx-64/julia-1.10.4-h0dc7051_0.conda
+  sha256: 788bf6916756b8a099cd1f4f779bca480827992b440be2351f579fedf5e8bf59
+  arch: x86_64
+  platform: osx
   license: MIT
-  license_family: MIT
-  size: 1935034
-  timestamp: 1728339944466
+  size: 134913991
+  timestamp: 1719213818292
+- kind: conda
+  name: julia
+  version: 1.10.4
+  build: h60d57d3_0
+  subdir: osx-arm64
+  url: https://repo.prefix.dev/julia-forge/osx-arm64/julia-1.10.4-h60d57d3_0.conda
+  sha256: 544544129232eabaf0eed2a0f00d47d14cfb8e47dd34259cebcda01b5d0da5c6
+  arch: arm64
+  platform: osx
+  license: MIT
+  size: 133972555
+  timestamp: 1719213815182
+- kind: conda
+  name: julia
+  version: 1.10.4
+  build: hb0f4dca_0
+  subdir: linux-64
+  url: https://repo.prefix.dev/julia-forge/linux-64/julia-1.10.4-hb0f4dca_0.conda
+  sha256: bb4284ce604b113381a51ca34157b220b286c88bef7a6a5092e44c9f2fabda00
+  arch: x86_64
+  platform: linux
+  license: MIT
+  size: 135542643
+  timestamp: 1719213812709
 - kind: conda
   name: libcxx
   version: 19.1.2
