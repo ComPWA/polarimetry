@@ -47,7 +47,6 @@
   "ignorePaths": [
     "**/.cspell.json",
     "*.bib",
-    ".constraints/*.txt",
     ".cspell/*.txt",
     ".gitignore",
     ".pre-commit-config.yaml",

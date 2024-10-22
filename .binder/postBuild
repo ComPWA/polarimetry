@@ -13,6 +13,7 @@ pixi clean cache --yes
 
 uv export \
   --extra jupyter \
+  --extra notebooks \
   > requirements.txt
 uv pip install \
   --requirement requirements.txt \
