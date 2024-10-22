@@ -11,15 +11,15 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libgcc-14.2.0-h77fa898_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libgomp-14.2.0-h77fa898_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-14.2.0-hc0a3c3a_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/uv-0.4.24-h0f3a69f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/uv-0.4.25-h0f3a69f_0.conda
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/juliaup-1.17.8-haf69f1c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libcxx-19.1.2-hf95d169_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/uv-0.4.24-h3a35632_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/uv-0.4.25-h3a35632_0.conda
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/juliaup-1.17.8-h3bba108_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libcxx-19.1.2-ha82da77_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/uv-0.4.24-h41fe3af_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/uv-0.4.25-h41fe3af_0.conda
 packages:
 - kind: conda
   name: _libgcc_mutex
@@ -178,12 +178,12 @@ packages:
   timestamp: 1729027746910
 - kind: conda
   name: uv
-  version: 0.4.24
+  version: 0.4.25
   build: h0f3a69f_0
   subdir: linux-64
-  url: https://conda.anaconda.org/conda-forge/linux-64/uv-0.4.24-h0f3a69f_0.conda
-  sha256: e4c6db92f3256969632545ba33916c187d6a2b70bb012983b2fb1a8cc3bdee12
-  md5: e9b42e09809df1d9070263b4db145447
+  url: https://conda.anaconda.org/conda-forge/linux-64/uv-0.4.25-h0f3a69f_0.conda
+  sha256: 66ec8fc80cebbabef8a43a8a420f6540399200dcc0c9195db0bdda2836eee7be
+  md5: f820dec118406e896be62db8c53151ad
   depends:
   - __glibc >=2.17,<3.0.a0
   - libgcc >=13
@@ -191,37 +191,37 @@ packages:
   constrains:
   - __glibc >=2.17
   license: Apache-2.0 OR MIT
-  size: 9429107
-  timestamp: 1729234173407
+  size: 9403871
+  timestamp: 1729526779016
 - kind: conda
   name: uv
-  version: 0.4.24
+  version: 0.4.25
   build: h3a35632_0
   subdir: osx-64
-  url: https://conda.anaconda.org/conda-forge/osx-64/uv-0.4.24-h3a35632_0.conda
-  sha256: ed3b7e04669445929e29a0733fc1d0684f2489ff6fb74e0f6248ed5281062dd2
-  md5: 107d17b0c99183e514037c103a4137a4
+  url: https://conda.anaconda.org/conda-forge/osx-64/uv-0.4.25-h3a35632_0.conda
+  sha256: db4dd667b1e78199412010a125c796c5bc9802ecc2d0e1c10f706cbb42c69417
+  md5: c27beb3bc2723f2d3065e4d6a94657e7
   depends:
   - __osx >=10.13
   - libcxx >=17
   constrains:
   - __osx >=10.13
   license: Apache-2.0 OR MIT
-  size: 9121188
-  timestamp: 1729234895338
+  size: 9047274
+  timestamp: 1729527682448
 - kind: conda
   name: uv
-  version: 0.4.24
+  version: 0.4.25
   build: h41fe3af_0
   subdir: osx-arm64
-  url: https://conda.anaconda.org/conda-forge/osx-arm64/uv-0.4.24-h41fe3af_0.conda
-  sha256: 3b4e07936f05e4903f6d702cb229c275b39e2796d9f1a0fa92dcc662e39c1881
-  md5: 86960ef5f2b3a8e454d7694a1ffcdc8f
+  url: https://conda.anaconda.org/conda-forge/osx-arm64/uv-0.4.25-h41fe3af_0.conda
+  sha256: 365063aa057bdb0f755449bb1f9490462c191109071a4ebb6b9648587558109e
+  md5: f736f9177b89edfccfe67650cbd05839
   depends:
   - __osx >=11.0
   - libcxx >=17
   constrains:
   - __osx >=11.0
   license: Apache-2.0 OR MIT
-  size: 8463963
-  timestamp: 1729234811330
+  size: 8475727
+  timestamp: 1729527780770
