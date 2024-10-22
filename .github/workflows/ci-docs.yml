@@ -1,4 +1,5 @@
 env:
+  FORCE_COLOR: "1"
   JULIA_CI: "true"
   PYTHONHASHSEED: "0"
   PYTHON_VERSION: "3.9"
