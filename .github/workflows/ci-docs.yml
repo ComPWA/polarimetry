@@ -82,7 +82,6 @@ jobs:
 
   documentation:
     name: Run notebooks and build documentation
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
