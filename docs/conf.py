@@ -360,7 +360,7 @@ html_theme_options = {
         },
         {
             "name": "Launch on Binder",
-            "url": f"https://mybinder.org/v2/gh/{ORGANIZATION}/{REPO_NAME}/{BRANCH}?filepath=docs",
+            "url": f"https://mybinder.org/v2/gh/{ORGANIZATION}/{REPO_NAME}/{BRANCH}?urlpath=lab",
             "icon": "https://mybinder.readthedocs.io/en/latest/_static/favicon.png",
             "type": "url",
         },
@@ -393,9 +393,9 @@ html_title = "Λ<sub>c</sub> → p K π polarimetry"
 intersphinx_mapping = {
     "IPython": (f"https://ipython.readthedocs.io/en/{pin('IPython')}", None),
     "ampform-dpd": ("https://compwa.github.io/ampform-dpd", None),
-    "ampform": (f"https://ampform.readthedocs.io/en/{pin('ampform')}", None),
+    "ampform": (f"https://ampform.readthedocs.io/{pin('ampform')}", None),
     "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
-    "iminuit": ("https://iminuit.readthedocs.io/en/stable", None),
+    "iminuit": ("https://scikit-hep.org/iminuit", None),
     "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/{pin('ipywidgets')}", None),
     "jax": ("https://jax.readthedocs.io/en/latest", None),
     "matplotlib": (f"https://matplotlib.org/{pin('matplotlib')}", None),
@@ -404,7 +404,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "scipy": (get_scipy_url(), None),
     "sympy": ("https://docs.sympy.org/latest", None),
-    "tensorwaves": (f"https://tensorwaves.rtfd.io/en/{pin('tensorwaves')}", None),
+    "tensorwaves": (f"https://tensorwaves.rtfd.io/{pin('tensorwaves')}", None),
 }
 latex_documents = [
     # https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-latex_documents

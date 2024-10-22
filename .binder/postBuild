@@ -1,0 +1,21 @@
+#!/bin/bash
+set -ex
+curl -LsSf https://pixi.sh/install.sh | bash
+export PATH="$HOME/.pixi/bin:$PATH"
+
+pixi_packages="$(NO_COLOR= pixi list --explicit --no-install | awk 'NR > 1 {print $1}')"
+if [[ -n "$pixi_packages" ]]; then
+  pixi global install $pixi_packages
+fi
+export PYTHONHASHSEED="0"
+bash julia/install.sh
+pixi clean cache --yes
+
+uv export \
+  --extra jupyter \
+  --extra notebooks \
+  > requirements.txt
+uv pip install \
+  --requirement requirements.txt \
+  --system
+uv cache clean

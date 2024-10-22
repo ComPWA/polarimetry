@@ -2,6 +2,7 @@ env:
   JULIA_CI: "true"
   PYTHONHASHSEED: "0"
   PYTHON_VERSION: "3.9"
+  UV_SYSTEM_PYTHON: "1"
 
 on:
   workflow_call:
@@ -14,15 +15,21 @@ jobs:
   fast-html:
     if: inputs.specific-pip-packages == ''
     name: Build HTML (fast)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: ComPWA/actions/pip-install@v1
+      - uses: actions/setup-python@v5
         with:
-          additional-packages: tox
-          extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-      - run: tox -e doc
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - name: Build documentation without running notebooks
+        run: >-
+          uv run \
+            --extra doc \
+            --with tox \
+            tox -e doc
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
@@ -32,18 +39,22 @@ jobs:
   fast-pdf:
     if: inputs.specific-pip-packages == ''
     name: Build PDF (fast)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: ComPWA/actions/pip-install@v1
+      - uses: actions/setup-python@v5
         with:
-          additional-packages: tox
-          extras: doc
           python-version: ${{env.PYTHON_VERSION}}
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
       - run: |
           sudo apt-get update -y
           sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
-      - run: tox -e pdf
+          uv run \
+            --extra doc \
+            --with tox \
+            tox -e pdf
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
@@ -53,28 +64,31 @@ jobs:
   linkcheck:
     if: inputs.specific-pip-packages == ''
     name: Check external links
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: ComPWA/actions/pip-install@v1
+      - uses: actions/setup-python@v5
         with:
-          additional-packages: tox
-          extras: doc
           python-version: ${{env.PYTHON_VERSION}}
-      - run: tox -e linkcheck
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - name: Check external links with Sphinx linkcheck
+        run: >-
+          uv run \
+            --extra doc \
+            --with tox \
+            tox -e linkcheck
 
   documentation:
     name: Run notebooks and build documentation
     if: github.event_name != 'pull_request'
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: ComPWA/actions/pip-install@v1
+      - uses: prefix-dev/setup-pixi@v0.8.1
         with:
-          additional-packages: tox
-          extras: doc
-          python-version: ${{env.PYTHON_VERSION}}
-          specific-packages: ${{ inputs.specific-pip-packages }}
+          cache: true
       - run: |
           sudo apt-get update -y
           sudo apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
@@ -89,59 +103,48 @@ jobs:
           path: |
             ./julia-*/
             ~/.julia/
-      - name: Install Julia
-        run: |
-          version=$(sed -n '3p' julia/Manifest.toml)
-          version=${version:17:-1}
-          major_version=${version:0:-2}
-          filename=julia-${version}-linux-x86_64.tar.gz
-          if [ ! -d julia-${version} ]; then
-            wget -q https://julialang-s3.julialang.org/bin/linux/x64/${major_version}/${filename}
-            tar xzf ${filename}
-          fi
-          sudo ln -s $(pwd)/julia-${version}/bin/julia /usr/local/bin/julia
-          julia --version
-          julia --project=./julia -e 'import Pkg; Pkg.instantiate()'
       - name: Fetch SymPy cache
         uses: actions/cache@v4
         with:
           key: |
-            sympy-${{hashFiles('.constraints/py3.*.txt')}}-${{hashFiles('src/**/*.py')}}-${{hashFiles('docs/**.ipynb')}}
+            sympy-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}-${{hashFiles('docs/**.ipynb')}}
           restore-keys: |
-            sympy-${{hashFiles('.constraints/py3.*.txt')}}-${{hashFiles('src/**/*.py')}}
-            sympy-${{hashFiles('.constraints/py3.*.txt')}}
+            sympy-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}
+            sympy-${{hashFiles('uv.lock')}}
           path: ~/.sympy-cache*/
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
         with:
           key: |
-            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
+            jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
           restore-keys: |
-            jupyter-cache-${{hashFiles('.constraints/py3.*.txt', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
+            jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
           path: |
             ./docs/_build/.jupyter_cache
       - name: Fetch output files
         uses: actions/cache@v4
         with:
           key: |
-            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
+            output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
           restore-keys: |
-            output-files-${{hashFiles('.constraints/py3.*.txt', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
+            output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
             output-files
           path: |
             ./docs/_images
             ./docs/_static/export
             ./docs/_static/images
             ./docs/appendix/export
-      - run: tox -e pdfnb
+      - name: Build PDF with notebook execution
+        run: pixi run tox -e pdfnb
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: latex
           path: docs/_build/latex
-      - run: tox -e docnb
+      - name: Build PDF with notebook execution
         env:
           EXECUTE_PLUTO: "YES"
+        run: pixi run tox -e docnb
       - uses: actions/upload-pages-artifact@v3
         if: always()
         with:
@@ -161,7 +164,7 @@ jobs:
     permissions:
       pages: write
       id-token: write
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
