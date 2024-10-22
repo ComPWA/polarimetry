@@ -53,6 +53,7 @@ dev = [
     "polarimetry-lc2pkpi[sty]",
     "polarimetry-lc2pkpi[test]",
     "sphinx-autobuild",
+    "tox",
 ]
 doc = [
     "myst-nb",
