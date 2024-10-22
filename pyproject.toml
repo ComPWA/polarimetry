@@ -53,7 +53,6 @@ dev = [
     "polarimetry-lc2pkpi[sty]",
     "polarimetry-lc2pkpi[test]",
     "sphinx-autobuild",
-    "tox >=1.9",
 ]
 doc = [
     "cairosvg",
@@ -95,7 +94,6 @@ jupyter = [
 sty = [
     "mypy",
     "polarimetry-lc2pkpi[types]",
-    "pre-commit-uv",
     "ruff",
 ]
 test = [
