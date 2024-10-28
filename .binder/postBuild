@@ -11,8 +11,9 @@ export PYTHONHASHSEED="0"
 pixi clean cache --yes
 
 uv export \
-  --extra jupyter \
-  --extra notebooks \
+  --group jupyter \
+  --group notebooks \
+  --no-dev \
   > requirements.txt
 uv pip install \
   --requirement requirements.txt \
