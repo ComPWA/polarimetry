@@ -37,7 +37,7 @@ def _patch_format_math(self, text: list[Text]) -> list[docutils.nodes.math]:
 
 class Math(Protected):
     def __repr__(self) -> str:
-        return f'Math({", ".join(repr(part) for part in self.parts)})'
+        return f"Math({', '.join(repr(part) for part in self.parts)})"
 
     def render(self, backend):
         text = super().render(backend)

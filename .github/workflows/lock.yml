@@ -12,7 +12,7 @@ on:
       - epic/*
     paths:
       - .pre-commit-config.yaml
-      - "**/Manifest.toml"
+      - Manifest.toml
       - pixi.lock
       - uv.lock
   workflow_dispatch:
