@@ -2611,7 +2611,6 @@ dependencies = [
     { name = "ampform" },
     { name = "ampform-dpd" },
     { name = "attrs" },
-    { name = "cloudpickle" },
     { name = "ipython" },
     { name = "matplotlib" },
     { name = "numpy" },
@@ -2623,6 +2622,7 @@ dependencies = [
 [package.dependency-groups]
 dev = [
     { name = "cairosvg" },
+    { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
     { name = "ipywidgets" },
@@ -2677,10 +2677,10 @@ doc = [
     { name = "sphinx-togglebutton" },
     { name = "sphinxcontrib-bibtex" },
     { name = "sphinxcontrib-svg2pdfconverter" },
-    { name = "svgutils" },
 ]
 jupyter = [
     { name = "cairosvg" },
+    { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
     { name = "ipywidgets" },
@@ -2697,11 +2697,13 @@ jupyter = [
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server", extra = ["rope"] },
     { name = "scipy" },
+    { name = "svgutils" },
     { name = "tqdm" },
     { name = "uproot" },
 ]
 notebooks = [
     { name = "cairosvg" },
+    { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
     { name = "ipywidgets" },
@@ -2711,6 +2713,7 @@ notebooks = [
     { name = "plotly" },
     { name = "psutil" },
     { name = "scipy" },
+    { name = "svgutils" },
     { name = "tqdm" },
     { name = "uproot" },
 ]
@@ -2744,7 +2747,6 @@ requires-dist = [
     { name = "ampform", specifier = ">=0.14.8" },
     { name = "ampform-dpd", specifier = "~=0.1.6" },
     { name = "attrs", specifier = ">=20.1.0" },
-    { name = "cloudpickle" },
     { name = "ipython" },
     { name = "matplotlib" },
     { name = "numpy" },
@@ -2756,6 +2758,7 @@ requires-dist = [
 [package.metadata.dependency-groups]
 dev = [
     { name = "cairosvg" },
+    { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
     { name = "ipywidgets" },
@@ -2811,10 +2814,10 @@ doc = [
     { name = "sphinx-togglebutton" },
     { name = "sphinxcontrib-bibtex", specifier = ">=2.2" },
     { name = "sphinxcontrib-svg2pdfconverter" },
-    { name = "svgutils" },
 ]
 jupyter = [
     { name = "cairosvg" },
+    { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
     { name = "ipywidgets" },
@@ -2831,11 +2834,13 @@ jupyter = [
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server", extras = ["rope"] },
     { name = "scipy" },
+    { name = "svgutils" },
     { name = "tqdm" },
     { name = "uproot" },
 ]
 notebooks = [
     { name = "cairosvg" },
+    { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
     { name = "ipywidgets" },
@@ -2845,6 +2850,7 @@ notebooks = [
     { name = "plotly" },
     { name = "psutil" },
     { name = "scipy" },
+    { name = "svgutils" },
     { name = "tqdm" },
     { name = "uproot" },
 ]

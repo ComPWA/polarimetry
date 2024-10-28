@@ -34,7 +34,6 @@ dependencies = [
     "ampform >=0.14.8", # @unevaluated decorator
     "ampform-dpd ~=0.1.6",
     "attrs >=20.1.0",
-    "cloudpickle",
     "matplotlib",
     "numpy",
     "sympy >=1.10",
@@ -71,7 +70,6 @@ doc = [
     "sphinx-togglebutton",
     "sphinxcontrib-bibtex >=2.2",
     "sphinxcontrib-svg2pdfconverter",
-    "svgutils",
 ]
 jupyter = [
     "jupyterlab",
@@ -86,6 +84,7 @@ jupyter = [
 ]
 notebooks = [
     "cairosvg",
+    "cloudpickle",
     "deepdiff",
     "ipympl",
     "ipywidgets",
@@ -95,6 +94,7 @@ notebooks = [
     "plotly",
     "psutil",
     "scipy",
+    "svgutils",
     "tqdm",
     "uproot",
 ]
