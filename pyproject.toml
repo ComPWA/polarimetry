@@ -51,6 +51,7 @@ file = "README.md"
 
 [dependency-groups]
 dev = [
+    "nbmake",
     "ruff",
     "sphinx-autobuild",
     {include-group = "doc"},
@@ -103,8 +104,7 @@ style = [
     {include-group = "types"},
 ]
 test = [
-    "nbmake",
-    "pytest >=6.0",
+    "pytest",
     "pytest-xdist",
 ]
 types = [

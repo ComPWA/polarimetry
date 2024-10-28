@@ -2728,7 +2728,6 @@ style = [
     { name = "types-requests" },
 ]
 test = [
-    { name = "nbmake" },
     { name = "pytest" },
     { name = "pytest-xdist" },
 ]
@@ -2778,7 +2777,6 @@ dev = [
     { name = "psutil" },
     { name = "pybtex-docutils" },
     { name = "pytest" },
-    { name = "pytest", specifier = ">=6.0" },
     { name = "pytest-xdist" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server", extras = ["rope"] },
@@ -2865,8 +2863,7 @@ style = [
     { name = "types-requests" },
 ]
 test = [
-    { name = "nbmake" },
-    { name = "pytest", specifier = ">=6.0" },
+    { name = "pytest" },
     { name = "pytest-xdist" },
 ]
 types = [
