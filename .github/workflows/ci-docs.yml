@@ -28,7 +28,8 @@ jobs:
       - name: Build documentation without running notebooks
         run: >-
           uv run \
-            --extra doc \
+            --group doc \
+            --no-dev \
             --with tox \
             tox -e doc
       - uses: actions/upload-artifact@v4
@@ -53,7 +54,8 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
           uv run \
-            --extra doc \
+            --group doc \
+            --no-dev \
             --with tox \
             tox -e pdf
       - uses: actions/upload-artifact@v4
@@ -77,7 +79,8 @@ jobs:
       - name: Check external links with Sphinx linkcheck
         run: >-
           uv run \
-            --extra doc \
+            --group doc \
+            --no-dev \
             --with tox \
             tox -e linkcheck
 
@@ -138,8 +141,9 @@ jobs:
         run: >-
           pixi run \
             uv run \
-              --extra doc \
-              --extra notebooks \
+              --group doc \
+              --group notebooks \
+              --no-dev \
               --with tox \
               tox -e pdfnb
       - uses: actions/upload-artifact@v4
@@ -153,8 +157,9 @@ jobs:
         run: >-
           pixi run \
             uv run \
-              --extra doc \
-              --extra notebooks \
+              --group doc \
+              --group notebooks \
+              --no-dev \
               --with tox \
               tox -e docnb
       - uses: actions/upload-pages-artifact@v3
