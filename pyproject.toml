@@ -34,7 +34,6 @@ dependencies = [
     "ampform >=0.14.8", # @unevaluated decorator
     "ampform-dpd ~=0.1.6",
     "attrs >=20.1.0",
-    "cloudpickle",
     "matplotlib",
     "numpy",
     "sympy >=1.10",
@@ -46,13 +45,19 @@ license = {file = "LICENSE"}
 name = "polarimetry-lc2pkpi"
 requires-python = ">=3.9"
 
-[project.optional-dependencies]
+[project.readme]
+content-type = "text/markdown"
+file = "README.md"
+
+[dependency-groups]
 dev = [
-    "polarimetry-lc2pkpi[doc]",
-    "polarimetry-lc2pkpi[jupyter]",
-    "polarimetry-lc2pkpi[sty]",
-    "polarimetry-lc2pkpi[test]",
+    "nbmake",
+    "ruff",
     "sphinx-autobuild",
+    {include-group = "doc"},
+    {include-group = "jupyter"},
+    {include-group = "style"},
+    {include-group = "test"},
 ]
 doc = [
     "myst-nb",
@@ -66,21 +71,21 @@ doc = [
     "sphinx-togglebutton",
     "sphinxcontrib-bibtex >=2.2",
     "sphinxcontrib-svg2pdfconverter",
-    "svgutils",
 ]
 jupyter = [
     "jupyterlab",
     "jupyterlab",
-    "jupyterlab-code-formatter >=3.0.0",
+    "jupyterlab-code-formatter",
     "jupyterlab-git",
     "jupyterlab-lsp",
     "jupyterlab-myst",
-    "polarimetry-lc2pkpi[notebooks]",
     "python-lsp-ruff",
     "python-lsp-server[rope]",
+    {include-group = "notebooks"},
 ]
 notebooks = [
     "cairosvg",
+    "cloudpickle",
     "deepdiff",
     "ipympl",
     "ipywidgets",
@@ -90,17 +95,16 @@ notebooks = [
     "plotly",
     "psutil",
     "scipy",
+    "svgutils",
     "tqdm",
     "uproot",
 ]
-sty = [
+style = [
     "mypy",
-    "polarimetry-lc2pkpi[types]",
-    "ruff",
+    {include-group = "types"},
 ]
 test = [
-    "nbmake",
-    "pytest >=6.0",
+    "pytest",
     "pytest-xdist",
 ]
 types = [
@@ -112,10 +116,6 @@ types = [
     "types-docutils",
     "types-requests",
 ]
-
-[project.readme]
-content-type = "text/markdown"
-file = "README.md"
 
 [tool.setuptools]
 include-package-data = false
@@ -188,6 +188,8 @@ reportUnusedFunction = true
 reportUnusedImport = true
 reportUnusedVariable = true
 typeCheckingMode = "strict"
+venv = ".venv"
+venvPath = "."
 
 [tool.pytest.ini_options]
 addopts = [
@@ -519,8 +521,6 @@ allowlist_externals =
 commands =
     pre-commit run --all-files {posargs}
 description = Perform all linting, formatting, and spelling checks
-setenv =
-    SKIP = pyright
 """
 
 [tool.uv]
