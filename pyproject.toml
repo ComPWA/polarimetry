@@ -203,6 +203,7 @@ addopts = [
 ]
 filterwarnings = [
     "error",
+    "ignore:The collections attribute was deprecated.*:matplotlib._api.deprecation.MatplotlibDeprecationWarning",
     "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
 markers = ["slow: marks tests as slow (select with '-m slow')"]
@@ -338,7 +339,6 @@ ignore-names = [
 "**/uncertainties.ipynb" = ["ARG001"]
 "**/widget.ipynb" = ["ARG001"]
 "docs/*" = [
-    "00",
     "E402",
     "INP001",
     "S101",
