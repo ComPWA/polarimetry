@@ -33,6 +33,7 @@
     "ms-python.flake8",
     "ms-python.isort",
     "ms-python.pylint",
+    "ms-toolsai.vscode-jupyter-slideshow",
     "ms-vscode.cpptools",
     "travisillig.vscode-json-stable-stringify",
     "tyriar.sort-lines"
