@@ -23,8 +23,6 @@ jobs:
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
       - name: Build documentation without running notebooks
         run: >-
           uv run \
@@ -48,8 +46,6 @@ jobs:
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
       - run: |
           sudo apt-get update -y
           sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
@@ -74,8 +70,6 @@ jobs:
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
       - name: Check external links with Sphinx linkcheck
         run: >-
           uv run \
