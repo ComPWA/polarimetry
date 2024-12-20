@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import shutil
+from importlib.metadata import version
 from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
@@ -10,7 +11,7 @@ import matplotlib.pyplot as plt
 if TYPE_CHECKING:
     from matplotlib.artist import Artist
     from matplotlib.axes import Axes
-    from matplotlib.collections import PathCollection
+    from matplotlib.collections import Collection
     from matplotlib.contour import QuadContourSet
 
 
@@ -59,12 +60,15 @@ def stylize_contour(
     linestyle: str | None = None,
     linewidth: float | None = None,
 ) -> None:
-    contour_line: PathCollection = contour_set.collections[0]
+    if version("matplotlib") >= "3.8.0":
+        contour: Collection = contour_set
+    else:
+        contour = contour_set.collections[0]
     if edgecolor is not None:
-        contour_line.set_edgecolor(edgecolor)
+        contour.set_edgecolor(edgecolor)
     if label is not None:
-        contour_line.set_label(label)
+        contour.set_label(label)
     if linestyle is not None:
-        contour_line.set_linestyle(linestyle)
+        contour.set_linestyle(linestyle)
     if linewidth is not None:
-        contour_line.set_linewidth(linewidth)
+        contour.set_linewidth(linewidth)
