@@ -18,21 +18,8 @@ def contour_set():
     plt.close(fig)
 
 
-def test_stylize_contour_edgecolor(contour_set: QuadContourSet):
-    edgecolor = "red"
-    stylize_contour(contour_set, edgecolor=edgecolor)
-
-
-def test_stylize_contour_label(contour_set: QuadContourSet):
-    label = "Test Label"
-    stylize_contour(contour_set, label=label)
-
-
-def test_stylize_contour_linestyle(contour_set: QuadContourSet):
-    linestyle = "--"
-    stylize_contour(contour_set, linestyle=linestyle)
-
-
-def test_stylize_contour_linewidth(contour_set: QuadContourSet):
-    linewidth = 2.0
-    stylize_contour(contour_set, linewidth=linewidth)
+def test_stylize_contour(contour_set: QuadContourSet):
+    stylize_contour(contour_set, edgecolor="red")
+    stylize_contour(contour_set, label="Test Label")
+    stylize_contour(contour_set, linestyle="--")
+    stylize_contour(contour_set, linewidth=2.0)
