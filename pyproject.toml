@@ -330,7 +330,7 @@ ignore-names = [
     "S307",
     "S310",
     "T20",
-    "TCH00",
+    "TC00",
 ]
 "**/benchmark.ipynb" = ["F821"]
 "**/extensions/*.py" = ["ARG001"]
