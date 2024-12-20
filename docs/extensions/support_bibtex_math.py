@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import codecs
+from typing import TYPE_CHECKING
 
 import docutils.nodes
 import latexcodec  # pyright:ignore[reportUnusedImport]  # noqa: F401
@@ -17,7 +18,9 @@ from pybtex.markup import LaTeXParser
 from pybtex.richtext import Protected, String, Text
 from pybtex.scanner import Literal, PybtexSyntaxError
 from pybtex_docutils import Backend
-from sphinx.application import Sphinx
+
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 
 def setup(app: Sphinx) -> None:
