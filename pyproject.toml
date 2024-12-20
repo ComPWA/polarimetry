@@ -338,12 +338,12 @@ ignore-names = [
 "**/uncertainties.ipynb" = ["ARG001"]
 "**/widget.ipynb" = ["ARG001"]
 "docs/*" = [
+    "00",
     "E402",
     "INP001",
     "S101",
     "S113",
     "S310",
-    "TCH00",
 ]
 "docs/conf.py" = [
     "A00",
