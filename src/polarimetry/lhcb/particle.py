@@ -62,8 +62,8 @@ def _average_float(input_str: float | str) -> float:
     2000.0
     """
     if isinstance(input_str, str) and "-" in input_str:
-        _min, _max, *_ = map(float, input_str.split("-"))
-        return (_max + _min) / 2
+        min_, max_, *_ = map(float, input_str.split("-"))
+        return (max_ + min_) / 2
     return float(input_str)
 
 
