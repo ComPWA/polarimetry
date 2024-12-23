@@ -203,6 +203,7 @@ addopts = [
 ]
 filterwarnings = [
     "error",
+    "ignore::pytest.PytestUnraisableExceptionWarning",
     "ignore:The collections attribute was deprecated.*:matplotlib._api.deprecation.MatplotlibDeprecationWarning",
     "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
