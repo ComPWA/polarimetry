@@ -203,6 +203,8 @@ addopts = [
 ]
 filterwarnings = [
     "error",
+    "ignore::pytest.PytestUnraisableExceptionWarning",
+    "ignore:The collections attribute was deprecated.*:matplotlib._api.deprecation.MatplotlibDeprecationWarning",
     "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
 markers = ["slow: marks tests as slow (select with '-m slow')"]
@@ -330,7 +332,7 @@ ignore-names = [
     "S307",
     "S310",
     "T20",
-    "TCH00",
+    "TC00",
 ]
 "**/benchmark.ipynb" = ["F821"]
 "**/extensions/*.py" = ["ARG001"]
@@ -343,7 +345,6 @@ ignore-names = [
     "S101",
     "S113",
     "S310",
-    "TCH00",
 ]
 "docs/conf.py" = [
     "A00",

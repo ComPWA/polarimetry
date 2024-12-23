@@ -19,8 +19,8 @@
     },
     {
       "addWords": true,
-      "name": "python",
-      "path": "./.cspell/python.txt"
+      "name": "python-extra",
+      "path": "./.cspell/python-extra.txt"
     },
     {
       "addWords": true,
@@ -68,29 +68,6 @@
     "pytest.ini",
     "tox.ini"
   ],
-  "language": "en-US",
-  "overrides": [
-    {
-      "allowCompoundWords": true,
-      "dictionaries": ["julia", "latex", "python"],
-      "filename": "**/*.ipynb"
-    },
-    {
-      "allowCompoundWords": true,
-      "dictionaries": ["julia", "latex"],
-      "filename": "**/*.jl",
-      "languageId": "julia"
-    },
-    {
-      "dictionaries": ["latex", "python"],
-      "filename": "**/*.py"
-    },
-    {
-      "dictionaries": ["latex", "python"],
-      "filename": "**/*.pyi"
-    }
-  ],
-  "version": "0.2",
   "ignoreWords": [
     "Colab",
     "Sigmapi",
@@ -133,5 +110,29 @@
     "xshift",
     "yaxis",
     "zaxis"
-  ]
+  ],
+  "language": "en-US",
+  "overrides": [
+    {
+      "allowCompoundWords": true,
+      "dictionaries": ["julia", "latex", "python", "python-extra"],
+      "filename": "**/*.ipynb"
+    },
+    {
+      "allowCompoundWords": true,
+      "dictionaries": ["julia", "latex"],
+      "filename": "**/*.jl",
+      "languageId": "julia"
+    },
+    {
+      "dictionaries": ["latex", "python", "python-extra"],
+      "filename": "**/*.py"
+    },
+    {
+      "dictionaries": ["latex", "python", "python-extra"],
+      "filename": "**/*.pyi"
+    }
+  ],
+  "useGitignore": true,
+  "version": "0.2"
 }
