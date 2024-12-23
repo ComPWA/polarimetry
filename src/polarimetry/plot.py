@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 if TYPE_CHECKING:
     from matplotlib.artist import Artist
     from matplotlib.axes import Axes
-    from matplotlib.collections import PathCollection
     from matplotlib.contour import QuadContourSet
 
 
@@ -49,22 +48,3 @@ def _wake_up_matplotlib() -> None:
     """Somehow `plt.rc` does not work if a figure hasn't been created before..."""
     plt.figure()
     plt.close()
-
-
-def stylize_contour(
-    contour_set: QuadContourSet,
-    *,
-    edgecolor=None,
-    label: str | None = None,
-    linestyle: str | None = None,
-    linewidth: float | None = None,
-) -> None:
-    contour_line: PathCollection = contour_set.collections[0]
-    if edgecolor is not None:
-        contour_line.set_edgecolor(edgecolor)
-    if label is not None:
-        contour_line.set_label(label)
-    if linestyle is not None:
-        contour_line.set_linestyle(linestyle)
-    if linewidth is not None:
-        contour_line.set_linewidth(linewidth)
