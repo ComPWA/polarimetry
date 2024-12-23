@@ -108,7 +108,9 @@ jobs:
           restore-keys: |
             sympy-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}
             sympy-${{hashFiles('uv.lock')}}
-          path: ~/.sympy-cache*/
+          path: |
+            ~/.cache/ampform*
+          # cspell:ignore ampform
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
         with:
