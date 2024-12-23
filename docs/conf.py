@@ -404,7 +404,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "scipy": (get_scipy_url(), None),
     "sympy": ("https://docs.sympy.org/latest", None),
-    "tensorwaves": (f"https://tensorwaves.rtfd.io/{pin('tensorwaves')}", None),
+    "tensorwaves": (f"https://tensorwaves.readthedocs.io/{pin('tensorwaves')}", None),
 }
 latex_documents = [
     # https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-latex_documents
