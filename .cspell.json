@@ -19,8 +19,8 @@
     },
     {
       "addWords": true,
-      "name": "python",
-      "path": "./.cspell/python.txt"
+      "name": "python-extra",
+      "path": "./.cspell/python-extra.txt"
     },
     {
       "addWords": true,
@@ -115,7 +115,7 @@
   "overrides": [
     {
       "allowCompoundWords": true,
-      "dictionaries": ["julia", "latex", "python"],
+      "dictionaries": ["julia", "latex", "python", "python-extra"],
       "filename": "**/*.ipynb"
     },
     {
@@ -125,11 +125,11 @@
       "languageId": "julia"
     },
     {
-      "dictionaries": ["latex", "python"],
+      "dictionaries": ["latex", "python", "python-extra"],
       "filename": "**/*.py"
     },
     {
-      "dictionaries": ["latex", "python"],
+      "dictionaries": ["latex", "python", "python-extra"],
       "filename": "**/*.pyi"
     }
   ],
