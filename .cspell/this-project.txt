@@ -31,7 +31,6 @@ PyPI
 pyproject
 pyright
 pytest
-PYTHONHASHSEED
 Remco
 texlive
 toctree
