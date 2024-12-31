@@ -227,6 +227,10 @@ def load_three_body_decay(
     ) -> list[tuple[int, sp.Rational]]:
         ls = generate_ls_couplings(parent.spin, child1.spin, child2.spin)
         if conserve_parity:
+            msg = "Parity is not defined"
+            assert parent.parity is not None, msg  # noqa: S101
+            assert child1.parity is not None, msg  # noqa: S101
+            assert child2.parity is not None, msg  # noqa: S101
             return filter_parity_violating_ls(
                 ls, parent.parity, child1.parity, child2.parity
             )
@@ -417,6 +421,10 @@ def compute_decay_couplings(
             else:
                 coupling_pos = H_dec[R, 0, +half]
                 coupling_neg = H_dec[R, 0, -half]
+            msg = "Parity is not defined"
+            assert chain.resonance.parity is not None, msg  # noqa: S101
+            assert child1.parity is not None, msg  # noqa: S101
+            assert child2.parity is not None, msg  # noqa: S101
             decay_couplings[coupling_pos] = 1
             decay_couplings[coupling_neg] = int(
                 chain.resonance.parity
@@ -554,6 +562,7 @@ class MeasuredParameter(Generic[ParameterType]):
 def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
     half = sp.Rational(1, 2)
+    assert resonance.parity is not None, "Parity is not defined"  # noqa: S101
     if resonance.name.startswith("D"):
         return int(-resonance.parity * (-1) ** (resonance.spin - half))  # type:ignore[return-value]
     if resonance.name.startswith("K"):
