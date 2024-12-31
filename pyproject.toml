@@ -199,7 +199,6 @@ addopts = [
     "--durations=3",
     "--ignore=docs/appendix/widget.ipynb",
     "--ignore=docs/conf.py",
-    "--nbmake-timeout=0",
     "-m not slow",
 ]
 filterwarnings = [
@@ -512,7 +511,7 @@ setenv =
 allowlist_externals =
     pytest
 commands =
-    pytest --nbmake --nbmake-timeout=3600 {posargs:docs}
+    pytest --nbmake --nbmake-timeout=0 {posargs:docs}
 description = Run all notebooks with pytest
 
 [testenv:sty]
