@@ -257,6 +257,7 @@ api_target_substitutions = {
     "Particle": "ampform_dpd.decay.Particle",
     "Path": "pathlib.Path",
     "Pattern": "typing.Pattern",
+    "polarimetry.lhcb._T": "typing.TypeVar",
     "PoolSum": "ampform.sympy.PoolSum",
     "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
     "QuadContourSet": "matplotlib.contour.QuadContourSet",
