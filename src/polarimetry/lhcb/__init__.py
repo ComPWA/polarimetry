@@ -644,10 +644,10 @@ def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
         return sp.Symbol(Rf"m_{{{R}}}")
     if key.startswith("G1"):
         R = _stringify(key[2:])
-        return sp.Symbol(Rf"\Gamma_{{{R} \to {p.latex} {K.latex}}}")
+        return sp.Symbol(Rf"\Gamma_{{{R} \to {K.latex} {p.latex}}}")
     if key.startswith("G2"):
         R = _stringify(key[2:])
-        return sp.Symbol(Rf"\Gamma_{{{R} \to {Σ.latex} {π.latex}}}")
+        return sp.Symbol(Rf"\Gamma_{{{R} \to {π.latex} {Σ.latex}}}")
     if key.startswith("G"):
         R = _stringify(key[1:])
         return sp.Symbol(Rf"\Gamma_{{{R}}}")

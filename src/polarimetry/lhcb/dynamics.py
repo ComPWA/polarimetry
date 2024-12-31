@@ -69,7 +69,7 @@ def formulate_flatte_1405(  # noqa: PLR0914
     m1, m2 = _create_decay_product_masses(decay_chain)
     m_res = sp.Symbol(f"m_{{{resonance.name}}}")
     Γ1 = sp.Symbol(Rf"\Gamma_{{{resonance.name} \to {p1.latex} {p2.latex}}}")
-    Γ2 = sp.Symbol(Rf"\Gamma_{{{resonance.name} \to {Σ.latex} {π.latex}}}")
+    Γ2 = sp.Symbol(Rf"\Gamma_{{{resonance.name} \to {π.latex} {Σ.latex}}}")
     m_top = sp.Symbol(f"m{decay_chain.parent.index}", nonnegative=True)
     m_spec = create_mass_symbol(decay_chain.spectator)
     mπ = create_mass_symbol(π)
