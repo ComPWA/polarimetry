@@ -199,6 +199,7 @@ addopts = [
     "--durations=3",
     "--ignore=docs/appendix/widget.ipynb",
     "--ignore=docs/conf.py",
+    "--nbmake-timeout=0",
     "-m not slow",
 ]
 filterwarnings = [
