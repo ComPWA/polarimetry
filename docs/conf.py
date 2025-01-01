@@ -239,6 +239,7 @@ api_target_substitutions = {
     "BuggBreitWigner": "ampform_dpd.dynamics.BuggBreitWigner",
     "DalitzPlotDecompositionBuilder": "ampform_dpd.DalitzPlotDecompositionBuilder",
     "DataSample": ("obj", "tensorwaves.interface.DataSample"),
+    "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
     "FlattéSWave": "ampform_dpd.dynamics.FlattéSWave",
     "Function": ("obj", "tensorwaves.interface.Function"),
     "implement_doit_method": "ampform.sympy.implement_doit_method",
@@ -256,6 +257,7 @@ api_target_substitutions = {
     "Particle": "ampform_dpd.decay.Particle",
     "Path": "pathlib.Path",
     "Pattern": "typing.Pattern",
+    "polarimetry.lhcb._T": "typing.TypeVar",
     "PoolSum": "ampform.sympy.PoolSum",
     "PositionalArgumentFunction": "tensorwaves.function.PositionalArgumentFunction",
     "QuadContourSet": "matplotlib.contour.QuadContourSet",
@@ -450,6 +452,7 @@ linkcheck_ignore = [
     "https://arxiv.org/pdf/2208.03262.pdf",
     "https://arxiv.org/pdf/hep-ex/0510019.pdf",
     "https://doi.org/10.1103/PhysRevD.101.034033",
+    "https://indico.cern.ch/event/1187317",
     "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033",
     "https://www.bookfinder.com",
 ]

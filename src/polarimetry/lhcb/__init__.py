@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import itertools
 import re
+from collections.abc import Iterable
 from copy import deepcopy
 from math import sqrt
 from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar
@@ -34,11 +35,13 @@ from polarimetry.lhcb.dynamics import (
     formulate_exponential_bugg_breit_wigner,
     formulate_flatte_1405,
 )
-from polarimetry.lhcb.particle import PARTICLE_TO_ID, Σ, K, Λc, p, π
+from polarimetry.lhcb.particle import Σ, K, Λc, p, π
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Sequence
     from pathlib import Path
+
+    from ampform_dpd.decay import State
 
 
 # fmt: off
@@ -186,7 +189,8 @@ def load_three_body_decay(
         elif resonance.name.startswith("D"):
             child1, child2, spectator = p, π, K
         else:
-            raise NotImplementedError
+            msg = f"Unknown which decay products to assign to {resonance.name}"
+            raise NotImplementedError(msg)
         prod_ls_couplings = generate_ls(Λc, resonance, spectator, conserve_parity=False)
         dec_ls_couplings = generate_ls(resonance, child1, child2, conserve_parity=True)
         if min_ls:
@@ -223,6 +227,10 @@ def load_three_body_decay(
     ) -> list[tuple[int, sp.Rational]]:
         ls = generate_ls_couplings(parent.spin, child1.spin, child2.spin)
         if conserve_parity:
+            msg = "Parity is not defined"
+            assert parent.parity is not None, msg  # noqa: S101
+            assert child1.parity is not None, msg  # noqa: S101
+            assert child2.parity is not None, msg  # noqa: S101
             return filter_parity_violating_ls(
                 ls, parent.parity, child1.parity, child2.parity
             )
@@ -232,8 +240,16 @@ def load_three_body_decay(
     chains: list[ThreeBodyDecayChain] = []
     for res in resonances:
         chains.extend(create_isobar(res))
+    return __form_three_body_decay(chains)
+
+
+def __form_three_body_decay(chains: Sequence[ThreeBodyDecayChain]) -> ThreeBodyDecay:
+    if not chains:
+        msg = "No decay chains were created"
+        raise ValueError(msg)
+    states: list[State] = [chains[0].initial_state, *chains[0].final_state]
     return ThreeBodyDecay(
-        states={state_id: particle for particle, state_id in PARTICLE_TO_ID.items()},
+        states={s.index: s for s in states},
         chains=tuple(chains),
     )
 
@@ -405,6 +421,10 @@ def compute_decay_couplings(
             else:
                 coupling_pos = H_dec[R, 0, +half]
                 coupling_neg = H_dec[R, 0, -half]
+            msg = "Parity is not defined"
+            assert chain.resonance.parity is not None, msg  # noqa: S101
+            assert child1.parity is not None, msg  # noqa: S101
+            assert child2.parity is not None, msg  # noqa: S101
             decay_couplings[coupling_pos] = 1
             decay_couplings[coupling_neg] = int(
                 chain.resonance.parity
@@ -542,6 +562,7 @@ class MeasuredParameter(Generic[ParameterType]):
 def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
     half = sp.Rational(1, 2)
+    assert resonance.parity is not None, "Parity is not defined"  # noqa: S101
     if resonance.name.startswith("D"):
         return int(-resonance.parity * (-1) ** (resonance.spin - half))  # type:ignore[return-value]
     if resonance.name.startswith("K"):
@@ -632,10 +653,10 @@ def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
         return sp.Symbol(Rf"m_{{{R}}}")
     if key.startswith("G1"):
         R = _stringify(key[2:])
-        return sp.Symbol(Rf"\Gamma_{{{R} \to {p.latex} {K.latex}}}")
+        return sp.Symbol(Rf"\Gamma_{{{R} \to {K.latex} {p.latex}}}")
     if key.startswith("G2"):
         R = _stringify(key[2:])
-        return sp.Symbol(Rf"\Gamma_{{{R} \to {Σ.latex} {π.latex}}}")
+        return sp.Symbol(Rf"\Gamma_{{{R} \to {π.latex} {Σ.latex}}}")
     if key.startswith("G"):
         R = _stringify(key[1:])
         return sp.Symbol(Rf"\Gamma_{{{R}}}")

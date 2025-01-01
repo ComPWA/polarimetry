@@ -32,7 +32,7 @@ dependencies = [
     "IPython",
     "PyYAML",
     "ampform >=0.14.8", # @unevaluated decorator
-    "ampform-dpd ~=0.1.6",
+    "ampform-dpd~=0.2.0",
     "attrs >=20.1.0",
     "matplotlib",
     "numpy",
@@ -404,8 +404,6 @@ commands =
     pytest {posargs}
 description = Run all unit tests
 passenv = *
-setenv =
-    PYTHONHASHSEED = 0
 
 [testenv:doc]
 allowlist_externals =
@@ -513,7 +511,7 @@ setenv =
 allowlist_externals =
     pytest
 commands =
-    pytest --nbmake --nbmake-timeout=3600 {posargs:docs}
+    pytest --nbmake --nbmake-timeout=0 {posargs:docs}
 description = Run all notebooks with pytest
 
 [testenv:sty]

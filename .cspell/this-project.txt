@@ -1,3 +1,4 @@
+AmpForm
 aslatex
 autoupdate
 batchmode
@@ -30,7 +31,6 @@ PyPI
 pyproject
 pyright
 pytest
-PYTHONHASHSEED
 Remco
 texlive
 toctree
