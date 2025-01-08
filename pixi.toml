@@ -11,5 +11,5 @@ platforms = [
 ]
 
 [dependencies]
-julia = {channel = "https://repo.prefix.dev/julia-forge", version = "*"}
+julia = { version = "*", channel = "https://repo.prefix.dev/julia-forge" }
 uv = "*"

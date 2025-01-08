@@ -12,21 +12,19 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libgcc-14.2.0-h77fa898_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libgomp-14.2.0-h77fa898_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-14.2.0-hc0a3c3a_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/uv-0.5.14-h0f3a69f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/uv-0.5.15-h0f3a69f_0.conda
       osx-64:
       - conda: https://repo.prefix.dev/julia-forge/osx-64/julia-1.10.4-h0dc7051_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libcxx-19.1.6-hf95d169_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/uv-0.5.14-h8de1528_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/uv-0.5.15-h8de1528_0.conda
       osx-arm64:
       - conda: https://repo.prefix.dev/julia-forge/osx-arm64/julia-1.10.4-h60d57d3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libcxx-19.1.6-ha82da77_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/uv-0.5.14-h668ec48_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/uv-0.5.15-h668ec48_0.conda
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
   sha256: fe51de6107f9edc7aa4f786a70f4a883943bc9d39b3bb7307c04c41410990726
   md5: d7c89558ba9fa0495403155b64376d81
-  arch: x86_64
-  platform: linux
   license: None
   size: 2562
   timestamp: 1578324546067
@@ -39,8 +37,6 @@ packages:
   - libgomp >=7.5.0
   constrains:
   - openmp_impl 9999
-  arch: x86_64
-  platform: linux
   license: BSD-3-Clause
   license_family: BSD
   size: 23621
@@ -65,8 +61,6 @@ packages:
   md5: 1bad6c181a0799298aad42fc5a7e98b7
   depends:
   - __osx >=10.13
-  arch: x86_64
-  platform: osx
   license: Apache-2.0 WITH LLVM-exception
   license_family: Apache
   size: 527370
@@ -76,8 +70,6 @@ packages:
   md5: ce5252d8db110cdb4ae4173d0a63c7c5
   depends:
   - __osx >=11.0
-  arch: arm64
-  platform: osx
   license: Apache-2.0 WITH LLVM-exception
   license_family: Apache
   size: 520992
@@ -91,8 +83,6 @@ packages:
   constrains:
   - libgomp 14.2.0 h77fa898_1
   - libgcc-ng ==14.2.0=*_1
-  arch: x86_64
-  platform: linux
   license: GPL-3.0-only WITH GCC-exception-3.1
   license_family: GPL
   size: 848745
@@ -102,8 +92,6 @@ packages:
   md5: cc3573974587f12dda90d96e3e55a702
   depends:
   - _libgcc_mutex 0.1 conda_forge
-  arch: x86_64
-  platform: linux
   license: GPL-3.0-only WITH GCC-exception-3.1
   license_family: GPL
   size: 460992
@@ -113,15 +101,13 @@ packages:
   md5: 234a5554c53625688d51062645337328
   depends:
   - libgcc 14.2.0 h77fa898_1
-  arch: x86_64
-  platform: linux
   license: GPL-3.0-only WITH GCC-exception-3.1
   license_family: GPL
   size: 3893695
   timestamp: 1729027746910
-- conda: https://conda.anaconda.org/conda-forge/linux-64/uv-0.5.14-h0f3a69f_0.conda
-  sha256: fb9e6a0b92e2d694afd3f5926de1c631a6f86897494527c0792374d8d96859b3
-  md5: 37aa0d278aeb3a71a2016c7684fc5a6c
+- conda: https://conda.anaconda.org/conda-forge/linux-64/uv-0.5.15-h0f3a69f_0.conda
+  sha256: 909bec3eb6d2fb3fbdf3bf5fe565ab43bb5db5302464e9a2cce90d8960a08f74
+  md5: 33eaa791be7db51cd4dbb8555b18489d
   depends:
   - __glibc >=2.17,<3.0.a0
   - libgcc >=13
@@ -131,11 +117,11 @@ packages:
   arch: x86_64
   platform: linux
   license: Apache-2.0 OR MIT
-  size: 10851448
-  timestamp: 1735852602867
-- conda: https://conda.anaconda.org/conda-forge/osx-64/uv-0.5.14-h8de1528_0.conda
-  sha256: 2cdf69d4bd6eb22429a9b221feabfa5877d9f7ab8e8f05b2d872cf5f9a6f436a
-  md5: 70445b6932c27499d0ddf4b2353a99ca
+  size: 10827337
+  timestamp: 1736227642935
+- conda: https://conda.anaconda.org/conda-forge/osx-64/uv-0.5.15-h8de1528_0.conda
+  sha256: cb6f63f4cef00d33fafc438d3c50870816468432646f326d10b4fe9cdae0df8f
+  md5: b471b2fb386d4fd012c96f76f6294e84
   depends:
   - __osx >=10.13
   - libcxx >=18
@@ -144,11 +130,11 @@ packages:
   arch: x86_64
   platform: osx
   license: Apache-2.0 OR MIT
-  size: 10382685
-  timestamp: 1735853830567
-- conda: https://conda.anaconda.org/conda-forge/osx-arm64/uv-0.5.14-h668ec48_0.conda
-  sha256: 7cccf0d40808746fc8f1d595c6000db16aea88bbaf5b860e456cab320a031c3c
-  md5: ba74550de2d811d8535f202d403d094d
+  size: 10327698
+  timestamp: 1736228528513
+- conda: https://conda.anaconda.org/conda-forge/osx-arm64/uv-0.5.15-h668ec48_0.conda
+  sha256: 8d791145d39adf0fbb7824b3cc27e0d769fa22acbdbacc535a65ecac4f24c6c1
+  md5: 43a82d68c7462f31065f6a2748577e2a
   depends:
   - __osx >=11.0
   - libcxx >=18
@@ -157,5 +143,5 @@ packages:
   arch: arm64
   platform: osx
   license: Apache-2.0 OR MIT
-  size: 10492975
-  timestamp: 1735854336261
+  size: 10392933
+  timestamp: 1736229481340
