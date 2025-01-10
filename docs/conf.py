@@ -75,11 +75,10 @@ def execute_pluto_notebooks() -> None:
     if shutil.which("julia") is None:
         msg = "Julia is not installed. Please download it at https://julialang.org/downloads"
         raise ValueError(msg)
-    result = subprocess.call(
-        "julia --project=. ./exportnotebooks.jl",
-        cwd="../julia",
-        shell=True,
-    )
+    print("\033[93;1mExecuting Pluto notebooks\033[0m")
+    cmd = "julia --project=. ./exportnotebooks.jl"
+    print(f"Running command: {cmd}")
+    result = subprocess.call(cmd, cwd="../julia", shell=True)
     if result != 0:
         msg = "Failed to execute pluto notebooks"
         raise ValueError(msg)
