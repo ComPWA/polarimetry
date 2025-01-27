@@ -386,9 +386,14 @@ trailing_comma_inline_array = true
 
 [tool.tox]
 env_list = [
-    "pdfnb-force",
+    "3.9",
+    "3.10",
+    "3.11",
+    "3.12",
+    "3.13",
     "docnb",
     "linkcheck",
+    "pdfnb-force",
     "py",
     "sty",
 ]
@@ -398,13 +403,18 @@ skip_install = true
 skip_missing_interpreters = true
 
 [tool.tox.env_run_base]
-allowlist_externals = ["pytest"]
 commands = [["pytest", {replace = "posargs", extend = true}]]
-description = "Run all unit tests"
+dependency_groups = ["test"]
+description = "Run test suite on Python {env_name}"
+no_package = false
 pass_env = ["*"]
+runner = "uv-venv-lock-runner"
+skip_install = false
+skip_missing_interpreters = false
 
 [tool.tox.env.doc]
 allowlist_externals = ["sphinx-build"]
+base = []
 commands = [
     [
         "sphinx-build",
@@ -422,6 +432,7 @@ set_env.PYTHONWARNINGS = ""
 
 [tool.tox.env.doclive]
 allowlist_externals = ["sphinx-autobuild"]
+base = ["tool.tox.env.doc"]
 commands = [
     [
         "sphinx-autobuild",
@@ -450,10 +461,9 @@ commands = [
     ],
 ]
 description = "Set up a server to directly preview changes to the HTML pages"
-set_env.PYTHONWARNINGS = ""
 
 [tool.tox.env.docnb]
-base = ["tool.tox.env.doc", "tool.tox.env_run_base"]
+base = ["tool.tox.env.doc"]
 description = "{[tool.tox.env.doc]description} with cached notebook execution"
 set_env = [
     {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
@@ -461,7 +471,7 @@ set_env = [
 ]
 
 [tool.tox.env.docnb-force]
-base = ["tool.tox.env.doc", "tool.tox.env_run_base"]
+base = ["tool.tox.env.doc"]
 description = "{[tool.tox.env.doc]description} with notebook execution (no cache)"
 set_env = [
     {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
@@ -469,7 +479,7 @@ set_env = [
 ]
 
 [tool.tox.env.docnblive]
-base = ["tool.tox.env.doclive", "tool.tox.env_run_base"]
+base = ["tool.tox.env.doclive"]
 description = "{[tool.tox.env.doclive]description} with cached notebook execution"
 set_env = [
     {replace = "ref", of = ["tool.tox.env.doclive.set_env"]},
@@ -477,7 +487,7 @@ set_env = [
 ]
 
 [tool.tox.env.linkcheck]
-allowlist_externals = ["sphinx-build"]
+base = ["tool.tox.env.doc"]
 commands = [
     [
         "sphinx-build",
@@ -488,10 +498,8 @@ commands = [
     ],
 ]
 description = "Check external links in the documentation (requires internet connection)"
-set_env.PYTHONWARNINGS = ""
 
 [tool.tox.env.nb]
-allowlist_externals = ["pytest"]
 commands = [
     [
         "pytest",
@@ -501,40 +509,54 @@ commands = [
     ],
 ]
 description = "Run all notebooks with pytest"
+with_dev = true
 
 [tool.tox.env.pdf]
 allowlist_externals = ["make"]
+base = ["tool.tox.env.doc"]
 change_dir = "docs"
-commands = [
-    [
-        "make",
-        "latexpdf",
-    ],
-]
+commands = [["make", "latexpdf"]]
 description = "Create documentation as a single PDF file"
-set_env.LATEXOPTS = "-interaction=batchmode"
-set_env.PYTHONWARNINGS = ""
+set_env = [
+    {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
+    {LATEXOPTS = "-interaction=batchmode"},
+]
 
 [tool.tox.env.pdfnb]
-base = ["tool.tox.env.pdf", "tool.tox.env_run_base"]
+base = ["tool.tox.env.pdf"]
 description = "{[tool.tox.env.pdf]description} with cached notebook execution"
 set_env = [
-    {replace = "ref", of = ["tool.tox.env.pdf.set_env"]},
+    {replace = "ref", of = ["tool.tox.env.pdf.set_env"], extend = true},
     {EXECUTE_NB = "yes"},
 ]
 
 [tool.tox.env.pdfnb-force]
-base = ["tool.tox.env.pdf", "tool.tox.env_run_base"]
+base = ["tool.tox.env.pdf"]
 description = "{[tool.tox.env.pdf]description} with notebook execution (no cache)"
 set_env = [
-    {replace = "ref", of = ["tool.tox.env.pdf.set_env"]},
+    {replace = "ref", of = ["tool.tox.env.pdf.set_env"], extend = true},
     {FORCE_EXECUTE_NB = "yes"},
 ]
 
 [tool.tox.env.sty]
 allowlist_externals = ["pre-commit"]
+base = []
 commands = [["pre-commit", "run", "--all-files", {replace = "posargs", extend = true}]]
 description = "Perform all linting, formatting, and spelling checks"
+
+[tool.tox.labels]
+doc = [
+    "linkcheck",
+    "pdfnb-force",
+    "docnb",
+]
+test = [
+    "3.9",
+    "3.10",
+    "3.11",
+    "3.12",
+    "3.13",
+]
 
 [tool.uv]
 constraint-dependencies = [
