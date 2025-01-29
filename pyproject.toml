@@ -159,7 +159,6 @@ disallow_untyped_defs = false
 module = ["tests.*"]
 
 [tool.pyright]
-exclude = ["**/.venv/"]
 include = ["src", "tests"]
 reportArgumentType = false
 reportAssignmentType = false
