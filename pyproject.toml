@@ -22,6 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python",
     "Topic :: Scientific/Engineering :: Physics",
@@ -132,8 +133,6 @@ namespaces = false
 where = ["src"]
 
 [tool.setuptools_scm]
-local_scheme = "no-local-version"
-version_scheme = "only-version"
 write_to = "src/polarimetry/version.py"
 
 [tool.mypy]
@@ -160,7 +159,6 @@ disallow_untyped_defs = false
 module = ["tests.*"]
 
 [tool.pyright]
-exclude = ["**/.venv/"]
 include = ["src", "tests"]
 reportArgumentType = false
 reportAssignmentType = false
@@ -387,9 +385,14 @@ trailing_comma_inline_array = true
 
 [tool.tox]
 env_list = [
-    "pdfnb-force",
+    "3.9",
+    "3.10",
+    "3.11",
+    "3.12",
+    "3.13",
     "docnb",
     "linkcheck",
+    "pdfnb-force",
     "py",
     "sty",
 ]
@@ -399,13 +402,18 @@ skip_install = true
 skip_missing_interpreters = true
 
 [tool.tox.env_run_base]
-allowlist_externals = ["pytest"]
 commands = [["pytest", {replace = "posargs", extend = true}]]
-description = "Run all unit tests"
+dependency_groups = ["test"]
+description = "Run test suite on Python {env_name}"
+no_package = false
 pass_env = ["*"]
+runner = "uv-venv-lock-runner"
+skip_install = false
+skip_missing_interpreters = false
 
 [tool.tox.env.doc]
 allowlist_externals = ["sphinx-build"]
+base = []
 commands = [
     [
         "sphinx-build",
@@ -415,7 +423,7 @@ commands = [
         "--nitpicky",
         "--show-traceback",
         "docs/",
-        "docs/_build/html",
+        "docs/_build/html/",
     ],
 ]
 description = "Build documentation with Sphinx"
@@ -423,38 +431,44 @@ set_env.PYTHONWARNINGS = ""
 
 [tool.tox.env.doclive]
 allowlist_externals = ["sphinx-autobuild"]
+base = ["tool.tox.env.doc"]
 commands = [
     [
         "sphinx-autobuild",
-        "--ignore=docs/_build/",
-        "--ignore=docs/_images/",
-        "--ignore=docs/_static/export/",
-        "--ignore=docs/_static/images/",
-        "--ignore=docs/_static/julia/",
-        "--ignore=docs/_static/polarimetry.pdf",
-        "--ignore=docs/api/",
-        "--ignore=docs/appendix/export/",
-        "--open-browser",
         "--port=0",
-        "--re-ignore='.*/__pycache__/.*'",
-        "--re-ignore='.*/.ipynb_checkpoints/.*'",
-        "--re-ignore='.*/.virtual_documents/.*'",
-        "--re-ignore='.*\\.pdf'",
-        "--re-ignore='.*\\.pkl'",
-        "--re-ignore='.*\\.png'",
-        "--re-ignore='.*\\.svg'",
-        "--re-ignore='.*\\.tmp'",
-        "--watch=docs",
+        "--re-ignore=/__pycache__(/.*)?$",
+        "--re-ignore=/_build(/.*)?$",
+        "--re-ignore=/_images(/.*)?$",
+        "--re-ignore=/_static/images(/.*)?$",
+        "--re-ignore=/_static/julia(/.*)?$",
+        "--re-ignore=/\\.cache(/.*)?$",
+        "--re-ignore=/\\.egg-info(/.*)?$",
+        "--re-ignore=/\\.ipynb_checkpoints(/.*)?$",
+        "--re-ignore=/\\.virtual_documents(/.*)?$",
+        "--re-ignore=/api(/.*)?$",
+        "--re-ignore=/docs$",
+        "--re-ignore=/export(/.*)?$",
+        "--re-ignore=/exported_intensity_model\\.py$",
+        "--re-ignore=/version\\.py$",
+        "--re-ignore=\\.egg-info(/.*)?$",
+        "--re-ignore=\\.json$",
+        "--re-ignore=\\.pdf$",
+        "--re-ignore=\\.pickle$",
+        "--re-ignore=\\.pkl$",
+        "--re-ignore=\\.png$",
+        "--re-ignore=\\.root$",
+        "--re-ignore=\\.svg$",
+        "--re-ignore=\\.tar.gz$",
+        "--re-ignore=\\.ya?ml$",
         "--watch=src",
         "docs/",
-        "docs/_build/html",
+        "docs/_build/html/",
     ],
 ]
 description = "Set up a server to directly preview changes to the HTML pages"
-set_env.PYTHONWARNINGS = ""
 
 [tool.tox.env.docnb]
-base = ["tool.tox.env.doc", "tool.tox.env_run_base"]
+base = ["tool.tox.env.doc"]
 description = "{[tool.tox.env.doc]description} with cached notebook execution"
 set_env = [
     {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
@@ -462,7 +476,7 @@ set_env = [
 ]
 
 [tool.tox.env.docnb-force]
-base = ["tool.tox.env.doc", "tool.tox.env_run_base"]
+base = ["tool.tox.env.doc"]
 description = "{[tool.tox.env.doc]description} with notebook execution (no cache)"
 set_env = [
     {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
@@ -470,7 +484,7 @@ set_env = [
 ]
 
 [tool.tox.env.docnblive]
-base = ["tool.tox.env.doclive", "tool.tox.env_run_base"]
+base = ["tool.tox.env.doclive"]
 description = "{[tool.tox.env.doclive]description} with cached notebook execution"
 set_env = [
     {replace = "ref", of = ["tool.tox.env.doclive.set_env"]},
@@ -478,21 +492,19 @@ set_env = [
 ]
 
 [tool.tox.env.linkcheck]
-allowlist_externals = ["sphinx-build"]
+base = ["tool.tox.env.doc"]
 commands = [
     [
         "sphinx-build",
         "--builder=linkcheck",
         "--show-traceback",
         "docs/",
-        "docs/_build/linkcheck",
+        "docs/_build/linkcheck/",
     ],
 ]
 description = "Check external links in the documentation (requires internet connection)"
-set_env.PYTHONWARNINGS = ""
 
 [tool.tox.env.nb]
-allowlist_externals = ["pytest"]
 commands = [
     [
         "pytest",
@@ -502,44 +514,56 @@ commands = [
     ],
 ]
 description = "Run all notebooks with pytest"
+with_dev = true
 
 [tool.tox.env.pdf]
 allowlist_externals = ["make"]
+base = ["tool.tox.env.doc"]
 change_dir = "docs"
-commands = [
-    [
-        "make",
-        "latexpdf",
-    ],
-]
+commands = [["make", "latexpdf"]]
 description = "Create documentation as a single PDF file"
-set_env.LATEXOPTS = "-interaction=batchmode"
-set_env.PYTHONWARNINGS = ""
+set_env = [
+    {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
+    {LATEXOPTS = "-interaction=batchmode"},
+]
 
 [tool.tox.env.pdfnb]
-base = ["tool.tox.env.pdf", "tool.tox.env_run_base"]
+base = ["tool.tox.env.pdf"]
 description = "{[tool.tox.env.pdf]description} with cached notebook execution"
 set_env = [
-    {replace = "ref", of = ["tool.tox.env.pdf.set_env"]},
+    {replace = "ref", of = ["tool.tox.env.pdf.set_env"], extend = true},
     {EXECUTE_NB = "yes"},
 ]
 
 [tool.tox.env.pdfnb-force]
-base = ["tool.tox.env.pdf", "tool.tox.env_run_base"]
+base = ["tool.tox.env.pdf"]
 description = "{[tool.tox.env.pdf]description} with notebook execution (no cache)"
 set_env = [
-    {replace = "ref", of = ["tool.tox.env.pdf.set_env"]},
+    {replace = "ref", of = ["tool.tox.env.pdf.set_env"], extend = true},
     {FORCE_EXECUTE_NB = "yes"},
 ]
 
 [tool.tox.env.sty]
 allowlist_externals = ["pre-commit"]
+base = []
 commands = [["pre-commit", "run", "--all-files", {replace = "posargs", extend = true}]]
 description = "Perform all linting, formatting, and spelling checks"
+
+[tool.tox.labels]
+doc = [
+    "linkcheck",
+    "pdfnb-force",
+    "docnb",
+]
+test = [
+    "3.9",
+    "3.10",
+    "3.11",
+    "3.12",
+    "3.13",
+]
 
 [tool.uv]
 constraint-dependencies = [
     "kaleido!=0.2.1.post1",
-    "pygments!=2.19.*", # https://github.com/felix-hilden/sphinx-codeautolink/issues/152
-    "sphinx-codeautolink!=0.16.0",
 ]

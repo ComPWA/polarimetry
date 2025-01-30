@@ -27,7 +27,7 @@ jobs:
           uv run \
             --group doc \
             --no-dev \
-            --with tox \
+            --with tox-uv \
             tox -e doc
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -51,7 +51,7 @@ jobs:
           uv run \
             --group doc \
             --no-dev \
-            --with tox \
+            --with tox-uv \
             tox -e pdf
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -74,7 +74,7 @@ jobs:
           uv run \
             --group doc \
             --no-dev \
-            --with tox \
+            --with tox-uv \
             tox -e linkcheck
 
   documentation:
@@ -139,7 +139,7 @@ jobs:
               --group doc \
               --group notebooks \
               --no-dev \
-              --with tox \
+              --with tox-uv \
               tox -e pdfnb
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -155,7 +155,7 @@ jobs:
               --group doc \
               --group notebooks \
               --no-dev \
-              --with tox \
+              --with tox-uv \
               tox -e docnb
       - uses: actions/upload-pages-artifact@v3
         if: always()
