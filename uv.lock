@@ -1828,6 +1828,18 @@ wheels = [
 ]
 
 [[package]]
+name = "jupyterlab-quickopen"
+version = "2.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jupyter-server" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/27/ac/d3787b743a0cdba56eae5b115e89c5fc88175124e5d9121d42ef12f567af/jupyterlab_quickopen-2.0.2.tar.gz", hash = "sha256:b365aebaa4e06c717c15505d57ce05f754c9f870606e30f2427f60c4d6cb7c75", size = 207871 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/53/af/7106886bef754d4c88daf99e62792c6c94709aa61d624b7f43d953acfbc7/jupyterlab_quickopen-2.0.2-py3-none-any.whl", hash = "sha256:7a48d5638452229c0d93149d1225f4c7ee66432aac2c1378131cc2cf58d45855", size = 22575 },
+]
+
+[[package]]
 name = "jupyterlab-server"
 version = "2.27.3"
 source = { registry = "https://pypi.org/simple" }
@@ -3125,6 +3137,7 @@ dev = [
     { name = "jupyterlab-git" },
     { name = "jupyterlab-lsp" },
     { name = "jupyterlab-myst" },
+    { name = "jupyterlab-quickopen" },
     { name = "kaleido" },
     { name = "matplotlib-inline" },
     { name = "mypy" },
@@ -3186,6 +3199,7 @@ jupyter = [
     { name = "jupyterlab-git" },
     { name = "jupyterlab-lsp" },
     { name = "jupyterlab-myst" },
+    { name = "jupyterlab-quickopen" },
     { name = "kaleido" },
     { name = "matplotlib-inline" },
     { name = "pandas" },
@@ -3265,6 +3279,7 @@ dev = [
     { name = "jupyterlab-git" },
     { name = "jupyterlab-lsp" },
     { name = "jupyterlab-myst" },
+    { name = "jupyterlab-quickopen" },
     { name = "kaleido" },
     { name = "matplotlib-inline" },
     { name = "mypy" },
@@ -3323,6 +3338,7 @@ jupyter = [
     { name = "jupyterlab-git" },
     { name = "jupyterlab-lsp" },
     { name = "jupyterlab-myst" },
+    { name = "jupyterlab-quickopen" },
     { name = "kaleido" },
     { name = "matplotlib-inline" },
     { name = "pandas" },
