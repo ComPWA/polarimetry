@@ -509,6 +509,7 @@ description = "Check external links in the documentation (requires internet conn
 commands = [
     [
         "pytest",
+        "--durations=0",
         "--nbmake",
         "--nbmake-timeout=0",
         "{posargs:docs}",
