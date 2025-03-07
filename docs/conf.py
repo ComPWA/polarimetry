@@ -526,6 +526,7 @@ redirects = {
     "appendix/polarization-fit": "../zz.polarization-fit.html",
 }
 suppress_warnings = [
+    "codeautolink.match_name",
     "mystnb.mime_priority",  # plotly figures in LaTeX build
     # https://github.com/executablebooks/MyST-NB/blob/4dcf7c5/docs/conf.py#L46-L47
     "mystnb.unknown_mime_type",
