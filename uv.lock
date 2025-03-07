@@ -3242,8 +3242,8 @@ types = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ampform", specifier = ">=0.14.8" },
-    { name = "ampform-dpd", specifier = "~=0.2.0" },
+    { name = "ampform", specifier = ">=0.15.7" },
+    { name = "ampform-dpd", specifier = "~=0.2.3" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "ipython" },
     { name = "matplotlib" },
