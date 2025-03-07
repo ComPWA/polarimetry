@@ -406,7 +406,7 @@ def _flip(obj: _V) -> _V:
 def compute_decay_couplings(
     decay: ThreeBodyDecay,
 ) -> dict[sp.Indexed, MeasuredParameter[int]]:
-    H_dec = _get_coupling_base(helicity_coupling=True, typ="decay")
+    H_dec = _get_coupling_base(helicity_basis=True, typ="decay")
     half = sp.Rational(1, 2)
     decay_couplings = {}
     for chain in decay.chains:
@@ -589,7 +589,7 @@ def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
     particle_definitions: dict[str, Particle],
     min_ls: bool = True,
 ) -> sp.Indexed | sp.Symbol:
-    H_prod = _get_coupling_base(helicity_coupling=min_ls, typ="production")
+    H_prod = _get_coupling_base(helicity_basis=min_ls, typ="production")
     half = sp.Rational(1, 2)
     if key.startswith("A"):
         # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
