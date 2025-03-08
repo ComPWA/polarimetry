@@ -334,7 +334,7 @@ html_css_files = [
 ]
 html_js_files = [
     # https://github.com/requirejs/requirejs/tags
-    "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js",
 ]
 html_last_updated_fmt = "%-d %B %Y"
 html_logo = "_static/lhcb-logo.svg"
@@ -398,7 +398,7 @@ intersphinx_mapping = {
     "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
     "iminuit": ("https://scikit-hep.org/iminuit", None),
     "ipywidgets": (f"https://ipywidgets.readthedocs.io/en/{pin('ipywidgets')}", None),
-    "jax": ("https://jax.readthedocs.io/en/latest", None),
+    "jax": ("https://docs.jax.dev/en/latest", None),
     "matplotlib": (f"https://matplotlib.org/{pin('matplotlib')}", None),
     "numpy": (f"https://numpy.org/doc/{pin_minor('numpy')}", None),
     "plotly": ("https://plotly.com/python-api-reference", None),
@@ -526,6 +526,7 @@ redirects = {
     "appendix/polarization-fit": "../zz.polarization-fit.html",
 }
 suppress_warnings = [
+    "codeautolink.match_name",
     "mystnb.mime_priority",  # plotly figures in LaTeX build
     # https://github.com/executablebooks/MyST-NB/blob/4dcf7c5/docs/conf.py#L46-L47
     "mystnb.unknown_mime_type",
