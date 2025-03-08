@@ -332,6 +332,7 @@ generate_apidoc_package_path = f"../src/{PACKAGE_NAME}"
 html_css_files = [
     "custom.css",
 ]
+html_favicon = "_static/favicon.ico"
 html_js_files = [
     # https://github.com/requirejs/requirejs/tags
     "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js",
