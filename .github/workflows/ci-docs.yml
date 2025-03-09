@@ -2,7 +2,7 @@ env:
   FORCE_COLOR: "1"
   JULIA_CI: "true"
   PYTHON_VERSION: "3.9"
-  UV_SYSTEM_PYTHON: "1"
+  UV_PYTHON_PREFERENCE: only-managed
 
 on:
   workflow_call:
