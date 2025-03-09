@@ -32,8 +32,8 @@ classifiers = [
 dependencies = [
     "IPython",
     "PyYAML",
-    "ampform >=0.14.8", # @unevaluated decorator
-    "ampform-dpd~=0.2.0",
+    "ampform >=0.15.7", # @unevaluated decorator, cached module
+    "ampform-dpd~=0.2.3", # cached module
     "attrs >=20.1.0",
     "matplotlib",
     "numpy",
@@ -80,6 +80,7 @@ jupyter = [
     "jupyterlab-git",
     "jupyterlab-lsp",
     "jupyterlab-myst",
+    "jupyterlab-quickopen",
     "python-lsp-ruff",
     "python-lsp-server[rope]",
     {include-group = "notebooks"},
@@ -427,6 +428,7 @@ commands = [
     ],
 ]
 description = "Build documentation with Sphinx"
+pass_env = ["*"]
 set_env.PYTHONWARNINGS = ""
 
 [tool.tox.env.doclive]
@@ -466,29 +468,30 @@ commands = [
     ],
 ]
 description = "Set up a server to directly preview changes to the HTML pages"
+pass_env = ["*"]
 
 [tool.tox.env.docnb]
 base = ["tool.tox.env.doc"]
 description = "{[tool.tox.env.doc]description} with cached notebook execution"
 set_env = [
-    {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
     {EXECUTE_NB = "yes"},
+    {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
 ]
 
 [tool.tox.env.docnb-force]
 base = ["tool.tox.env.doc"]
 description = "{[tool.tox.env.doc]description} with notebook execution (no cache)"
 set_env = [
-    {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
     {FORCE_EXECUTE_NB = "yes"},
+    {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
 ]
 
 [tool.tox.env.docnblive]
 base = ["tool.tox.env.doclive"]
 description = "{[tool.tox.env.doclive]description} with cached notebook execution"
 set_env = [
-    {replace = "ref", of = ["tool.tox.env.doclive.set_env"]},
     {EXECUTE_NB = "yes"},
+    {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
 ]
 
 [tool.tox.env.linkcheck]
@@ -508,6 +511,7 @@ description = "Check external links in the documentation (requires internet conn
 commands = [
     [
         "pytest",
+        "--durations=0",
         "--nbmake",
         "--nbmake-timeout=0",
         "{posargs:docs}",
@@ -531,16 +535,16 @@ set_env = [
 base = ["tool.tox.env.pdf"]
 description = "{[tool.tox.env.pdf]description} with cached notebook execution"
 set_env = [
-    {replace = "ref", of = ["tool.tox.env.pdf.set_env"], extend = true},
     {EXECUTE_NB = "yes"},
+    {replace = "ref", of = ["tool.tox.env.pdf.set_env"], extend = true},
 ]
 
 [tool.tox.env.pdfnb-force]
 base = ["tool.tox.env.pdf"]
 description = "{[tool.tox.env.pdf]description} with notebook execution (no cache)"
 set_env = [
-    {replace = "ref", of = ["tool.tox.env.pdf.set_env"], extend = true},
     {FORCE_EXECUTE_NB = "yes"},
+    {replace = "ref", of = ["tool.tox.env.pdf.set_env"], extend = true},
 ]
 
 [tool.tox.env.sty]
@@ -548,6 +552,7 @@ allowlist_externals = ["pre-commit"]
 base = []
 commands = [["pre-commit", "run", "--all-files", {replace = "posargs", extend = true}]]
 description = "Perform all linting, formatting, and spelling checks"
+pass_env = ["*"]
 
 [tool.tox.labels]
 doc = [

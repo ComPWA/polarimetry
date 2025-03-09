@@ -66,7 +66,7 @@ def test_get_conversion_factor_ls():
 
 def test_load_model_parameters():
     pars = _load_parameters("Default amplitude model")
-    H = _get_coupling_base(helicity_coupling=True, typ="production")
+    H = _get_coupling_base(helicity_basis=True, typ="production")
     gamma = sp.Symbol(R"\gamma_{K(700)}")
     h = sp.Rational(1, 2)
     assert len(pars) == 53
@@ -86,7 +86,7 @@ def test_load_model_parameters():
     assert pars[H[Str(R"\Lambda(1810)"), +h, 0]] == (1.179995 + 4.413438j) * -1
 
     pars = _load_parameters("Alternative amplitude model obtained using LS couplings")
-    H = _get_coupling_base(helicity_coupling=False, typ="production")  # pyright:ignore[reportConstantRedefinition]
+    H = _get_coupling_base(helicity_basis=False, typ="production")  # pyright:ignore[reportConstantRedefinition]
     assert len(pars) == 53
     assert pars[gamma] == 0.847475
     assert pars[H[Str("K(892)"), 0, +h]] == (1.0 + 0.0j) * +1
