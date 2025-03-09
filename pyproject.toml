@@ -105,10 +105,7 @@ style = [
     "mypy",
     {include-group = "types"},
 ]
-test = [
-    "pytest",
-    "pytest-xdist",
-]
+test = ["pytest"]
 types = [
     "nbformat",
     "pybtex-docutils",
