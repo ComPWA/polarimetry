@@ -1771,6 +1771,18 @@ wheels = [
 ]
 
 [[package]]
+name = "jupyterlab-execute-time"
+version = "3.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jupyterlab" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ee/e5/245bf4ebc553c5a4e616fdeb0ea285549174135e72b05479f7bb91a4e6ed/jupyterlab_execute_time-3.2.0.tar.gz", hash = "sha256:9b13b65c2c139bfabb3f6ff1706c4d33ed5a56203a89d0297608334e15bc9c0b", size = 340467 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ce/74/f47c4411b280175938c5f1ee3f8f98a0a75c83aa6e992c1616621b238ac0/jupyterlab_execute_time-3.2.0-py3-none-any.whl", hash = "sha256:a0be3fe740fa59b59b16047793e5a0831cc497906863d26b83d3b92525dcb7ed", size = 527063 },
+]
+
+[[package]]
 name = "jupyterlab-git"
 version = "0.51.0"
 source = { registry = "https://pypi.org/simple" }
@@ -3119,6 +3131,7 @@ dev = [
     { name = "ipywidgets" },
     { name = "jupyterlab" },
     { name = "jupyterlab-code-formatter" },
+    { name = "jupyterlab-execute-time" },
     { name = "jupyterlab-git" },
     { name = "jupyterlab-lsp" },
     { name = "jupyterlab-myst" },
@@ -3180,6 +3193,7 @@ jupyter = [
     { name = "ipywidgets" },
     { name = "jupyterlab" },
     { name = "jupyterlab-code-formatter" },
+    { name = "jupyterlab-execute-time" },
     { name = "jupyterlab-git" },
     { name = "jupyterlab-lsp" },
     { name = "jupyterlab-myst" },
@@ -3259,6 +3273,7 @@ dev = [
     { name = "ipywidgets" },
     { name = "jupyterlab" },
     { name = "jupyterlab-code-formatter" },
+    { name = "jupyterlab-execute-time" },
     { name = "jupyterlab-git" },
     { name = "jupyterlab-lsp" },
     { name = "jupyterlab-myst" },
@@ -3317,6 +3332,7 @@ jupyter = [
     { name = "ipywidgets" },
     { name = "jupyterlab" },
     { name = "jupyterlab-code-formatter" },
+    { name = "jupyterlab-execute-time" },
     { name = "jupyterlab-git" },
     { name = "jupyterlab-lsp" },
     { name = "jupyterlab-myst" },

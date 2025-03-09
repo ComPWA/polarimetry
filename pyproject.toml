@@ -77,6 +77,7 @@ jupyter = [
     "jupyterlab",
     "jupyterlab",
     "jupyterlab-code-formatter",
+    "jupyterlab-execute-time",
     "jupyterlab-git",
     "jupyterlab-lsp",
     "jupyterlab-myst",
