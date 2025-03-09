@@ -45,11 +45,9 @@ jobs:
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - uses: astral-sh/setup-uv@v5
-      - uses: awalsh128/cache-apt-pkgs-action@v1 # cspell:ignore awalsh pkgs
-        with:
-          packages: inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
-          version: 1.0
       - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
           uv run \
             --group doc \
             --no-dev \
@@ -87,10 +85,9 @@ jobs:
       - uses: prefix-dev/setup-pixi@v0.8.3
         with:
           cache: true
-      - uses: awalsh128/cache-apt-pkgs-action@v1 # cspell:ignore awalsh pkgs
-        with:
-          packages: cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
-          version: 1.0
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch Julia cache
         uses: actions/cache@v4
         with:
