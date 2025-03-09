@@ -1,8 +1,7 @@
 env:
   FORCE_COLOR: "1"
   JULIA_CI: "true"
-  PYTHON_VERSION: "3.9"
-  UV_SYSTEM_PYTHON: "1"
+  UV_PYTHON_PREFERENCE: only-managed
 
 on:
   workflow_call:
@@ -18,9 +17,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{env.PYTHON_VERSION}}
       - uses: astral-sh/setup-uv@v5
       - name: Build documentation without running notebooks
         run: >-
@@ -41,9 +37,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{env.PYTHON_VERSION}}
       - uses: astral-sh/setup-uv@v5
       - run: |
           sudo apt-get update -y
@@ -65,9 +58,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{env.PYTHON_VERSION}}
       - uses: astral-sh/setup-uv@v5
       - name: Check external links with Sphinx linkcheck
         run: >-
@@ -99,17 +89,7 @@ jobs:
           path: |
             ./julia-*/
             ~/.julia/
-      - name: Fetch SymPy cache
-        uses: actions/cache@v4
-        with:
-          key: |
-            sympy-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}-${{hashFiles('docs/**.ipynb')}}
-          restore-keys: |
-            sympy-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}
-            sympy-${{hashFiles('uv.lock')}}
-          path: |
-            ~/.cache/ampform*
-          # cspell:ignore ampform
+      - uses: ComPWA/actions/cache-sympy@v2
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
         with:
@@ -132,6 +112,7 @@ jobs:
             ./docs/_static/export
             ./docs/_static/images
             ./docs/appendix/export
+            ./docs/appendix/exported_intensity_model.py
       - name: Build PDF with notebook execution
         run: >-
           pixi run \

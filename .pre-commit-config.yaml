@@ -22,6 +22,7 @@ repos:
           - --no-cspell-update
           - --no-github-actions
           - --package-manager=pixi+uv
+          - --pytest-single-threaded
           - --repo-name=polarimetry
       - id: colab-toc-visible
       - id: remove-empty-tags

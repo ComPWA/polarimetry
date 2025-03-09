@@ -77,6 +77,7 @@ jupyter = [
     "jupyterlab",
     "jupyterlab",
     "jupyterlab-code-formatter",
+    "jupyterlab-execute-time",
     "jupyterlab-git",
     "jupyterlab-lsp",
     "jupyterlab-myst",
@@ -105,10 +106,7 @@ style = [
     "mypy",
     {include-group = "types"},
 ]
-test = [
-    "pytest",
-    "pytest-xdist",
-]
+test = ["pytest"]
 types = [
     "nbformat",
     "pybtex-docutils",
@@ -571,4 +569,5 @@ test = [
 [tool.uv]
 constraint-dependencies = [
     "kaleido!=0.2.1.post1",
+    "plotly~=5.0", # https://github.com/executablebooks/MyST-NB/issues/667
 ]
