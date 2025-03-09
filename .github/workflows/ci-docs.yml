@@ -1,7 +1,6 @@
 env:
   FORCE_COLOR: "1"
   JULIA_CI: "true"
-  PYTHON_VERSION: "3.9"
   UV_PYTHON_PREFERENCE: only-managed
 
 on:
@@ -18,9 +17,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{env.PYTHON_VERSION}}
       - uses: astral-sh/setup-uv@v5
       - name: Build documentation without running notebooks
         run: >-
@@ -41,9 +37,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{env.PYTHON_VERSION}}
       - uses: astral-sh/setup-uv@v5
       - run: |
           sudo apt-get update -y
@@ -65,9 +58,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{env.PYTHON_VERSION}}
       - uses: astral-sh/setup-uv@v5
       - name: Check external links with Sphinx linkcheck
         run: >-
