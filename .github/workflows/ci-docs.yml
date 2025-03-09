@@ -102,17 +102,7 @@ jobs:
           path: |
             ./julia-*/
             ~/.julia/
-      - name: Fetch SymPy cache
-        uses: actions/cache@v4
-        with:
-          key: |
-            sympy-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}-${{hashFiles('docs/**.ipynb')}}
-          restore-keys: |
-            sympy-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}
-            sympy-${{hashFiles('uv.lock')}}
-          path: |
-            ~/.cache/ampform*
-          # cspell:ignore ampform
+      - uses: ComPWA/actions/cache-sympy@v2
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
         with:
