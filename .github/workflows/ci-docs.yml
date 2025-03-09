@@ -122,6 +122,7 @@ jobs:
             ./docs/_static/export
             ./docs/_static/images
             ./docs/appendix/export
+            ./docs/appendix/exported_intensity_model.py
       - name: Build PDF with notebook execution
         run: >-
           pixi run \
