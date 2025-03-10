@@ -332,6 +332,8 @@ generate_apidoc_package_path = f"../src/{PACKAGE_NAME}"
 html_css_files = [
     "custom.css",
 ]
+html_extra_path = ["favicon.ico"]
+html_favicon = "favicon.ico"
 html_js_files = [
     # https://github.com/requirejs/requirejs/tags
     "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js",
@@ -346,7 +348,7 @@ html_theme_options = {
         {
             "name": "Common Partial Wave Analysis",
             "url": "https://compwa.github.io",
-            "icon": "https://compwa.github.io/_static/favicon.ico",
+            "icon": "favicon.ico",
             "type": "url",
         },
         {
@@ -386,6 +388,7 @@ html_theme_options = {
     "show_toc_level": 2,
     "use_download_button": False,
     "use_edit_page_button": True,
+    "use_fullscreen_button": False,
     "use_issues_button": True,
     "use_repository_button": True,
     "use_source_button": True,
