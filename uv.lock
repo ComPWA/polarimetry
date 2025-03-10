@@ -56,7 +56,7 @@ wheels = [
 
 [[package]]
 name = "ampform"
-version = "0.15.7"
+version = "0.15.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
@@ -64,9 +64,9 @@ dependencies = [
     { name = "qrules" },
     { name = "sympy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/bf/a5/f1b45b55c1486bd8dbacf4380b8e65575efd7c98bb90b08900fd5c2bfacb/ampform-0.15.7.tar.gz", hash = "sha256:0d4a7af2cd6eb18b39f2ffec48001d70464c39f0085c8b90f0744450c36bfa3a", size = 371491 }
+sdist = { url = "https://files.pythonhosted.org/packages/d4/7a/936b6111fd2855cf99c2f56c0e0d7098ea550a2f90de6b658c41f7b140ac/ampform-0.15.8.tar.gz", hash = "sha256:cf3afa23dad9249147456d2067da39bb33b8e7f5081f310e53166df6760f0410", size = 371646 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fb/37/34462914cd0d7fa833e47f0a44055448cf7bfeb30292606571c853d57547/ampform-0.15.7-py3-none-any.whl", hash = "sha256:ddfc346a0c9bb48b95be5a5f79dff557af742cbc4a2b2a9721fceecebc1fab98", size = 88351 },
+    { url = "https://files.pythonhosted.org/packages/48/2a/91f45b108c77830aacc4bae109f57a69d1c894fae08e95aee3959b98b272/ampform-0.15.8-py3-none-any.whl", hash = "sha256:e9faf059217bbe15e765c13560480f7630897dd25deaa04e542c4aac67011dd6", size = 88574 },
 ]
 
 [[package]]
