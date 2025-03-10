@@ -54,8 +54,8 @@ def sub_intensity(func, data, non_zero_couplings: list[str]):
     return integrate_intensity(intensity_array)
 
 
-def integrate_intensity(intensities) -> float:
-    return float(jnp.nanmean(intensities))
+def integrate_intensity(intensities) -> jnp.ndarray:
+    return jnp.nanmean(intensities, axis=-1)
 
 
 def _get_coupling_regex(non_zero_couplings: list[str]) -> str:
