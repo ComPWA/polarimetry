@@ -6,8 +6,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pytest
 import sympy as sp
-from ampform.sympy import perform_cached_doit
-from ampform_dpd.io import perform_cached_lambdify
+from ampform_dpd.io import cached
 
 from polarimetry import lhcb
 from polarimetry.data import create_data_transformer, generate_phasespace_sample
@@ -33,7 +32,7 @@ def model() -> AmplitudeModel:
 
 @pytest.fixture(scope="session")
 def intensity_func(model: AmplitudeModel) -> ParametrizedFunction:
-    unfolded_intensity_expr = perform_cached_doit(model.full_expression)
+    unfolded_intensity_expr = cached.unfold(model)
     free_parameters = {
         symbol: value
         for symbol, value in model.parameter_defaults.items()
@@ -45,8 +44,8 @@ def intensity_func(model: AmplitudeModel) -> ParametrizedFunction:
         for symbol, value in model.parameter_defaults.items()
         if symbol not in free_parameters
     }
-    subs_intensity_expr = unfolded_intensity_expr.xreplace(fixed_parameters)
-    return perform_cached_lambdify(
+    subs_intensity_expr = cached.xreplace(unfolded_intensity_expr, fixed_parameters)
+    return cached.lambdify(
         subs_intensity_expr,
         parameters=free_parameters,  # type:ignore[arg-type]
         backend="jax",
