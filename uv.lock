@@ -3118,6 +3118,7 @@ dependencies = [
     { name = "numpy", version = "2.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "numpy", version = "2.2.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "pyyaml" },
+    { name = "scour" },
     { name = "sympy" },
     { name = "tensorwaves", extra = ["jax"] },
 ]
@@ -3260,6 +3261,7 @@ requires-dist = [
     { name = "matplotlib" },
     { name = "numpy" },
     { name = "pyyaml" },
+    { name = "scour" },
     { name = "sympy", specifier = ">=1.10" },
     { name = "tensorwaves", extras = ["jax"], specifier = ">=0.4.5" },
 ]
@@ -4140,6 +4142,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/af/f5/ab3838e56fe5cc22383d6fcf2336e48c8fe33e944b9037fbf6cbdf5a11f8/scipy-1.15.2-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:f031846580d9acccd0044efd1a90e6f4df3a6e12b4b6bd694a7bc03a89892b28", size = 39136566 },
     { url = "https://files.pythonhosted.org/packages/0a/c8/b3f566db71461cabd4b2d5b39bcc24a7e1c119535c8361f81426be39bb47/scipy-1.15.2-cp313-cp313t-win_amd64.whl", hash = "sha256:fe8a9eb875d430d81755472c5ba75e84acc980e4a8f6204d402849234d3017db", size = 40477705 },
 ]
+
+[[package]]
+name = "scour"
+version = "0.38.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/75/19/f519ef8aa2f379935a44212c5744e2b3a46173bf04e0110fb7f4af4028c9/scour-0.38.2.tar.gz", hash = "sha256:6881ec26660c130c5ecd996ac6f6b03939dd574198f50773f2508b81a68e0daf", size = 52947 }
 
 [[package]]
 name = "send2trash"

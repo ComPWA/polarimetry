@@ -26,6 +26,7 @@ svgutils
 sympify
 tensorwaves
 tolist
+viewboxing
 viridis
 vmax
 vmin

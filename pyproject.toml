@@ -37,6 +37,7 @@ dependencies = [
     "attrs >=20.1.0",
     "matplotlib",
     "numpy",
+    "scour",
     "sympy >=1.10",
     "tensorwaves[jax] >=0.4.5",
 ]
@@ -138,6 +139,10 @@ write_to = "src/polarimetry/version.py"
 exclude = "_build"
 show_error_codes = true
 warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = ["cairosvg"]
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
@@ -352,6 +357,7 @@ ignore-names = [
     "T201",
 ]
 "src/polarimetry/io.py" = ["S301"] # pickle
+"src/polarimetry/plot.py" = ["S404", "S60"] # subprocess
 "tests/*" = [
     "C408",
     "D",

@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import shutil
+import subprocess
+from pathlib import Path
 from typing import TYPE_CHECKING
 
+import cairosvg
 import matplotlib.pyplot as plt
 
 if TYPE_CHECKING:
@@ -27,6 +30,38 @@ def add_watermark(
 def get_contour_line(contour_set: QuadContourSet) -> Artist:
     (line_collection, *_), _ = contour_set.legend_elements()
     return line_collection
+
+
+def reduce_svg_size(path: str) -> None:
+    input_path = Path(path)
+    output_path = input_path.parent / f"optimized-{input_path.name}"
+    try:
+        subprocess.run(
+            [
+                "scour",
+                str(input_path),
+                str(output_path),
+                "--enable-comment-stripping",
+                "--enable-id-stripping",
+                "--enable-viewboxing",
+                "--indent=none",
+                "--shorten-ids",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        output_path.rename(input_path)
+    except subprocess.CalledProcessError as err:
+        msg = f"Error optimizing SVG: {err.stderr}"
+        raise RuntimeError(msg) from err
+
+
+def convert_svg_to_png(input_file: str, dpi: int) -> None:
+    output_file = input_file.replace(".svg", ".png").replace(".SVG", ".png")
+    with open(input_file) as f:
+        src = f.read()
+    cairosvg.svg2png(bytestring=src, write_to=output_file, dpi=dpi)
 
 
 def use_mpl_latex_fonts(reset_mpl: bool = True) -> None:
