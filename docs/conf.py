@@ -393,7 +393,7 @@ html_theme_options = {
     "use_repository_button": True,
     "use_source_button": True,
 }
-html_title = "Λ<sub>c</sub> → p K π polarimetry"
+html_title = "Λc → p K π polarimetry"
 intersphinx_mapping = {
     "IPython": (f"https://ipython.readthedocs.io/en/{pin('IPython')}", None),
     "ampform-dpd": ("https://compwa.github.io/ampform-dpd", None),
