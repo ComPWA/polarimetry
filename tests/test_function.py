@@ -44,7 +44,7 @@ def intensity_func(model: AmplitudeModel) -> ParametrizedFunction:
         for symbol, value in model.parameter_defaults.items()
         if symbol not in free_parameters
     }
-    subs_intensity_expr = unfolded_intensity_expr.xreplace(fixed_parameters)
+    subs_intensity_expr = cached.xreplace(unfolded_intensity_expr, fixed_parameters)
     return cached.lambdify(
         subs_intensity_expr,
         parameters=free_parameters,  # type:ignore[arg-type]
