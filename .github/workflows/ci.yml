@@ -29,10 +29,10 @@ jobs:
     permissions:
       pages: write
       id-token: write
-    with:
-      specific-pip-packages: ${{ inputs.specific-pip-packages }}
     secrets:
       token: ${{ secrets.PAT }}
+    with:
+      specific-pip-packages: ${{ inputs.specific-pip-packages }}
   pytest:
     uses: ComPWA/actions/.github/workflows/pytest.yml@v2.1
     with:

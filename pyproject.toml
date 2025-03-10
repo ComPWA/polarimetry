@@ -532,6 +532,7 @@ set_env = [
 [tool.tox.env.pdfnb]
 base = ["tool.tox.env.pdf"]
 description = "{[tool.tox.env.pdf]description} with cached notebook execution"
+pass_env = ["*"]
 set_env = [
     {EXECUTE_NB = "yes"},
     {replace = "ref", of = ["tool.tox.env.pdf.set_env"], extend = true},

@@ -1,5 +1,6 @@
 env:
   FORCE_COLOR: "1"
+  JAX_COMPILATION_CACHE_DIR: ~/.cache/jax
   JULIA_CI: "true"
   UV_PYTHON_PREFERENCE: only-managed
 
@@ -89,6 +90,16 @@ jobs:
       - run: |
           sudo apt-get update -y
           sudo apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
+      - name: Fetch JAX cache
+        uses: actions/cache@v4
+        with:
+          key: |
+            jax-${{hashFiles('uv.lock', 'pyproject.toml')}}
+          restore-keys: |
+            jax-${{hashFiles('uv.lock', 'pyproject.toml')}}
+            jax
+          path: |
+            ~/.cache/jax
       - name: Fetch Julia cache
         uses: actions/cache@v4
         with:
