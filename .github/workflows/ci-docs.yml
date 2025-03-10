@@ -9,6 +9,17 @@ on:
       specific-pip-packages:
         required: false
         type: string
+    secrets:
+      token:
+        description: >-
+          Personal Access Token for GitHub. This needs to be set as a secret by
+          the host repository in order to rerun checks after pushing to a PR.
+          The default GITHUB_TOKEN does not suffice for that, see here:
+          https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+
+          This page tells more about creating a PAT:
+          https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+        required: true
 
 jobs:
   fast-html:
@@ -171,7 +182,7 @@ jobs:
           git commit -m "Push preview for https://github.com/ComPWA/polarimetry/pull/${{ github.event.number }}"
       - name: Push results to GitHub Pages
         run: |
-          git remote add origin https://x-access-token:${{ secrets.PAT }}@github.com/ComPWA/polarimetry-pr-preview
+          git remote add origin https://x-access-token:${{ secrets.token }}@github.com/ComPWA/polarimetry-pr-preview
           git push origin gh-pages --force
       - name: Show notice with link to PR preview
         run: echo "Documentation preview available on [compwa.github.io/polarimetry-pr-preview](https://compwa.github.io/polarimetry-pr-preview)" >> $GITHUB_STEP_SUMMARY
