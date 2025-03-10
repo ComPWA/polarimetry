@@ -524,6 +524,7 @@ base = ["tool.tox.env.doc"]
 change_dir = "docs"
 commands = [["make", "latexpdf"]]
 description = "Create documentation as a single PDF file"
+pass_env = ["*"]
 set_env = [
     {replace = "ref", of = ["tool.tox.env.doc.set_env"]},
     {LATEXOPTS = "-interaction=batchmode"},
