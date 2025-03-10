@@ -25,7 +25,7 @@ def download_paper_figures() -> str:
         "2": "_static/images/total-polarimetry-field-watermark.svg",
         "3a": "_static/images/polarimetry-field-L1520-unaligned-watermark.svg",
         "3b": "_static/images/polarimetry-field-L1520-aligned-watermark.svg",
-        "4": "_static/images/polarimetry-field-norm-uncertainties-watermark.png",
+        "4": "_static/images/polarimetry-field-norm-uncertainties-watermark.svg",
     }
     for path in figures.values():
         if not os.path.exists(path):
@@ -52,7 +52,7 @@ def download_paper_figures() -> str:
 
 
 def download_intensity_distribution() -> str:
-    filename = "_static/images/intensity-distribution.png"
+    filename = "_static/images/intensity-distribution.svg"
     if not os.path.exists(filename):
         MISSING_FILES.add(filename)
         return ""
