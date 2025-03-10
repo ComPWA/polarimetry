@@ -170,7 +170,7 @@ jobs:
           git add -A
           git commit -m "Push preview for https://github.com/ComPWA/polarimetry/pull/${{ github.event.number }}"
       - name: Push results to GitHub Pages
-        run: git push --force https://ComPWA:${{ secrets.PAT }}@github.com/ComPWA/polarimetry-pr-preview gh-pages
+        run: git push --force 'https://ComPWA:${{ secrets.PAT }}@github.com/ComPWA/polarimetry-pr-preview' gh-pages
       - name: Show notice with link to PR preview
         run: echo "Documentation preview available on [compwa.github.io/polarimetry-pr-preview](https://compwa.github.io/polarimetry-pr-preview)" >> $GITHUB_STEP_SUMMARY
 
