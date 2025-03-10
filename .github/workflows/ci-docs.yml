@@ -155,6 +155,10 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: github-pages
+      - name: Extract artifact
+        run: |
+          tar xf artifact.tar
+          rm artifact.tar
       - name: Configure Git credentials
         run: |
           git config --global user.name "GitHub Action"
