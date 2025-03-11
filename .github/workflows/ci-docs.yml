@@ -142,6 +142,7 @@ jobs:
     name: Run Pluto notebooks
     env:
       JULIA_CI: "true"
+      JULIA_COLOR: "yes"
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
