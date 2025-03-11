@@ -95,8 +95,11 @@ def get_execution_mode() -> str:
 
 
 def get_link_to_julia_pages() -> str:
-    julia_landing_page = "./_static/julia/index.html"
+    julia_landing_page = "./julia/index.html"
     if os.path.exists(julia_landing_page):
+        shutil.copytree("julia", "_build/html/julia")
+        os.remove("_build/html/julia/.gitignore")
+        Path("_build/html/julia/.nojekyl").touch()
         src = f"""
         :::{{tip}}
         Several cross-checks with Julia can be found [here]({julia_landing_page}).
