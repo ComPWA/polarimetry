@@ -166,9 +166,7 @@ jobs:
 
   pr-preview:
     name: Push to ComPWA/polarimetry-pr-preview
-    if: >-
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'pull_request'
     needs:
       - documentation
     runs-on: ubuntu-24.04
