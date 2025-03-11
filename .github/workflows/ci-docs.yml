@@ -96,7 +96,6 @@ jobs:
           key: |
             jax-${{hashFiles('uv.lock', 'pyproject.toml')}}
           restore-keys: |
-            jax-${{hashFiles('uv.lock', 'pyproject.toml')}}
             jax
           path: |
             ~/.cache/jax
