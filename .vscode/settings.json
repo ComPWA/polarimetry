@@ -1,4 +1,7 @@
 {
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
   "[git-commit]": {
     "editor.rulers": [72],
     "rewrap.wrappingColumn": 72
@@ -37,8 +40,8 @@
     "\u03c3": true
   },
   "files.associations": {
-    "**/pixi.lock": "yaml",
-    ".cspell/*.txt": "plaintext"
+    ".cspell/*.txt": "plaintext",
+    "**/pixi.lock": "yaml"
   },
   "files.eol": "\n",
   "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],

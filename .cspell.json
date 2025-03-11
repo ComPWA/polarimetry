@@ -57,6 +57,7 @@
     "conf.py",
     "data/**.json",
     "data/**.yaml",
+    "Dockerfile*",
     "docs/_templates/*",
     "julia/**",
     "LICENSE",

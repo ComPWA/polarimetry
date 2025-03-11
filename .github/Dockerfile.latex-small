@@ -1,0 +1,22 @@
+FROM ubuntu:24.04
+LABEL org.opencontainers.image.description=" \
+    This image is used by the ci-docs.yml workflow of the ComPWA/polarimetry \
+    repository to generate a PDF for the documentation without notebook outputs \
+    (fast-pdf job). The LaTeX packages are required for building the PDF file and \
+    for having matplotlib plots with LaTeX. \
+    "
+ENV DEBIAN_FRONTEND=noninteractive
+ENV HOME=/workspace
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    git \
+    inkscape \
+    latexmk \
+    make \
+    texlive-fonts-extra \
+    texlive-xetex \
+    xindy && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+WORKDIR /workspace
+CMD ["/bin/bash"]
