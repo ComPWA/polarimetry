@@ -4947,7 +4947,7 @@ wheels = [
 
 [[package]]
 name = "uproot"
-version = "5.5.2"
+version = "5.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "awkward" },
@@ -4959,9 +4959,9 @@ dependencies = [
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
     { name = "xxhash" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/66/1f/24790a19b595f7a3902abd96d4c92a9c35d9f5aafd980bd63bb86b069b85/uproot-5.5.2.tar.gz", hash = "sha256:d765be4bea1df58cc237672fe4e8a10a2f7a40a2c7a8cf643333af48def07f5c", size = 943604 }
+sdist = { url = "https://files.pythonhosted.org/packages/00/42/da970307a7ddc574b94bd1e68e6454be5c9cf044b334d20cba3200ed36d7/uproot-5.6.0.tar.gz", hash = "sha256:eb5c2add21090d4ba30c7c1b87d7678fac52473191285bec7d9a845b2018fc08", size = 948481 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/37/bf/403bb6ed1b4227743bfb6a6c8e1af7e73023931bc76d1c39ecffca001bb6/uproot-5.5.2-py3-none-any.whl", hash = "sha256:7417dfa04603d31eb443f7bbc32d980e79c9c435678e5c096b5600d45deb7790", size = 363512 },
+    { url = "https://files.pythonhosted.org/packages/8f/4a/ea424af833cbb53b942ddd6e6cfa7eb7ac9c2dcca7d3ffeb17dd3995f420/uproot-5.6.0-py3-none-any.whl", hash = "sha256:90612ceccd11ea7d60645065611d3185360995631f7f3dc693c1222cd433c85e", size = 365048 },
 ]
 
 [[package]]
