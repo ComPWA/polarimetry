@@ -1,7 +1,6 @@
 env:
   FORCE_COLOR: "1"
   JAX_COMPILATION_CACHE_DIR: ~/.cache/jax
-  JULIA_CI: "true"
   UV_PYTHON_PREFERENCE: only-managed
 
 on:
@@ -40,7 +39,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
-          name: html
+          name: docs-fast-html
           path: docs/_build/html
 
   fast-pdf:
@@ -61,7 +60,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
-          name: latex-fast-pdf
+          name: docs-fast-pdf
           path: docs/_build/latex
 
   linkcheck:
@@ -79,8 +78,8 @@ jobs:
             --with tox-uv \
             tox -e linkcheck
 
-  documentation:
-    name: Run notebooks and build documentation
+  jupyter:
+    name: Run Jupyter notebooks
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -99,17 +98,6 @@ jobs:
             jax
           path: |
             ~/.cache/jax
-      - name: Fetch Julia cache
-        uses: actions/cache@v4
-        with:
-          key: |
-            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
-          restore-keys: |
-            julia-${{hashFiles('julia/Manifest.toml')}}
-            julia
-          path: |
-            ./julia-*/
-            ~/.julia/
       - uses: ComPWA/actions/cache-sympy@v2
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
@@ -144,33 +132,74 @@ jobs:
               --with tox-uv \
               tox -e pdfnb
       - uses: actions/upload-artifact@v4
-        if: ${{ always() }}
         with:
-          name: latex
-          path: docs/_build/latex
-      - name: Build PDF with notebook execution
-        env:
-          EXECUTE_PLUTO: "YES"
+          include-hidden-files: true
+          name: docs
+          path: docs
+
+  pluto:
+    name: Run Pluto notebooks
+    env:
+      JULIA_CI: "true"
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: prefix-dev/setup-pixi@v0.8.3
+        with:
+          cache: true
+      - name: Fetch Julia cache
+        uses: actions/cache@v4
+        with:
+          key: |
+            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
+          restore-keys: |
+            julia-${{hashFiles('julia/Manifest.toml')}}
+            julia
+          path: |
+            ./julia-*/
+            ~/.julia/
+      - run: pixi run julia --color yes --project=. exportnotebooks.jl
+        working-directory: julia/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs-julia
+          path: docs/julia
+
+  combine-builds:
+    name: Combine into website
+    runs-on: ubuntu-24.04
+    needs:
+      - jupyter
+      - pluto
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: docs
+          path: docs
+      - uses: actions/download-artifact@v4
+        with:
+          name: docs-julia
+          path: docs/julia
+      - name: Combine executed notebooks PDF
         run: >-
-          pixi run \
-            uv run \
-              --group doc \
-              --group notebooks \
-              --no-dev \
-              --with tox-uv \
-              tox -e docnb
+          uv run \
+            --group doc \
+            --no-dev \
+            --with tox-uv \
+            tox -e docnb
       - uses: actions/upload-pages-artifact@v3
-        if: always()
         with:
           path: docs/_build/html
 
   pr-preview:
-    name: Push to ComPWA/polarimetry-pr-preview
+    name: Push PR preview
     if: >-
       github.event_name == 'pull_request' &&
       github.event.pull_request.head.repo.full_name == github.repository
     needs:
-      - documentation
+      - combine-builds
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/download-artifact@v4
@@ -206,7 +235,7 @@ jobs:
       github.event_name == 'push' &&
       github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     needs:
-      - documentation
+      - combine-builds
       - linkcheck
     permissions:
       pages: write
