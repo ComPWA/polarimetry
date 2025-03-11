@@ -93,9 +93,9 @@ jobs:
         uses: actions/cache@v4
         with:
           key: |
-            jax-${{hashFiles('uv.lock', 'pyproject.toml')}}}-${{hashFiles('docs/**/*.ipynb', 'src/**/*.py')}}
+            jax-${{hashFiles('uv.lock', 'pyproject.toml')}}-${{hashFiles('docs/**/*.ipynb', 'src/**/*.py')}}
           restore-keys: |
-            jax-${{hashFiles('uv.lock', 'pyproject.toml')}}}
+            jax-${{hashFiles('uv.lock', 'pyproject.toml')}}
             jax
           path: |
             ~/.cache/jax
@@ -142,6 +142,7 @@ jobs:
     name: Run Pluto notebooks
     env:
       JULIA_CI: "true"
+      JULIA_COLOR: "yes"
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4

@@ -55,7 +55,7 @@ jobs:
           path: |
             ./julia-*/
             ~/.julia/
-      - run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
+      - run: julia --color=yes --project=. -e 'using Pkg; Pkg.instantiate()'
         working-directory: julia/
       - name: Run scripts in julia directory
         run: |
