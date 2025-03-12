@@ -147,6 +147,6 @@ repos:
       - id: pyright
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.6.5
+    rev: 0.6.6
     hooks:
       - id: uv-lock

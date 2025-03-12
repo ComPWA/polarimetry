@@ -102,16 +102,13 @@ jobs:
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
         with:
-          key: |
-            jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
-          restore-keys: |
-            jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
-          path: |
-            ./docs/_build/.jupyter_cache
+          key: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
+          restore-keys: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
+          path: docs/_build/.jupyter_cache
       - name: Fetch output files
         uses: actions/cache@v4
         with:
-          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
+          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           restore-keys: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
           path: |
             ./docs/_images
@@ -131,13 +128,18 @@ jobs:
       - uses: actions/cache/save@v3
         if: failure()
         with:
+          key: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
+          path: docs/_build/.jupyter_cache
+      - uses: actions/cache/save@v3
+        if: failure()
+        with:
+          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           path: |
             ./docs/_images
             ./docs/_static/export
             ./docs/_static/images
             ./docs/appendix/export
             ./docs/appendix/exported_intensity_model.py
-          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
       - uses: actions/upload-artifact@v4
         with:
           include-hidden-files: true
@@ -158,8 +160,7 @@ jobs:
       - name: Fetch Julia cache
         uses: actions/cache@v4
         with:
-          key: |
-            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
+          key: julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
           restore-keys: |
             julia-${{hashFiles('julia/Manifest.toml')}}
             julia

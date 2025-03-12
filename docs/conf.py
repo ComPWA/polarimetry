@@ -25,7 +25,7 @@ def download_paper_figures() -> str:
         "2": "_static/images/total-polarimetry-field-watermark.svg",
         "3a": "_static/images/polarimetry-field-L1520-unaligned-watermark.svg",
         "3b": "_static/images/polarimetry-field-L1520-aligned-watermark.svg",
-        "4": "_static/images/polarimetry-field-norm-uncertainties-watermark.png",
+        "4": "_static/images/polarimetry-field-norm-uncertainties-watermark.svg",
     }
     for path in figures.values():
         if not os.path.exists(path):
@@ -52,7 +52,7 @@ def download_paper_figures() -> str:
 
 
 def download_intensity_distribution() -> str:
-    filename = "_static/images/intensity-distribution.png"
+    filename = "_static/images/intensity-distribution.svg"
     if not os.path.exists(filename):
         MISSING_FILES.add(filename)
         return ""
@@ -340,7 +340,7 @@ html_extra_path = ["favicon.ico"]
 html_favicon = "favicon.ico"
 html_js_files = [
     # https://github.com/requirejs/requirejs/tags
-    "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js",
 ]
 html_last_updated_fmt = "%-d %B %Y"
 html_logo = "_static/lhcb-logo.svg"
@@ -352,7 +352,7 @@ html_theme_options = {
         {
             "name": "Common Partial Wave Analysis",
             "url": "https://compwa.github.io",
-            "icon": "favicon.ico",
+            "icon": "/favicon.ico",
             "type": "url",
         },
         {

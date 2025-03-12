@@ -13,7 +13,7 @@
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/polarimetry-lc2pkpi)](https://pypi.org/project/polarimetry-lc2pkpi)
 [![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ComPWA/polarimetry/stable?urlpath=lab)
 
-This repository contains the source code for "$\Lambda_c^+$ polarimetry using the dominant hadronic mode" (2023) by the LHCb Collaboration ([10.1007/JHEP07(2023)228](<https://doi.org/10.1007/JHEP07(2023)228>)). It uses [`ampform-dpd`](https://github.com/ComPWA/ampform-dpd) to formulate symbolic amplitude models for the decay $\Lambda^+_c \to p \pi^+ K^-$ that are aligned with [Dalitz-plot decomposition](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033). The aligned amplitudes are used to compute polarimeter vector field $\vec\alpha$ over the Dalitz plane. Helicity couplings and other parameter values are taken from a recent study by the LHCb Collaboration[^1] and its [supplementary material](https://cds.cern.ch/record/2824328/files).
+This repository contains the source code for “<span></span>$\Lambda_c^+$ polarimetry using the dominant hadronic mode” (2023) by the LHCb Collaboration ([10.1007/JHEP07(2023)228](<https://doi.org/10.1007/JHEP07(2023)228>)). It uses [`ampform-dpd`](https://github.com/ComPWA/ampform-dpd) to formulate symbolic amplitude models for the decay $\Lambda^+_c \to p \pi^+ K^-$ that are aligned with [Dalitz-plot decomposition](https://journals.aps.org/prd/abstract/10.1103/PhysRevD.101.034033). The aligned amplitudes are used to compute polarimeter vector field $\vec\alpha$ over the Dalitz plane. Helicity couplings and other parameter values are taken from a recent study by the LHCb Collaboration[^1] and its [supplementary material](https://cds.cern.ch/record/2824328/files).
 
 <!-- cspell:ignore semileptonic -->
 
@@ -21,14 +21,22 @@ This repository contains the source code for "$\Lambda_c^+$ polarimetry using th
 
 ## Installation
 
-It's recommended to develop this code base with [VS&nbsp;Code](https://code.visualstudio.com) and install the developer environment with Conda:
+All the dependencies required to work on this Repository are managed by [Pixi](https://pixi.sh). If you have installed Pixi, you can simply start developing by activating the environment with:
 
 ```shell
-conda env create
-conda activate polarimetry
+pixi shell
 ```
 
-Style checks are enforced with [Pre-commit](https://pre-commit.com). To activate for each commit, run:
+This will install [`uv`](https://docs.astral.sh/uv) for managing Python and its dependencies as well as Julia. Then it activates the environment and you can start developing.
+
+Style checks are enforced with [Pre-commit](https://pre-commit.com). You should install this system-wide once, for instance through [`uv`](https://docs.astral.sh/uv). For running local CI jobs, it is also recommended to install [`tox](https://tox.readthedocs.io):
+
+```shell
+uv tool install --with pre-commit-uv pre-commit
+uv tool install --with tox-uv tox
+```
+
+You can then install the Git hooks for this repository, so that the checks are run automatically before each commit:
 
 ```shell
 pre-commit install
