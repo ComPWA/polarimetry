@@ -126,12 +126,12 @@ jobs:
               --with tox-uv \
               tox -e pdfnb
       - uses: actions/cache/save@v3
-        if: always()
+        if: failure()
         with:
           key: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
           path: docs/_build/.jupyter_cache
       - uses: actions/cache/save@v3
-        if: always()
+        if: failure()
         with:
           key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
           path: |
