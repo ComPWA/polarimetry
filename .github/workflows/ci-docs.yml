@@ -102,10 +102,8 @@ jobs:
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
         with:
-          key: |
-            jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
-          restore-keys: |
-            jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
+          key: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
+          restore-keys: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
           path: docs/_build/.jupyter_cache
       - name: Fetch output files
         uses: actions/cache@v4
@@ -162,8 +160,7 @@ jobs:
       - name: Fetch Julia cache
         uses: actions/cache@v4
         with:
-          key: |
-            julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
+          key: julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
           restore-keys: |
             julia-${{hashFiles('julia/Manifest.toml')}}
             julia
