@@ -111,10 +111,8 @@ jobs:
       - name: Fetch output files
         uses: actions/cache@v4
         with:
-          key: |
-            output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
-          restore-keys: |
-            output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
+          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
+          restore-keys: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
           path: |
             ./docs/_images
             ./docs/_static/export
@@ -130,6 +128,16 @@ jobs:
               --no-dev \
               --with tox-uv \
               tox -e pdfnb
+      - uses: actions/cache/save@v3
+        if: failure()
+        with:
+          path: |
+            ./docs/_images
+            ./docs/_static/export
+            ./docs/_static/images
+            ./docs/appendix/export
+            ./docs/appendix/exported_intensity_model.py
+          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
       - uses: actions/upload-artifact@v4
         with:
           include-hidden-files: true
