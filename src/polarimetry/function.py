@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 import jax.numpy as jnp
 
 if TYPE_CHECKING:
+    from jax._src.numpy.reductions import Axis
     from tensorwaves.interface import DataSample, ParametrizedFunction
 
 _LOGGER = logging.getLogger(__name__)
@@ -42,22 +43,24 @@ def set_parameter_to_zero(
     func.update_parameters(new_parameters)
 
 
-def interference_intensity(func, data, chain1: list[str], chain2: list[str]) -> float:
+def interference_intensity(
+    func, data, chain1: list[str], chain2: list[str]
+) -> jnp.ndarray:
     I_interference = sub_intensity(func, data, chain1 + chain2)
     I_chain1 = sub_intensity(func, data, chain1)
     I_chain2 = sub_intensity(func, data, chain2)
     return I_interference - I_chain1 - I_chain2
 
 
-def sub_intensity(func, data, non_zero_couplings: list[str]):
+def sub_intensity(
+    func: ParametrizedFunction, data, non_zero_couplings: list[str], axis: Axis = None
+) -> jnp.ndarray:
     intensity_array = compute_sub_function(func, data, non_zero_couplings)
-    return integrate_intensity(intensity_array)
+    return integrate_intensity(intensity_array, axis=axis)
 
 
-def integrate_intensity(intensities) -> float:
-    flattened_intensities = intensities.flatten()
-    non_nan_intensities = flattened_intensities[~jnp.isnan(flattened_intensities)]
-    return float(jnp.sum(non_nan_intensities) / len(non_nan_intensities))
+def integrate_intensity(intensities, axis: Axis = None) -> jnp.ndarray:
+    return jnp.nanmean(intensities, axis=axis)
 
 
 def _get_coupling_regex(non_zero_couplings: list[str]) -> str:

@@ -245,6 +245,7 @@ api_target_substitutions = {
     "FlattéSWave": "ampform_dpd.dynamics.FlattéSWave",
     "Function": ("obj", "tensorwaves.interface.Function"),
     "implement_doit_method": "ampform.sympy.implement_doit_method",
+    "jnp.ndarray": "jax.Array",
     "LineCollection": "matplotlib.collections.LineCollection",
     "LineshapeName": ("obj", "polarimetry.lhcb.LineshapeName"),
     "Literal[- 1, 1]": "typing.Literal",
@@ -521,6 +522,7 @@ nb_render_markdown_format = "myst"
 nb_remove_code_source = get_nb_remove_code_source()
 nitpicky = False
 nitpick_ignore_regex = [
+    ("py:class", "Axis"),
     ("py:class", "KeyType"),
     ("py:class", "NewValueType"),
     ("py:class", "OldValueType"),

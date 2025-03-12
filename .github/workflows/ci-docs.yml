@@ -1,6 +1,6 @@
 env:
   FORCE_COLOR: "1"
-  JAX_COMPILATION_CACHE_DIR: ~/.cache/jax
+  JAX_COMPILATION_CACHE_DIR: /tmp/jax_cache
   UV_PYTHON_PREFERENCE: only-managed
 
 on:
@@ -92,12 +92,12 @@ jobs:
       - name: Fetch JAX cache
         uses: actions/cache@v4
         with:
-          key: |
-            jax-${{hashFiles('uv.lock', 'pyproject.toml')}}
+          key: jax-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           restore-keys: |
+            jax-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}
+            jax-${{hashFiles('uv.lock')}}
             jax
-          path: |
-            ~/.cache/jax
+          path: ${{ env.JAX_COMPILATION_CACHE_DIR }}
       - uses: ComPWA/actions/cache-sympy@v2
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
@@ -111,11 +111,8 @@ jobs:
       - name: Fetch output files
         uses: actions/cache@v4
         with:
-          key: |
-            output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
-          restore-keys: |
-            output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
-            output-files
+          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
+          restore-keys: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
           path: |
             ./docs/_images
             ./docs/_static/export
@@ -131,6 +128,16 @@ jobs:
               --no-dev \
               --with tox-uv \
               tox -e pdfnb
+      - uses: actions/cache/save@v3
+        if: failure()
+        with:
+          path: |
+            ./docs/_images
+            ./docs/_static/export
+            ./docs/_static/images
+            ./docs/appendix/export
+            ./docs/appendix/exported_intensity_model.py
+          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
       - uses: actions/upload-artifact@v4
         with:
           include-hidden-files: true
@@ -141,6 +148,7 @@ jobs:
     name: Run Pluto notebooks
     env:
       JULIA_CI: "true"
+      JULIA_COLOR: "yes"
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
