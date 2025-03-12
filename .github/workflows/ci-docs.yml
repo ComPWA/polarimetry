@@ -106,8 +106,7 @@ jobs:
             jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
           restore-keys: |
             jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
-          path: |
-            ./docs/_build/.jupyter_cache
+          path: docs/_build/.jupyter_cache
       - name: Fetch output files
         uses: actions/cache@v4
         with:
@@ -129,15 +128,20 @@ jobs:
               --with tox-uv \
               tox -e pdfnb
       - uses: actions/cache/save@v3
-        if: failure()
+        if: always()
         with:
+          key: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
+          path: docs/_build/.jupyter_cache
+      - uses: actions/cache/save@v3
+        if: always()
+        with:
+          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
           path: |
             ./docs/_images
             ./docs/_static/export
             ./docs/_static/images
             ./docs/appendix/export
             ./docs/appendix/exported_intensity_model.py
-          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**')}}
       - uses: actions/upload-artifact@v4
         with:
           include-hidden-files: true
