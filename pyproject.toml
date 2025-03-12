@@ -35,6 +35,7 @@ dependencies = [
     "ampform >=0.15.7", # @unevaluated decorator, cached module
     "ampform-dpd~=0.2.3", # cached module
     "attrs >=20.1.0",
+    "cairosvg",
     "matplotlib",
     "numpy",
     "scour",
@@ -88,7 +89,6 @@ jupyter = [
     {include-group = "notebooks"},
 ]
 notebooks = [
-    "cairosvg",
     "cloudpickle",
     "deepdiff",
     "ipympl",

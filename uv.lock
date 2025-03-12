@@ -3110,6 +3110,7 @@ dependencies = [
     { name = "ampform" },
     { name = "ampform-dpd" },
     { name = "attrs" },
+    { name = "cairosvg" },
     { name = "ipython", version = "8.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "ipython", version = "8.34.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.10.*'" },
     { name = "ipython", version = "9.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
@@ -3125,7 +3126,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "cairosvg" },
     { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
@@ -3187,7 +3187,6 @@ doc = [
     { name = "sphinxcontrib-svg2pdfconverter" },
 ]
 jupyter = [
-    { name = "cairosvg" },
     { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
@@ -3213,7 +3212,6 @@ jupyter = [
     { name = "uproot" },
 ]
 notebooks = [
-    { name = "cairosvg" },
     { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
@@ -3257,6 +3255,7 @@ requires-dist = [
     { name = "ampform", specifier = ">=0.15.7" },
     { name = "ampform-dpd", specifier = "~=0.2.3" },
     { name = "attrs", specifier = ">=20.1.0" },
+    { name = "cairosvg" },
     { name = "ipython" },
     { name = "matplotlib" },
     { name = "numpy" },
@@ -3268,7 +3267,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "cairosvg" },
     { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
@@ -3327,7 +3325,6 @@ doc = [
     { name = "sphinxcontrib-svg2pdfconverter" },
 ]
 jupyter = [
-    { name = "cairosvg" },
     { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
@@ -3352,7 +3349,6 @@ jupyter = [
     { name = "uproot" },
 ]
 notebooks = [
-    { name = "cairosvg" },
     { name = "cloudpickle" },
     { name = "deepdiff" },
     { name = "ipympl" },
