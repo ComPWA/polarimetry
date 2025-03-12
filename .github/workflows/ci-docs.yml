@@ -1,6 +1,6 @@
 env:
   FORCE_COLOR: "1"
-  JAX_COMPILATION_CACHE_DIR: ~/.cache/jax
+  JAX_COMPILATION_CACHE_DIR: /tmp/jax_cache
   UV_PYTHON_PREFERENCE: only-managed
 
 on:
@@ -92,13 +92,12 @@ jobs:
       - name: Fetch JAX cache
         uses: actions/cache@v4
         with:
-          key: |
-            jax-${{hashFiles('uv.lock', 'pyproject.toml')}}-${{hashFiles('docs/**/*.ipynb', 'src/**/*.py')}}
+          key: jax-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           restore-keys: |
-            jax-${{hashFiles('uv.lock', 'pyproject.toml')}}
+            jax-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}
+            jax-${{hashFiles('uv.lock')}}
             jax
-          path: |
-            ~/.cache/jax
+          path: ${{ env.JAX_COMPILATION_CACHE_DIR }}
       - uses: ComPWA/actions/cache-sympy@v2
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
