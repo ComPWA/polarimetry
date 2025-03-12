@@ -21,14 +21,22 @@ This repository contains the source code for “<span></span>$\Lambda_c^+$ polar
 
 ## Installation
 
-It's recommended to develop this code base with [VS&nbsp;Code](https://code.visualstudio.com) and install the developer environment with Conda:
+All the dependencies required to work on this Repository are managed by [Pixi](https://pixi.sh). If you have installed Pixi, you can simply start developing by activating the environment with:
 
 ```shell
-conda env create
-conda activate polarimetry
+pixi shell
 ```
 
-Style checks are enforced with [Pre-commit](https://pre-commit.com). To activate for each commit, run:
+This will install [`uv`](https://docs.astral.sh/uv) for managing Python and its dependencies as well as Julia. Then it activates the environment and you can start developing.
+
+Style checks are enforced with [Pre-commit](https://pre-commit.com). You should install this system-wide once, for instance through [`uv`](https://docs.astral.sh/uv). For running local CI jobs, it is also recommended to install [`tox](https://tox.readthedocs.io):
+
+```shell
+uv tool install --with pre-commit-uv pre-commit
+uv tool install --with tox-uv tox
+```
+
+You can then install the Git hooks for this repository, so that the checks are run automatically before each commit:
 
 ```shell
 pre-commit install
