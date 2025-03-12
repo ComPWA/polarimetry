@@ -71,12 +71,11 @@ def test_interference_intensity(intensity_func: ParametrizedFunction, phsp: Data
     I_tot = integrate_intensity(intensity_func(phsp))
 
     assert pytest.approx(I_LK) == I_KL
-    decay_rates_array = [
+    decay_rates = [
         I_KK / I_tot,
         I_KL / I_tot,
         I_LL / I_tot,
     ]
-    decay_rates = [float(v) for v in decay_rates_array]
     assert pytest.approx(decay_rates) == [
         -0.147005113,
         +0.047790508,
