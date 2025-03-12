@@ -43,14 +43,18 @@ def set_parameter_to_zero(
     func.update_parameters(new_parameters)
 
 
-def interference_intensity(func, data, chain1: list[str], chain2: list[str]) -> float:
+def interference_intensity(
+    func, data, chain1: list[str], chain2: list[str]
+) -> jnp.ndarray:
     I_interference = sub_intensity(func, data, chain1 + chain2)
     I_chain1 = sub_intensity(func, data, chain1)
     I_chain2 = sub_intensity(func, data, chain2)
     return I_interference - I_chain1 - I_chain2
 
 
-def sub_intensity(func, data, non_zero_couplings: list[str], axis: Axis = None):
+def sub_intensity(
+    func: ParametrizedFunction, data, non_zero_couplings: list[str], axis: Axis = None
+) -> jnp.ndarray:
     intensity_array = compute_sub_function(func, data, non_zero_couplings)
     return integrate_intensity(intensity_array, axis=axis)
 
