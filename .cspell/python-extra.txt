@@ -26,6 +26,7 @@ svgutils
 sympify
 tensorwaves
 tolist
+unicodeitplus
 viewboxing
 viridis
 vmax
@@ -36,6 +37,8 @@ xreplace
 xtick
 xticklabels
 xticks
+yanchor
+yaxes
 ylabel
 ytick
 yticklabels
