@@ -2083,6 +2083,15 @@ wheels = [
 ]
 
 [[package]]
+name = "lark"
+version = "1.2.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/af/60/bc7622aefb2aee1c0b4ba23c1446d3e30225c8770b38d7aedbfb65ca9d5a/lark-1.2.2.tar.gz", hash = "sha256:ca807d0162cd16cef15a8feecb862d7319e7a09bdb13aef927968e45040fed80", size = 252132 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2d/00/d90b10b962b4277f5e64a78b6609968859ff86889f5b898c1a778c06ec00/lark-1.2.2-py3-none-any.whl", hash = "sha256:c2276486b02f0f1b90be155f2c8ba4a8e194d42775786db622faccd652d8e80c", size = 111036 },
+]
+
+[[package]]
 name = "latexcodec"
 version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -3170,6 +3179,7 @@ dev = [
     { name = "types-docutils" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 doc = [
@@ -3209,6 +3219,7 @@ jupyter = [
     { name = "scipy", version = "1.15.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "svgutils" },
     { name = "tqdm" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 notebooks = [
@@ -3225,6 +3236,7 @@ notebooks = [
     { name = "scipy", version = "1.15.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "svgutils" },
     { name = "tqdm" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 style = [
@@ -3309,6 +3321,7 @@ dev = [
     { name = "types-docutils" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 doc = [
@@ -3346,6 +3359,7 @@ jupyter = [
     { name = "scipy" },
     { name = "svgutils" },
     { name = "tqdm" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 notebooks = [
@@ -3361,6 +3375,7 @@ notebooks = [
     { name = "scipy" },
     { name = "svgutils" },
     { name = "tqdm" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 style = [
@@ -4938,6 +4953,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/e8/d9/b6f4d1e6bec20a3b582b48f64eaa25209fd70dc2892b21656b273bc23434/ujson-5.10.0-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7c10f4654e5326ec14a46bcdeb2b685d4ada6911050aa8baaf3501e57024b804", size = 48457 },
     { url = "https://files.pythonhosted.org/packages/23/1c/cfefabb5996e21a1a4348852df7eb7cfc69299143739e86e5b1071c78735/ujson-5.10.0-pp39-pypy39_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:0de4971a89a762398006e844ae394bd46991f7c385d7a6a3b93ba229e6dac17e", size = 54238 },
     { url = "https://files.pythonhosted.org/packages/af/c4/fa70e77e1c27bbaf682d790bd09ef40e86807ada704c528ef3ea3418d439/ujson-5.10.0-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:e1402f0564a97d2a52310ae10a64d25bcef94f8dd643fcf5d310219d915484f7", size = 42230 },
+]
+
+[[package]]
+name = "unicodeitplus"
+version = "0.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "lark" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6b/4e/558c4ca31395e7ca427ed3ff8d5a0c161117b42db0ca19b830eb4d4eb813/unicodeitplus-0.3.1.tar.gz", hash = "sha256:8c1ce8f1c2737e1f3aa5611675585a60a9edc593fe8a9569111fb703a36c5ad7", size = 88787 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ed/47/9a0c7d427255831984275cde1c6960421fd608c398922ad776ab044b770d/unicodeitplus-0.3.1-py3-none-any.whl", hash = "sha256:f5fa44c19c28b88710f72837b8c600124906aef8351c357efed15cd5a3e18879", size = 26728 },
 ]
 
 [[package]]
