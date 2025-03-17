@@ -3,6 +3,7 @@ aslatex
 autoupdate
 batchmode
 bibtex
+CANO
 ComPWA
 Conda
 docnb
