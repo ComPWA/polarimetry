@@ -45,13 +45,14 @@ jobs:
   fast-pdf:
     if: inputs.specific-pip-packages == ''
     name: Build PDF (fast)
+    container:
+      image: ghcr.io/compwa/polarimetry-latex-small:latest
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - run: git config --global --add safe.directory '*'
       - uses: astral-sh/setup-uv@v5
       - run: |
-          sudo apt-get update -y
-          sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
           uv run \
             --group doc \
             --no-dev \
@@ -80,15 +81,15 @@ jobs:
 
   jupyter:
     name: Run Jupyter notebooks
+    container:
+      image: ghcr.io/compwa/polarimetry-latex:latest
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - run: git config --global --add safe.directory '*'
       - uses: prefix-dev/setup-pixi@v0.8.3
         with:
           cache: true
-      - run: |
-          sudo apt-get update -y
-          sudo apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch JAX cache
         uses: actions/cache@v4
         with:
