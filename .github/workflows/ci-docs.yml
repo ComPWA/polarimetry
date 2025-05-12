@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.3
+      - uses: prefix-dev/setup-pixi@v0.8.8
         with:
           cache: true
       - run: |
@@ -125,12 +125,12 @@ jobs:
               --no-dev \
               --with tox-uv \
               tox -e pdfnb
-      - uses: actions/cache/save@v3
+      - uses: actions/cache/save@v4
         if: failure()
         with:
           key: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           path: docs/_build/.jupyter_cache
-      - uses: actions/cache/save@v3
+      - uses: actions/cache/save@v4
         if: failure()
         with:
           key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
@@ -154,7 +154,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.3
+      - uses: prefix-dev/setup-pixi@v0.8.8
         with:
           cache: true
       - name: Fetch Julia cache
