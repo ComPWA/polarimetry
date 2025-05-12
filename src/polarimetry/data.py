@@ -25,7 +25,7 @@ def create_data_transformer(
     model: AmplitudeModel, backend: str = "jax"
 ) -> SympyDataTransformer:
     kinematic_variables = {
-        symbol: expression.doit().subs(model.parameter_defaults)
+        symbol: expression.doit().subs(model.parameter_defaults)  # pyright:ignore[reportCallIssue]
         for symbol, expression in model.variables.items()
     }
     identity_mapping = {s: s for s in sp.symbols("sigma1:4", nonnegative=True)}
