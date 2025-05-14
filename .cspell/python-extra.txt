@@ -34,6 +34,7 @@ vmax
 vmin
 wspace
 xlabel
+xpad
 xreplace
 xtick
 xticklabels
