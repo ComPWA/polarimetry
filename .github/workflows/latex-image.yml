@@ -32,7 +32,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # https://github.com/docker/metadata-action/releases/tag/v5.7.0
+        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # https://github.com/docker/metadata-action/releases/tag/v5.8.0
         with:
           images: ghcr.io/compwa/polarimetry-${{ matrix.image-name }}
       - name: Build and push Docker images
