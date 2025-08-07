@@ -25,14 +25,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # https://github.com/docker/login-action/releases/tag/v3.4.0
+        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # https://github.com/docker/login-action/releases/tag/v3.5.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # https://github.com/docker/metadata-action/releases/tag/v5.7.0
+        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # https://github.com/docker/metadata-action/releases/tag/v5.8.0
         with:
           images: ghcr.io/compwa/polarimetry-${{ matrix.image-name }}
       - name: Build and push Docker images
