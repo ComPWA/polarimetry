@@ -36,6 +36,7 @@
     "ms-python.pylint",
     "ms-toolsai.vscode-jupyter-slideshow",
     "ms-vscode.cpptools",
+    "ryanluker.vscode-coverage-gutters",
     "travisillig.vscode-json-stable-stringify",
     "tyriar.sort-lines"
   ]
