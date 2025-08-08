@@ -40,8 +40,8 @@
     "\u03c3": true
   },
   "files.associations": {
-    ".cspell/*.txt": "plaintext",
-    "**/pixi.lock": "yaml"
+    "**/pixi.lock": "yaml",
+    ".cspell/*.txt": "plaintext"
   },
   "files.eol": "\n",
   "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
@@ -50,7 +50,6 @@
   "livePreview.defaultPreviewPath": "docs/_build/html",
   "multiDiffEditor.experimental.enabled": true,
   "mypy-type-checker.args": ["--config-file=${workspaceFolder}/pyproject.toml"],
-  "mypy-type-checker.importStrategy": "fromEnvironment",
   "notebook.codeActionsOnSave": {
     "notebook.source.organizeImports": "explicit"
   },
