@@ -30,11 +30,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - name: Build documentation without running notebooks
-        run: >-
+        run: |-
+          uv tool install --with tox-uv tox
           uv run \
             --group doc \
             --no-dev \
-            --with tox-uv \
             tox -e doc
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -49,13 +49,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - run: |
+      - run: |-
           sudo apt-get update -y
           sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
+          uv tool install --with tox-uv tox
           uv run \
             --group doc \
             --no-dev \
-            --with tox-uv \
             tox -e pdf
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -71,11 +71,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - name: Check external links with Sphinx linkcheck
-        run: >-
+        run: |-
+          uv tool install --with tox-uv tox
           uv run \
             --group doc \
             --no-dev \
-            --with tox-uv \
             tox -e linkcheck
 
   jupyter:
@@ -117,13 +117,13 @@ jobs:
             ./docs/appendix/export
             ./docs/appendix/exported_intensity_model.py
       - name: Build PDF with notebook execution
-        run: >-
+        run: |-
+          pixi run uv tool install --with tox-uv tox
           pixi run \
             uv run \
               --group doc \
               --group notebooks \
               --no-dev \
-              --with tox-uv \
               tox -e pdfnb
       - uses: actions/cache/save@v4
         if: failure()
@@ -192,11 +192,11 @@ jobs:
           name: docs-julia
           path: docs/julia
       - name: Combine executed notebooks PDF
-        run: >-
+        run: |-
+          uv tool install --with tox-uv tox
           uv run \
             --group doc \
             --no-dev \
-            --with tox-uv \
             tox -e docnb
       - uses: actions/upload-pages-artifact@v3
         with:
