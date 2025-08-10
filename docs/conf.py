@@ -216,6 +216,7 @@ execute_pluto_notebooks()
 set_intersphinx_version_remapping({
     "ipywidgets": {
         "8.1.1": "8.1.2",
+        "8.1.7": "8.1.5",
     },
     "matplotlib": {
         "3.9.1.post1": "3.9.1",
