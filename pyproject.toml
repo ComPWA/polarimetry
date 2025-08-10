@@ -577,5 +577,6 @@ test = [
 [tool.uv]
 constraint-dependencies = [
     "kaleido!=0.2.1.post1",
+    "kaleido!=1.0.0",
     "plotly~=5.0", # https://github.com/executablebooks/MyST-NB/issues/667
 ]
