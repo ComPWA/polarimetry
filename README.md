@@ -29,11 +29,22 @@ pixi shell
 
 This will install [`uv`](https://docs.astral.sh/uv) for managing Python and its dependencies as well as Julia. Then it activates the environment and you can start developing.
 
-Style checks are enforced with [Pre-commit](https://pre-commit.com). You should install this system-wide once, for instance through [`uv`](https://docs.astral.sh/uv). For running local CI jobs, it is also recommended to install [`tox](https://tox.readthedocs.io):
+Common checks are defined under [`pixi.toml`](./pixi.toml) and can be listed with
+
+```shell
+pixi task list
+```
+
+For example, you build the documentation with executed notebooks with
+
+```shell
+pixi run docnb
+```
+
+Style checks are enforced with [Pre-commit](https://pre-commit.com). You should install this system-wide once, for instance through [`uv`](https://docs.astral.sh/uv):
 
 ```shell
 uv tool install --with pre-commit-uv pre-commit
-uv tool install --with tox-uv tox
 ```
 
 You can then install the Git hooks for this repository, so that the checks are run automatically before each commit:
@@ -72,7 +83,7 @@ sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex 
 Having [installed the Python environment](#installation), you can build the documentation with:[^2]
 
 ```shell
-tox -e docnb
+pixi run docnb
 ```
 
 This will run all Jupyter notebooks and convert the output to static webpages (view the output under `docs/_build/html/index.html`). Running all notebooks from scratch (without any available cache) should take **around one hour**.
@@ -80,30 +91,30 @@ This will run all Jupyter notebooks and convert the output to static webpages (v
 If you have installed Julia and instantiated the Julia environment, you can embed the [Pluto notebooks](./julia/notebooks) as static pages in the documentation with:
 
 ```shell
-EXECUTE_PLUTO=YES tox -e docnb
+pixi run docnb-pluto
 ```
 
 or, alternatively, by executing _all_ Jupyter and Pluto notebooks (ignoring any existing caches):
 
 ```shell
-EXECUTE_PLUTO=YES tox -e docnb-force
+pixi run docnb-pluto-force
 ```
 
 The [above commands](#building-the-documentation) result in a static HTML webpage. It's also possible to render the notebook as a single PDF file. This can be done as follows:
 
 ```shell
-tox -e pdf
+pixi run pdf
 ```
 
-Just as above, cell output can be rendered by setting the `EXECUTE_NB` variable to some value:
+Just as above, cell output can be rendered by appending `nb`:
 
 ```shell
-EXECUTE_NB=YES tox -e pdf
+pixi run pdfnb
 ```
 
 [^2]:
     It's also possible have a look at the documentation _without_ cell output (just as a check for the links). This can be done with:
 
     ```shell
-    tox -e doc
+    pixi run doc
     ```

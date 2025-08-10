@@ -13,3 +13,210 @@ platforms = [
 [dependencies]
 julia = {version = "*", channel = "https://repo.prefix.dev/julia-forge"}
 uv = "*"
+
+[tasks.all]
+depends-on = [
+    "style",
+    "test-all",
+    "linkcheck",
+    "pdfnb-pluto",
+    "docnb",
+]
+description = "Run all continuous integration (CI) tasks locally"
+
+[tasks.doc]
+cmd = """
+uv run \
+    --group doc \
+    --group notebooks \
+    --no-dev \
+    sphinx-build \
+        --builder=html \
+        --fail-on-warning \
+        --keep-going \
+        --show-traceback \
+        docs/ \
+        docs/_build/html/
+"""
+description = "Build documentation and API"
+env.PYTHONWARNINGS = ""
+
+[tasks.doclive]
+cmd = """
+uv run sphinx-autobuild \
+    --open-browser \
+    --port=0 \
+    --re-ignore='/__pycache__(/.*)?$' \
+    --re-ignore='/_build(/.*)?$' \
+    --re-ignore='/_images(/.*)?$' \
+    --re-ignore='/_static/images(/.*)?$' \
+    --re-ignore='/\\.cache(/.*)?$' \
+    --re-ignore='/\\.egg-info(/.*)?$' \
+    --re-ignore='/\\.ipynb_checkpoints(/.*)?$' \
+    --re-ignore='/\\.virtual_documents(/.*)?$' \
+    --re-ignore='/api(/.*)?$' \
+    --re-ignore='/docs$' \
+    --re-ignore='/export(/.*)?$' \
+    --re-ignore='/exported_intensity_model\\.py$' \
+    --re-ignore='/julia(/.*)?$' \
+    --re-ignore='/version\\.py$' \
+    --re-ignore='\\.egg-info(/.*)?$' \
+    --re-ignore='\\.json$' \
+    --re-ignore='\\.pdf$' \
+    --re-ignore='\\.pkl$' \
+    --re-ignore='\\.png$' \
+    --re-ignore='\\.root$' \
+    --re-ignore='\\.svg$' \
+    --re-ignore='\\.tar.gz$' \
+    --re-ignore='\\.ya?ml$' \
+    --watch=src \
+    docs/ \
+    docs/_build/html/
+"""
+description = "Set up a server to directly preview changes to the HTML pages"
+env.PYTHONWARNINGS = ""
+
+[tasks.docnb]
+cmd = "pixi run doc"
+description = "Build documentation and API with cached notebook execution"
+env.EXECUTE_NB = "yes"
+
+[tasks.docnb-force]
+cmd = "pixi run doc"
+description = "Build documentation and API with notebook execution (no cache)"
+env.FORCE_EXECUTE_NB = "yes"
+
+[tasks.docnb-pluto]
+depends-on = ["pluto-server", "docnb"]
+description = "Run Pluto notebooks and build documentation and API with cached notebook execution"
+
+[tasks.docnb-pluto-force]
+depends-on = ["pluto-server", "docnb-force"]
+description = "Run Pluto notebooks and build documentation and API with notebook execution (no cache)"
+
+[tasks.docnblive]
+cmd = "pixi run doclive"
+description = "Set up a server to directly preview changes to the HTML pages with cached notebook execution"
+env.EXECUTE_NB = "yes"
+
+[tasks.instantiate-julia]
+cmd = "julia --eval='using Pkg; Pkg.instantiate()' --project=julia"
+description = "Instantiate Julia environment"
+
+[tasks.lab]
+args = [{"arg" = "path", "default" = "docs"}]
+cmd = """
+uv run \
+    --group jupyter \
+    --no-dev \
+    jupyter lab {{ path }}
+"""
+description = "Launch Jupyter Lab"
+
+[tasks.linkcheck]
+cmd = """
+uv run \
+    --group doc \
+    --no-dev \
+    sphinx-build \
+        --builder=linkcheck \
+        --show-traceback \
+        docs/ \
+        docs/_build/linkcheck/
+"""
+description = "Check external links in the documentation (requires internet connection)"
+
+[tasks.nb]
+args = [{"arg" = "paths", "default" = "docs"}]
+cmd = """
+uv run pytest \
+    --durations=0 \
+    --nbmake \
+    --nbmake-timeout=0 \
+    {{ paths }}
+"""
+description = "Run all Jupyter notebooks"
+
+[tasks.pdf]
+cmd = """
+uv run \
+    --group doc \
+    --group notebooks \
+    --no-dev \
+    make latexpdf
+"""
+cwd = "docs"
+description = "Create documentation as a single PDF file"
+env.LATEXOPTS = "-interaction=batchmode"
+env.PYTHONWARNINGS = ""
+
+[tasks.pdfnb]
+cmd = "pixi run pdf"
+description = "Create documentation as a single PDF file with cached notebook execution"
+env.EXECUTE_NB = "yes"
+
+[tasks.pdfnb-force]
+cmd = "pixi run pdf"
+description = "Create documentation as a single PDF file with notebook execution (no cache)"
+env.FORCE_EXECUTE_NB = "yes"
+
+[tasks.pdfnb-pluto]
+depends-on = ["pluto-server", "pdfnb"]
+description = "Run Pluto notebooks and create documentation as a single PDF file with cached notebook execution"
+
+[tasks.pdfnb-pluto-force]
+depends-on = ["pluto-server", "pdfnb-force"]
+description = "Run Pluto notebooks and create documentation as a single PDF file with notebook execution (no cache)"
+
+[tasks.pluto]
+cmd = """
+julia \
+    --eval='using Pluto; Pluto.run()' \
+    --project=..
+"""
+cwd = "julia/notebooks"
+depends-on = ["instantiate-julia"]
+description = "Launch Pluto notebook server"
+
+[tasks.pluto-server]
+cmd = """
+julia \
+    --eval='
+        using PlutoSliderServer
+        PlutoSliderServer.export_directory("notebooks", Export_output_dir="../docs/julia")
+    ' \
+    --project=.
+"""
+cwd = "julia"
+depends-on = ["instantiate-julia"]
+description = "Preview static Pluto website"
+
+[tasks.style]
+cmd = "uv run --group style --no-dev pre-commit run --all-files"
+description = "Perform all linting, formatting, and spelling checks"
+
+[tasks.test]
+cmd = "uv run --group test --no-dev pytest"
+description = "Run all unit tests"
+
+[tasks.test-all]
+depends-on = [
+    {"task" = "test-py", "args" = ["3.10"]},
+    {"task" = "test-py", "args" = ["3.11"]},
+    {"task" = "test-py", "args" = ["3.12"]},
+    {"task" = "test-py", "args" = ["3.13"]},
+    {"task" = "test-py", "args" = ["3.9"]},
+]
+description = "Run all tests on each supported Python version"
+
+[tasks.test-py]
+args = [{"arg" = "version", "default" = "3.12"}]
+cmd = """
+uv run \
+    --group test \
+    --isolated \
+    --no-dev \
+    --python={{ version }} \
+    pytest -m 'slow or not slow'
+"""
+description = "Run all tests on a specific Python version"
