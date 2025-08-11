@@ -33,7 +33,6 @@ typings/
 # Virtual environments
 *venv/
 .pixi/
-.tox/
 pyvenv*/
 
 # Settings

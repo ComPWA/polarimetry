@@ -40,17 +40,18 @@
     "\u03c3": true
   },
   "files.associations": {
-    ".cspell/*.txt": "plaintext",
-    "**/pixi.lock": "yaml"
+    "**/pixi.lock": "yaml",
+    ".cspell/*.txt": "plaintext"
   },
   "files.eol": "\n",
   "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
   "gitlens.telemetry.enabled": false,
+  "julia.environmentPath": "${workspaceFolder}/julia",
+  "julia.executablePath": "${workspaceFolder}/.pixi/envs/default/bin/julia",
   "julia.NumThreads": "auto",
   "livePreview.defaultPreviewPath": "docs/_build/html",
   "multiDiffEditor.experimental.enabled": true,
   "mypy-type-checker.args": ["--config-file=${workspaceFolder}/pyproject.toml"],
-  "mypy-type-checker.importStrategy": "fromEnvironment",
   "notebook.codeActionsOnSave": {
     "notebook.source.organizeImports": "explicit"
   },
@@ -60,7 +61,6 @@
   "python.analysis.inlayHints.pytestParameters": true,
   "python.defaultInterpreterPath": ".venv/bin/python",
   "python.terminal.activateEnvironment": false,
-  "python.testing.pytestArgs": ["--color=no"],
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
   "redhat.telemetry.enabled": false,
@@ -69,9 +69,12 @@
   "ruff.importStrategy": "fromEnvironment",
   "ruff.organizeImports": true,
   "search.exclude": {
+    "**/*.svg": true,
     "**/uv.lock": true
   },
   "telemetry.telemetryLevel": "off",
+  "testing.coverageToolbarEnabled": true,
+  "testing.showCoverageInExplorer": true,
   "yaml.schemas": {
     "https://citation-file-format.github.io/1.2.0/schema.json": "CITATION.cff",
     "https://json.schemastore.org/github-workflow.json": "./.github/workflows/requirements.yml"
