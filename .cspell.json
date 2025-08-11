@@ -64,10 +64,10 @@
     "Makefile",
     "Manifest.toml",
     "miscellchecks/**.C",
+    "pixi.toml",
     "Project.toml",
     "pyproject.toml",
-    "pytest.ini",
-    "tox.ini"
+    "pytest.ini"
   ],
   "ignoreWords": [
     "Colab",
@@ -81,7 +81,6 @@
     "concat",
     "contourf",
     "einsum",
-    "exportnotebooks",
     "hangle",
     "hasattr",
     "iminuit",

@@ -76,9 +76,9 @@ def execute_pluto_notebooks() -> None:
         msg = "Julia is not installed. Please download it at https://julialang.org/downloads"
         raise ValueError(msg)
     print("\033[93;1mExecuting Pluto notebooks\033[0m")
-    cmd = "julia --project=. ./exportnotebooks.jl"
+    cmd = "pixi run pluto-server"
     print(f"Running command: {cmd}")
-    result = subprocess.call(cmd, cwd="../julia", shell=True)
+    result = subprocess.call(cmd, shell=True)
     if result != 0:
         msg = "Failed to execute pluto notebooks"
         raise ValueError(msg)
@@ -97,9 +97,10 @@ def get_execution_mode() -> str:
 def get_link_to_julia_pages() -> str:
     julia_landing_page = "./julia/index.html"
     if os.path.exists(julia_landing_page):
-        shutil.copytree("julia", "_build/html/julia")
-        os.remove("_build/html/julia/.gitignore")
-        Path("_build/html/julia/.nojekyl").touch()
+        build_dir = Path("_build/html/julia")
+        shutil.copytree("julia", build_dir, dirs_exist_ok=True)
+        (build_dir / ".gitignore").unlink()
+        (build_dir / ".nojekyl").touch()
         src = f"""
         :::{{tip}}
         Several cross-checks with Julia can be found [here]({julia_landing_page}).
@@ -216,6 +217,7 @@ execute_pluto_notebooks()
 set_intersphinx_version_remapping({
     "ipywidgets": {
         "8.1.1": "8.1.2",
+        "8.1.7": "8.1.5",
     },
     "matplotlib": {
         "3.9.1.post1": "3.9.1",
@@ -309,6 +311,7 @@ copyright = "2023"
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
+    "**.virtual_documents",
     ".DS_Store",
     "Thumbs.db",
     "_build",
