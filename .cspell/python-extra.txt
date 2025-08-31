@@ -1,7 +1,7 @@
 absl
 ampform
 clim
-cmap
+cbar
 cmap
 corrcoef
 fontsize
