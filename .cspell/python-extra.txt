@@ -1,10 +1,12 @@
 absl
 ampform
+arange
 clim
 cbar
 cmap
 corrcoef
 fontsize
+frameon
 funcs
 hspace
 imread
