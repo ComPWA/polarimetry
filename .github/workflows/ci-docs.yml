@@ -27,7 +27,7 @@ jobs:
     name: Build HTML (fast)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: prefix-dev/setup-pixi@v0.8.14
         with:
           cache: true
@@ -45,7 +45,7 @@ jobs:
     name: Build PDF (fast)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: prefix-dev/setup-pixi@v0.8.14
         with:
           cache: true
@@ -66,7 +66,7 @@ jobs:
     name: Check external links
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: prefix-dev/setup-pixi@v0.8.14
         with:
           cache: true
@@ -78,7 +78,7 @@ jobs:
     name: Run Jupyter notebooks
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: prefix-dev/setup-pixi@v0.8.14
         with:
           cache: true
@@ -142,7 +142,7 @@ jobs:
       JULIA_COLOR: "yes"
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: prefix-dev/setup-pixi@v0.8.14
         with:
           cache: true
@@ -169,7 +169,7 @@ jobs:
       - jupyter
       - pluto
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: prefix-dev/setup-pixi@v0.8.14
         with:
           cache: true
