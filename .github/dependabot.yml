@@ -6,6 +6,10 @@ updates:
       - redeboer
     commit-message:
       prefix: MAINT
+    groups:
+      actions:
+        patterns:
+          - "*"
     labels:
       - 🔨 Maintenance
     schedule:
