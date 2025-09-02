@@ -184,7 +184,7 @@ jobs:
           path: docs/julia
       - name: Combine executed notebooks PDF
         run: pixi run docnb
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: docs/_build/html
 
