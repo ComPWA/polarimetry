@@ -11,6 +11,6 @@ updates:
         patterns:
           - "*"
     labels:
-      - 🔨 Maintenance
+      - ⬆️ Lock
     schedule:
       interval: monthly
