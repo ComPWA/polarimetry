@@ -94,7 +94,7 @@ jobs:
             jax-${{hashFiles('uv.lock')}}
             jax
           path: ${{ env.JAX_COMPILATION_CACHE_DIR }}
-      - uses: ComPWA/actions/cache-sympy@v2
+      - uses: ComPWA/actions/cache-sympy@v3
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
         with:
