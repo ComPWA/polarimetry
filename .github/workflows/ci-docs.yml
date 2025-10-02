@@ -27,8 +27,8 @@ jobs:
     name: Build HTML (fast)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.14
+      - uses: actions/checkout@v5
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - uses: astral-sh/setup-uv@v6
@@ -45,8 +45,8 @@ jobs:
     name: Build PDF (fast)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.14
+      - uses: actions/checkout@v5
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - uses: astral-sh/setup-uv@v6
@@ -66,8 +66,8 @@ jobs:
     name: Check external links
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.14
+      - uses: actions/checkout@v5
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - uses: astral-sh/setup-uv@v6
@@ -78,8 +78,8 @@ jobs:
     name: Run Jupyter notebooks
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.14
+      - uses: actions/checkout@v5
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - run: |
@@ -94,7 +94,7 @@ jobs:
             jax-${{hashFiles('uv.lock')}}
             jax
           path: ${{ env.JAX_COMPILATION_CACHE_DIR }}
-      - uses: ComPWA/actions/cache-sympy@v2
+      - uses: ComPWA/actions/cache-sympy@v3
       - name: Fetch Jupyter cache
         uses: actions/cache@v4
         with:
@@ -142,8 +142,8 @@ jobs:
       JULIA_COLOR: "yes"
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.14
+      - uses: actions/checkout@v5
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - name: Fetch Julia cache
@@ -169,8 +169,8 @@ jobs:
       - jupyter
       - pluto
     steps:
-      - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.14
+      - uses: actions/checkout@v5
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - uses: astral-sh/setup-uv@v6
@@ -184,7 +184,7 @@ jobs:
           path: docs/julia
       - name: Combine executed notebooks PDF
         run: pixi run docnb
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: docs/_build/html
 
