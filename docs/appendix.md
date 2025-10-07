@@ -9,7 +9,6 @@ appendix/benchmark
 appendix/serialization
 appendix/model-serialization
 appendix/ls-model
-appendix/pc-pv-currents
 appendix/homomorphism
 zz.polarization-fit
 appendix/widget

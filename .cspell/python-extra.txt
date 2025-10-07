@@ -1,12 +1,10 @@
 absl
 ampform
-arange
 clim
 cbar
 cmap
 corrcoef
 fontsize
-frameon
 funcs
 hspace
 imread
@@ -36,12 +34,10 @@ vmax
 vmin
 wspace
 xlabel
-xpad
 xreplace
 xtick
 xticklabels
 xticks
-yanchor
 yaxes
 ylabel
 ytick
