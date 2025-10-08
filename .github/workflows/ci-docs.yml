@@ -37,6 +37,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
+          include-hidden-files: true
           name: docs-fast-html
           path: docs/_build/html
 
@@ -58,6 +59,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
+          include-hidden-files: true
           name: docs-fast-pdf
           path: docs/_build/latex
 
@@ -159,6 +161,7 @@ jobs:
       - run: pixi run pluto-server
       - uses: actions/upload-artifact@v4
         with:
+          include-hidden-files: true
           name: docs-julia
           path: docs/julia
 
@@ -184,8 +187,10 @@ jobs:
           path: docs/julia
       - name: Combine executed notebooks PDF
         run: pixi run docnb
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-artifact@v4 # https://github.com/actions/upload-pages-artifact/issues/129
         with:
+          include-hidden-files: true
+          name: github-pages
           path: docs/_build/html
 
   pr-preview:
@@ -200,10 +205,6 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: github-pages
-      - name: Extract artifact
-        run: |
-          tar xf artifact.tar
-          rm artifact.tar
       - name: Configure Git credentials
         run: |
           git config --global user.name "GitHub Action"

@@ -35,6 +35,7 @@ viridis
 vmax
 vmin
 wspace
+xanchor
 xlabel
 xpad
 xreplace
