@@ -1,7 +1,7 @@
 absl
 ampform
 clim
-cmap
+cbar
 cmap
 corrcoef
 fontsize
@@ -27,6 +27,7 @@ sympify
 tensorwaves
 tolist
 tril
+unicodeitplus
 viewboxing
 viridis
 vmax
@@ -37,6 +38,7 @@ xreplace
 xtick
 xticklabels
 xticks
+yaxes
 ylabel
 ytick
 yticklabels
