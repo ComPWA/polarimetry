@@ -1,10 +1,12 @@
 absl
 ampform
+arange
 clim
 cbar
 cmap
 corrcoef
 fontsize
+frameon
 funcs
 hspace
 imread
@@ -33,11 +35,14 @@ viridis
 vmax
 vmin
 wspace
+xanchor
 xlabel
+xpad
 xreplace
 xtick
 xticklabels
 xticks
+yanchor
 yaxes
 ylabel
 ytick
