@@ -37,6 +37,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
+          include-hidden-files: true
           name: docs-fast-html
           path: docs/_build/html
 
@@ -58,6 +59,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
+          include-hidden-files: true
           name: docs-fast-pdf
           path: docs/_build/latex
 
@@ -159,6 +161,7 @@ jobs:
       - run: pixi run pluto-server
       - uses: actions/upload-artifact@v4
         with:
+          include-hidden-files: true
           name: docs-julia
           path: docs/julia
 
@@ -184,9 +187,11 @@ jobs:
           path: docs/julia
       - name: Combine executed notebooks PDF
         run: pixi run docnb
-      - uses: actions/upload-pages-artifact@v4
+      - run: tar cf artifact.tar -C docs/_build/html .
+      - uses: actions/upload-artifact@v4 # https://github.com/actions/upload-pages-artifact/issues/129
         with:
-          path: docs/_build/html
+          name: github-pages
+          path: artifact.tar
 
   pr-preview:
     name: Push PR preview

@@ -102,6 +102,7 @@ notebooks = [
     "scipy",
     "svgutils",
     "tqdm",
+    "unicodeitplus",
     "uproot",
 ]
 style = [

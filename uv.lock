@@ -3941,6 +3941,7 @@ dev = [
     { name = "types-docutils" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 doc = [
@@ -3982,6 +3983,7 @@ jupyter = [
     { name = "scipy", version = "1.16.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "svgutils" },
     { name = "tqdm" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 notebooks = [
@@ -3999,6 +4001,7 @@ notebooks = [
     { name = "scipy", version = "1.16.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "svgutils" },
     { name = "tqdm" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 style = [
@@ -4083,6 +4086,7 @@ dev = [
     { name = "types-docutils" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 doc = [
@@ -4120,6 +4124,7 @@ jupyter = [
     { name = "scipy" },
     { name = "svgutils" },
     { name = "tqdm" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 notebooks = [
@@ -4135,6 +4140,7 @@ notebooks = [
     { name = "scipy" },
     { name = "svgutils" },
     { name = "tqdm" },
+    { name = "unicodeitplus" },
     { name = "uproot" },
 ]
 style = [
@@ -6047,6 +6053,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/74/cf/209d90506b7d6c5873f82c5a226d7aad1a1da153364e9ebf61eff0740c33/ujson-5.11.0-pp311-pypy311_pp73-manylinux_2_24_i686.manylinux_2_28_i686.whl", hash = "sha256:86baf341d90b566d61a394869ce77188cc8668f76d7bb2c311d77a00f4bdf844", size = 56584, upload-time = "2025-08-20T11:56:52.89Z" },
     { url = "https://files.pythonhosted.org/packages/e9/97/bd939bb76943cb0e1d2b692d7e68629f51c711ef60425fa5bb6968037ecd/ujson-5.11.0-pp311-pypy311_pp73-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:4598bf3965fc1a936bd84034312bcbe00ba87880ef1ee33e33c1e88f2c398b49", size = 51588, upload-time = "2025-08-20T11:56:54.054Z" },
     { url = "https://files.pythonhosted.org/packages/52/5b/8c5e33228f7f83f05719964db59f3f9f276d272dc43752fa3bbf0df53e7b/ujson-5.11.0-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:416389ec19ef5f2013592f791486bef712ebce0cd59299bf9df1ba40bb2f6e04", size = 43835, upload-time = "2025-08-20T11:56:55.237Z" },
+]
+
+[[package]]
+name = "unicodeitplus"
+version = "0.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "lark" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6b/4e/558c4ca31395e7ca427ed3ff8d5a0c161117b42db0ca19b830eb4d4eb813/unicodeitplus-0.3.1.tar.gz", hash = "sha256:8c1ce8f1c2737e1f3aa5611675585a60a9edc593fe8a9569111fb703a36c5ad7", size = 88787, upload-time = "2023-04-20T21:51:16.687Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ed/47/9a0c7d427255831984275cde1c6960421fd608c398922ad776ab044b770d/unicodeitplus-0.3.1-py3-none-any.whl", hash = "sha256:f5fa44c19c28b88710f72837b8c600124906aef8351c357efed15cd5a3e18879", size = 26728, upload-time = "2023-04-20T21:51:14.542Z" },
 ]
 
 [[package]]

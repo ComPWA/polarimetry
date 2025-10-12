@@ -14,8 +14,11 @@ from IPython.core.display import Math
 from IPython.display import display
 
 
-def display_latex(obj) -> None:
-    latex = aslatex(obj)
+def display_latex(obj, *, wrap: bool = False) -> None:
+    if wrap:
+        latex = aslatex(obj, terms_per_line=1)
+    else:
+        latex = aslatex(obj)
     display(Math(latex))
 
 
