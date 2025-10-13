@@ -210,7 +210,7 @@ depends-on = [
 description = "Run all tests on each supported Python version"
 
 [tasks.test-py]
-args = [{"arg" = "version", "default" = "3.12"}]
+args = [{"arg" = "version", "default" = "3.13"}]
 cmd = """
 uv run \
     --group test \
