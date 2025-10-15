@@ -94,9 +94,10 @@ notebooks = [
     "ipympl",
     "ipywidgets",
     "kaleido",
+    "kaleido~=0.1,!=0.2.1.post1",
     "matplotlib-inline",
     "pandas",
-    "plotly",
+    "plotly~=5.0", # https://github.com/executablebooks/MyST-NB/issues/667
     "psutil",
     "scipy",
     "svgutils",
@@ -386,8 +387,3 @@ sort_first = [
 ]
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
-
-[tool.uv]
-constraint-dependencies = [
-    "plotly~=5.0", # https://github.com/executablebooks/MyST-NB/issues/667
-]
