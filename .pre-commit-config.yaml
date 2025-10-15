@@ -20,7 +20,6 @@ repos:
       - id: check-dev-files
         args:
           - --dependabot=keep
-          - --excluded-python-versions=3.14
           - --no-cspell-update
           - --no-github-actions
           - --package-manager=pixi+uv
