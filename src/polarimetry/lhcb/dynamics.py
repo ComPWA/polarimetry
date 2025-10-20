@@ -35,6 +35,7 @@ def formulate_bugg_breit_wigner(
     gamma = sp.Symbol(Rf"\gamma_{{{decay_chain.resonance.name}}}")
     mass = sp.Symbol(f"m_{{{decay_chain.resonance.name}}}")
     width = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.name}}}")
+    expression = BuggBreitWigner(s, mass, width, m3, m2, gamma)
     parameter_defaults: dict[sp.Symbol, complex | float] = {
         mass: decay_chain.resonance.mass,
         width: decay_chain.resonance.width,
@@ -42,22 +43,21 @@ def formulate_bugg_breit_wigner(
         m3: decay_chain.decay_products[1].mass,
         gamma: 1,
     }
-    expr = BuggBreitWigner(s, mass, width, m3, m2, gamma)  # Adler zero for K minus π
-    return expr, parameter_defaults
+    return expression, parameter_defaults
 
 
 def formulate_exponential_bugg_breit_wigner(
     decay_chain: ThreeBodyDecayChain,
 ) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
     """See `this paper, Eq. (4) <https://arxiv.org/pdf/hep-ex/0510019.pdf#page=3>`_."""
-    expr, parameter_defaults = formulate_bugg_breit_wigner(decay_chain)
+    expression, parameter_defaults = formulate_bugg_breit_wigner(decay_chain)
     alpha = sp.Symbol(Rf"\alpha_{{{decay_chain.resonance.name}}}")
     parameter_defaults[alpha] = sp.Rational(0)
     s = get_mandelstam_s(decay_chain.decay_node)
     m0, m1 = sp.symbols("m0 m1", nonnegative=True)
     q = Q(s, m0, m1)
-    expr *= sp.exp(-alpha * q**2)
-    return expr, parameter_defaults
+    expression *= sp.exp(-alpha * q**2)
+    return expression, parameter_defaults
 
 
 def formulate_flatte_1405(  # noqa: PLR0914
@@ -74,6 +74,15 @@ def formulate_flatte_1405(  # noqa: PLR0914
     m_spec = create_mass_symbol(decay_chain.spectator)
     mπ = create_mass_symbol(π)
     mΣ = create_mass_symbol(Σ)
+    l_prod = _get_angular_momentum(decay_chain.production_node)
+    R_prod = sp.Symbol(R"R_{\Lambda_c}")
+    q = Q(s, m_top, m_spec)
+    q0 = Q(m_res**2, m_top, m_spec)
+    expression = sp.Mul(
+        (q / q0) ** l_prod,
+        BlattWeisskopf(q * R_prod, l_prod) / BlattWeisskopf(q0 * R_prod, l_prod),
+        FlattéSWave(s, m_res, (Γ1, Γ2), (m1, m2), (mπ, mΣ)),
+    )
     parameter_defaults: dict[sp.Symbol, complex | float] = {
         m_res: resonance.mass,
         Γ1: resonance.width,
@@ -84,17 +93,10 @@ def formulate_flatte_1405(  # noqa: PLR0914
         m_spec: decay_chain.spectator.mass,
         mπ: π.mass,
         mΣ: Σ.mass,
+        # https://github.com/ComPWA/polarimetry/pull/11#issuecomment-1128784376
+        R_prod: 5,
     }
-    l_prod = _get_angular_momentum(decay_chain.production_node)
-    R_prod = sp.Symbol(R"R_{\Lambda_c}")
-    q = Q(s, m_top, m_spec)
-    q0 = Q(m_res**2, m_top, m_spec)
-    dynamics = sp.Mul(
-        (q / q0) ** l_prod,
-        BlattWeisskopf(q * R_prod, l_prod) / BlattWeisskopf(q0 * R_prod, l_prod),
-        FlattéSWave(s, m_res, (Γ1, Γ2), (m1, m2), (mπ, mΣ)),
-    )
-    return dynamics, parameter_defaults
+    return expression, parameter_defaults
 
 
 def formulate_breit_wigner(
@@ -110,18 +112,7 @@ def formulate_breit_wigner(
     resonance_width = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.name}}}")
     R_dec = sp.Symbol(R"R_\mathrm{res}")
     R_prod = sp.Symbol(R"R_{\Lambda_c}")
-    parameter_defaults: dict[sp.Symbol, complex | float] = {
-        parent_mass: decay_chain.parent.mass,
-        spectator_mass: decay_chain.spectator.mass,
-        resonance_mass: decay_chain.resonance.mass,
-        resonance_width: decay_chain.resonance.width,
-        m1: decay_chain.decay_products[0].mass,
-        m2: decay_chain.decay_products[1].mass,
-        # https://github.com/ComPWA/polarimetry/pull/11#issuecomment-1128784376
-        R_dec: 1.5,
-        R_prod: 5,
-    }
-    dynamics = BreitWignerMinL(
+    expression = BreitWignerMinL(
         s,
         parent_mass,
         spectator_mass,
@@ -134,7 +125,18 @@ def formulate_breit_wigner(
         R_dec,
         R_prod,
     )
-    return dynamics, parameter_defaults
+    parameter_defaults: dict[sp.Symbol, complex | float] = {
+        parent_mass: decay_chain.parent.mass,
+        spectator_mass: decay_chain.spectator.mass,
+        resonance_mass: decay_chain.resonance.mass,
+        resonance_width: decay_chain.resonance.width,
+        m1: decay_chain.decay_products[0].mass,
+        m2: decay_chain.decay_products[1].mass,
+        # https://github.com/ComPWA/polarimetry/pull/11#issuecomment-1128784376
+        R_dec: 1.5,
+        R_prod: 5,
+    }
+    return expression, parameter_defaults
 
 
 def _create_decay_product_masses(
