@@ -49,13 +49,13 @@ def create_meson_radius_symbol(typ: Literal["production", "decay"]) -> sp.Symbol
 
 
 def create_alpha_symbol(particle: str | Particle) -> sp.Symbol:
-    """Define symbol :math:`alpha` for `this paper<https://arxiv.org/pdf/hep-ex/0510019.pdf>`_."""
+    """Define symbol :math:`alpha` for `this paper <https://arxiv.org/pdf/hep-ex/0510019.pdf>`_."""
     particle = _get_latex(particle)
     return sp.Symbol(Rf"\alpha_{{{particle}}}", real=True)
 
 
 def create_gamma_symbol(particle: str | Particle) -> sp.Symbol:
-    """Define symbol :math:`gamma` for `this paper<https://arxiv.org/pdf/hep-ex/0510019.pdf>`_."""
+    """Define symbol :math:`gamma` for `this paper <https://arxiv.org/pdf/hep-ex/0510019.pdf>`_."""
     particle = _get_latex(particle)
     return sp.Symbol(Rf"\gamma_{{{particle}}}", nonnegative=True)
 
