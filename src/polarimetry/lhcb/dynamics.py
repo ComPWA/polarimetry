@@ -14,11 +14,17 @@ from ampform_dpd.dynamics import (
 )
 from ampform_dpd.dynamics.builder import (
     _get_angular_momentum,  # noqa: PLC2701  # pyright:ignore[reportPrivateUsage]s
-    create_mass_symbol,
     get_mandelstam_s,
 )
 
 from polarimetry.lhcb.particle import Σ, π
+from polarimetry.lhcb.symbol import (
+    create_alpha_symbol,
+    create_gamma_symbol,
+    create_mass_symbol,
+    create_meson_radius_symbol,
+    create_width_symbol,
+)
 
 if TYPE_CHECKING:
     from ampform_dpd.decay import ThreeBodyDecayChain
@@ -32,9 +38,9 @@ def formulate_bugg_breit_wigner(
         raise ValueError(msg)
     s = get_mandelstam_s(decay_chain.decay_node)
     m2, m3 = _create_decay_product_masses(decay_chain)
-    gamma = sp.Symbol(Rf"\gamma_{{{decay_chain.resonance.name}}}")
-    mass = sp.Symbol(f"m_{{{decay_chain.resonance.name}}}")
-    width = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.name}}}")
+    gamma = create_gamma_symbol(decay_chain.resonance)
+    mass = create_mass_symbol(decay_chain.resonance)
+    width = create_width_symbol(decay_chain.resonance)
     expression = BuggBreitWigner(s, mass, width, m3, m2, gamma)
     parameter_defaults: dict[sp.Symbol, complex | float] = {
         mass: decay_chain.resonance.mass,
@@ -51,7 +57,7 @@ def formulate_exponential_bugg_breit_wigner(
 ) -> tuple[sp.Expr, dict[sp.Symbol, complex | float]]:
     """See `this paper, Eq. (4) <https://arxiv.org/pdf/hep-ex/0510019.pdf#page=3>`_."""
     expression, parameter_defaults = formulate_bugg_breit_wigner(decay_chain)
-    alpha = sp.Symbol(Rf"\alpha_{{{decay_chain.resonance.name}}}")
+    alpha = create_alpha_symbol(decay_chain.resonance)
     parameter_defaults[alpha] = sp.Rational(0)
     s = get_mandelstam_s(decay_chain.decay_node)
     m0, m1 = sp.symbols("m0 m1", nonnegative=True)
@@ -67,15 +73,15 @@ def formulate_flatte_1405(  # noqa: PLR0914
     resonance = decay_chain.resonance
     p1, p2 = decay_chain.decay_products
     m1, m2 = _create_decay_product_masses(decay_chain)
-    m_res = sp.Symbol(f"m_{{{resonance.name}}}")
-    Γ1 = sp.Symbol(Rf"\Gamma_{{{resonance.name} \to {p1.latex} {p2.latex}}}")
-    Γ2 = sp.Symbol(Rf"\Gamma_{{{resonance.name} \to {π.latex} {Σ.latex}}}")
-    m_top = sp.Symbol(f"m{decay_chain.parent.index}", nonnegative=True)
+    m_res = create_mass_symbol(resonance)
+    Γ1 = create_width_symbol(resonance, (p1, p2))
+    Γ2 = create_width_symbol(resonance, (π, Σ))
+    m_top = create_mass_symbol(decay_chain.parent)
     m_spec = create_mass_symbol(decay_chain.spectator)
     mπ = create_mass_symbol(π)
     mΣ = create_mass_symbol(Σ)
     l_prod = _get_angular_momentum(decay_chain.production_node)
-    R_prod = sp.Symbol(R"R_{\Lambda_c}")
+    R_prod = create_meson_radius_symbol("production")
     q = Q(s, m_top, m_spec)
     q0 = Q(m_res**2, m_top, m_spec)
     expression = sp.Mul(
@@ -106,12 +112,12 @@ def formulate_breit_wigner(
     m1, m2 = _create_decay_product_masses(decay_chain)
     l_dec = _get_angular_momentum(decay_chain.decay_node)
     l_prod = _get_angular_momentum(decay_chain.production_node)
-    parent_mass = sp.Symbol(f"m_{{{decay_chain.parent.name}}}")
-    spectator_mass = sp.Symbol(f"m_{{{decay_chain.spectator.name}}}")
-    resonance_mass = sp.Symbol(f"m_{{{decay_chain.resonance.name}}}")
-    resonance_width = sp.Symbol(Rf"\Gamma_{{{decay_chain.resonance.name}}}")
-    R_dec = sp.Symbol(R"R_\mathrm{res}")
-    R_prod = sp.Symbol(R"R_{\Lambda_c}")
+    parent_mass = create_mass_symbol(decay_chain.parent)
+    spectator_mass = create_mass_symbol(decay_chain.spectator)
+    resonance_mass = create_mass_symbol(decay_chain.resonance)
+    resonance_width = create_width_symbol(decay_chain.resonance)
+    R_dec = create_meson_radius_symbol("decay")
+    R_prod = create_meson_radius_symbol("production")
     expression = BreitWignerMinL(
         s,
         parent_mass,
@@ -142,7 +148,5 @@ def formulate_breit_wigner(
 def _create_decay_product_masses(
     decay_chain: ThreeBodyDecayChain,
 ) -> tuple[sp.Symbol, sp.Symbol]:
-    mi, mj = (
-        sp.Symbol(f"m{s.index}", nonnegative=True) for s in decay_chain.decay_products
-    )
+    mi, mj = (create_mass_symbol(p) for p in decay_chain.decay_products)
     return mi, mj

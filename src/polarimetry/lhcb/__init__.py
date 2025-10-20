@@ -36,6 +36,13 @@ from polarimetry.lhcb.dynamics import (
     formulate_flatte_1405,
 )
 from polarimetry.lhcb.particle import Σ, K, Λc, p, π
+from polarimetry.lhcb.symbol import (
+    create_alpha_symbol,
+    create_gamma_symbol,
+    create_mass_symbol,
+    create_meson_radius_symbol,
+    create_width_symbol,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -644,24 +651,24 @@ def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
                         return H_prod[R, 2, 3 * half]
     if key.startswith("alpha"):
         R = _stringify(key[5:])
-        return sp.Symbol(Rf"\alpha_{{{R}}}")
+        return create_alpha_symbol(R)
     if key.startswith("gamma"):
         R = _stringify(key[5:])
-        return sp.Symbol(Rf"\gamma_{{{R}}}")
+        return create_gamma_symbol(R)
     if key.startswith("M"):
         R = _stringify(key[1:])
-        return sp.Symbol(Rf"m_{{{R}}}")
+        return create_mass_symbol(R)
     if key.startswith("G1"):
         R = _stringify(key[2:])
-        return sp.Symbol(Rf"\Gamma_{{{R} \to {K.latex} {p.latex}}}")
+        return create_width_symbol(R, (K, p))
     if key.startswith("G2"):
         R = _stringify(key[2:])
-        return sp.Symbol(Rf"\Gamma_{{{R} \to {π.latex} {Σ.latex}}}")
+        return create_width_symbol(R, (π, Σ))
     if key.startswith("G"):
         R = _stringify(key[1:])
-        return sp.Symbol(Rf"\Gamma_{{{R}}}")
+        return create_width_symbol(R)
     if key == "dLc":
-        return sp.Symbol(R"R_{\Lambda_c}")
+        return create_meson_radius_symbol("production")
     msg = f'Cannot convert key "{key}" in model parameter JSON file to SymPy symbol'
     raise NotImplementedError(msg)
 
