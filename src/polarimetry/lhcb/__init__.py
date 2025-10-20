@@ -650,23 +650,23 @@ def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
                     if coupling_number == 4:
                         return H_prod[R, 2, 3 * half]
     if key.startswith("alpha"):
-        R = _stringify(key[5:])
-        return create_alpha_symbol(R)
+        resonance = particle_definitions[key[5:]]
+        return create_alpha_symbol(resonance)
     if key.startswith("gamma"):
-        R = _stringify(key[5:])
-        return create_gamma_symbol(R)
+        resonance = particle_definitions[key[5:]]
+        return create_gamma_symbol(resonance)
     if key.startswith("M"):
-        R = _stringify(key[1:])
-        return create_mass_symbol(R)
+        resonance = particle_definitions[key[1:]]
+        return create_mass_symbol(resonance)
     if key.startswith("G1"):
-        R = _stringify(key[2:])
-        return create_width_symbol(R, (K, p))
+        resonance = particle_definitions[key[2:]]
+        return create_width_symbol(resonance, (K, p))
     if key.startswith("G2"):
-        R = _stringify(key[2:])
-        return create_width_symbol(R, (π, Σ))
+        resonance = particle_definitions[key[2:]]
+        return create_width_symbol(resonance, (π, Σ))
     if key.startswith("G"):
-        R = _stringify(key[1:])
-        return create_width_symbol(R)
+        resonance = particle_definitions[key[1:]]
+        return create_width_symbol(resonance)
     if key == "dLc":
         return create_meson_radius_symbol("production")
     msg = f'Cannot convert key "{key}" in model parameter JSON file to SymPy symbol'
