@@ -81,7 +81,7 @@ def formulate_flatte_1405(  # noqa: PLR0914
     mπ = create_mass_symbol(π)
     mΣ = create_mass_symbol(Σ)
     l_prod = _get_angular_momentum(decay_chain.production_node)
-    R_prod = create_meson_radius_symbol("production")
+    R_prod = create_meson_radius_symbol("prod")
     q = Q(s, m_top, m_spec)
     q0 = Q(m_res**2, m_top, m_spec)
     expression = sp.Mul(
@@ -116,8 +116,8 @@ def formulate_breit_wigner(
     spectator_mass = create_mass_symbol(decay_chain.spectator)
     resonance_mass = create_mass_symbol(decay_chain.resonance)
     resonance_width = create_width_symbol(decay_chain.resonance)
-    R_dec = create_meson_radius_symbol("decay")
-    R_prod = create_meson_radius_symbol("production")
+    R_dec = create_meson_radius_symbol("dec")
+    R_prod = create_meson_radius_symbol("prod")
     expression = BreitWignerMinL(
         s,
         parent_mass,

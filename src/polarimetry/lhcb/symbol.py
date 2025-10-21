@@ -37,15 +37,8 @@ def create_width_symbol(
     return sp.Symbol(Rf"\Gamma_{{{particle}{suffix}}}", nonnegative=True)
 
 
-def create_meson_radius_symbol(typ: Literal["production", "decay"]) -> sp.Symbol:
-    match typ:
-        case "production":
-            return sp.Symbol(R"R_{\Lambda_c}", positive=True)
-        case "decay":
-            return sp.Symbol(R"R_\mathrm{res}", positive=True)
-        case _:
-            msg = f"Unknown meson radius type {typ!r}"
-            raise NotImplementedError(msg)
+def create_meson_radius_symbol(subscript: Literal["prod", "dec"]) -> sp.Symbol:
+    return sp.Symbol(Rf"R_\mathrm{{{subscript}}}", positive=True)
 
 
 def create_alpha_symbol(particle: str | Particle) -> sp.Symbol:

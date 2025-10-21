@@ -668,7 +668,7 @@ def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
         resonance = particle_definitions[key[1:]]
         return create_width_symbol(resonance)
     if key == "dLc":
-        return create_meson_radius_symbol("production")
+        return create_meson_radius_symbol("prod")
     msg = f'Cannot convert key "{key}" in model parameter JSON file to SymPy symbol'
     raise NotImplementedError(msg)
 
