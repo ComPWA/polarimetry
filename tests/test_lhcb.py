@@ -16,6 +16,7 @@ from polarimetry.lhcb import (
     load_model_parameters,
 )
 from polarimetry.lhcb.particle import load_particles
+from polarimetry.lhcb.symbol import create_gamma_symbol
 
 THIS_DIR = dirname(__file__)
 DATA_DIR = f"{THIS_DIR}/../data"
@@ -67,7 +68,7 @@ def test_get_conversion_factor_ls():
 def test_load_model_parameters():
     pars = _load_parameters("Default amplitude model")
     H = _get_coupling_base(helicity_basis=True, typ="production")
-    gamma = sp.Symbol(R"\gamma_{K(700)}")
+    gamma = create_gamma_symbol("K(700)")
     h = sp.Rational(1, 2)
     assert len(pars) == 53
     assert pars[gamma] == 0.94106
