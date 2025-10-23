@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import warnings
 from typing import Any
 
 import jax
@@ -35,10 +36,15 @@ def display_doit(expr: sp.Expr, deep=False, terms_per_line: int | None = None) -
     display(Math(latex))
 
 
+def mute_ampform_warnings() -> None:
+    logging.getLogger("ampform.sympy._cache").setLevel(logging.ERROR)
+    warnings.filterwarnings("ignore", category=UserWarning, module="ampform_dpd.decay")
+
+
 def mute_jax_warnings() -> None:
-    jax_logger = logging.getLogger("absl")
-    jax_logger = logging.getLogger("jax._src.lib.xla_bridge")
-    jax_logger.setLevel(logging.ERROR)
+    logging.getLogger("absl").setLevel(logging.ERROR)
+    logging.getLogger("jax._src.lib.xla_bridge").setLevel(logging.ERROR)
+    logging.getLogger("jax._src.xla_bridge").setLevel(logging.ERROR)
 
 
 def export_polarimetry_field(  # noqa: PLR0917

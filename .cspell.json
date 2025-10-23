@@ -75,6 +75,8 @@
     "allclose",
     "astuple",
     "avrgd",
+    "axvline",
+    "axvspan",
     "ccrcr",
     "cmin",
     "commitlint",
