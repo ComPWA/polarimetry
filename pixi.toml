@@ -205,12 +205,11 @@ depends-on = [
     {"task" = "test-py", "args" = ["3.11"]},
     {"task" = "test-py", "args" = ["3.12"]},
     {"task" = "test-py", "args" = ["3.13"]},
-    {"task" = "test-py", "args" = ["3.9"]},
 ]
 description = "Run all tests on each supported Python version"
 
 [tasks.test-py]
-args = [{"arg" = "version", "default" = "3.12"}]
+args = [{"arg" = "version", "default" = "3.13"}]
 cmd = """
 uv run \
     --group test \

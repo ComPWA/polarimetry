@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
-      - uses: prefix-dev/setup-pixi@v0.9.0
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - uses: astral-sh/setup-uv@v6
@@ -37,6 +37,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
+          include-hidden-files: true
           name: docs-fast-html
           path: docs/_build/html
 
@@ -46,7 +47,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
-      - uses: prefix-dev/setup-pixi@v0.9.0
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - uses: astral-sh/setup-uv@v6
@@ -58,6 +59,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
+          include-hidden-files: true
           name: docs-fast-pdf
           path: docs/_build/latex
 
@@ -67,7 +69,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
-      - uses: prefix-dev/setup-pixi@v0.9.0
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - uses: astral-sh/setup-uv@v6
@@ -79,7 +81,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
-      - uses: prefix-dev/setup-pixi@v0.9.0
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - run: |
@@ -143,7 +145,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
-      - uses: prefix-dev/setup-pixi@v0.9.0
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - name: Fetch Julia cache
@@ -159,6 +161,7 @@ jobs:
       - run: pixi run pluto-server
       - uses: actions/upload-artifact@v4
         with:
+          include-hidden-files: true
           name: docs-julia
           path: docs/julia
 
@@ -170,7 +173,7 @@ jobs:
       - pluto
     steps:
       - uses: actions/checkout@v5
-      - uses: prefix-dev/setup-pixi@v0.9.0
+      - uses: prefix-dev/setup-pixi@v0.9.1
         with:
           cache: true
       - uses: astral-sh/setup-uv@v6
@@ -184,9 +187,11 @@ jobs:
           path: docs/julia
       - name: Combine executed notebooks PDF
         run: pixi run docnb
-      - uses: actions/upload-pages-artifact@v4
+      - run: tar cf artifact.tar -C docs/_build/html .
+      - uses: actions/upload-artifact@v4 # https://github.com/actions/upload-pages-artifact/issues/129
         with:
-          path: docs/_build/html
+          name: github-pages
+          path: artifact.tar
 
   pr-preview:
     name: Push PR preview

@@ -23,7 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python",
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Scientific/Engineering",
@@ -46,7 +46,7 @@ description = "Symbolic expressions that describe an aligned polarimeter vector 
 dynamic = ["version"]
 license = {file = "LICENSE"}
 name = "polarimetry-lc2pkpi"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 [project.readme]
 content-type = "text/markdown"
@@ -77,7 +77,6 @@ doc = [
 ]
 jupyter = [
     "jupyterlab",
-    "jupyterlab",
     "jupyterlab-code-formatter",
     "jupyterlab-execute-time",
     "jupyterlab-git",
@@ -94,13 +93,15 @@ notebooks = [
     "ipympl",
     "ipywidgets",
     "kaleido",
+    "kaleido~=0.1,!=0.2.1.post1",
     "matplotlib-inline",
     "pandas",
-    "plotly",
+    "plotly~=5.0", # https://github.com/executablebooks/MyST-NB/issues/667
     "psutil",
     "scipy",
     "svgutils",
     "tqdm",
+    "unicodeitplus",
     "uproot",
 ]
 style = [
@@ -199,6 +200,7 @@ addopts = [
     "--doctest-continue-on-failure",
     "--doctest-modules",
     "--durations=3",
+    "--ignore-glob=.virtual_documents",
     "--ignore=docs/appendix/widget.ipynb",
     "--ignore=docs/conf.py",
     "-m not slow",
@@ -322,7 +324,6 @@ ignore-names = [
     "E703",
     "E741",
     "N8",
-    "PD901",
     "PGH001",
     "PLC2701",
     "PLR09",
@@ -386,10 +387,3 @@ sort_first = [
 ]
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
-
-[tool.uv]
-constraint-dependencies = [
-    "kaleido!=0.2.1.post1",
-    "kaleido!=1.0.0",
-    "plotly~=5.0", # https://github.com/executablebooks/MyST-NB/issues/667
-]
