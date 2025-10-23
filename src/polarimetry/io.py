@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import warnings
 from typing import Any
 
 import jax
@@ -33,6 +34,11 @@ def display_doit(expr: sp.Expr, deep=False, terms_per_line: int | None = None) -
             environment="eqnarray",
         )
     display(Math(latex))
+
+
+def mute_ampform_warnings() -> None:
+    logging.getLogger("ampform.sympy._cache").setLevel(logging.ERROR)
+    warnings.filterwarnings("ignore", category=UserWarning, module="ampform_dpd.decay")
 
 
 def mute_jax_warnings() -> None:
