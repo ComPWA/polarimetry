@@ -36,9 +36,9 @@ def display_doit(expr: sp.Expr, deep=False, terms_per_line: int | None = None) -
 
 
 def mute_jax_warnings() -> None:
-    jax_logger = logging.getLogger("absl")
-    jax_logger = logging.getLogger("jax._src.lib.xla_bridge")
-    jax_logger.setLevel(logging.ERROR)
+    logging.getLogger("absl").setLevel(logging.ERROR)
+    logging.getLogger("jax._src.lib.xla_bridge").setLevel(logging.ERROR)
+    logging.getLogger("jax._src.xla_bridge").setLevel(logging.ERROR)
 
 
 def export_polarimetry_field(  # noqa: PLR0917
