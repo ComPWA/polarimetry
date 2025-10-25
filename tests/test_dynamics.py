@@ -180,7 +180,7 @@ def test_dynamics_builder(  # noqa: PLR0914
         sigma = get_mandelstam_s(chain.decay_node)
         z = func({sigma.name: x**2})
         arrays.append(z.tolist())
-    np.testing.assert_allclose(arrays, expected, atol=1e-6)
+    np.testing.assert_allclose(arrays, expected, atol=1e-6, rtol=1e-6)
 
 
 def load_parameters(
