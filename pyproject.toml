@@ -387,3 +387,6 @@ sort_first = [
 ]
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
+
+[tool.uv.sources]
+ampform-dpd = {git = "https://github.com/ComPWA/ampform-dpd", rev = "980d5ebbe80ffc0a891129615b14d60344adafd9"}

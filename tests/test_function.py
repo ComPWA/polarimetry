@@ -78,16 +78,16 @@ def test_interference_intensity(intensity_func: ParametrizedFunction, phsp: Data
     ]
     decay_rates = [float(v) for v in decay_rates_array]
     expected = [
-        -0.14700511274990016,
-        +0.04779050812786789,
-        -0.07778927301796905,
+        -0.14700511274989925,
+        +0.04779050812786767,
+        -0.07778927301796884,
     ]
     np.testing.assert_allclose(
         decay_rates,
         expected,
-        atol=1e-16,
+        atol=1e-15,
         err_msg=str(decay_rates),
-        rtol=1e-16,
+        rtol=1e-15,
     )
 
 

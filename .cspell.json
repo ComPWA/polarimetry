@@ -74,6 +74,7 @@
     "Sigmapi",
     "allclose",
     "astuple",
+    "atol",
     "avrgd",
     "axvline",
     "axvspan",

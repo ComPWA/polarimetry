@@ -5,15 +5,15 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import sympy as sp
+from ampform.dynamics.phasespace import BreakupMomentum
 from ampform_dpd.dynamics import (
     BlattWeisskopf,
     BreitWignerMinL,
     BuggBreitWigner,
     FlattéSWave,
-    Q,
 )
 from ampform_dpd.dynamics.builder import (
-    _get_angular_momentum,  # noqa: PLC2701  # pyright:ignore[reportPrivateUsage]s
+    _get_angular_momentum,  # noqa: PLC2701  # pyright:ignore[reportPrivateUsage]
     get_mandelstam_s,
 )
 
@@ -61,7 +61,7 @@ def formulate_exponential_bugg_breit_wigner(
     parameter_defaults[alpha] = sp.Rational(0)
     s = get_mandelstam_s(decay_chain.decay_node)
     m0, m1 = sp.symbols("m0 m1", nonnegative=True)
-    q = Q(s, m0, m1)
+    q = BreakupMomentum(m0**2, sp.sqrt(s), m1)
     expression *= sp.exp(-alpha * q**2)
     return expression, parameter_defaults
 
@@ -82,8 +82,8 @@ def formulate_flatte_1405(  # noqa: PLR0914
     mΣ = create_mass_symbol(Σ)
     l_prod = _get_angular_momentum(decay_chain.production_node)
     R_prod = create_meson_radius_symbol("prod")
-    q = Q(s, m_top, m_spec)
-    q0 = Q(m_res**2, m_top, m_spec)
+    q = BreakupMomentum(m_top**2, sp.sqrt(s), m_spec)
+    q0 = BreakupMomentum(m_top**2, m_res, m_spec)
     expression = sp.Mul(
         (q / q0) ** l_prod,
         BlattWeisskopf(q * R_prod, l_prod) / BlattWeisskopf(q0 * R_prod, l_prod),
