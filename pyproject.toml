@@ -33,7 +33,7 @@ dependencies = [
     "IPython",
     "PyYAML",
     "ampform >=0.15.7", # @unevaluated decorator, cached module
-    "ampform-dpd~=0.2.3", # cached module
+    "ampform-dpd~=0.2.4", # cached module
     "attrs >=20.1.0",
     "cairosvg",
     "matplotlib",
