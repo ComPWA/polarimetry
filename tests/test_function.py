@@ -77,11 +77,18 @@ def test_interference_intensity(intensity_func: ParametrizedFunction, phsp: Data
         I_LL / I_tot,
     ]
     decay_rates = [float(v) for v in decay_rates_array]
-    assert pytest.approx(decay_rates) == [
-        -0.147005113,
-        +0.047790508,
-        -0.077789273,
+    expected = [
+        -0.14700511274990016,
+        +0.04779050812786789,
+        -0.07778927301796905,
     ]
+    np.testing.assert_allclose(
+        decay_rates,
+        expected,
+        atol=1e-16,
+        err_msg=str(decay_rates),
+        rtol=1e-16,
+    )
 
 
 @pytest.mark.slow
