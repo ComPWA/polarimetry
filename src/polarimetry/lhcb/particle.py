@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from functools import cache
 from pathlib import Path
 from typing import Literal, TypedDict
 
@@ -11,6 +12,7 @@ from ampform_dpd.decay import Particle, State
 from attrs import astuple
 
 
+@cache
 def load_particles(filename: Path | str) -> dict[str, Particle]:
     """Load `~ampform_dpd.decay.Particle` definitions from a YAML file."""
     particle_definitions = _load_particles_json(filename)
