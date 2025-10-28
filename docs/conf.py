@@ -215,6 +215,9 @@ class MissingFileCollector:
 
 execute_pluto_notebooks()
 set_intersphinx_version_remapping({
+    "ampform": {
+        "0.15.11.dev20+g30a966bf9": "0.15.10",
+    },
     "ipywidgets": {
         "8.1.1": "8.1.2",
         "8.1.7": "8.1.5",

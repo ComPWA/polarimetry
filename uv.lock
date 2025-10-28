@@ -32,7 +32,7 @@ wheels = [
 
 [[package]]
 name = "ampform"
-version = "0.15.10"
+version = "0.15.11"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
@@ -40,9 +40,9 @@ dependencies = [
     { name = "qrules" },
     { name = "sympy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/91/be/2462c20e2fc5148b4f8864c8efc3c93b52f209e997db00fdf77c4e494810/ampform-0.15.10.tar.gz", hash = "sha256:5281a1bfad09c10f32dc654659abf970fdaa45d50666cf74009fa27485de1c05", size = 431447, upload-time = "2025-10-06T15:44:00.35Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c7/c3/6288de29431f46d730d0d2bc771a42bf68e1e947d636b8d931f5d4585c75/ampform-0.15.11.tar.gz", hash = "sha256:506ac63739e53ab0fe9c7306117852b53a2a2873cf673162c9ab694899ae4c2e", size = 401515, upload-time = "2025-10-29T12:51:58.829Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f2/e6/2c272f44cd6fc5a2c0f8e80f9cefdce274af285666e89070f21ea9d22499/ampform-0.15.10-py3-none-any.whl", hash = "sha256:672d06ac6c76b63c8afaf9db6d4eacd10c06fc6dda4fea9918d4970f1a37ac06", size = 89083, upload-time = "2025-10-06T15:43:58.887Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/fc/380fad7f18e911596e60e80047355f5ed3b683db1f4233eed5b13ebfb6a0/ampform-0.15.11-py3-none-any.whl", hash = "sha256:41b6818dd9b92980816a247abf85fcbef5b935b734ad3261623ce03b713d2ab6", size = 89680, upload-time = "2025-10-29T12:51:56.23Z" },
 ]
 
 [[package]]
@@ -3253,7 +3253,7 @@ types = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ampform", specifier = ">=0.15.7" },
+    { name = "ampform", specifier = ">=0.15.11" },
     { name = "ampform-dpd", git = "https://github.com/ComPWA/ampform-dpd?rev=980d5ebbe80ffc0a891129615b14d60344adafd9" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cairosvg" },

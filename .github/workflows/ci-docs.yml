@@ -109,7 +109,9 @@ jobs:
         uses: actions/cache@v4
         with:
           key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
-          restore-keys: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
+          restore-keys: |
+            output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
+            output-files
           path: |
             ./docs/_images
             ./docs/_static/export
