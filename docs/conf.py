@@ -215,9 +215,6 @@ class MissingFileCollector:
 
 execute_pluto_notebooks()
 set_intersphinx_version_remapping({
-    "ampform": {
-        "0.15.11.dev20+g30a966bf9": "0.15.10",
-    },
     "ipywidgets": {
         "8.1.1": "8.1.2",
         "8.1.7": "8.1.5",
@@ -246,6 +243,7 @@ api_target_substitutions = {
     "BuggBreitWigner": "ampform_dpd.dynamics.BuggBreitWigner",
     "DalitzPlotDecompositionBuilder": "ampform_dpd.DalitzPlotDecompositionBuilder",
     "DataSample": ("obj", "tensorwaves.interface.DataSample"),
+    "DefinedExpression": "ampform_dpd.DefinedExpression",
     "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
     "FlattéSWave": "ampform_dpd.dynamics.FlattéSWave",
     "Function": ("obj", "tensorwaves.interface.Function"),

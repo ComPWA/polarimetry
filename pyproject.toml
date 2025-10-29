@@ -33,7 +33,7 @@ dependencies = [
     "IPython",
     "PyYAML",
     "ampform >=0.15.11", # @unevaluated decorator, cached module, single-sqrt phsp factor
-    "ampform-dpd~=0.2.4", # cached module
+    "ampform-dpd ~=0.3.0", # cached module, DefinedExpression
     "attrs >=20.1.0",
     "cairosvg",
     "matplotlib",
@@ -387,6 +387,3 @@ sort_first = [
 ]
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
-
-[tool.uv.sources]
-ampform-dpd = {git = "https://github.com/ComPWA/ampform-dpd", rev = "980d5ebbe80ffc0a891129615b14d60344adafd9"}

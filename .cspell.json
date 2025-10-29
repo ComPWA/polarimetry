@@ -72,6 +72,7 @@
   "ignoreWords": [
     "Colab",
     "Sigmapi",
+    "SphericalHankel1",
     "allclose",
     "astuple",
     "atol",
