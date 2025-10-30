@@ -72,8 +72,10 @@
   "ignoreWords": [
     "Colab",
     "Sigmapi",
+    "SphericalHankel1",
     "allclose",
     "astuple",
+    "atol",
     "avrgd",
     "axvline",
     "axvspan",

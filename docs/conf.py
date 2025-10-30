@@ -243,6 +243,7 @@ api_target_substitutions = {
     "BuggBreitWigner": "ampform_dpd.dynamics.BuggBreitWigner",
     "DalitzPlotDecompositionBuilder": "ampform_dpd.DalitzPlotDecompositionBuilder",
     "DataSample": ("obj", "tensorwaves.interface.DataSample"),
+    "DefinedExpression": "ampform_dpd.DefinedExpression",
     "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
     "FlattéSWave": "ampform_dpd.dynamics.FlattéSWave",
     "Function": ("obj", "tensorwaves.interface.Function"),

@@ -119,7 +119,9 @@ def load_model(
     cleanup_summations: bool = False,
 ) -> AmplitudeModel:
     builder = load_model_builder(model_file, particle_definitions, model_id)
-    model = builder.formulate(cleanup_summations=cleanup_summations)
+    model = builder.formulate(
+        cleanup_summations=cleanup_summations, reference_subsystem=1
+    )
     imported_parameter_values = load_model_parameters(
         model_file, builder.decay, model_id, particle_definitions
     )
