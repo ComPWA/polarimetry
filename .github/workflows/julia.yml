@@ -33,7 +33,7 @@ jobs:
     name: Run scripts
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Extract locked Julia version
         id: extract-version
         run: |
@@ -43,7 +43,7 @@ jobs:
         with:
           version: ${{ steps.extract-version.outputs.version }}
       - name: Fetch Julia cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           key: |
             julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
