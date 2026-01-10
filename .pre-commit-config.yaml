@@ -4,7 +4,6 @@ ci:
   autoupdate_schedule: quarterly # already done by requirements-cron.yml
   skip:
     - check-jsonschema
-    - mypy
     - pyright
     - uv-lock
 
@@ -131,16 +130,6 @@ repos:
           (?x)^(
             .*\.py
           )$
-
-  - repo: local
-    hooks:
-      - id: mypy
-        name: mypy
-        entry: mypy
-        language: system
-        require_serial: true
-        types:
-          - python
 
   - repo: https://github.com/ComPWA/pyright-pre-commit
     rev: v1.1.407
