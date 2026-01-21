@@ -76,15 +76,15 @@ doc = [
     "sphinxcontrib-svg2pdfconverter",
 ]
 jupyter = [
+    "jupyter-ruff",
     "jupyterlab",
-    "jupyterlab-code-formatter",
     "jupyterlab-execute-time",
     "jupyterlab-git",
     "jupyterlab-lsp",
     "jupyterlab-myst",
     "jupyterlab-quickopen",
     "python-lsp-ruff",
-    "python-lsp-server[rope]",
+    "python-lsp-server",
     {include-group = "notebooks"},
 ]
 notebooks = [
@@ -105,6 +105,7 @@ notebooks = [
     "uproot",
 ]
 style = [
+    "ty",
     {include-group = "types"},
 ]
 test = ["pytest"]
@@ -135,38 +136,7 @@ where = ["src"]
 [tool.setuptools_scm]
 write_to = "src/polarimetry/version.py"
 
-[tool.pyright]
-include = ["src", "tests"]
-reportArgumentType = false
-reportAssignmentType = false
-reportAttributeAccessIssue = false
-reportCallIssue = true
-reportGeneralTypeIssues = false
-reportImportCycles = true
-reportMissingParameterType = false
-reportMissingTypeArgument = false
-reportMissingTypeStubs = false
-reportOperatorIssue = false
-reportPrivateImportUsage = false
-reportReturnType = false
-reportUnknownArgumentType = false
-reportUnknownLambdaType = false
-reportUnknownMemberType = false
-reportUnknownParameterType = false
-reportUnknownVariableType = false
-reportUnnecessaryContains = true
-reportUnnecessaryIsInstance = false
-reportUntypedBaseClass = false
-reportUntypedFunctionDecorator = false
-reportUnusedClass = true
-reportUnusedFunction = true
-reportUnusedImport = true
-reportUnusedVariable = true
-typeCheckingMode = "strict"
-venv = ".venv"
-venvPath = "."
-
-[tool.pytest.ini_options]
+[tool.pytest]
 addopts = [
     "--color=yes",
     "--doctest-continue-on-failure",
@@ -175,6 +145,7 @@ addopts = [
     "--ignore-glob=.virtual_documents",
     "--ignore=docs/appendix/widget.ipynb",
     "--ignore=docs/conf.py",
+    "--import-mode=importlib",
     "-m not slow",
 ]
 filterwarnings = [
@@ -184,6 +155,7 @@ filterwarnings = [
     "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
 markers = ["slow: marks tests as slow (select with '-m slow')"]
+minversion = "9.0"
 norecursedirs = [
     ".ipynb_checkpoints",
     "_build",
@@ -240,6 +212,7 @@ ignore = [
     "PT001",
     "PTH",
     "RUF001",
+    "RUF067",
     "S403",
     "SIM108",
 ]
@@ -257,6 +230,7 @@ allow-dict-calls-with-keyword-arguments = true
 ban-relative-imports = "all"
 
 [tool.ruff.lint.isort]
+known-first-party = ["polarimetry"]
 known-third-party = ["sympy"]
 split-on-trailing-comma = false
 
@@ -296,7 +270,6 @@ ignore-names = [
     "E703",
     "E741",
     "N8",
-    "PGH001",
     "PLC2701",
     "PLR09",
     "PLW0602",
@@ -336,7 +309,6 @@ ignore-names = [
     "D",
     "INP001",
     "N806",
-    "PGH001",
     "PLC2701",
     "PLR6301",
     "S101",
@@ -359,3 +331,14 @@ sort_first = [
 ]
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
+
+[tool.ty.rules]
+division-by-zero = "warn"
+possibly-missing-import = "warn"
+possibly-unresolved-reference = "warn"
+
+[tool.uv.sources]
+ampform = {git = "https://github.com/ComPWA/ampform", rev = "fc1d4e2920954738bb6620905f0de0a73a5a93cd"}
+ampform-dpd = {git = "https://github.com/ComPWA/ampform-dpd", rev = "0bf986807a349b0e656ee43f4f2ec63627cfbf2d"}
+qrules = {git = "https://github.com/ComPWA/qrules", rev = "33be556be51fff52869034327bcf6157eb6cf726"}
+tensorwaves = {git = "https://github.com/ComPWA/tensorwaves", rev = "916cf9202569ad5503eb1fb04e129ae0a6d8120d"}

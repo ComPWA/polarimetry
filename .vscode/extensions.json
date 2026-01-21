@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "astral-sh.ty",
     "charliermarsh.ruff",
     "eamodio.gitlens",
     "editorconfig.editorconfig",
@@ -25,7 +26,6 @@
     "yzhang.markdown-all-in-one"
   ],
   "unwantedRecommendations": [
-    "astral-sh.ty",
     "bungcip.better-toml",
     "davidanson.vscode-markdownlint",
     "garaioag.garaio-vscode-unwanted-recommendations",
