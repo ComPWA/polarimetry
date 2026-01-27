@@ -1,6 +1,4 @@
 # cspell:ignore bibtex latexcodec pybtex sphinxcontrib ulatex
-# pyright: reportMissingImports=false
-# pyright: reportMissingModuleSource=false
 """Enable math mode in `sphinxcontrib-bibtex`.
 
 .. note:: The source code below is inspired by
@@ -13,7 +11,6 @@ import codecs
 from typing import TYPE_CHECKING
 
 import docutils.nodes
-import latexcodec  # pyright:ignore[reportUnusedImport]  # noqa: F401
 from pybtex.markup import LaTeXParser
 from pybtex.richtext import Protected, String, Text
 from pybtex.scanner import Literal, PybtexSyntaxError
@@ -24,18 +21,18 @@ if TYPE_CHECKING:
 
 
 def setup(app: Sphinx) -> None:
-    Text.from_latex = _patch_from_latex
-    if Backend.default_suffix != ".txt":  # pyright:ignore[reportUnnecessaryComparison]
-        Backend.format_math = _patch_format_math
+    Text.from_latex = _patch_from_latex  # ty:ignore[invalid-assignment]
+    if Backend.default_suffix != ".txt":
+        Backend.format_math = _patch_format_math  # ty:ignore[unresolved-attribute]
 
 
-@classmethod  # type:ignore[misc]
+@classmethod
 def _patch_from_latex(cls, latex: str) -> LaTeXMathParser:
-    return LaTeXMathParser(codecs.decode(latex, "ulatex")).parse()  # type:ignore[call-overload]  # pyright:ignore[reportCallIssue]
+    return LaTeXMathParser(codecs.decode(latex, "ulatex")).parse()  # ty:ignore[no-matching-overload]
 
 
 def _patch_format_math(self, text: list[Text]) -> list[docutils.nodes.math]:
-    return [docutils.nodes.math("", "", *text)]
+    return [docutils.nodes.math("", "", *text)]  # ty:ignore[invalid-argument-type]
 
 
 class Math(Protected):

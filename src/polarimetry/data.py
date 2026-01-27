@@ -25,7 +25,7 @@ def create_data_transformer(
     model: AmplitudeModel, backend: str = "jax"
 ) -> SympyDataTransformer:
     kinematic_variables = {
-        symbol: expression.doit().subs(model.parameter_defaults)  # pyright:ignore[reportCallIssue]
+        symbol: expression.doit().subs(model.parameter_defaults)
         for symbol, expression in model.variables.items()
     }
     identity_mapping = {s: s for s in sp.symbols("sigma1:4", nonnegative=True)}
@@ -114,7 +114,7 @@ def compute_dalitz_boundaries(
     decay: ThreeBodyDecay,
 ) -> tuple[tuple[float, float], tuple[float, float], tuple[float, float]]:
     m0, m1, m2, m3 = create_mass_symbol_mapping(decay).values()
-    return (  # type:ignore[return-value]
+    return (
         ((m2 + m3) ** 2, (m0 - m1) ** 2),
         ((m3 + m1) ** 2, (m0 - m2) ** 2),
         ((m1 + m2) ** 2, (m0 - m3) ** 2),

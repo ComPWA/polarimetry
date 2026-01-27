@@ -277,7 +277,7 @@ def test_dynamics_builder(  # noqa: PLR0914
         dynamics = dynamics_builder(chain)
         func = create_parametrized_function(
             dynamics.expression.doit(),
-            parameters=dynamics.parameters | parameter_defaults,
+            parameters=dynamics.parameters | parameter_defaults,  # ty:ignore[invalid-argument-type]
             backend="jax",
         )
         child1, child2 = chain.decay_products
@@ -302,4 +302,4 @@ def load_parameters(
         filename=REPO_DIR / "data/model-definitions.yaml",
         model_id=model_id,
         particle_definitions=particles,
-    )
+    )  # ty:ignore[invalid-return-type]

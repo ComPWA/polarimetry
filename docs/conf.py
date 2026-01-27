@@ -248,7 +248,7 @@ api_target_substitutions = {
     "FlattéSWave": "ampform_dpd.dynamics.FlattéSWave",
     "Function": ("obj", "tensorwaves.interface.Function"),
     "implement_doit_method": "ampform.sympy.implement_doit_method",
-    "jnp.ndarray": "jax.Array",
+    "jnp.ndarray": "jnp.ndarray",
     "LineCollection": "matplotlib.collections.LineCollection",
     "LineshapeName": ("obj", "polarimetry.lhcb.LineshapeName"),
     "Literal[- 1, 1]": "typing.Literal",

@@ -53,7 +53,7 @@ def _to_jp_pair(input_str: str) -> tuple[sp.Rational, Literal[-1, 1]]:
     (0, 1)
     """
     spin, parity_sign = input_str.split("^")
-    return sp.Rational(spin), int(f"{parity_sign}1")  # type:ignore[return-value]
+    return sp.Rational(spin), int(f"{parity_sign}1")  # ty:ignore[invalid-return-type]
 
 
 def _average_float(input_str: float | str) -> float:
@@ -78,7 +78,7 @@ class ResonanceJSON(TypedDict):
 
 
 def __particle_to_state(particle: Particle, index: int) -> State:
-    return State(*astuple(particle), index)  # type:ignore[call-arg]  # pyright:ignore[reportCallIssue]
+    return State(*astuple(particle), index)  # ty:ignore[too-many-positional-arguments]
 
 
 __PARTICLE_DATABASE = load_particles(

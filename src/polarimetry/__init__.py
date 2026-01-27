@@ -13,12 +13,12 @@ from sympy.physics.matrices import msigma
 from polarimetry.lhcb import (
     ModelDefinition,
     ModelName,
-    _load_model_definitions,  # pyright: ignore[reportPrivateUsage]
+    _load_model_definitions,
     load_model,
 )
 from polarimetry.lhcb.particle import (
     ResonanceJSON,
-    _load_particles_json,  # pyright: ignore[reportPrivateUsage]
+    _load_particles_json,
     load_particles,
 )
 
@@ -46,9 +46,9 @@ def formulate_polarimetry(
     ref = reference_subsystem
     return tuple(
         PoolSum(
-            builder.formulate_aligned_amplitude(λ0, *λ, ref)[0].conjugate()  # type:ignore[arg-type,call-arg]  # pyright:ignore[reportCallIssue]
+            builder.formulate_aligned_amplitude(λ0, *λ, ref)[0].conjugate()  # ty:ignore[invalid-argument-type, too-many-positional-arguments]
             * pauli_matrix[_to_index(λ0), _to_index(λ0_prime)]
-            * builder.formulate_aligned_amplitude(λ0_prime, *λ, ref)[0],  # type:ignore[arg-type,call-arg]  # pyright:ignore[reportCallIssue]
+            * builder.formulate_aligned_amplitude(λ0_prime, *λ, ref)[0],  # ty:ignore[invalid-argument-type, too-many-positional-arguments]
             (λ0, [-half, +half]),
             (λ0_prime, [-half, +half]),
             *λ.items(),

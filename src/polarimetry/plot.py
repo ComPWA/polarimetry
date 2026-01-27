@@ -32,7 +32,7 @@ def get_contour_line(contour_set: QuadContourSet) -> Artist:
     return line_collection
 
 
-def reduce_svg_size(path: str) -> None:
+def reduce_svg_size(path: str | Path) -> None:
     input_path = Path(path)
     output_path = input_path.parent / f"optimized-{input_path.name}"
     try:

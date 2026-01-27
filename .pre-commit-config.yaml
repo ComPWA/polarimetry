@@ -13,7 +13,7 @@ repos:
       - id: check-useless-excludes
 
   - repo: https://github.com/ComPWA/policy
-    rev: 03b20f409821a637c6bd96c715cdc940d82bd46c
+    rev: 0.8.2rc12
     hooks:
       - id: check-dev-files
         args:
@@ -136,6 +136,7 @@ repos:
         name: ty
         entry: ty check
         args: [--no-progress, --output-format=concise]
+        pass_filenames: false
         require_serial: true
         language: system
         types_or: [python, pyi, jupyter]
