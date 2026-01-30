@@ -3339,13 +3339,11 @@ dev = [
     { name = "kaleido" },
     { name = "matplotlib-inline" },
     { name = "myst-nb" },
-    { name = "nbformat" },
     { name = "nbmake" },
     { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "pandas", version = "3.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "plotly" },
     { name = "psutil" },
-    { name = "pybtex-docutils" },
     { name = "pytest" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server" },
@@ -3369,7 +3367,6 @@ dev = [
     { name = "svgutils" },
     { name = "tqdm" },
     { name = "ty" },
-    { name = "types-docutils" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
     { name = "unicodeitplus" },
@@ -3436,12 +3433,9 @@ notebooks = [
     { name = "uproot" },
 ]
 style = [
-    { name = "nbformat" },
-    { name = "pybtex-docutils" },
     { name = "pytest" },
     { name = "sphinx-api-relink" },
     { name = "ty" },
-    { name = "types-docutils" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
 ]
@@ -3449,11 +3443,8 @@ test = [
     { name = "pytest" },
 ]
 types = [
-    { name = "nbformat" },
-    { name = "pybtex-docutils" },
     { name = "pytest" },
     { name = "sphinx-api-relink" },
-    { name = "types-docutils" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
 ]
@@ -3490,12 +3481,10 @@ dev = [
     { name = "kaleido", specifier = "~=0.1,!=0.2.1.post1" },
     { name = "matplotlib-inline" },
     { name = "myst-nb" },
-    { name = "nbformat" },
     { name = "nbmake" },
     { name = "pandas" },
     { name = "plotly", specifier = "~=5.0" },
     { name = "psutil" },
-    { name = "pybtex-docutils" },
     { name = "pytest" },
     { name = "python-lsp-ruff" },
     { name = "python-lsp-server" },
@@ -3507,7 +3496,7 @@ dev = [
     { name = "sphinx-codeautolink", extras = ["ipython"] },
     { name = "sphinx-copybutton" },
     { name = "sphinx-design" },
-    { name = "sphinx-pybtex-etal-style" },
+    { name = "sphinx-pybtex-etal-style", git = "https://github.com/ComPWA/sphinx-pybtex-etal-style?rev=763f4d99a68a1789689c5a4f60ee86498f92ed31" },
     { name = "sphinx-reredirects" },
     { name = "sphinx-togglebutton" },
     { name = "sphinxcontrib-bibtex", specifier = ">=2.2" },
@@ -3515,7 +3504,6 @@ dev = [
     { name = "svgutils" },
     { name = "tqdm" },
     { name = "ty" },
-    { name = "types-docutils" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
     { name = "unicodeitplus" },
@@ -3528,7 +3516,7 @@ doc = [
     { name = "sphinx-codeautolink", extras = ["ipython"] },
     { name = "sphinx-copybutton" },
     { name = "sphinx-design" },
-    { name = "sphinx-pybtex-etal-style" },
+    { name = "sphinx-pybtex-etal-style", git = "https://github.com/ComPWA/sphinx-pybtex-etal-style?rev=763f4d99a68a1789689c5a4f60ee86498f92ed31" },
     { name = "sphinx-reredirects" },
     { name = "sphinx-togglebutton" },
     { name = "sphinxcontrib-bibtex", specifier = ">=2.2" },
@@ -3578,22 +3566,16 @@ notebooks = [
     { name = "uproot" },
 ]
 style = [
-    { name = "nbformat" },
-    { name = "pybtex-docutils" },
     { name = "pytest" },
     { name = "sphinx-api-relink", git = "https://github.com/ComPWA/sphinx-api-relink?rev=5e18cb0981eb31680926bdb6511078f4308f38e0" },
     { name = "ty" },
-    { name = "types-docutils" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
 ]
 test = [{ name = "pytest" }]
 types = [
-    { name = "nbformat" },
-    { name = "pybtex-docutils" },
     { name = "pytest" },
     { name = "sphinx-api-relink", git = "https://github.com/ComPWA/sphinx-api-relink?rev=5e18cb0981eb31680926bdb6511078f4308f38e0" },
-    { name = "types-docutils" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
 ]
@@ -4733,14 +4715,10 @@ wheels = [
 
 [[package]]
 name = "sphinx-pybtex-etal-style"
-version = "0.0.3"
-source = { registry = "https://pypi.org/simple" }
+version = "0.0.4.dev11+g763f4d99a"
+source = { git = "https://github.com/ComPWA/sphinx-pybtex-etal-style?rev=763f4d99a68a1789689c5a4f60ee86498f92ed31#763f4d99a68a1789689c5a4f60ee86498f92ed31" }
 dependencies = [
     { name = "pybtex" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/05/cb/c75d1173988344a5fabd9dbeea742e4a8c452953e68f1c25d844733b62a6/sphinx_pybtex_etal_style-0.0.3.tar.gz", hash = "sha256:e43beb55bc33f01d9b4d0ac90b20ad1d7209238d993d3256a973946aeeece262", size = 11855, upload-time = "2024-10-29T10:58:09.749Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a3/4d/8beb18b2cf347e152899a1a595f85049d691fbcd9a60e38756144742ca8f/sphinx_pybtex_etal_style-0.0.3-py3-none-any.whl", hash = "sha256:51170abd9fcf5ba5d09ffb890c1b722448d8d185b9b9b5a2feb869c57256f2ff", size = 6032, upload-time = "2024-10-29T10:58:07.973Z" },
 ]
 
 [[package]]
@@ -5178,15 +5156,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/08/d5/655beb51224d1bfd4f9ddc0bb209659bfe71ff141bcf05c418ab670698f0/ty-0.0.14-py3-none-win32.whl", hash = "sha256:b20e22cf54c66b3e37e87377635da412d9a552c9bf4ad9fc449fed8b2e19dad2", size = 9507626, upload-time = "2026-01-27T00:57:41.43Z" },
     { url = "https://files.pythonhosted.org/packages/b6/d9/c569c9961760e20e0a4bc008eeb1415754564304fd53997a371b7cf3f864/ty-0.0.14-py3-none-win_amd64.whl", hash = "sha256:e312ff9475522d1a33186657fe74d1ec98e4a13e016d66f5758a452c90ff6409", size = 10437980, upload-time = "2026-01-27T00:57:36.422Z" },
     { url = "https://files.pythonhosted.org/packages/ad/0c/186829654f5bfd9a028f6648e9caeb11271960a61de97484627d24443f91/ty-0.0.14-py3-none-win_arm64.whl", hash = "sha256:b6facdbe9b740cb2c15293a1d178e22ffc600653646452632541d01c36d5e378", size = 9885831, upload-time = "2026-01-27T00:57:49.747Z" },
-]
-
-[[package]]
-name = "types-docutils"
-version = "0.22.3.20251115"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/eb/d7/576ec24bf61a280f571e1f22284793adc321610b9bcfba1bf468cf7b334f/types_docutils-0.22.3.20251115.tar.gz", hash = "sha256:0f79ea6a7bd4d12d56c9f824a0090ffae0ea4204203eb0006392906850913e16", size = 56828, upload-time = "2025-11-15T02:59:57.371Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9c/01/61ac9eb38f1f978b47443dc6fd2e0a3b0f647c2da741ddad30771f1b2b6f/types_docutils-0.22.3.20251115-py3-none-any.whl", hash = "sha256:c6e53715b65395d00a75a3a8a74e352c669bc63959e65a207dffaa22f4a2ad6e", size = 91951, upload-time = "2025-11-15T02:59:56.413Z" },
 ]
 
 [[package]]

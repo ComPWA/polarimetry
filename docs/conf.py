@@ -17,8 +17,6 @@ from sphinx_api_relink.helpers import (
     set_intersphinx_version_remapping,
 )
 
-sys.path.insert(0, os.path.abspath("extensions"))
-
 
 def download_paper_figures() -> str:
     figures = {
@@ -310,6 +308,7 @@ bibtex_bibfiles = [
     "_static/references.bib",
 ]
 bibtex_default_style = "unsrt_et_al"
+bibtex_use_mathjax = True
 codeautolink_concat_default = True
 copyright = "2023"
 default_role = "py:obj"
@@ -337,7 +336,6 @@ extensions = [
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
     "sphinxcontrib.inkscapeconverter",
-    "support_bibtex_math",
 ]
 generate_apidoc_package_path = f"../src/{PACKAGE_NAME}"
 html_css_files = [
