@@ -5322,7 +5322,7 @@ wheels = [
 
 [[package]]
 name = "uproot"
-version = "5.7.0"
+version = "5.7.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "awkward" },
@@ -5334,9 +5334,9 @@ dependencies = [
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
     { name = "xxhash" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/47/2d/9b439eb20fe1d78c7b2577cccbc444d26a0b94700eed73beda0c11e4e254/uproot-5.7.0.tar.gz", hash = "sha256:726a01604979dc590af044cf20c945100dd3b65c7c8ad10731e8bb089b834f2a", size = 995669, upload-time = "2026-01-25T14:38:59.986Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/50/21/5f5959abf092d74b4cf43182e169d86c994f8080cb1902156fb1f2822a22/uproot-5.7.1.tar.gz", hash = "sha256:52fc757de1278959b1ff48a9ec4640f57c937cd1870a2f4fe047eacd9e8d5535", size = 995970, upload-time = "2026-01-30T18:58:52.921Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8e/34/bdd97b07ed2f0a4f60e6dccd3ca693b50a21d1af7bcbb28851d7ec403e00/uproot-5.7.0-py3-none-any.whl", hash = "sha256:383a644f23a19609f108ae33dde597fbdcc0bf052ff84444ab8edb50f33211f3", size = 393726, upload-time = "2026-01-25T14:38:57.679Z" },
+    { url = "https://files.pythonhosted.org/packages/32/0b/234b7f23909ae6e9df4c88f10fbfe585c03d769fe69fa4baae71165fe4ed/uproot-5.7.1-py3-none-any.whl", hash = "sha256:3ae06f307d49c32fbf40a42bbf4f3b6ec182f6ba2d6abe18f37e40161e10f0da", size = 393790, upload-time = "2026-01-30T18:58:51.312Z" },
 ]
 
 [[package]]
