@@ -11,6 +11,7 @@ import codecs
 from typing import TYPE_CHECKING
 
 import docutils.nodes
+import latexcodec  # noqa: F401
 from pybtex.markup import LaTeXParser
 from pybtex.richtext import Protected, String, Text
 from pybtex.scanner import Literal, PybtexSyntaxError

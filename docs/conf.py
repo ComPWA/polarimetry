@@ -215,13 +215,16 @@ class MissingFileCollector:
 
 execute_pluto_notebooks()
 set_intersphinx_version_remapping({
+    "ampform": {r"0.15.12\.dev.*": "0.15.11"},
     "ipywidgets": {
         "8.1.1": "8.1.2",
         "8.1.7": "8.1.5",
+        "8.1.8": "8.1.5",
     },
     "matplotlib": {
         "3.9.1.post1": "3.9.1",
     },
+    "tensorwaves": {r"0.4.15\.dev.*": "0.4.14"},
 })
 
 MISSING_FILES = MissingFileCollector()
