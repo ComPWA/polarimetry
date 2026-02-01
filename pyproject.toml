@@ -106,6 +106,7 @@ notebooks = [
 ]
 style = [
     "ty",
+    {include-group = "notebooks"},
     {include-group = "types"},
 ]
 test = ["pytest"]
