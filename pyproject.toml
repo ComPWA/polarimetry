@@ -392,6 +392,7 @@ rules.invalid-argument-type = "ignore"
 rules.invalid-return-type = "ignore"
 rules.possibly-unresolved-reference = "ignore"
 rules.unresolved-attribute = "ignore"
+rules.unsupported-operator = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/resonance-polarimetry.ipynb"]

@@ -249,7 +249,7 @@ api_target_substitutions = {
     "FlattéSWave": "ampform_dpd.dynamics.FlattéSWave",
     "Function": ("obj", "tensorwaves.interface.Function"),
     "implement_doit_method": "ampform.sympy.implement_doit_method",
-    "jnp.ndarray": "jnp.ndarray",
+    "jnp.ndarray": "jax.Array",
     "LineCollection": "matplotlib.collections.LineCollection",
     "LineshapeName": ("obj", "polarimetry.lhcb.LineshapeName"),
     "Literal[- 1, 1]": "typing.Literal",
@@ -270,6 +270,7 @@ api_target_substitutions = {
     "QuadContourSet": "matplotlib.contour.QuadContourSet",
     "ResonanceName": ("obj", "polarimetry.lhcb.ResonanceName"),
     "sp.acos": "sympy.functions.elementary.trigonometric.acos",
+    "sp.Basic": "sympy.core.basic.Basic",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
     "sp.Mul": "sympy.core.mul.Mul",
@@ -466,6 +467,7 @@ linkcheck_ignore = [
     "https://indico.cern.ch/event/1187317",
     "https://indico.cern.ch/event/1242323",
     "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033",
+    "https://twiki.cern.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi",
     "https://www.bookfinder.com",
 ]
 myst_enable_extensions = [
