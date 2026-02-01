@@ -17,11 +17,6 @@ on:
       - epic/*
       - "[0-9]+.[0-9]+.x"
   workflow_dispatch:
-    inputs:
-      specific-pip-packages:
-        description: Run CI with specific pip packages
-        required: false
-        type: string
 
 jobs:
   doc:
@@ -31,14 +26,11 @@ jobs:
       id-token: write
     secrets:
       token: ${{ secrets.PAT }}
-    with:
-      specific-pip-packages: ${{ inputs.specific-pip-packages }}
-  pytest:
-    uses: ComPWA/actions/.github/workflows/test.yml@v4
-    with:
-      multithreaded: false
   style:
-    if: inputs.specific-pip-packages == ''
     secrets:
       token: ${{ secrets.PAT }}
-    uses: ComPWA/actions/.github/workflows/pre-commit.yml@v4
+    uses: ComPWA/actions/.github/workflows/pre-commit.yml@v4.0
+  test:
+    uses: ComPWA/actions/.github/workflows/test.yml@v4.0
+    with:
+      multithreaded: false
