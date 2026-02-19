@@ -76,15 +76,15 @@ doc = [
     "sphinxcontrib-svg2pdfconverter",
 ]
 jupyter = [
+    "jupyter-ruff",
     "jupyterlab",
-    "jupyterlab-code-formatter",
     "jupyterlab-execute-time",
     "jupyterlab-git",
     "jupyterlab-lsp",
     "jupyterlab-myst",
     "jupyterlab-quickopen",
     "python-lsp-ruff",
-    "python-lsp-server[rope]",
+    "python-lsp-server",
     {include-group = "notebooks"},
 ]
 notebooks = [
@@ -105,17 +105,15 @@ notebooks = [
     "uproot",
 ]
 style = [
-    "mypy",
+    "ty",
+    {include-group = "notebooks"},
     {include-group = "types"},
 ]
 test = ["pytest"]
 types = [
-    "nbformat",
-    "pybtex-docutils",
     "pytest",
     "sphinx-api-relink",
     "types-PyYAML",
-    "types-docutils",
     "types-requests",
 ]
 
@@ -136,65 +134,7 @@ where = ["src"]
 [tool.setuptools_scm]
 write_to = "src/polarimetry/version.py"
 
-[tool.mypy]
-exclude = "_build"
-show_error_codes = true
-warn_unused_configs = true
-
-[[tool.mypy.overrides]]
-ignore_missing_imports = true
-module = ["cairosvg"]
-
-[[tool.mypy.overrides]]
-ignore_missing_imports = true
-module = ["latexcodec.*"]
-
-[[tool.mypy.overrides]]
-ignore_missing_imports = true
-module = ["sympy.*"]
-
-[[tool.mypy.overrides]]
-ignore_missing_imports = true
-module = ["pybtex.*"]
-
-[[tool.mypy.overrides]]
-check_untyped_defs = true
-disallow_incomplete_defs = false
-disallow_untyped_defs = false
-module = ["tests.*"]
-
-[tool.pyright]
-include = ["src", "tests"]
-reportArgumentType = false
-reportAssignmentType = false
-reportAttributeAccessIssue = false
-reportCallIssue = true
-reportGeneralTypeIssues = false
-reportImportCycles = true
-reportMissingParameterType = false
-reportMissingTypeArgument = false
-reportMissingTypeStubs = false
-reportOperatorIssue = false
-reportPrivateImportUsage = false
-reportReturnType = false
-reportUnknownArgumentType = false
-reportUnknownLambdaType = false
-reportUnknownMemberType = false
-reportUnknownParameterType = false
-reportUnknownVariableType = false
-reportUnnecessaryContains = true
-reportUnnecessaryIsInstance = false
-reportUntypedBaseClass = false
-reportUntypedFunctionDecorator = false
-reportUnusedClass = true
-reportUnusedFunction = true
-reportUnusedImport = true
-reportUnusedVariable = true
-typeCheckingMode = "strict"
-venv = ".venv"
-venvPath = "."
-
-[tool.pytest.ini_options]
+[tool.pytest]
 addopts = [
     "--color=yes",
     "--doctest-continue-on-failure",
@@ -203,6 +143,7 @@ addopts = [
     "--ignore-glob=.virtual_documents",
     "--ignore=docs/appendix/widget.ipynb",
     "--ignore=docs/conf.py",
+    "--import-mode=importlib",
     "-m not slow",
 ]
 filterwarnings = [
@@ -212,10 +153,10 @@ filterwarnings = [
     "ignore:the imp module is deprecated in favour of importlib.*:DeprecationWarning",
 ]
 markers = ["slow: marks tests as slow (select with '-m slow')"]
+minversion = "9.0"
 norecursedirs = [
     ".ipynb_checkpoints",
     "_build",
-    "docs/extensions",
 ]
 testpaths = [
     "src",
@@ -268,6 +209,7 @@ ignore = [
     "PT001",
     "PTH",
     "RUF001",
+    "RUF067",
     "S403",
     "SIM108",
 ]
@@ -285,6 +227,7 @@ allow-dict-calls-with-keyword-arguments = true
 ban-relative-imports = "all"
 
 [tool.ruff.lint.isort]
+known-first-party = ["polarimetry"]
 known-third-party = ["sympy"]
 split-on-trailing-comma = false
 
@@ -324,11 +267,11 @@ ignore-names = [
     "E703",
     "E741",
     "N8",
-    "PGH001",
     "PLC2701",
     "PLR09",
     "PLW0602",
     "PLW0603",
+    "RUF069",
     "S101",
     "S102",
     "S301",
@@ -338,7 +281,6 @@ ignore-names = [
     "TC00",
 ]
 "**/benchmark.ipynb" = ["F821"]
-"**/extensions/*.py" = ["ARG001"]
 "**/polarimetry.ipynb" = ["SLF001"]
 "**/uncertainties.ipynb" = ["ARG001"]
 "**/widget.ipynb" = ["ARG001"]
@@ -350,11 +292,11 @@ ignore-names = [
     "S310",
 ]
 "docs/conf.py" = [
-    "A00",
+    "A001",
     "D100",
     "DTZ005",
     "S404",
-    "S60",
+    "S602",
     "T201",
 ]
 "src/polarimetry/io.py" = ["S301"] # pickle
@@ -364,9 +306,9 @@ ignore-names = [
     "D",
     "INP001",
     "N806",
-    "PGH001",
     "PLC2701",
     "PLR6301",
+    "RUF069",
     "S101",
     "SLF001",
     "T20",
@@ -387,3 +329,88 @@ sort_first = [
 ]
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
+
+[[tool.ty.overrides]]
+include = ["docs/amplitude-model.ipynb"]
+rules.invalid-argument-type = "ignore"
+rules.unresolved-attribute = "ignore"
+rules.unsupported-operator = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/appendix/alignment.ipynb"]
+rules.possibly-unresolved-reference = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/appendix/benchmark.ipynb"]
+rules.invalid-argument-type = "ignore"
+rules.unresolved-reference = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/cross-check.ipynb"]
+rules.call-non-callable = "ignore"
+rules.invalid-argument-type = "ignore"
+rules.possibly-missing-attribute = "ignore"
+rules.unresolved-attribute = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/appendix/dynamics.ipynb"]
+rules.invalid-argument-type = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/appendix/ls-model.ipynb"]
+rules.invalid-argument-type = "ignore"
+rules.unresolved-attribute = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/appendix/model-serialization.ipynb"]
+rules.invalid-argument-type = "ignore"
+rules.unresolved-attribute = "ignore"
+rules.unresolved-reference = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/appendix/pc-pv-currents.ipynb"]
+rules.invalid-argument-type = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/appendix/serialization.ipynb"]
+rules.invalid-argument-type = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/index.ipynb"]
+rules.unresolved-attribute = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/appendix/widget.ipynb"]
+rules.no-matching-overload = "ignore"
+rules.possibly-unresolved-reference = "ignore"
+rules.unresolved-attribute = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/intensity.ipynb"]
+rules.unresolved-attribute = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/uncertainties.ipynb"]
+rules.invalid-argument-type = "ignore"
+rules.invalid-return-type = "ignore"
+rules.possibly-unresolved-reference = "ignore"
+rules.unresolved-attribute = "ignore"
+rules.unsupported-operator = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/resonance-polarimetry.ipynb"]
+rules.invalid-return-type = "ignore"
+
+[[tool.ty.overrides]]
+include = ["docs/zz.polarization-fit.ipynb"]
+rules.invalid-argument-type = "ignore"
+rules.invalid-assignment = "ignore"
+rules.invalid-return-type = "ignore"
+
+[tool.ty.rules]
+division-by-zero = "warn"
+possibly-missing-import = "warn"
+possibly-unresolved-reference = "warn"
+
+[tool.ty.terminal]
+error-on-warning = true

@@ -1,7 +1,4 @@
 {
-  "[dockerfile]": {
-    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
-  },
   "[git-commit]": {
     "editor.rulers": [72],
     "rewrap.wrappingColumn": 72
@@ -37,7 +34,7 @@
   "diffEditor.experimental.showMoves": true,
   "editor.formatOnSave": true,
   "editor.unicodeHighlight.allowedCharacters": {
-    "\u03c3": true
+    "σ": true
   },
   "files.associations": {
     "**/pixi.lock": "yaml",
@@ -46,19 +43,16 @@
   "files.eol": "\n",
   "github-actions.workflows.pinned.workflows": [".github/workflows/ci.yml"],
   "gitlens.telemetry.enabled": false,
+  "julia.NumThreads": "auto",
   "julia.environmentPath": "${workspaceFolder}/julia",
   "julia.executablePath": "${workspaceFolder}/.pixi/envs/default/bin/julia",
-  "julia.NumThreads": "auto",
   "livePreview.defaultPreviewPath": "docs/_build/html",
   "multiDiffEditor.experimental.enabled": true,
-  "mypy-type-checker.args": ["--config-file=${workspaceFolder}/pyproject.toml"],
   "notebook.codeActionsOnSave": {
     "notebook.source.organizeImports": "explicit"
   },
   "notebook.formatOnSave.enabled": true,
   "notebook.gotoSymbols.showAllSymbols": true,
-  "python.analysis.autoImportCompletions": false,
-  "python.analysis.inlayHints.pytestParameters": true,
   "python.defaultInterpreterPath": ".venv/bin/python",
   "python.terminal.activateEnvironment": false,
   "python.testing.pytestEnabled": true,
@@ -75,6 +69,9 @@
   "telemetry.telemetryLevel": "off",
   "testing.coverageToolbarEnabled": true,
   "testing.showCoverageInExplorer": true,
+  "ty.completions.autoImport": false,
+  "ty.diagnosticMode": "workspace",
+  "ty.importStrategy": "fromEnvironment",
   "yaml.schemas": {
     "https://citation-file-format.github.io/1.2.0/schema.json": "CITATION.cff",
     "https://json.schemastore.org/github-workflow.json": "./.github/workflows/requirements.yml"

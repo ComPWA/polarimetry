@@ -7,7 +7,6 @@ import logging
 import warnings
 from typing import Any
 
-import jax
 import jax.numpy as jnp
 import sympy as sp
 from ampform_dpd.io import aslatex
@@ -48,12 +47,12 @@ def mute_jax_warnings() -> None:
 
 
 def export_polarimetry_field(  # noqa: PLR0917
-    sigma1: jax.Array,
-    sigma2: jax.Array,
-    alpha_x: jax.Array,
-    alpha_y: jax.Array,
-    alpha_z: jax.Array,
-    intensity: jax.Array,
+    sigma1: jnp.ndarray,
+    sigma2: jnp.ndarray,
+    alpha_x: jnp.ndarray,
+    alpha_y: jnp.ndarray,
+    alpha_z: jnp.ndarray,
+    intensity: jnp.ndarray,
     filename: str,
     metadata: dict | None = None,
 ) -> None:
@@ -63,7 +62,7 @@ def export_polarimetry_field(  # noqa: PLR0917
     if len(sigma2.shape) != 1:
         msg = f"sigma2 must be a 1D array, got {sigma2.shape}"
         raise ValueError(msg)
-    expected_shape: tuple[int, int] = (*sigma1.shape, *sigma2.shape)
+    expected_shape: tuple[int, int] = (*sigma1.shape, *sigma2.shape)  # ty:ignore[invalid-assignment]
     for array in [alpha_x, alpha_y, alpha_z, intensity]:
         if array.shape != expected_shape:
             msg = f"Expected shape {expected_shape}, got {array.shape}"
@@ -85,7 +84,7 @@ def export_polarimetry_field(  # noqa: PLR0917
         json.dump(json_data, f, separators=(",", ":"))
 
 
-def import_polarimetry_field(filename: str, steps: int = 1) -> dict[str, jax.Array]:
+def import_polarimetry_field(filename: str, steps: int = 1) -> dict[str, jnp.ndarray]:
     with open(filename) as f:
         json_data: dict = json.load(f)
     return {

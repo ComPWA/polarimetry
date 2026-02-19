@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 from os.path import dirname
+from typing import TYPE_CHECKING
 
 import sympy as sp
-from ampform_dpd import (
-    DalitzPlotDecompositionBuilder,
-    _get_coupling_base,  # pyright:ignore[reportPrivateUsage]
-)
+from ampform_dpd import DalitzPlotDecompositionBuilder, _get_coupling_base
 from sympy.core.symbol import Str
 
 from polarimetry.lhcb import (
@@ -17,6 +15,9 @@ from polarimetry.lhcb import (
 )
 from polarimetry.lhcb.particle import load_particles
 from polarimetry.lhcb.symbol import create_gamma_symbol
+
+if TYPE_CHECKING:
+    from tensorwaves.interface import ParameterValue
 
 THIS_DIR = dirname(__file__)
 DATA_DIR = f"{THIS_DIR}/../data"
@@ -33,7 +34,7 @@ def test_get_conversion_factor_ls():
             f"{chain.resonance.name:9s}"
             f"L={chain.incoming_ls.L!r:3s}"
             f"S={chain.incoming_ls.S!r:5s}"
-            f"factor={get_conversion_factor_ls(chain.resonance, chain.incoming_ls.L, chain.incoming_ls.S):+d}"
+            f"factor={get_conversion_factor_ls(chain.resonance, chain.incoming_ls.L, chain.incoming_ls.S):+d}"  # ty:ignore[invalid-argument-type]
         )
     assert items == [
         "L(1405)  L=0  S=1/2  factor=+1",
@@ -87,7 +88,7 @@ def test_load_model_parameters():
     assert pars[H[Str(R"\Lambda(1810)"), +h, 0]] == (1.179995 + 4.413438j) * -1
 
     pars = _load_parameters("Alternative amplitude model obtained using LS couplings")
-    H = _get_coupling_base(helicity_basis=False, typ="production")  # pyright:ignore[reportConstantRedefinition]
+    H = _get_coupling_base(helicity_basis=False, typ="production")
     assert len(pars) == 53
     assert pars[gamma] == 0.847475
     assert pars[H[Str("K(892)"), 0, +h]] == (1.0 + 0.0j) * +1
@@ -111,7 +112,7 @@ def _load_builder(model_choice: int | ModelName) -> DalitzPlotDecompositionBuild
 
 def _load_parameters(
     model_choice: int | ModelName,
-) -> dict[sp.Indexed | sp.Symbol, complex]:
+) -> dict[sp.Basic, ParameterValue]:
     model_builder = _load_builder(model_choice)
     return load_model_parameters(
         filename=MODEL_FILE,

@@ -17,8 +17,6 @@ from sphinx_api_relink.helpers import (
     set_intersphinx_version_remapping,
 )
 
-sys.path.insert(0, os.path.abspath("extensions"))
-
 
 def download_paper_figures() -> str:
     figures = {
@@ -215,13 +213,16 @@ class MissingFileCollector:
 
 execute_pluto_notebooks()
 set_intersphinx_version_remapping({
+    "ampform": {r"0.15.12\.dev.*": "0.15.11"},
     "ipywidgets": {
         "8.1.1": "8.1.2",
         "8.1.7": "8.1.5",
+        "8.1.8": "8.1.5",
     },
     "matplotlib": {
         "3.9.1.post1": "3.9.1",
     },
+    "tensorwaves": {r"0.4.15\.dev.*": "0.4.14"},
 })
 
 MISSING_FILES = MissingFileCollector()
@@ -269,6 +270,7 @@ api_target_substitutions = {
     "QuadContourSet": "matplotlib.contour.QuadContourSet",
     "ResonanceName": ("obj", "polarimetry.lhcb.ResonanceName"),
     "sp.acos": "sympy.functions.elementary.trigonometric.acos",
+    "sp.Basic": "sympy.core.basic.Basic",
     "sp.Expr": "sympy.core.expr.Expr",
     "sp.Indexed": "sympy.tensor.indexed.Indexed",
     "sp.Mul": "sympy.core.mul.Mul",
@@ -307,6 +309,7 @@ bibtex_bibfiles = [
     "_static/references.bib",
 ]
 bibtex_default_style = "unsrt_et_al"
+bibtex_use_mathjax = True
 codeautolink_concat_default = True
 copyright = "2023"
 default_role = "py:obj"
@@ -334,7 +337,6 @@ extensions = [
     "sphinx_togglebutton",
     "sphinxcontrib.bibtex",
     "sphinxcontrib.inkscapeconverter",
-    "support_bibtex_math",
 ]
 generate_apidoc_package_path = f"../src/{PACKAGE_NAME}"
 html_css_files = [
@@ -465,6 +467,7 @@ linkcheck_ignore = [
     "https://indico.cern.ch/event/1187317",
     "https://indico.cern.ch/event/1242323",
     "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033",
+    "https://twiki.cern.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi",
     "https://www.bookfinder.com",
 ]
 myst_enable_extensions = [

@@ -10,7 +10,7 @@ from ampform.dynamics.phasespace import BreakupMomentum
 from ampform_dpd import DefinedExpression
 from ampform_dpd.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave
 from ampform_dpd.dynamics.builder import (
-    _get_angular_momentum,  # noqa: PLC2701  # pyright:ignore[reportPrivateUsage]
+    _get_angular_momentum,  # noqa: PLC2701
     get_mandelstam_s,
 )
 
@@ -59,7 +59,7 @@ def formulate_exponential_bugg_breit_wigner(
     q = BreakupMomentum(m0**2, sp.sqrt(s), m1)
     return DefinedExpression(
         expression=bugg_bw.expression * sp.exp(-alpha * q**2),
-        parameters={**bugg_bw.parameters, alpha: sp.Rational(0)},
+        parameters={**bugg_bw.parameters, alpha: sp.Rational(0)},  # ty:ignore[invalid-argument-type]
     )
 
 
@@ -79,10 +79,10 @@ def formulate_flatte_1405(  # noqa: PLR0914
     mΣ = create_mass_symbol(Σ)
     l_prod = _get_angular_momentum(decay_chain.production_node)
     R_prod = create_meson_radius_symbol("prod")
-    ff = FormFactor(m_top**2, sp.sqrt(s), m_spec, l_prod, R_prod)
-    ff0 = FormFactor(m_top**2, m_res, m_spec, l_prod, R_prod)
+    ff = FormFactor(m_top**2, sp.sqrt(s), m_spec, l_prod, R_prod)  # ty:ignore[invalid-argument-type]
+    ff0 = FormFactor(m_top**2, m_res, m_spec, l_prod, R_prod)  # ty:ignore[invalid-argument-type]
     return DefinedExpression(
-        expression=ff / ff0 * FlattéSWave(s, m_res, (Γ1, Γ2), (m1, m2), (mπ, mΣ)),
+        expression=ff / ff0 * FlattéSWave(s, m_res, (Γ1, Γ2), (m1, m2), (mπ, mΣ)),  # ty:ignore[invalid-argument-type]
         parameters={
             m_res: resonance.mass,
             Γ1: resonance.width,
@@ -119,8 +119,8 @@ def formulate_breit_wigner(decay_chain: ThreeBodyDecayChain) -> DefinedExpressio
             resonance_width,
             m1,
             m2,
-            l_dec,
-            l_prod,
+            l_dec,  # ty:ignore[invalid-argument-type]
+            l_prod,  # ty:ignore[invalid-argument-type]
             R_dec,
             R_prod,
         ),

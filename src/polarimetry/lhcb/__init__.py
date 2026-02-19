@@ -1,5 +1,4 @@
 # cspell:ignore modelparameters modelstudies
-# pyright: reportConstantRedefinition=false
 """Import functions that are specifically for this LHCb analysis.
 
 .. seealso:: :doc:`/cross-check`
@@ -22,7 +21,7 @@ from ampform_dpd import (
     AmplitudeModel,
     DalitzPlotDecompositionBuilder,
     DynamicsBuilder,
-    _get_coupling_base,  # pyright:ignore[reportPrivateUsage]  # noqa: PLC2701
+    _get_coupling_base,  # noqa: PLC2701
 )
 from ampform_dpd.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 from ampform_dpd.spin import filter_parity_violating_ls, generate_ls_couplings
@@ -49,6 +48,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from ampform_dpd.decay import State
+    from tensorwaves.interface import ParameterValue
 
 
 # fmt: off
@@ -125,8 +125,10 @@ def load_model(
     imported_parameter_values = load_model_parameters(
         model_file, builder.decay, model_id, particle_definitions
     )
-    model.parameter_defaults.update(imported_parameter_values)  # type:ignore[arg-type]  # pyright:ignore[reportCallIssue]
-    return model
+    return attrs.evolve(
+        model,
+        parameter_defaults={**model.parameter_defaults, **imported_parameter_values},
+    )
 
 
 def load_model_builder(
@@ -142,7 +144,7 @@ def load_model_builder(
     decay = load_three_body_decay(lineshapes, particle_definitions, min_ls)
     amplitude_builder = DalitzPlotDecompositionBuilder(decay, min_ls=(min_ls, True))
     for chain in decay.chains:
-        lineshape_choice = lineshapes[chain.resonance.name]  # type:ignore[index]
+        lineshape_choice = lineshapes[chain.resonance.name]  # ty:ignore[invalid-argument-type]
         dynamics_builder = _get_resonance_builder(lineshape_choice)
         amplitude_builder.dynamics_choices.register_builder(chain, dynamics_builder)
     return amplitude_builder
@@ -160,7 +162,7 @@ def _find_model_title(
     if isinstance(model_id, int):
         for i, title in enumerate(model_definitions):
             if i == model_id:
-                return title
+                return title  # ty:ignore[invalid-return-type]
         msg = (
             f"Model definition file contains {len(model_definitions)} models, but"
             f" trying to get number {model_id}."
@@ -209,10 +211,10 @@ def load_three_body_decay(
                     parent=resonance,
                     child1=child1,
                     child2=child2,
-                    interaction=min(dec_ls_couplings),
+                    interaction=min(dec_ls_couplings),  # ty:ignore[invalid-argument-type]
                 ),
                 child2=spectator,
-                interaction=min(prod_ls_couplings),
+                interaction=min(prod_ls_couplings),  # ty:ignore[invalid-argument-type]
             )
             return [ThreeBodyDecayChain(decay)]
         chains = []
@@ -228,7 +230,7 @@ def load_three_body_decay(
                 child2=spectator,
                 interaction=prod_ls,
             )
-            chains.append(ThreeBodyDecayChain(decay))
+            chains.append(ThreeBodyDecayChain(decay))  # ty:ignore[invalid-argument-type]
         return chains
 
     def generate_ls(
@@ -302,7 +304,7 @@ def load_model_parameters(
     decay: ThreeBodyDecay,
     model_id: int | ModelName = 0,
     particle_definitions: dict[str, Particle] | None = None,
-) -> dict[sp.Indexed | sp.Symbol, complex]:
+) -> dict[sp.Basic, ParameterValue]:
     parameters = load_model_parameters_with_uncertainties(
         filename, decay, model_id, particle_definitions
     )
@@ -327,8 +329,8 @@ def load_model_parameters_with_uncertainties(
         parameter_definitions, min_ls, particle_definitions
     )
     decay_couplings = compute_decay_couplings(decay)
-    parameters.update(decay_couplings)  # type:ignore[arg-type]  # pyright:ignore[reportCallIssue]
-    return parameters  # type:ignore[return-value]
+    parameters.update(decay_couplings)  # ty:ignore[no-matching-overload]
+    return parameters  # ty:ignore[invalid-return-type]
 
 
 def _smear_gaussian(
@@ -371,16 +373,16 @@ def flip_production_coupling_signs(
     obj: _T, subsystem_names: Iterable[Literal["D", "K", "L"]]
 ) -> _T:
     if isinstance(obj, AmplitudeModel):
-        return attrs.evolve(  # type:ignore[return-value]
+        return attrs.evolve(
             obj,
             parameter_defaults=_flip_signs(obj.parameter_defaults, subsystem_names),
         )
     if isinstance(obj, ParameterBootstrap):
         bootstrap = deepcopy(obj)
-        bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # type: ignore[reportPrivateUsage]  # noqa: SLF001
-        return bootstrap  # type:ignore[return-value]
+        bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # noqa: SLF001
+        return bootstrap
     if isinstance(obj, dict):
-        return _flip_signs(obj, subsystem_names)  # type:ignore[return-value]
+        return _flip_signs(obj, subsystem_names)  # ty:ignore[invalid-return-type]
     raise NotImplementedError
 
 
@@ -408,8 +410,8 @@ def _flip_signs(
 
 def _flip(obj: _V) -> _V:
     if isinstance(obj, MeasuredParameter):
-        return attrs.evolve(obj, value=_flip(obj.value))  # type:ignore[return-value]
-    return -obj  # type:ignore[operator]
+        return attrs.evolve(obj, value=_flip(obj.value))
+    return -obj  # ty:ignore[unsupported-operator]
 
 
 def compute_decay_couplings(
@@ -444,7 +446,7 @@ def compute_decay_couplings(
     return {
         symbol: MeasuredParameter(value, hesse=0)
         for symbol, value in decay_couplings.items()
-    }
+    }  # ty:ignore[invalid-return-type]
 
 
 def _to_symbol_value_mapping(
@@ -458,9 +460,9 @@ def _to_symbol_value_mapping(
             identifier = key[2:]
             str_imag = parameter_dict[f"Ai{identifier}"]
             key = f"A{identifier}"
-            indexed_symbol: sp.Indexed = parameter_key_to_symbol(  # type:ignore[assignment]
+            indexed_symbol: sp.Indexed = parameter_key_to_symbol(
                 key, particle_definitions, min_ls
-            )
+            )  # ty:ignore[invalid-assignment]
             resonance_latex = str(indexed_symbol.indices[0])
             resonance, *_ = (
                 p for p in particle_definitions.values() if p.latex == resonance_latex
@@ -503,14 +505,14 @@ def _to_value_with_uncertainty(str_value: str) -> MeasuredParameter[float]:
         return MeasuredParameter(
             value=float_values[0],
             hesse=float_values[1],
-        )
+        )  # ty:ignore[invalid-return-type]
     if len(float_values) == 4:
         return MeasuredParameter(
             value=float_values[0],
             hesse=float_values[1],
             model=float_values[2],
             systematic=float_values[3],
-        )
+        )  # ty:ignore[invalid-return-type]
     msg = f"Cannot convert '{str_value}' to {MeasuredParameter.__name__}"
     raise ValueError(msg)
 
@@ -561,11 +563,11 @@ class MeasuredParameter(Generic[ParameterType]):
         if self.systematic is None:
             return self.hesse
         if isinstance(self.value, (float, int)):
-            return sqrt(self.hesse**2 + self.systematic**2)  # type:ignore[arg-type,return-value]
+            return sqrt(self.hesse**2 + self.systematic**2)  # ty:ignore[invalid-return-type, invalid-argument-type]
         return complex(
             sqrt(self.hesse.real**2 + self.systematic.real**2),
             sqrt(self.hesse.imag**2 + self.systematic.imag**2),
-        )
+        )  # ty:ignore[invalid-return-type]
 
 
 def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
@@ -573,11 +575,11 @@ def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
     half = sp.Rational(1, 2)
     assert resonance.parity is not None, "Parity is not defined"  # noqa: S101
     if resonance.name.startswith("D"):
-        return int(-resonance.parity * (-1) ** (resonance.spin - half))  # type:ignore[return-value]
+        return int(-resonance.parity * (-1) ** (resonance.spin - half))  # ty:ignore[invalid-return-type]
     if resonance.name.startswith("K"):
         return 1
     if resonance.name.startswith("L"):
-        return int(-resonance.parity)  # type:ignore[return-value]
+        return int(-resonance.parity)  # ty:ignore[invalid-return-type]
     msg = f"No conversion factor implemented for {resonance.name}"
     raise NotImplementedError(msg)
 
@@ -590,7 +592,7 @@ def get_conversion_factor_ls(
         return 1
     half = sp.Rational(1, 2)
     cg_flip_factor = int((-1) ** (L + S - half))
-    return get_conversion_factor(resonance) * cg_flip_factor  # type:ignore[return-value]
+    return get_conversion_factor(resonance) * cg_flip_factor  # ty:ignore[invalid-return-type]
 
 
 def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
