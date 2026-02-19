@@ -375,7 +375,7 @@ def flip_production_coupling_signs(
     if isinstance(obj, AmplitudeModel):
         return attrs.evolve(
             obj,
-            parameter_defaults=_flip_signs(obj.parameter_defaults, subsystem_names),  # ty:ignore[invalid-argument-type]
+            parameter_defaults=_flip_signs(obj.parameter_defaults, subsystem_names),
         )
     if isinstance(obj, ParameterBootstrap):
         bootstrap = deepcopy(obj)

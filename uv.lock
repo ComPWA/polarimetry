@@ -40,19 +40,23 @@ wheels = [
 
 [[package]]
 name = "ampform"
-version = "0.15.12.dev25+gfc1d4e292"
-source = { git = "https://github.com/ComPWA/ampform?rev=fc1d4e2920954738bb6620905f0de0a73a5a93cd#fc1d4e2920954738bb6620905f0de0a73a5a93cd" }
+version = "0.16.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
     { name = "frozendict" },
     { name = "qrules" },
     { name = "sympy" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/3b/d2/08eecf35f3a299531ed70d3282597d4c440b5485f74b4b99ad6bb98474cb/ampform-0.16.0.tar.gz", hash = "sha256:c242aea47a53e46fe127f87f79a6038ae533ff3640b6128439b2286a3178c261", size = 413943, upload-time = "2026-02-16T15:42:42.772Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/62/3e/c5959630b8fbb520d6b82cd686e6bd775b7e6053c67b3ee4c71b22c95983/ampform-0.16.0-py3-none-any.whl", hash = "sha256:55f78106b872d1884f23a9f64c0ee6e08fddf12218c56f7635f1e20e88647f96", size = 89314, upload-time = "2026-02-16T15:42:41.489Z" },
+]
 
 [[package]]
 name = "ampform-dpd"
-version = "0.3.1.dev12+g0bf986807"
-source = { git = "https://github.com/ComPWA/ampform-dpd?rev=0bf986807a349b0e656ee43f4f2ec63627cfbf2d#0bf986807a349b0e656ee43f4f2ec63627cfbf2d" }
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ampform" },
     { name = "attrs" },
@@ -64,6 +68,10 @@ dependencies = [
     { name = "sympy" },
     { name = "tensorwaves", extra = ["jax"] },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/84/2b/99e729a88dc56c5136d5dd440b671c4dc1829da13765981f3af3a6ba2dac/ampform_dpd-0.3.0.tar.gz", hash = "sha256:a0c74b4f864f22bfc059435d84ba30cf484571626e792e74b3d53c8ec9263fe4", size = 362937, upload-time = "2025-10-29T20:09:34.192Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2f/aa/81f178458d307166eaeef35eddc122c17714e8069e3363f50534e5772562/ampform_dpd-0.3.0-py3-none-any.whl", hash = "sha256:58dff3c86b2fa1fb1b1f15fad7a320f5d0219e28a1e9899c70475256f7f0bc99", size = 42755, upload-time = "2025-10-29T20:09:32.724Z" },
 ]
 
 [[package]]
@@ -3443,8 +3451,8 @@ types = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ampform", git = "https://github.com/ComPWA/ampform?rev=fc1d4e2920954738bb6620905f0de0a73a5a93cd" },
-    { name = "ampform-dpd", git = "https://github.com/ComPWA/ampform-dpd?rev=0bf986807a349b0e656ee43f4f2ec63627cfbf2d" },
+    { name = "ampform", specifier = ">=0.15.11" },
+    { name = "ampform-dpd", specifier = "~=0.3.0" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cairosvg" },
     { name = "ipython" },
@@ -3453,7 +3461,7 @@ requires-dist = [
     { name = "pyyaml" },
     { name = "scour" },
     { name = "sympy", specifier = ">=1.10" },
-    { name = "tensorwaves", extras = ["jax"], git = "https://github.com/ComPWA/tensorwaves?rev=916cf9202569ad5503eb1fb04e129ae0a6d8120d" },
+    { name = "tensorwaves", extras = ["jax"], specifier = ">=0.4.5" },
 ]
 
 [package.metadata.requires-dev]
@@ -4029,8 +4037,8 @@ wheels = [
 
 [[package]]
 name = "qrules"
-version = "0.10.7.dev21+g33be556be"
-source = { git = "https://github.com/ComPWA/qrules?rev=33be556be51fff52869034327bcf6157eb6cf726#33be556be51fff52869034327bcf6157eb6cf726" }
+version = "0.10.7"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
     { name = "frozendict" },
@@ -4039,6 +4047,10 @@ dependencies = [
     { name = "python-constraint" },
     { name = "pyyaml" },
     { name = "tqdm" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/aa/20/9d279bdd140a18959472cd1cc3e689b73e9554bc987a173e35e85ce713c9/qrules-0.10.7.tar.gz", hash = "sha256:bb2ee2957aa3bd55d7eb38bb111823c26d9364d0d16c88730ddc97acf47c31c9", size = 294071, upload-time = "2026-02-06T14:50:50.924Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2c/5d/c1371af6f81376bebffd055911e355ff5972d2646135d961757ffe0a858f/qrules-0.10.7-py3-none-any.whl", hash = "sha256:a7936995dba23868d8d37319a9250aa4e0d90da9845a89da1ac476ce48abf694", size = 80795, upload-time = "2026-02-06T14:50:49.063Z" },
 ]
 
 [[package]]
@@ -5015,8 +5027,8 @@ wheels = [
 
 [[package]]
 name = "tensorwaves"
-version = "0.4.15.dev19+g916cf9202"
-source = { git = "https://github.com/ComPWA/tensorwaves?rev=916cf9202569ad5503eb1fb04e129ae0a6d8120d#916cf9202569ad5503eb1fb04e129ae0a6d8120d" }
+version = "0.4.15"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
     { name = "iminuit" },
@@ -5025,6 +5037,10 @@ dependencies = [
     { name = "pyyaml" },
     { name = "sympy" },
     { name = "tqdm" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/04/9c/67c86f76dd71348f7d02b7df2657a4e4467a7f0ec7430d8d9cf3c90d0f60/tensorwaves-0.4.15.tar.gz", hash = "sha256:69b5d50b333790642ee93cc8aeccadce6bc523d0e62499b6a81f7004d2fd3c36", size = 390790, upload-time = "2026-02-16T16:36:08.158Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/04/5e/37bc24179e5421314a7386dc434b1861e59a126dc6c2991f51657e82b703/tensorwaves-0.4.15-py3-none-any.whl", hash = "sha256:032675d709d130cd5485aab8900819f4748cea600b74b65ace6be684f863553d", size = 43255, upload-time = "2026-02-16T16:36:05.899Z" },
 ]
 
 [package.optional-dependencies]
