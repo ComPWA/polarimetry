@@ -277,7 +277,7 @@ def test_dynamics_builder(  # noqa: PLR0914
         dynamics = dynamics_builder(chain)
         func = create_parametrized_function(
             dynamics.expression.doit(),
-            parameters=dynamics.parameters | parameter_defaults,  # ty:ignore[invalid-argument-type]
+            parameters=dynamics.parameters | parameter_defaults,
             backend="jax",
         )
         child1, child2 = chain.decay_products
