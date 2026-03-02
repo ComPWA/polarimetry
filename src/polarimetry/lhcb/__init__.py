@@ -162,7 +162,7 @@ def _find_model_title(
     if isinstance(model_id, int):
         for i, title in enumerate(model_definitions):
             if i == model_id:
-                return title  # ty:ignore[invalid-return-type]
+                return title
         msg = (
             f"Model definition file contains {len(model_definitions)} models, but"
             f" trying to get number {model_id}."
