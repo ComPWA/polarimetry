@@ -44,7 +44,7 @@ from polarimetry.lhcb.symbol import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Sequence
+    from collections.abc import Iterable, Mapping, Sequence
     from pathlib import Path
 
     from ampform_dpd.decay import State
@@ -387,7 +387,7 @@ def flip_production_coupling_signs(
 
 
 def _flip_signs(
-    parameters: dict[_K, _V], subsystem_names: Iterable[Literal["D", "K", "L"]]
+    parameters: Mapping[_K, _V], subsystem_names: Iterable[Literal["D", "K", "L"]]
 ) -> dict[_K, _V]:
     r"""Flip the signs of the production couplings for the given subsystems.
 
