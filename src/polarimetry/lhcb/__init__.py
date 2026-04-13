@@ -211,12 +211,12 @@ def load_three_body_decay(
                     parent=resonance,
                     child1=child1,
                     child2=child2,
-                    interaction=min(dec_ls_couplings),  # ty:ignore[invalid-argument-type]
+                    interaction=min(dec_ls_couplings),
                 ),
                 child2=spectator,
-                interaction=min(prod_ls_couplings),  # ty:ignore[invalid-argument-type]
+                interaction=min(prod_ls_couplings),
             )
-            return [ThreeBodyDecayChain(decay)]
+            return [ThreeBodyDecayChain(decay)]  # ty:ignore[invalid-argument-type]
         chains = []
         for dec_ls, prod_ls in itertools.product(dec_ls_couplings, prod_ls_couplings):
             decay = IsobarNode(

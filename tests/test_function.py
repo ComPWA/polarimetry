@@ -47,7 +47,7 @@ def intensity_func(model: AmplitudeModel) -> ParametrizedFunction:
     subs_intensity_expr = cached.xreplace(unfolded_intensity_expr, fixed_parameters)
     return cached.lambdify(
         subs_intensity_expr,
-        parameters=free_parameters,
+        parameters=free_parameters,  # ty:ignore[invalid-argument-type]
         backend="jax",
     )
 
