@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import sympy as sp
+from ampform.decay.spin import create_spin_range
 from ampform.sympy import PoolSum
-from ampform_dpd.spin import create_spin_range
 from sympy.physics.matrices import msigma
 
 from polarimetry.lhcb import (
@@ -23,8 +23,8 @@ from polarimetry.lhcb.particle import (
 )
 
 if TYPE_CHECKING:
-    from ampform_dpd import AmplitudeModel, DalitzPlotDecompositionBuilder
-    from ampform_dpd.decay import FinalStateID
+    from ampform.amplitude.dpd import AmplitudeModel, DalitzPlotDecompositionBuilder
+    from ampform.decay import FinalStateID
 
 
 def formulate_polarimetry(

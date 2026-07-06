@@ -213,7 +213,10 @@ class MissingFileCollector:
 
 execute_pluto_notebooks()
 set_intersphinx_version_remapping({
-    "ampform": {r"0.15.12\.dev.*": "0.15.11"},
+    "ampform": {
+        r"0.15.12\.dev.*": "0.15.11",
+        r"0.16\.\d+\.dev.*": "latest",
+    },
     "ipywidgets": {
         "8.1.1": "8.1.2",
         "8.1.7": "8.1.5",
@@ -237,16 +240,16 @@ add_module_names = False
 api_github_repo = f"{ORGANIZATION}/{REPO_NAME}"
 api_target_substitutions = {
     "_T": "typing.TypeVar",
-    "AmplitudeModel": "ampform_dpd.AmplitudeModel",
+    "AmplitudeModel": "ampform.amplitude.dpd.AmplitudeModel",
     "Artist": "matplotlib.artist.Artist",
     "Axes": "matplotlib.axes.Axes",
-    "BreitWignerMinL": "ampform_dpd.dynamics.BreitWignerMinL",
-    "BuggBreitWigner": "ampform_dpd.dynamics.BuggBreitWigner",
-    "DalitzPlotDecompositionBuilder": "ampform_dpd.DalitzPlotDecompositionBuilder",
+    "BreitWignerMinL": "ampform.dynamics.BreitWignerMinL",
+    "BuggBreitWigner": "ampform.dynamics.BuggBreitWigner",
+    "DalitzPlotDecompositionBuilder": "ampform.amplitude.dpd.DalitzPlotDecompositionBuilder",
     "DataSample": ("obj", "tensorwaves.interface.DataSample"),
-    "DefinedExpression": "ampform_dpd.DefinedExpression",
-    "FinalStateID": ("obj", "ampform_dpd.decay.FinalStateID"),
-    "FlattéSWave": "ampform_dpd.dynamics.FlattéSWave",
+    "DefinedExpression": "ampform.dynamics.builder.DefinedExpression",
+    "FinalStateID": ("obj", "ampform.decay.FinalStateID"),
+    "FlattéSWave": "ampform.dynamics.FlattéSWave",
     "Function": ("obj", "tensorwaves.interface.Function"),
     "implement_doit_method": "ampform.sympy.implement_doit_method",
     "jnp.ndarray": "jax.Array",
@@ -261,7 +264,7 @@ api_target_substitutions = {
     "ParameterType": ("obj", "polarimetry.lhcb.ParameterType"),
     "ParameterValue": ("obj", "tensorwaves.interface.ParameterValue"),
     "ParametrizedFunction": ("obj", "tensorwaves.interface.ParametrizedFunction"),
-    "Particle": "ampform_dpd.decay.Particle",
+    "Particle": "ampform.decay.Particle",
     "Path": "pathlib.Path",
     "Pattern": "typing.Pattern",
     "polarimetry.lhcb._T": "typing.TypeVar",
@@ -277,8 +280,8 @@ api_target_substitutions = {
     "sp.Rational": "sympy.core.numbers.Rational",
     "sp.Symbol": "sympy.core.symbol.Symbol",
     "SympyDataTransformer": "tensorwaves.data.transform.SympyDataTransformer",
-    "ThreeBodyDecay": "ampform_dpd.decay.ThreeBodyDecay",
-    "ThreeBodyDecayChain": "ampform_dpd.decay.ThreeBodyDecayChain",
+    "ThreeBodyDecay": "ampform.decay.ThreeBodyDecay",
+    "ThreeBodyDecayChain": "ampform.decay.ThreeBodyDecayChain",
     "typing.Literal[-1, 1]": "typing.Literal",
     "UnevaluatedExpression": "ampform.sympy.UnevaluatedExpression",
 }
@@ -406,7 +409,6 @@ html_theme_options = {
 html_title = "Λc → p K π polarimetry"
 intersphinx_mapping = {
     "IPython": (f"https://ipython.readthedocs.io/en/{pin('IPython')}", None),
-    "ampform-dpd": ("https://compwa.github.io/ampform-dpd", None),
     "ampform": (f"https://ampform.readthedocs.io/{pin('ampform')}", None),
     "attrs": (f"https://www.attrs.org/en/{pin('attrs')}", None),
     "iminuit": ("https://scikit-hep.org/iminuit", None),

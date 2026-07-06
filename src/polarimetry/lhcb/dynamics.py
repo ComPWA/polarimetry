@@ -5,14 +5,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import sympy as sp
-from ampform.dynamics.form_factor import FormFactor
-from ampform.dynamics.phasespace import BreakupMomentum
-from ampform_dpd import DefinedExpression
-from ampform_dpd.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave
-from ampform_dpd.dynamics.builder import (
+from ampform.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave
+from ampform.dynamics.builder import (
+    DefinedExpression,
     _get_angular_momentum,  # noqa: PLC2701
     get_mandelstam_s,
 )
+from ampform.dynamics.form_factor import FormFactor
+from ampform.dynamics.phasespace import BreakupMomentum
 
 from polarimetry.lhcb.particle import Σ, π
 from polarimetry.lhcb.symbol import (
@@ -24,7 +24,7 @@ from polarimetry.lhcb.symbol import (
 )
 
 if TYPE_CHECKING:
-    from ampform_dpd.decay import ThreeBodyDecayChain
+    from ampform.decay import ThreeBodyDecayChain
 
 
 def formulate_bugg_breit_wigner(decay_chain: ThreeBodyDecayChain) -> DefinedExpression:

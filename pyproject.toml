@@ -32,10 +32,11 @@ classifiers = [
 dependencies = [
     "IPython",
     "PyYAML",
-    "ampform >=0.15.11", # @unevaluated decorator, cached module, single-sqrt phsp factor
-    "ampform-dpd ~=0.4.0", # cached module, DefinedExpression
+    "ampform >=0.16.1", # Dalitz-plot decomposition, decay structures, DefinedExpression
     "attrs >=20.1.0",
     "cairosvg",
+    "cloudpickle",
+    "frozendict",
     "matplotlib",
     "numpy",
     "scour",
@@ -414,3 +415,6 @@ possibly-unresolved-reference = "warn"
 
 [tool.ty.terminal]
 error-on-warning = true
+
+[tool.uv.sources]
+ampform = {path = "../ampform", editable = true}

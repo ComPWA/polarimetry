@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Literal, Protocol
 
 import sympy as sp
-from ampform_dpd.decay import State
+from ampform.decay import State
 
 if TYPE_CHECKING:
     from typing import Literal

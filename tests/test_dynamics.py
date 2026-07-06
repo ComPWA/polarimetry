@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pytest
-from ampform_dpd import DynamicsBuilder, create_mass_symbol_mapping
-from ampform_dpd.dynamics.builder import get_mandelstam_s
+from ampform.amplitude.dpd import create_mass_symbol_mapping
+from ampform.dynamics.builder import DynamicsBuilder, get_mandelstam_s
 from tensorwaves.function.sympy import create_parametrized_function
 
 from polarimetry.lhcb import (
@@ -25,7 +25,7 @@ from polarimetry.lhcb.particle import load_particles
 
 if TYPE_CHECKING:
     import sympy as sp
-    from ampform_dpd.decay import ThreeBodyDecay
+    from ampform.decay import ThreeBodyDecay
 
 LS_MODEL_ID: ModelName = "Alternative amplitude model obtained using LS couplings"
 EXP_MODEL_ID: ModelName = "Alternative amplitude model with an additional overall exponential form factor exp(-alpha q^2) multiplying Bugg lineshapes. The exponential parameter is indicated as alpha"

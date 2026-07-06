@@ -17,14 +17,13 @@ import attrs
 import numpy as np
 import sympy as sp
 import yaml
-from ampform_dpd import (
+from ampform.amplitude.dpd import (
     AmplitudeModel,
     DalitzPlotDecompositionBuilder,
-    DynamicsBuilder,
     _get_coupling_base,  # noqa: PLC2701
 )
-from ampform_dpd.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
-from ampform_dpd.spin import filter_parity_violating_ls, generate_ls_couplings
+from ampform.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
+from ampform.decay.spin import filter_parity_violating_ls, generate_ls_couplings
 from attrs import frozen
 from sympy.core.symbol import Str
 
@@ -47,7 +46,8 @@ if TYPE_CHECKING:
     from collections.abc import Iterable, Mapping, Sequence
     from pathlib import Path
 
-    from ampform_dpd.decay import State
+    from ampform.decay import State
+    from ampform.dynamics.builder import DynamicsBuilder
     from tensorwaves.interface import ParameterValue
 
 
@@ -258,7 +258,7 @@ def __form_three_body_decay(chains: Sequence[ThreeBodyDecayChain]) -> ThreeBodyD
     if not chains:
         msg = "No decay chains were created"
         raise ValueError(msg)
-    states: list[State] = [chains[0].initial_state, *chains[0].final_state]
+    states: list[State] = [chains[0].initial_state, *chains[0].final_state.values()]
     return ThreeBodyDecay(
         states={s.index: s for s in states},
         chains=tuple(chains),

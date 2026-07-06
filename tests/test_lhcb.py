@@ -4,7 +4,7 @@ from os.path import dirname
 from typing import TYPE_CHECKING
 
 import sympy as sp
-from ampform_dpd import DalitzPlotDecompositionBuilder, _get_coupling_base
+from ampform.amplitude.dpd import DalitzPlotDecompositionBuilder, _get_coupling_base
 from sympy.core.symbol import Str
 
 from polarimetry.lhcb import (

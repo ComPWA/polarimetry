@@ -6,9 +6,8 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pytest
 import sympy as sp
-from ampform_dpd.io import cached
 
-from polarimetry import lhcb
+from polarimetry import cached, lhcb
 from polarimetry.data import create_data_transformer, generate_phasespace_sample
 from polarimetry.function import (
     integrate_intensity,
@@ -19,7 +18,7 @@ from polarimetry.lhcb import load_model
 from polarimetry.lhcb.particle import load_particles
 
 if TYPE_CHECKING:
-    from ampform_dpd import AmplitudeModel
+    from ampform.amplitude.dpd import AmplitudeModel
     from tensorwaves.interface import DataSample, ParametrizedFunction
 
 

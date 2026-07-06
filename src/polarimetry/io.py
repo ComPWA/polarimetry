@@ -9,7 +9,7 @@ from typing import Any
 
 import jax.numpy as jnp
 import sympy as sp
-from ampform_dpd.io import aslatex
+from ampform.io import aslatex
 from IPython.core.display import Math
 from IPython.display import display
 
@@ -37,7 +37,7 @@ def display_doit(expr: sp.Expr, deep=False, terms_per_line: int | None = None) -
 
 def mute_ampform_warnings() -> None:
     logging.getLogger("ampform.sympy._cache").setLevel(logging.ERROR)
-    warnings.filterwarnings("ignore", category=UserWarning, module="ampform_dpd.decay")
+    warnings.filterwarnings("ignore", category=UserWarning, module="ampform.decay")
 
 
 def mute_jax_warnings() -> None:

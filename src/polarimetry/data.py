@@ -6,17 +6,17 @@ from typing import TYPE_CHECKING, Any
 
 import jax.numpy as jnp
 import sympy as sp
+from ampform.amplitude.dpd import create_mass_symbol_mapping, formulate_third_mandelstam
+from ampform.decay import ThreeBodyDecay
 from ampform.kinematics.phasespace import is_within_phasespace
-from ampform_dpd import create_mass_symbol_mapping, formulate_third_mandelstam
-from ampform_dpd.decay import ThreeBodyDecay
 from tensorwaves.data import IntensityDistributionGenerator, NumpyDomainGenerator
 from tensorwaves.data.rng import NumpyUniformRNG
 from tensorwaves.data.transform import SympyDataTransformer
 from tensorwaves.function.sympy import create_function
 
 if TYPE_CHECKING:
-    from ampform_dpd import AmplitudeModel
-    from ampform_dpd.decay import FinalStateID, ThreeBodyDecay
+    from ampform.amplitude.dpd import AmplitudeModel
+    from ampform.decay import FinalStateID, ThreeBodyDecay
     from tensorwaves.function import PositionalArgumentFunction
     from tensorwaves.interface import DataSample
 

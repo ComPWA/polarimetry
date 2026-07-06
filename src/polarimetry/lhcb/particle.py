@@ -8,13 +8,13 @@ from typing import Literal, TypedDict
 
 import sympy as sp
 import yaml
-from ampform_dpd.decay import Particle, State
+from ampform.decay import Particle, State
 from attrs import astuple
 
 
 @cache
 def load_particles(filename: Path | str) -> dict[str, Particle]:
-    """Load `~ampform_dpd.decay.Particle` definitions from a YAML file."""
+    """Load `~ampform.decay.Particle` definitions from a YAML file."""
     particle_definitions = _load_particles_json(filename)
     return _to_resonance_dict(particle_definitions)
 

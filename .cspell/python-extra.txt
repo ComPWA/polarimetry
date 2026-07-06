@@ -1,8 +1,8 @@
 absl
 ampform
 arange
-clim
 cbar
+clim
 cmap
 corrcoef
 fontsize
@@ -12,6 +12,7 @@ hspace
 imread
 imshow
 ioff
+lambdification
 lambdify
 lambdifying
 lhcb
@@ -28,6 +29,7 @@ svgutils
 sympify
 tensorwaves
 tolist
+trigsimp
 tril
 unicodeitplus
 viewboxing
