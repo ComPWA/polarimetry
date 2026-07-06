@@ -16,7 +16,7 @@ from tensorwaves.function.sympy import create_function
 
 if TYPE_CHECKING:
     from ampform_dpd import AmplitudeModel
-    from ampform_dpd.decay import FinalStateID, ThreeBodyDecay
+    from ampform_dpd.decay import FinalStateID
     from tensorwaves.function import PositionalArgumentFunction
     from tensorwaves.interface import DataSample
 

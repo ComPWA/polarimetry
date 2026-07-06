@@ -2,13 +2,10 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal, Protocol
+from typing import Literal, Protocol
 
 import sympy as sp
 from ampform_dpd.decay import State
-
-if TYPE_CHECKING:
-    from typing import Literal
 
 
 class Particle(Protocol):

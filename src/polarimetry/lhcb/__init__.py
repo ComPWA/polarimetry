@@ -44,7 +44,7 @@ from polarimetry.lhcb.symbol import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Mapping, Sequence
+    from collections.abc import Mapping, Sequence
     from pathlib import Path
 
     from ampform_dpd.decay import State
