@@ -32,7 +32,7 @@ def model() -> AmplitudeModel:
 
 @pytest.fixture(scope="session")
 def intensity_func(model: AmplitudeModel) -> ParametrizedFunction:
-    unfolded_intensity_expr = cached.unfold(model)
+    unfolded_intensity_expr = cached.unfold(model)  # ty:ignore[invalid-argument-type]
     free_parameters = {
         symbol: value
         for symbol, value in model.parameter_defaults.items()
