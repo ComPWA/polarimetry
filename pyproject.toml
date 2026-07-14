@@ -1,39 +1,34 @@
-[build-system]
-build-backend = "setuptools.build_meta"
-requires = [
-    "setuptools>=61.2",
-    "setuptools_scm",
-    "wheel",
-]
-
 [project]
+name = "polarimetry-lc2pkpi"
+description = "Symbolic expressions that describe an aligned polarimeter vector field"
+requires-python = ">=3.10"
+license = "Apache-2.0"
 authors = [
-    {name = "Mikhail Mikhasenko"},
-    {name = "Remco de Boer"},
+    { name = "Mikhail Mikhasenko" },
+    { name = "Remco de Boer" },
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: Apache Software License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
+    "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python",
-    "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
     "Typing :: Typed",
 ]
 dependencies = [
     "IPython",
     "PyYAML",
-    "ampform >=0.15.11", # @unevaluated decorator, cached module, single-sqrt phsp factor
-    "ampform-dpd ~=0.4.0", # cached module, DefinedExpression
+    "ampform-dpd ~=0.4.0",  # cached module, DefinedExpression
+    "ampform >=0.15.11",  # @unevaluated decorator, cached module, single-sqrt phsp factor
     "attrs >=20.1.0",
     "cairosvg",
     "matplotlib",
@@ -42,25 +37,21 @@ dependencies = [
     "sympy >=1.10",
     "tensorwaves[jax] >=0.4.5",
 ]
-description = "Symbolic expressions that describe an aligned polarimeter vector field"
 dynamic = ["version"]
-license = {file = "LICENSE"}
-name = "polarimetry-lc2pkpi"
-requires-python = ">=3.10"
 
 [project.readme]
-content-type = "text/markdown"
 file = "README.md"
+content-type = "text/markdown"
 
 [dependency-groups]
 dev = [
     "nbmake",
     "ruff",
     "sphinx-autobuild",
-    {include-group = "doc"},
-    {include-group = "jupyter"},
-    {include-group = "style"},
-    {include-group = "test"},
+    { include-group = "doc" },
+    { include-group = "jupyter" },
+    { include-group = "style" },
+    { include-group = "test" },
 ]
 doc = [
     "myst-nb",
@@ -85,7 +76,7 @@ jupyter = [
     "jupyterlab-quickopen",
     "python-lsp-ruff",
     "python-lsp-server",
-    {include-group = "notebooks"},
+    { include-group = "notebooks" },
 ]
 notebooks = [
     "cloudpickle",
@@ -96,7 +87,7 @@ notebooks = [
     "kaleido~=0.1,!=0.2.1.post1",
     "matplotlib-inline",
     "pandas",
-    "plotly~=5.0", # https://github.com/executablebooks/MyST-NB/issues/667
+    "plotly~=5.0",  # https://github.com/executablebooks/MyST-NB/issues/667
     "psutil",
     "scipy",
     "svgutils",
@@ -106,8 +97,8 @@ notebooks = [
 ]
 style = [
     "ty",
-    {include-group = "notebooks"},
-    {include-group = "types"},
+    { include-group = "notebooks" },
+    { include-group = "types" },
 ]
 test = ["pytest"]
 types = [
@@ -117,22 +108,27 @@ types = [
     "types-requests",
 ]
 
-[tool.setuptools]
-include-package-data = false
-package-dir = {"" = "src"}
-
-[tool.setuptools.package-data]
-"polarimetry.lhcb" = [
-    "model-definitions.yaml",
-    "particle-definitions.yaml",
+[build-system]
+requires = [
+    "setuptools>=61.2",
+    "setuptools_scm",
+    "wheel",
 ]
+build-backend = "setuptools.build_meta"
 
-[tool.setuptools.packages.find]
-namespaces = false
-where = ["src"]
+[tool.compwa.policy]
+package-manager = "pixi+uv"
+pytest-single-threaded = true
+repo-name = "polarimetry"
 
-[tool.setuptools_scm]
-write_to = "src/polarimetry/version.py"
+[tool.compwa.policy.format]
+no-cspell-update = true
+
+[tool.compwa.policy.github]
+no-github-actions = true
+
+[tool.compwa.policy.python]
+type-checker = ["ty"]
 
 [tool.pytest]
 addopts = [
@@ -158,20 +154,14 @@ norecursedirs = [
     ".ipynb_checkpoints",
     "_build",
 ]
-testpaths = [
-    "src",
-    "tests",
-]
+testpaths = ["src", "tests"]
 
 [tool.ruff]
 extend-exclude = ["typings"]
 extend-include = ["*.ipynb"]
 preview = true
 show-fixes = true
-src = [
-    "src",
-    "tests",
-]
+src = ["src", "tests"]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -217,8 +207,8 @@ select = ["ALL"]
 task-tags = ["cspell"]
 
 [tool.ruff.lint.flake8-builtins]
-builtins-allowed-modules = ["io"]
-builtins-ignorelist = ["display"]
+allowed-modules = ["io"]
+ignorelist = ["display"]
 
 [tool.ruff.lint.flake8-comprehensions]
 allow-dict-calls-with-keyword-arguments = true
@@ -299,8 +289,8 @@ ignore-names = [
     "S602",
     "T201",
 ]
-"src/polarimetry/io.py" = ["S301"] # pickle
-"src/polarimetry/plot.py" = ["S404", "S60"] # subprocess
+"src/polarimetry/io.py" = ["S301"]  # pickle
+"src/polarimetry/plot.py" = ["S404", "S60"]  # subprocess
 "tests/*" = [
     "C408",
     "D",
@@ -317,18 +307,41 @@ ignore-names = [
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.tomlsort]
-all = false
-ignore_case = true
-in_place = true
-sort_first = [
-    "build-system",
-    "project",
-    "tool.setuptools",
-    "tool.setuptools_scm",
+[tool.setuptools]
+include-package-data = false
+package-dir = { "" = "src" }
+
+[tool.setuptools.package-data]
+"polarimetry.lhcb" = [
+    "model-definitions.yaml",
+    "particle-definitions.yaml",
 ]
-spaces_indent_inline_array = 4
-trailing_comma_inline_array = true
+
+[tool.setuptools.packages.find]
+namespaces = false
+where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/polarimetry/version.py"
+
+[tool.tombi.files]
+exclude = [
+    "**/Manifest.toml",
+    "**/Project.toml",
+    "uv.lock",
+]
+
+[tool.tombi.format.rules]
+indent-width = 4
+line-width = 88
+
+[tool.tombi.lint.rules]
+key-empty = "off"
+
+[[tool.tombi.schemas]]
+root = "tool.compwa.policy"
+path = "https://raw.githubusercontent.com/ComPWA/policy/1a1d5e8a13c4f76cee452121b5bafe2286dec2f4/compwa-policy.schema.json"
+include = ["pyproject.toml"]
 
 [[tool.ty.overrides]]
 include = ["docs/amplitude-model.ipynb"]
