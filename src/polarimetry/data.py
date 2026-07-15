@@ -8,7 +8,6 @@ import jax.numpy as jnp
 import sympy as sp
 from ampform.kinematics.phasespace import is_within_phasespace
 from ampform_dpd import create_mass_symbol_mapping, formulate_third_mandelstam
-from ampform_dpd.decay import ThreeBodyDecay
 from tensorwaves.data import IntensityDistributionGenerator, NumpyDomainGenerator
 from tensorwaves.data.rng import NumpyUniformRNG
 from tensorwaves.data.transform import SympyDataTransformer

@@ -62,7 +62,7 @@ def export_polarimetry_field(  # noqa: PLR0917
     if len(sigma2.shape) != 1:
         msg = f"sigma2 must be a 1D array, got {sigma2.shape}"
         raise ValueError(msg)
-    expected_shape: tuple[int, int] = (*sigma1.shape, *sigma2.shape)  # ty:ignore[invalid-assignment]
+    expected_shape: tuple[int, int] = (*sigma1.shape, *sigma2.shape)
     for array in [alpha_x, alpha_y, alpha_z, intensity]:
         if array.shape != expected_shape:
             msg = f"Expected shape {expected_shape}, got {array.shape}"

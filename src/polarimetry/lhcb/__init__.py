@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import itertools
 import re
-from collections.abc import Iterable
 from copy import deepcopy
 from math import sqrt
 from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar
@@ -216,7 +215,7 @@ def load_three_body_decay(
                 child2=spectator,
                 interaction=min(prod_ls_couplings),
             )
-            return [ThreeBodyDecayChain(decay)]  # ty:ignore[invalid-argument-type]
+            return [ThreeBodyDecayChain(decay)]
         chains = []
         for dec_ls, prod_ls in itertools.product(dec_ls_couplings, prod_ls_couplings):
             decay = IsobarNode(
@@ -230,7 +229,7 @@ def load_three_body_decay(
                 child2=spectator,
                 interaction=prod_ls,
             )
-            chains.append(ThreeBodyDecayChain(decay))  # ty:ignore[invalid-argument-type]
+            chains.append(ThreeBodyDecayChain(decay))
         return chains
 
     def generate_ls(
@@ -446,7 +445,7 @@ def compute_decay_couplings(
     return {
         symbol: MeasuredParameter(value, hesse=0)
         for symbol, value in decay_couplings.items()
-    }  # ty:ignore[invalid-return-type]
+    }
 
 
 def _to_symbol_value_mapping(
@@ -505,14 +504,14 @@ def _to_value_with_uncertainty(str_value: str) -> MeasuredParameter[float]:
         return MeasuredParameter(
             value=float_values[0],
             hesse=float_values[1],
-        )  # ty:ignore[invalid-return-type]
+        )
     if len(float_values) == 4:
         return MeasuredParameter(
             value=float_values[0],
             hesse=float_values[1],
             model=float_values[2],
             systematic=float_values[3],
-        )  # ty:ignore[invalid-return-type]
+        )
     msg = f"Cannot convert '{str_value}' to {MeasuredParameter.__name__}"
     raise ValueError(msg)
 
