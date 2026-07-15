@@ -207,6 +207,27 @@ uv run \
 """
 description = "Run all tests on a specific Python version"
 
+[tasks.upgrade]
+depends-on = [
+    "_upgrade-pixi",
+    "_upgrade-precommit",
+    "_upgrade-uv",
+    "_upgrade-julia",
+]
+description = "Upgrade all lock files"
+
+[tasks._upgrade-julia]
+cmd = "julia --eval='using Pkg; Pkg.update()' --project=julia"
+
+[tasks._upgrade-pixi]
+cmd = "pixi update"
+
+[tasks._upgrade-precommit]
+cmd = "pre-commit autoupdate -j8"
+
+[tasks._upgrade-uv]
+cmd = "uv lock --upgrade"
+
 [workspace]
 channels = [
     "conda-forge",
