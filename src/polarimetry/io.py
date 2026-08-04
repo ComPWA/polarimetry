@@ -46,7 +46,7 @@ def mute_jax_warnings() -> None:
     logging.getLogger("jax._src.xla_bridge").setLevel(logging.ERROR)
 
 
-def export_polarimetry_field(  # noqa: PLR0917
+def export_polarimetry_field(  # ruff: ignore[too-many-positional-arguments]
     sigma1: jnp.ndarray,
     sigma2: jnp.ndarray,
     alpha_x: jnp.ndarray,

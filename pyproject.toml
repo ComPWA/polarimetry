@@ -203,6 +203,28 @@ ignore = [
     "RUF067",
     "S403",
     "SIM108",
+    "any-type",
+    "if-else-block-instead-of-if-exp",
+    "incorrect-blank-line-before-class",
+    "line-too-long",
+    "logging-f-string",
+    "missing-copyright-notice",
+    "missing-dashed-underline-after-section",
+    "missing-section-name-colon",
+    "missing-trailing-comma",
+    "multi-line-summary-second-line",
+    "non-empty-init-module",
+    "pytest-fixture-incorrect-parentheses-style",
+    "read-whole-file",
+    "reimplemented-starmap",
+    "single-line-implicit-string-concatenation",
+    "undocumented-magic-method",
+    "undocumented-public-class",
+    "undocumented-public-function",
+    "undocumented-public-init",
+    "undocumented-public-method",
+    "unspecified-encoding",
+    "write-whole-file",
 ]
 select = ["ALL"]
 task-tags = ["cspell"]
@@ -270,6 +292,15 @@ ignore-names = [
     "S310",
     "T20",
     "TC00",
+    "assert",
+    "global-statement",
+    "global-variable-not-assigned",
+    "magic-value-comparison",
+    "mixed-case-variable-in-global-scope",
+    "non-lowercase-variable-in-function",
+    "too-many-blank-lines",
+    "useless-expression",
+    "useless-semicolon",
 ]
 "**/benchmark.ipynb" = ["F821"]
 "**/polarimetry.ipynb" = ["SLF001"]
@@ -281,6 +312,9 @@ ignore-names = [
     "S101",
     "S113",
     "S310",
+    "assert",
+    "implicit-namespace-package",
+    "request-without-timeout",
 ]
 "docs/conf.py" = [
     "A001",
@@ -289,6 +323,8 @@ ignore-names = [
     "S404",
     "S602",
     "T201",
+    "builtin-variable-shadowing",
+    "undocumented-public-module",
 ]
 "src/polarimetry/io.py" = ["S301"]  # pickle
 "src/polarimetry/plot.py" = ["S404", "S60"]  # subprocess
@@ -303,6 +339,14 @@ ignore-names = [
     "S101",
     "SLF001",
     "T20",
+    "assert",
+    "boolean-type-hint-positional-argument",
+    "float-equality-comparison",
+    "implicit-namespace-package",
+    "import-private-name",
+    "magic-value-comparison",
+    "no-self-use",
+    "private-member-access",
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -341,7 +385,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.0/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.3/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [[tool.ty.overrides]]
