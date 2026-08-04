@@ -28,15 +28,15 @@ classifiers = [
 dependencies = [
     "IPython",
     "PyYAML",
-    "ampform-dpd ~=0.4.0",  # cached module, DefinedExpression
-    "ampform >=0.15.11",  # @unevaluated decorator, cached module, single-sqrt phsp factor
-    "attrs >=20.1.0",
+    "ampform>=0.15.11",  # @unevaluated decorator, cached module, single-sqrt phsp factor
+    "ampform-dpd~=0.4.0",  # cached module, DefinedExpression
+    "attrs>=20.1.0",
     "cairosvg",
     "matplotlib",
     "numpy",
     "scour",
-    "sympy >=1.10",
-    "tensorwaves[jax] >=0.4.5",
+    "sympy>=1.10",
+    "tensorwaves[jax]>=0.4.5",
 ]
 dynamic = ["version"]
 
@@ -64,7 +64,7 @@ doc = [
     "sphinx-pybtex-etal-style",
     "sphinx-reredirects",
     "sphinx-togglebutton",
-    "sphinxcontrib-bibtex >=2.2",
+    "sphinxcontrib-bibtex>=2.2",
     "sphinxcontrib-svg2pdfconverter",
 ]
 jupyter = [
