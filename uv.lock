@@ -55,8 +55,8 @@ wheels = [
 
 [[package]]
 name = "ampform-dpd"
-version = "0.4.1.dev8+ge68a987eb"
-source = { git = "https://github.com/ComPWA/ampform-dpd?branch=main#e68a987eb40e9d58e757e5c3787dd1777e91fb46" }
+version = "0.4.1"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ampform" },
     { name = "attrs" },
@@ -69,6 +69,10 @@ dependencies = [
     { name = "sympy" },
     { name = "tensorwaves", extra = ["jax"] },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/df/dc/06486bb3a1cc544ae9f8fb3f26e95b6573e6f6d8416834d5dfa933d83daa/ampform_dpd-0.4.1.tar.gz", hash = "sha256:56904265491bf716375eb0a027f4739613c1980d106a2cd8b1949416765e6341", size = 394896, upload-time = "2026-08-04T22:18:17.777Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ad/0d/bbb5b15ef5a9a3eb82ac7dc03ff18f5f49d291b030cb1609bfeadb937d64/ampform_dpd-0.4.1-py3-none-any.whl", hash = "sha256:445df5c64b75203bf9c9f053db8c29ce358d39bfef1217146eae7fcacdc20cd2", size = 42214, upload-time = "2026-08-04T22:18:16.395Z" },
 ]
 
 [[package]]
@@ -3861,7 +3865,7 @@ types = [
 [package.metadata]
 requires-dist = [
     { name = "ampform", specifier = ">=0.15.11" },
-    { name = "ampform-dpd", git = "https://github.com/ComPWA/ampform-dpd?branch=main" },
+    { name = "ampform-dpd", specifier = "~=0.4.0" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cairosvg" },
     { name = "ipython" },
