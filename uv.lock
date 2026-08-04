@@ -55,8 +55,8 @@ wheels = [
 
 [[package]]
 name = "ampform-dpd"
-version = "0.4.0"
-source = { registry = "https://pypi.org/simple" }
+version = "0.4.1.dev7+g4950497f0"
+source = { git = "https://github.com/ComPWA/ampform-dpd?branch=fix-ls-pair-ordering#4950497f023ac0208aace8064da637bf32e51c35" }
 dependencies = [
     { name = "ampform" },
     { name = "attrs" },
@@ -69,10 +69,6 @@ dependencies = [
     { name = "sympy" },
     { name = "tensorwaves", extra = ["jax"] },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/3c/3d/af3f629c3120632ce5ddbe2baaee8f87f5ef6123c9aa45d6ec8b6f8605fa/ampform_dpd-0.4.0.tar.gz", hash = "sha256:c32356ae6c00881ab106583e3e94614f8e3657a4acc8b38d5e44d5eb61c2726a", size = 362741, upload-time = "2026-02-16T17:00:01.061Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e2/67/b78fba3e3031ecc5dafca4a39b0d8895f10db878823e207d69a32f6d1882/ampform_dpd-0.4.0-py3-none-any.whl", hash = "sha256:28ac25b814d5467b825c9a906ee050fba5c66ad2da7a645f70202684060c3047", size = 43004, upload-time = "2026-02-16T16:59:59.204Z" },
 ]
 
 [[package]]
@@ -3865,7 +3861,7 @@ types = [
 [package.metadata]
 requires-dist = [
     { name = "ampform", specifier = ">=0.15.11" },
-    { name = "ampform-dpd", specifier = "~=0.4.0" },
+    { name = "ampform-dpd", git = "https://github.com/ComPWA/ampform-dpd?branch=fix-ls-pair-ordering" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cairosvg" },
     { name = "ipython" },
