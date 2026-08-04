@@ -10,7 +10,7 @@ from ampform.dynamics.phasespace import BreakupMomentum
 from ampform_dpd import DefinedExpression
 from ampform_dpd.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave
 from ampform_dpd.dynamics.builder import (
-    _get_angular_momentum,  # noqa: PLC2701
+    _get_angular_momentum,  # ruff: ignore[import-private-name]
     get_mandelstam_s,
 )
 
@@ -63,7 +63,7 @@ def formulate_exponential_bugg_breit_wigner(
     )
 
 
-def formulate_flatte_1405(  # noqa: PLR0914
+def formulate_flatte_1405(  # ruff: ignore[too-many-locals]
     decay_chain: ThreeBodyDecayChain,
 ) -> DefinedExpression:
     s = get_mandelstam_s(decay_chain.decay_node)
