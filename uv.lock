@@ -55,8 +55,8 @@ wheels = [
 
 [[package]]
 name = "ampform-dpd"
-version = "0.4.1.dev7+g4950497f0"
-source = { git = "https://github.com/ComPWA/ampform-dpd?branch=fix-ls-pair-ordering#4950497f023ac0208aace8064da637bf32e51c35" }
+version = "0.4.1.dev12+ge4d16bdea"
+source = { git = "https://github.com/ComPWA/ampform-dpd?branch=FIX%2Fintensity-checksum#e4d16bdea72a3858f34fdd26495bee0c47bdad25" }
 dependencies = [
     { name = "ampform" },
     { name = "attrs" },
@@ -3861,7 +3861,7 @@ types = [
 [package.metadata]
 requires-dist = [
     { name = "ampform", specifier = ">=0.15.11" },
-    { name = "ampform-dpd", git = "https://github.com/ComPWA/ampform-dpd?branch=fix-ls-pair-ordering" },
+    { name = "ampform-dpd", git = "https://github.com/ComPWA/ampform-dpd?branch=FIX%2Fintensity-checksum" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cairosvg" },
     { name = "ipython" },

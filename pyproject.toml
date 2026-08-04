@@ -437,4 +437,4 @@ possibly-unresolved-reference = "warn"
 error-on-warning = true
 
 [tool.uv.sources]
-ampform-dpd = { git = "https://github.com/ComPWA/ampform-dpd", branch = "fix-ls-pair-ordering" }
+ampform-dpd = { git = "https://github.com/ComPWA/ampform-dpd", branch = "FIX/intensity-checksum" }
