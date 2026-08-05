@@ -39,3 +39,10 @@ pyvenv*/
 **.code-workspace
 julia/notes/crosscheck.md
 julia/plots
+
+# Agent tooling
+/.agents/
+/.claude/
+/.codex/
+/AGENTS.md
+/CLAUDE.md

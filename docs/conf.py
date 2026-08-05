@@ -287,7 +287,7 @@ api_target_types = {
 }
 author = "Mikhail Mikhasenko, Remco de Boer, Miriam Fritsch"
 autodoc_default_options = {
-    "exclude-members": ", ".join([  # noqa: FLY002
+    "exclude-members": ", ".join([  # ruff: ignore[static-join-to-f-string]
         "default_assumptions",
         "doit",
         "evaluate",

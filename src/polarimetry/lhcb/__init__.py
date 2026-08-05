@@ -20,7 +20,7 @@ from ampform_dpd import (
     AmplitudeModel,
     DalitzPlotDecompositionBuilder,
     DynamicsBuilder,
-    _get_coupling_base,  # noqa: PLC2701
+    _get_coupling_base,  # ruff: ignore[import-private-name]
 )
 from ampform_dpd.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 from ampform_dpd.spin import filter_parity_violating_ls, generate_ls_couplings
@@ -238,9 +238,9 @@ def load_three_body_decay(
         ls = generate_ls_couplings(parent.spin, child1.spin, child2.spin)
         if conserve_parity:
             msg = "Parity is not defined"
-            assert parent.parity is not None, msg  # noqa: S101
-            assert child1.parity is not None, msg  # noqa: S101
-            assert child2.parity is not None, msg  # noqa: S101
+            assert parent.parity is not None, msg  # ruff: ignore[assert]
+            assert child1.parity is not None, msg  # ruff: ignore[assert]
+            assert child2.parity is not None, msg  # ruff: ignore[assert]
             return filter_parity_violating_ls(
                 ls, parent.parity, child1.parity, child2.parity
             )
@@ -378,7 +378,7 @@ def flip_production_coupling_signs(
         )
     if isinstance(obj, ParameterBootstrap):
         bootstrap = deepcopy(obj)
-        bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # noqa: SLF001
+        bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # ruff: ignore[private-member-access]
         return bootstrap
     if isinstance(obj, dict):
         return _flip_signs(obj, subsystem_names)  # ty:ignore[invalid-return-type]
@@ -432,9 +432,9 @@ def compute_decay_couplings(
                 coupling_pos = H_dec[R, 0, +half]
                 coupling_neg = H_dec[R, 0, -half]
             msg = "Parity is not defined"
-            assert chain.resonance.parity is not None, msg  # noqa: S101
-            assert child1.parity is not None, msg  # noqa: S101
-            assert child2.parity is not None, msg  # noqa: S101
+            assert chain.resonance.parity is not None, msg  # ruff: ignore[assert]
+            assert child1.parity is not None, msg  # ruff: ignore[assert]
+            assert child2.parity is not None, msg  # ruff: ignore[assert]
             decay_couplings[coupling_pos] = 1
             decay_couplings[coupling_neg] = int(
                 chain.resonance.parity
@@ -572,7 +572,7 @@ class MeasuredParameter(Generic[ParameterType]):
 def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
     half = sp.Rational(1, 2)
-    assert resonance.parity is not None, "Parity is not defined"  # noqa: S101
+    assert resonance.parity is not None, "Parity is not defined"  # ruff: ignore[assert]
     if resonance.name.startswith("D"):
         return int(-resonance.parity * (-1) ** (resonance.spin - half))  # ty:ignore[invalid-return-type]
     if resonance.name.startswith("K"):
@@ -594,7 +594,7 @@ def get_conversion_factor_ls(
     return get_conversion_factor(resonance) * cg_flip_factor  # ty:ignore[invalid-return-type]
 
 
-def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
+def parameter_key_to_symbol(  # ruff: ignore[complex-structure, too-many-return-statements, too-many-branches]
     key: str,
     particle_definitions: dict[str, Particle],
     min_ls: bool = True,

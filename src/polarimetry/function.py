@@ -80,6 +80,6 @@ def _get_coupling_regex(non_zero_couplings: list[str]) -> str:
     """
     # https://regex101.com/r/BOGYEz
     non_zero_couplings = [re.escape(coupling) for coupling in non_zero_couplings]
-    H = r"\\mathcal{H}\^\\mathrm{(LS,)?(decay|production)}"  # noqa: N806
+    H = r"\\mathcal{H}\^\\mathrm{(LS,)?(decay|production)}"  # ruff: ignore[non-lowercase-variable-in-function]
     group = rf"({'|'.join(non_zero_couplings)})"
     return rf"^{H}\[(?!\\?{group}).*$"

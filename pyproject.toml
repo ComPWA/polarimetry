@@ -28,15 +28,15 @@ classifiers = [
 dependencies = [
     "IPython",
     "PyYAML",
-    "ampform-dpd ~=0.4.0",  # cached module, DefinedExpression
-    "ampform >=0.15.11",  # @unevaluated decorator, cached module, single-sqrt phsp factor
-    "attrs >=20.1.0",
+    "ampform>=0.15.11",  # @unevaluated decorator, cached module, single-sqrt phsp factor
+    "ampform-dpd~=0.4.0",  # cached module, DefinedExpression
+    "attrs>=20.1.0",
     "cairosvg",
     "matplotlib",
     "numpy",
     "scour",
-    "sympy >=1.10",
-    "tensorwaves[jax] >=0.4.5",
+    "sympy>=1.10",
+    "tensorwaves[jax]>=0.4.5",
 ]
 dynamic = ["version"]
 
@@ -64,7 +64,7 @@ doc = [
     "sphinx-pybtex-etal-style",
     "sphinx-reredirects",
     "sphinx-togglebutton",
-    "sphinxcontrib-bibtex >=2.2",
+    "sphinxcontrib-bibtex>=2.2",
     "sphinxcontrib-svg2pdfconverter",
 ]
 jupyter = [
@@ -171,38 +171,39 @@ line-ending = "lf"
 [tool.ruff.lint]
 ignore = [
     "ANN",
-    "COM812",
-    "CPY001",
-    "D101",
-    "D102",
-    "D103",
-    "D105",
-    "D107",
-    "D203",
-    "D213",
-    "D407",
-    "D416",
     "DOC",
-    "E501",
     "FBT",
-    "FURB101",
-    "FURB103",
-    "FURB140",
-    "G004",
-    "ISC001",
-    "ISC003",
-    "PLC2401",
-    "PLC2403",
-    "PLR0913",
-    "PLR2004",
-    "PLW1514",
-    "PLW2901",
-    "PT001",
     "PTH",
-    "RUF001",
-    "RUF067",
-    "S403",
-    "SIM108",
+    "ambiguous-unicode-character-string",
+    "any-type",
+    "explicit-string-concatenation",
+    "if-else-block-instead-of-if-exp",
+    "incorrect-blank-line-before-class",
+    "line-too-long",
+    "logging-f-string",
+    "magic-value-comparison",
+    "missing-copyright-notice",
+    "missing-dashed-underline-after-section",
+    "missing-section-name-colon",
+    "missing-trailing-comma",
+    "multi-line-summary-second-line",
+    "non-ascii-import-name",
+    "non-ascii-name",
+    "non-empty-init-module",
+    "pytest-fixture-incorrect-parentheses-style",
+    "read-whole-file",
+    "redefined-loop-name",
+    "reimplemented-starmap",
+    "single-line-implicit-string-concatenation",
+    "suspicious-pickle-import",
+    "too-many-arguments",
+    "undocumented-magic-method",
+    "undocumented-public-class",
+    "undocumented-public-function",
+    "undocumented-public-init",
+    "undocumented-public-method",
+    "unspecified-encoding",
+    "write-whole-file",
 ]
 select = ["ALL"]
 task-tags = ["cspell"]
@@ -249,60 +250,66 @@ ignore-names = [
 
 [tool.ruff.lint.per-file-ignores]
 "*.ipynb" = [
-    "B018",
-    "C408",
     "C90",
     "D",
-    "E303",
-    "E402",
-    "E703",
-    "E741",
     "N8",
-    "PLC2701",
     "PLR09",
-    "PLW0602",
-    "PLW0603",
-    "RUF069",
-    "S101",
-    "S102",
-    "S301",
-    "S307",
-    "S310",
     "T20",
     "TC00",
+    "ambiguous-variable-name",
+    "assert",
+    "exec-builtin",
+    "float-equality-comparison",
+    "global-statement",
+    "global-variable-not-assigned",
+    "import-private-name",
+    "mixed-case-variable-in-global-scope",
+    "module-import-not-at-top-of-file",
+    "non-lowercase-variable-in-function",
+    "suspicious-eval-usage",
+    "suspicious-pickle-usage",
+    "suspicious-url-open-usage",
+    "too-many-blank-lines",
+    "unnecessary-collection-call",
+    "useless-expression",
+    "useless-semicolon",
 ]
-"**/benchmark.ipynb" = ["F821"]
-"**/polarimetry.ipynb" = ["SLF001"]
-"**/uncertainties.ipynb" = ["ARG001"]
-"**/widget.ipynb" = ["ARG001"]
+"**/benchmark.ipynb" = ["undefined-name"]
+"**/polarimetry.ipynb" = ["private-member-access"]
+"**/uncertainties.ipynb" = ["unused-function-argument"]
+"**/widget.ipynb" = ["unused-function-argument"]
 "docs/*" = [
-    "E402",
-    "INP001",
-    "S101",
-    "S113",
-    "S310",
+    "assert",
+    "implicit-namespace-package",
+    "module-import-not-at-top-of-file",
+    "request-without-timeout",
+    "suspicious-url-open-usage",
 ]
 "docs/conf.py" = [
-    "A001",
-    "D100",
-    "DTZ005",
-    "S404",
-    "S602",
-    "T201",
+    "builtin-variable-shadowing",
+    "call-datetime-now-without-tzinfo",
+    "print",
+    "subprocess-popen-with-shell-equals-true",
+    "suspicious-subprocess-import",
+    "undocumented-public-module",
 ]
-"src/polarimetry/io.py" = ["S301"]  # pickle
-"src/polarimetry/plot.py" = ["S404", "S60"]  # subprocess
+"src/polarimetry/io.py" = ["suspicious-pickle-usage"]  # pickle
+"src/polarimetry/plot.py" = [
+    "suspicious-subprocess-import",
+    "S60",
+]
 "tests/*" = [
-    "C408",
     "D",
-    "INP001",
-    "N806",
-    "PLC2701",
-    "PLR6301",
-    "RUF069",
-    "S101",
-    "SLF001",
     "T20",
+    "assert",
+    "boolean-type-hint-positional-argument",
+    "float-equality-comparison",
+    "implicit-namespace-package",
+    "import-private-name",
+    "no-self-use",
+    "non-lowercase-variable-in-function",
+    "private-member-access",
+    "unnecessary-collection-call",
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -341,7 +348,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.0/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.9.3/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [[tool.ty.overrides]]
