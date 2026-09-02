@@ -33,17 +33,17 @@ jobs:
     name: Run scripts
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
       - name: Extract locked Julia version
         id: extract-version
         run: |
           VERSION=$(grep 'julia_version = ' julia/Manifest.toml | head -n 1 | cut -d '"' -f 2)
           echo "version=$VERSION" | tee -a $GITHUB_OUTPUT
-      - uses: julia-actions/setup-julia@v2
+      - uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9 # v2.7.0
         with:
           version: ${{ steps.extract-version.outputs.version }}
       - name: Fetch Julia cache
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           key: |
             julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
