@@ -563,9 +563,11 @@ class MeasuredParameter(Generic[ParameterType]):
             return self.hesse
         if isinstance(self.value, (float, int)):
             return sqrt(self.hesse**2 + self.systematic**2)  # ty:ignore[invalid-return-type, invalid-argument-type]
+        hesse = complex(self.hesse)
+        systematic = complex(self.systematic)
         return complex(
-            sqrt(self.hesse.real**2 + self.systematic.real**2),
-            sqrt(self.hesse.imag**2 + self.systematic.imag**2),
+            sqrt(hesse.real**2 + systematic.real**2),
+            sqrt(hesse.imag**2 + systematic.imag**2),
         )  # ty:ignore[invalid-return-type]
 
 
