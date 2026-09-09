@@ -27,14 +27,14 @@ jobs:
     name: Build HTML (fast)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-      - uses: prefix-dev/setup-pixi@v0.9.4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: prefix-dev/setup-pixi@a0af7a228712d6121d37aba47adf55c1332c9c2e # v0.9.4
         with:
           cache: true
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
       - name: Build documentation without running notebooks
         run: pixi run doc
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: ${{ always() }}
         with:
           include-hidden-files: true
@@ -46,17 +46,17 @@ jobs:
     name: Build PDF (fast)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-      - uses: prefix-dev/setup-pixi@v0.9.4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: prefix-dev/setup-pixi@a0af7a228712d6121d37aba47adf55c1332c9c2e # v0.9.4
         with:
           cache: true
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
       - name: Install LaTeX dependencies
         run: |-
           sudo apt-get update -y
           sudo apt-get install -y inkscape latexmk make texlive-fonts-extra texlive-xetex xindy
       - run: pixi run pdf
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: ${{ always() }}
         with:
           include-hidden-files: true
@@ -68,11 +68,11 @@ jobs:
     name: Check external links
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-      - uses: prefix-dev/setup-pixi@v0.9.4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: prefix-dev/setup-pixi@a0af7a228712d6121d37aba47adf55c1332c9c2e # v0.9.4
         with:
           cache: true
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
       - name: Check external links with Sphinx linkcheck
         run: pixi run linkcheck
 
@@ -80,15 +80,15 @@ jobs:
     name: Run Jupyter notebooks
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-      - uses: prefix-dev/setup-pixi@v0.9.4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: prefix-dev/setup-pixi@a0af7a228712d6121d37aba47adf55c1332c9c2e # v0.9.4
         with:
           cache: true
       - run: |
           sudo apt-get update -y
           sudo apt-get install -y cm-super dvipng inkscape latexmk texlive-fonts-extra texlive-latex-extra texlive-xetex xindy
       - name: Fetch JAX cache
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           key: jax-${{hashFiles('uv.lock')}}-${{hashFiles('src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           restore-keys: |
@@ -96,9 +96,9 @@ jobs:
             jax-${{hashFiles('uv.lock')}}
             jax
           path: ${{ env.JAX_COMPILATION_CACHE_DIR }}
-      - uses: ComPWA/actions/cache-sympy@v4
+      - uses: ComPWA/actions/cache-sympy@13f1a3b0c831615fb49c008bcc48113da8a76477 # 4.0.2
       - name: Fetch Jupyter cache
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           key: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           restore-keys: |
@@ -106,7 +106,7 @@ jobs:
             jupyter-cache
           path: docs/_build/.jupyter_cache
       - name: Fetch output files
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           restore-keys: |
@@ -120,12 +120,12 @@ jobs:
             ./docs/appendix/exported_intensity_model.py
       - name: Build PDF with notebook execution
         run: pixi run pdfnb
-      - uses: actions/cache/save@v5
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         if: failure()
         with:
           key: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           path: docs/_build/.jupyter_cache
-      - uses: actions/cache/save@v5
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         if: failure()
         with:
           key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
@@ -135,7 +135,7 @@ jobs:
             ./docs/_static/images
             ./docs/appendix/export
             ./docs/appendix/exported_intensity_model.py
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           include-hidden-files: true
           name: docs
@@ -148,12 +148,12 @@ jobs:
       JULIA_COLOR: "yes"
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-      - uses: prefix-dev/setup-pixi@v0.9.4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: prefix-dev/setup-pixi@a0af7a228712d6121d37aba47adf55c1332c9c2e # v0.9.4
         with:
           cache: true
       - name: Fetch Julia cache
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           key: julia-${{hashFiles('julia/Manifest.toml')}}-${{hashFiles('**/*.jl')}}
           restore-keys: |
@@ -163,7 +163,7 @@ jobs:
             ./julia-*/
             ~/.julia/
       - run: pixi run pluto-server
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           include-hidden-files: true
           name: docs-julia
@@ -176,23 +176,23 @@ jobs:
       - jupyter
       - pluto
     steps:
-      - uses: actions/checkout@v6
-      - uses: prefix-dev/setup-pixi@v0.9.4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: prefix-dev/setup-pixi@a0af7a228712d6121d37aba47adf55c1332c9c2e # v0.9.4
         with:
           cache: true
-      - uses: astral-sh/setup-uv@v7
-      - uses: actions/download-artifact@v7
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: docs
           path: docs
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: docs-julia
           path: docs/julia
       - name: Combine executed notebooks PDF
         run: pixi run docnb
       - run: tar cf artifact.tar -C docs/_build/html .
-      - uses: actions/upload-artifact@v6 # https://github.com/actions/upload-pages-artifact/issues/129
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: github-pages
           path: artifact.tar
@@ -206,7 +206,7 @@ jobs:
       - combine-builds
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: github-pages
       - name: Extract artifact
@@ -247,4 +247,4 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
