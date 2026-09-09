@@ -41,8 +41,8 @@ julia/notes/crosscheck.md
 julia/plots
 
 # Agent tooling
-/.agents/
-/.claude/
-/.codex/
-/AGENTS.md
-/CLAUDE.md
+.agents/
+.claude/
+.codex/
+AGENTS.md
+CLAUDE.md
