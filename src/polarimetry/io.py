@@ -5,13 +5,15 @@ from __future__ import annotations
 import json
 import logging
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import jax.numpy as jnp
-import sympy as sp
 from ampform_dpd.io import aslatex
 from IPython.core.display import Math
 from IPython.display import display
+
+if TYPE_CHECKING:
+    import sympy as sp
 
 
 def display_latex(obj, *, wrap: bool = False) -> None:
@@ -22,16 +24,8 @@ def display_latex(obj, *, wrap: bool = False) -> None:
     display(Math(latex))
 
 
-def display_doit(expr: sp.Expr, deep=False, terms_per_line: int | None = None) -> None:
-    if terms_per_line is None:
-        latex = aslatex({expr: expr.doit(deep=deep)})
-    else:
-        latex = sp.multiline_latex(
-            lhs=expr,
-            rhs=expr.doit(deep=deep),
-            terms_per_line=terms_per_line,
-            environment="eqnarray",
-        )
+def display_doit(expr: sp.Expr, deep=False, terms_per_line: int = 0) -> None:
+    latex = aslatex({expr: expr.doit(deep=deep)}, terms_per_line=terms_per_line)
     display(Math(latex))
 
 
