@@ -4910,7 +4910,7 @@ wheels = [
 
 [[package]]
 name = "qrules"
-version = "0.10.12"
+version = "0.10.13"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
@@ -4922,9 +4922,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5e/b2/66d1d0c8a0551d6ff7cdb555e03582d271b0c4a3d07c2b413e36024a85b3/qrules-0.10.12.tar.gz", hash = "sha256:72b0fd0c3042f1b82b6d27f03f2636156f8e3070a8d915f3f2b31b535bd1d347", size = 334897, upload-time = "2026-09-04T12:32:04.51Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f3/19/22031f406c12f0f965ce6299b4a95afb6bd6c69782d825cee01e0d170eea/qrules-0.10.13.tar.gz", hash = "sha256:e68682e418d907be840791d1781f54f38bc5c7313b3fcc464151b4d554ac323a", size = 335212, upload-time = "2026-09-09T15:23:51.625Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ff/31/a10f094959a0cc33e790511d4ae91ca3f1a10c54029c9b4c7e078198df22/qrules-0.10.12-py3-none-any.whl", hash = "sha256:8b3f0d7b412eb4d19ca8a4006a2bab7a9dd2c0e744fb85eae61e7d590a999705", size = 85931, upload-time = "2026-09-04T12:32:02.879Z" },
+    { url = "https://files.pythonhosted.org/packages/5b/dc/2a53d6de38c598e08266a52fa7bdfd213a816c3025190cdbcc0451f3b41c/qrules-0.10.13-py3-none-any.whl", hash = "sha256:8c0206d0e3b8bb2ad5f2cfce69512e22534fc666eff8ca32e51a5bd79ce93d2f", size = 86140, upload-time = "2026-09-09T15:23:50.337Z" },
 ]
 
 [[package]]
