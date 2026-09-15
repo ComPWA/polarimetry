@@ -51,8 +51,8 @@ dependencies = [
 
 [[package]]
 name = "ampform-dpd"
-version = "0.4.4.dev11+gc54c84e7b"
-source = { git = "https://github.com/ComPWA/ampform-dpd?rev=c54c84e7b66b0cbf26b4f883331603b67f46c90b#c54c84e7b66b0cbf26b4f883331603b67f46c90b" }
+version = "0.4.4.dev13+g03ca1cd1f"
+source = { git = "https://github.com/ComPWA/ampform-dpd?rev=03ca1cd1f45da3a5c23fde98d4546f747b1b2b95#03ca1cd1f45da3a5c23fde98d4546f747b1b2b95" }
 dependencies = [
     { name = "ampform" },
     { name = "attrs" },
@@ -4189,7 +4189,7 @@ types = [
 [package.metadata]
 requires-dist = [
     { name = "ampform", git = "https://github.com/ComPWA/ampform?rev=4fe79a57503abd70a5ab04fdc02cdd0d66dc99f3" },
-    { name = "ampform-dpd", git = "https://github.com/ComPWA/ampform-dpd?rev=c54c84e7b66b0cbf26b4f883331603b67f46c90b" },
+    { name = "ampform-dpd", git = "https://github.com/ComPWA/ampform-dpd?rev=03ca1cd1f45da3a5c23fde98d4546f747b1b2b95" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cairosvg" },
     { name = "ipython" },
