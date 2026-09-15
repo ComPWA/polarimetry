@@ -8,8 +8,9 @@ import sympy as sp
 from ampform.dynamics.form_factor import FormFactor
 from ampform.dynamics.phasespace import BreakupMomentum
 from ampform_dpd import DefinedExpression
-from ampform_dpd.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave
+from ampform_dpd.dynamics import BuggBreitWigner, FlattéSWave
 from ampform_dpd.dynamics.builder import (
+    BreitWignerBuilder,
     _get_angular_momentum,  # ruff: ignore[import-private-name]
     get_mandelstam_s,
 )
@@ -100,42 +101,23 @@ def formulate_flatte_1405(  # ruff: ignore[too-many-locals]
 
 
 def formulate_breit_wigner(decay_chain: ThreeBodyDecayChain) -> DefinedExpression:
-    s = get_mandelstam_s(decay_chain.decay_node)
-    m1, m2 = _create_decay_product_masses(decay_chain)
-    l_dec = _get_angular_momentum(decay_chain.decay_node)
-    l_prod = _get_angular_momentum(decay_chain.production_node)
-    parent_mass = create_mass_symbol(decay_chain.parent)
-    spectator_mass = create_mass_symbol(decay_chain.spectator)
-    resonance_mass = create_mass_symbol(decay_chain.resonance)
-    resonance_width = create_width_symbol(decay_chain.resonance)
+    """Relativistic Breit-Wigner with pole-normalized production and decay vertices.
+
+    This is the ``BreitWignerMinL`` lineshape of the published LHCb models, expressed
+    through AmpForm-DPD's common `~ampform_dpd.dynamics.builder.BreitWignerBuilder`.
+    """
     R_dec = create_meson_radius_symbol("dec")
     R_prod = create_meson_radius_symbol("prod")
-    return DefinedExpression(
-        expression=BreitWignerMinL(
-            s,
-            parent_mass,
-            spectator_mass,
-            resonance_mass,
-            resonance_width,
-            m1,
-            m2,
-            l_dec,  # ty:ignore[invalid-argument-type]
-            l_prod,  # ty:ignore[invalid-argument-type]
-            R_dec,
-            R_prod,
-        ),
-        parameters={
-            parent_mass: decay_chain.parent.mass,
-            spectator_mass: decay_chain.spectator.mass,
-            resonance_mass: decay_chain.resonance.mass,
-            resonance_width: decay_chain.resonance.width,
-            m1: decay_chain.decay_products[0].mass,
-            m2: decay_chain.decay_products[1].mass,
-            # https://github.com/ComPWA/polarimetry/pull/11#issuecomment-1128784376
-            R_dec: 1.5,
-            R_prod: 5,
+    builder = BreitWignerBuilder(
+        normalize_form_factors=True,
+        symbol_mapping={
+            sp.Symbol(Rf"R_{{{decay_chain.resonance.latex}}}", nonnegative=True): R_dec,
+            sp.Symbol(Rf"R_{{{decay_chain.parent.latex}}}", nonnegative=True): R_prod,
         },
+        # https://github.com/ComPWA/polarimetry/pull/11#issuecomment-1128784376
+        parameter_defaults={R_dec: 1.5, R_prod: 5},
     )
+    return builder(decay_chain)
 
 
 def _create_decay_product_masses(
