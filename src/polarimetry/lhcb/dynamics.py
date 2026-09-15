@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import sympy as sp
 from ampform.dynamics.form_factor import FormFactor
 from ampform.dynamics.phasespace import BreakupMomentum
+from ampform.sympy import unevaluated
 from ampform_dpd import DefinedExpression
-from ampform_dpd.dynamics import BuggBreitWigner, FlattéSWave
-from ampform_dpd.dynamics.builder import (
+from ampform_dpd.dynamics import (
     BreitWignerBuilder,
     _get_angular_momentum,  # ruff: ignore[import-private-name]
     get_mandelstam_s,
@@ -26,6 +26,51 @@ from polarimetry.lhcb.symbol import (
 
 if TYPE_CHECKING:
     from ampform_dpd.decay import ThreeBodyDecayChain
+
+
+@unevaluated
+class BuggBreitWigner(sp.Expr):
+    s: Any
+    m0: Any
+    Γ0: Any
+    m1: Any
+    m2: Any
+    γ: Any
+    _latex_repr_ = R"\mathcal{{R}}^\mathrm{{Bugg}}\left({s}\right)"
+
+    def evaluate(self):
+        s, m0, Γ0, m1, m2, γ = self.args
+        # Adler zero
+        s_A = m1**2 - m2**2 / 2  # ty: ignore[unsupported-operator]
+        g_squared = sp.Mul(
+            (s - s_A) / (m0**2 - s_A),  # ty: ignore[unsupported-operator]
+            m0 * Γ0 * sp.exp(-γ * s),  # ty: ignore[unsupported-operator]
+            evaluate=False,
+        )
+        return 1 / (m0**2 - s - sp.I * g_squared)  # ty: ignore[unsupported-operator]
+
+
+@unevaluated
+class FlattéSWave(sp.Expr):
+    # https://github.com/ComPWA/polarimetry/blob/34f5330/julia/notebooks/model0.jl#L151-L161
+    s: Any
+    m0: Any
+    widths: tuple[Any, Any]
+    masses1: tuple[Any, Any]
+    masses2: tuple[Any, Any]
+    _latex_repr_ = R"\mathcal{{R}}^\mathrm{{Flatté}}\left({s}\right)"
+
+    def evaluate(self):
+        m0: sp.Expr
+        s, m0, (Γ1, Γ2), (ma1, mb1), (ma2, mb2) = self.args  # ty: ignore[not-iterable, invalid-assignment]
+        p = BreakupMomentum(s, ma1, mb1)
+        p0 = BreakupMomentum(m0**2, ma2, mb2)
+        q = BreakupMomentum(s, ma2, mb2)
+        q0 = BreakupMomentum(m0**2, ma2, mb2)
+        Γ1 *= (p / p0) * m0 / sp.sqrt(s)
+        Γ2 *= (q / q0) * m0 / sp.sqrt(s)
+        Γ = Γ1 + Γ2
+        return 1 / (m0**2 - s - sp.I * m0 * Γ)
 
 
 def formulate_bugg_breit_wigner(decay_chain: ThreeBodyDecayChain) -> DefinedExpression:
@@ -104,7 +149,7 @@ def formulate_breit_wigner(decay_chain: ThreeBodyDecayChain) -> DefinedExpressio
     """Relativistic Breit-Wigner with pole-normalized production and decay vertices.
 
     This is the ``BreitWignerMinL`` lineshape of the published LHCb models, expressed
-    through AmpForm-DPD's common `~ampform_dpd.dynamics.builder.BreitWignerBuilder`.
+    through AmpForm-DPD's common `~ampform_dpd.dynamics.BreitWignerBuilder`.
     """
     R_dec = create_meson_radius_symbol("dec")
     R_prod = create_meson_radius_symbol("prod")

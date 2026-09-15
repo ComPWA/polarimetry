@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pytest
 from ampform_dpd import DynamicsBuilder, create_mass_symbol_mapping
-from ampform_dpd.dynamics.builder import get_mandelstam_s
+from ampform_dpd.dynamics import get_mandelstam_s
 from tensorwaves.function.sympy import create_parametrized_function
 
 from polarimetry.lhcb import (
