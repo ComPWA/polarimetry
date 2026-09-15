@@ -437,5 +437,5 @@ possibly-unresolved-reference = "warn"
 error-on-warning = true
 
 [tool.uv.sources]
-ampform = { git = "https://github.com/ComPWA/ampform", rev = "4fe79a57503abd70a5ab04fdc02cdd0d66dc99f3" }
-ampform-dpd = { git = "https://github.com/ComPWA/ampform-dpd", rev = "9e502debe87d03ec27c296d27bc92af30bef14c1" }
+ampform = { git = "https://github.com/ComPWA/ampform", rev = "cbf7654eb5452eee23f593a284931351ca433a6c" }
+ampform-dpd = { git = "https://github.com/ComPWA/ampform-dpd", rev = "9a6ec0575e5878ea27d853dac49875550f083017" }

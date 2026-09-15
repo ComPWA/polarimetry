@@ -155,10 +155,9 @@ def formulate_breit_wigner(decay_chain: ThreeBodyDecayChain) -> DefinedExpressio
     R_prod = create_meson_radius_symbol("prod")
     builder = BreitWignerBuilder(
         normalize_form_factors=True,
-        symbol_mapping={
-            sp.Symbol(Rf"R_{{{decay_chain.resonance.latex}}}", nonnegative=True): R_dec,
-            sp.Symbol(Rf"R_{{{decay_chain.parent.latex}}}", nonnegative=True): R_prod,
-        },
+        meson_radius=lambda isobar: (
+            R_prod if isobar.parent == decay_chain.parent else R_dec
+        ),
         # https://github.com/ComPWA/polarimetry/pull/11#issuecomment-1128784376
         parameter_defaults={R_dec: 1.5, R_prod: 5},
     )

@@ -40,8 +40,8 @@ wheels = [
 
 [[package]]
 name = "ampform"
-version = "0.16.2.dev13+g4fe79a575"
-source = { git = "https://github.com/ComPWA/ampform.git?rev=4fe79a57503abd70a5ab04fdc02cdd0d66dc99f3#4fe79a57503abd70a5ab04fdc02cdd0d66dc99f3" }
+version = "0.16.2.dev17+gcbf7654eb"
+source = { git = "https://github.com/ComPWA/ampform.git?rev=cbf7654eb5452eee23f593a284931351ca433a6c#cbf7654eb5452eee23f593a284931351ca433a6c" }
 dependencies = [
     { name = "attrs" },
     { name = "frozendict" },
@@ -51,8 +51,8 @@ dependencies = [
 
 [[package]]
 name = "ampform-dpd"
-version = "0.4.4.dev15+g9e502debe"
-source = { git = "https://github.com/ComPWA/ampform-dpd?rev=9e502debe87d03ec27c296d27bc92af30bef14c1#9e502debe87d03ec27c296d27bc92af30bef14c1" }
+version = "0.4.4.dev18+g9a6ec0575"
+source = { git = "https://github.com/ComPWA/ampform-dpd?rev=9a6ec0575e5878ea27d853dac49875550f083017#9a6ec0575e5878ea27d853dac49875550f083017" }
 dependencies = [
     { name = "ampform" },
     { name = "attrs" },
@@ -4188,8 +4188,8 @@ types = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ampform", git = "https://github.com/ComPWA/ampform?rev=4fe79a57503abd70a5ab04fdc02cdd0d66dc99f3" },
-    { name = "ampform-dpd", git = "https://github.com/ComPWA/ampform-dpd?rev=9e502debe87d03ec27c296d27bc92af30bef14c1" },
+    { name = "ampform", git = "https://github.com/ComPWA/ampform?rev=cbf7654eb5452eee23f593a284931351ca433a6c" },
+    { name = "ampform-dpd", git = "https://github.com/ComPWA/ampform-dpd?rev=9a6ec0575e5878ea27d853dac49875550f083017" },
     { name = "attrs", specifier = ">=20.1.0" },
     { name = "cairosvg" },
     { name = "ipython" },
