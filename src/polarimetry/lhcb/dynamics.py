@@ -9,6 +9,7 @@ from ampform.dynamics.form_factor import FormFactor
 from ampform.dynamics.phasespace import BreakupMomentum
 from ampform.sympy import unevaluated
 from ampform_dpd import DefinedExpression
+from ampform_dpd.decay import State
 from ampform_dpd.dynamics import (
     BreitWignerBuilder,
     _get_angular_momentum,  # ruff: ignore[import-private-name]
@@ -126,9 +127,9 @@ def formulate_flatte_1405(  # ruff: ignore[too-many-locals]
     l_prod = _get_angular_momentum(decay_chain.production_node)
     R_prod = create_meson_radius_symbol("prod")
     ff = FormFactor(m_top**2, sp.sqrt(s), m_spec, l_prod, R_prod)  # ty:ignore[invalid-argument-type]
-    ff0 = FormFactor(m_top**2, m_res, m_spec, l_prod, R_prod)  # ty:ignore[invalid-argument-type]
+    ff /= ff.xreplace({s: m_res**2})
     return DefinedExpression(
-        expression=ff / ff0 * FlattéSWave(s, m_res, (Γ1, Γ2), (m1, m2), (mπ, mΣ)),  # ty:ignore[invalid-argument-type]
+        expression=ff * FlattéSWave(s, m_res, (Γ1, Γ2), (m1, m2), (mπ, mΣ)),  # ty:ignore[invalid-argument-type]
         parameters={
             m_res: resonance.mass,
             Γ1: resonance.width,
@@ -156,7 +157,7 @@ def formulate_breit_wigner(decay_chain: ThreeBodyDecayChain) -> DefinedExpressio
     builder = BreitWignerBuilder(
         normalize_form_factors=True,
         meson_radius=lambda isobar: (
-            R_prod if isobar.parent == decay_chain.parent else R_dec
+            R_prod if isinstance(isobar.parent, State) else R_dec
         ),
         # https://github.com/ComPWA/polarimetry/pull/11#issuecomment-1128784376
         parameter_defaults={R_dec: 1.5, R_prod: 5},
