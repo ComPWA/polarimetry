@@ -223,7 +223,7 @@ cmd = "julia --eval='using Pkg; Pkg.update()' --project=julia"
 cmd = "pixi update"
 
 [tasks._upgrade-precommit]
-cmd = "pre-commit autoupdate -j8"
+cmd = "prek autoupdate"
 
 [tasks._upgrade-uv]
 cmd = "uv lock --upgrade"
