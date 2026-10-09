@@ -179,7 +179,7 @@ depends-on = ["instantiate-julia"]
 description = "Preview static Pluto website"
 
 [tasks.style]
-cmd = "uv run --group style --no-dev pre-commit run --all-files"
+cmd = "uv run --group style --no-dev prek run --all-files"
 description = "Perform all linting, formatting, and spelling checks"
 
 [tasks.test]
