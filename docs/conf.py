@@ -310,7 +310,7 @@ bibtex_bibfiles = [
 bibtex_default_style = "unsrt_et_al"
 bibtex_use_mathjax = True
 codeautolink_concat_default = True
-copyright = "2022"
+copyright = f"2022, {ORGANIZATION}"
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
