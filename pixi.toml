@@ -179,7 +179,7 @@ depends-on = ["instantiate-julia"]
 description = "Preview static Pluto website"
 
 [tasks.style]
-cmd = "uv run --group style --no-dev pre-commit run --all-files"
+cmd = "uv run --group style --no-dev prek run --all-files"
 description = "Perform all linting, formatting, and spelling checks"
 
 [tasks.test]
@@ -188,7 +188,6 @@ description = "Run all unit tests"
 
 [tasks.test-all]
 depends-on = [
-    { "task" = "test-py", "args" = ["3.10"] },
     { "task" = "test-py", "args" = ["3.11"] },
     { "task" = "test-py", "args" = ["3.12"] },
     { "task" = "test-py", "args" = ["3.13"] }
@@ -223,7 +222,7 @@ cmd = "julia --eval='using Pkg; Pkg.update()' --project=julia"
 cmd = "pixi update"
 
 [tasks._upgrade-precommit]
-cmd = "pre-commit autoupdate -j8"
+cmd = "prek autoupdate"
 
 [tasks._upgrade-uv]
 cmd = "uv lock --upgrade"
