@@ -13,7 +13,7 @@ from functools import cache
 from typing import TYPE_CHECKING, overload
 
 import cloudpickle
-from ampform.sympy._cache import cache_to_disk  # noqa: PLC2701
+from ampform.sympy._cache import cache_to_disk  # ruff: ignore[import-private-name]
 from ampform.sympy.cached import doit, simplify, subs, trigsimp, unfold, xreplace
 from frozendict import frozendict
 from tensorwaves.function.sympy import create_function, create_parametrized_function
@@ -75,7 +75,7 @@ def lambdify(
         backend = parameters
         parameters = None
     if backend == "jax":
-        import jax  # noqa: PLC0415
+        import jax  # ruff: ignore[import-outside-top-level]
 
         jax.config.update("jax_enable_x64", True)
     if parameters is None:

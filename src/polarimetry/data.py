@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any
 import jax.numpy as jnp
 import sympy as sp
 from ampform.amplitude.dpd import create_mass_symbol_mapping, formulate_third_mandelstam
-from ampform.decay import ThreeBodyDecay
 from ampform.kinematics.phasespace import is_within_phasespace
 from tensorwaves.data import IntensityDistributionGenerator, NumpyDomainGenerator
 from tensorwaves.data.rng import NumpyUniformRNG
@@ -66,7 +65,7 @@ def generate_meshgrid_sample(
     )
 
 
-def generate_sub_meshgrid_sample(  # noqa: PLR0917
+def generate_sub_meshgrid_sample(  # ruff: ignore[too-many-positional-arguments]
     decay: ThreeBodyDecay,
     resolution: int,
     x_range: tuple[float, float],

@@ -5,13 +5,15 @@ from __future__ import annotations
 import json
 import logging
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import jax.numpy as jnp
-import sympy as sp
 from ampform.io import aslatex
 from IPython.core.display import Math
 from IPython.display import display
+
+if TYPE_CHECKING:
+    import sympy as sp
 
 
 def display_latex(obj, *, wrap: bool = False) -> None:
@@ -22,16 +24,8 @@ def display_latex(obj, *, wrap: bool = False) -> None:
     display(Math(latex))
 
 
-def display_doit(expr: sp.Expr, deep=False, terms_per_line: int | None = None) -> None:
-    if terms_per_line is None:
-        latex = aslatex({expr: expr.doit(deep=deep)})
-    else:
-        latex = sp.multiline_latex(
-            lhs=expr,
-            rhs=expr.doit(deep=deep),
-            terms_per_line=terms_per_line,
-            environment="eqnarray",
-        )
+def display_doit(expr: sp.Expr, deep=False, terms_per_line: int = 0) -> None:
+    latex = aslatex({expr: expr.doit(deep=deep)}, terms_per_line=terms_per_line)
     display(Math(latex))
 
 
@@ -46,7 +40,7 @@ def mute_jax_warnings() -> None:
     logging.getLogger("jax._src.xla_bridge").setLevel(logging.ERROR)
 
 
-def export_polarimetry_field(  # noqa: PLR0917
+def export_polarimetry_field(  # ruff: ignore[too-many-positional-arguments]
     sigma1: jnp.ndarray,
     sigma2: jnp.ndarray,
     alpha_x: jnp.ndarray,
@@ -62,7 +56,7 @@ def export_polarimetry_field(  # noqa: PLR0917
     if len(sigma2.shape) != 1:
         msg = f"sigma2 must be a 1D array, got {sigma2.shape}"
         raise ValueError(msg)
-    expected_shape: tuple[int, int] = (*sigma1.shape, *sigma2.shape)  # ty:ignore[invalid-assignment]
+    expected_shape: tuple[int, int] = (*sigma1.shape, *sigma2.shape)
     for array in [alpha_x, alpha_y, alpha_z, intensity]:
         if array.shape != expected_shape:
             msg = f"Expected shape {expected_shape}, got {array.shape}"

@@ -8,7 +8,7 @@ import sympy as sp
 from ampform.dynamics import BreitWignerMinL, BuggBreitWigner, FlattéSWave
 from ampform.dynamics.builder import (
     DefinedExpression,
-    _get_angular_momentum,  # noqa: PLC2701
+    _get_angular_momentum,  # ruff: ignore[import-private-name]
     get_mandelstam_s,
 )
 from ampform.dynamics.form_factor import FormFactor
@@ -63,7 +63,7 @@ def formulate_exponential_bugg_breit_wigner(
     )
 
 
-def formulate_flatte_1405(  # noqa: PLR0914
+def formulate_flatte_1405(  # ruff: ignore[too-many-locals]
     decay_chain: ThreeBodyDecayChain,
 ) -> DefinedExpression:
     s = get_mandelstam_s(decay_chain.decay_node)

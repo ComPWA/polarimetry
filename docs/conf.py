@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import os
 import shutil
 import subprocess
@@ -221,6 +219,7 @@ set_intersphinx_version_remapping({
         "8.1.1": "8.1.2",
         "8.1.7": "8.1.5",
         "8.1.8": "8.1.5",
+        "8.1.9": "8.1.5",
     },
     "matplotlib": {
         "3.9.1.post1": "3.9.1",
@@ -290,7 +289,7 @@ api_target_types = {
 }
 author = "Mikhail Mikhasenko, Remco de Boer, Miriam Fritsch"
 autodoc_default_options = {
-    "exclude-members": ", ".join([  # noqa: FLY002
+    "exclude-members": ", ".join([  # ruff: ignore[static-join-to-f-string]
         "default_assumptions",
         "doit",
         "evaluate",
@@ -314,7 +313,7 @@ bibtex_bibfiles = [
 bibtex_default_style = "unsrt_et_al"
 bibtex_use_mathjax = True
 codeautolink_concat_default = True
-copyright = "2023"
+copyright = f"2022, {ORGANIZATION}"
 default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
@@ -466,11 +465,13 @@ linkcheck_ignore = [
     "https://arxiv.org/pdf/2208.03262.pdf",
     "https://arxiv.org/pdf/hep-ex/0510019.pdf",
     "https://doi.org/10.1103/PhysRevD.101.034033",
+    "https://doi.org/10.5281/zenodo",  # 403 for zenodo.org
     "https://indico.cern.ch/event/1187317",
     "https://indico.cern.ch/event/1242323",
     "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033",
     "https://twiki.cern.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi",
     "https://www.bookfinder.com",
+    "https://zenodo.org",  # 403
 ]
 myst_enable_extensions = [
     "colon_fence",

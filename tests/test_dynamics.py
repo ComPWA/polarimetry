@@ -261,7 +261,7 @@ REPO_DIR = Path(__file__).parent.parent
         ),
     ],
 )
-def test_dynamics_builder(  # noqa: PLR0914
+def test_dynamics_builder(  # ruff: ignore[too-many-locals]
     dynamics_builder: DynamicsBuilder,
     resonance: ResonanceName,
     expected: list[list[complex]],

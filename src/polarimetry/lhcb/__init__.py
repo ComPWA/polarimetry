@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import itertools
 import re
-from collections.abc import Iterable
 from copy import deepcopy
 from math import sqrt
 from typing import TYPE_CHECKING, Generic, Literal, TypedDict, TypeVar
@@ -20,7 +19,7 @@ import yaml
 from ampform.amplitude.dpd import (
     AmplitudeModel,
     DalitzPlotDecompositionBuilder,
-    _get_coupling_base,  # noqa: PLC2701
+    _get_coupling_base,  # ruff: ignore[import-private-name]
 )
 from ampform.decay import IsobarNode, Particle, ThreeBodyDecay, ThreeBodyDecayChain
 from ampform.decay.spin import filter_parity_violating_ls, generate_ls_couplings
@@ -216,7 +215,7 @@ def load_three_body_decay(
                 child2=spectator,
                 interaction=min(prod_ls_couplings),
             )
-            return [ThreeBodyDecayChain(decay)]  # ty:ignore[invalid-argument-type]
+            return [ThreeBodyDecayChain(decay)]
         chains = []
         for dec_ls, prod_ls in itertools.product(dec_ls_couplings, prod_ls_couplings):
             decay = IsobarNode(
@@ -230,7 +229,7 @@ def load_three_body_decay(
                 child2=spectator,
                 interaction=prod_ls,
             )
-            chains.append(ThreeBodyDecayChain(decay))  # ty:ignore[invalid-argument-type]
+            chains.append(ThreeBodyDecayChain(decay))
         return chains
 
     def generate_ls(
@@ -239,9 +238,9 @@ def load_three_body_decay(
         ls = generate_ls_couplings(parent.spin, child1.spin, child2.spin)
         if conserve_parity:
             msg = "Parity is not defined"
-            assert parent.parity is not None, msg  # noqa: S101
-            assert child1.parity is not None, msg  # noqa: S101
-            assert child2.parity is not None, msg  # noqa: S101
+            assert parent.parity is not None, msg  # ruff: ignore[assert]
+            assert child1.parity is not None, msg  # ruff: ignore[assert]
+            assert child2.parity is not None, msg  # ruff: ignore[assert]
             return filter_parity_violating_ls(
                 ls, parent.parity, child1.parity, child2.parity
             )
@@ -379,7 +378,7 @@ def flip_production_coupling_signs(
         )
     if isinstance(obj, ParameterBootstrap):
         bootstrap = deepcopy(obj)
-        bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # noqa: SLF001
+        bootstrap._parameters = _flip_signs(bootstrap._parameters, subsystem_names)  # ruff: ignore[private-member-access]
         return bootstrap
     if isinstance(obj, dict):
         return _flip_signs(obj, subsystem_names)  # ty:ignore[invalid-return-type]
@@ -433,9 +432,9 @@ def compute_decay_couplings(
                 coupling_pos = H_dec[R, 0, +half]
                 coupling_neg = H_dec[R, 0, -half]
             msg = "Parity is not defined"
-            assert chain.resonance.parity is not None, msg  # noqa: S101
-            assert child1.parity is not None, msg  # noqa: S101
-            assert child2.parity is not None, msg  # noqa: S101
+            assert chain.resonance.parity is not None, msg  # ruff: ignore[assert]
+            assert child1.parity is not None, msg  # ruff: ignore[assert]
+            assert child2.parity is not None, msg  # ruff: ignore[assert]
             decay_couplings[coupling_pos] = 1
             decay_couplings[coupling_neg] = int(
                 chain.resonance.parity
@@ -446,7 +445,7 @@ def compute_decay_couplings(
     return {
         symbol: MeasuredParameter(value, hesse=0)
         for symbol, value in decay_couplings.items()
-    }  # ty:ignore[invalid-return-type]
+    }
 
 
 def _to_symbol_value_mapping(
@@ -505,14 +504,14 @@ def _to_value_with_uncertainty(str_value: str) -> MeasuredParameter[float]:
         return MeasuredParameter(
             value=float_values[0],
             hesse=float_values[1],
-        )  # ty:ignore[invalid-return-type]
+        )
     if len(float_values) == 4:
         return MeasuredParameter(
             value=float_values[0],
             hesse=float_values[1],
             model=float_values[2],
             systematic=float_values[3],
-        )  # ty:ignore[invalid-return-type]
+        )
     msg = f"Cannot convert '{str_value}' to {MeasuredParameter.__name__}"
     raise ValueError(msg)
 
@@ -564,16 +563,18 @@ class MeasuredParameter(Generic[ParameterType]):
             return self.hesse
         if isinstance(self.value, (float, int)):
             return sqrt(self.hesse**2 + self.systematic**2)  # ty:ignore[invalid-return-type, invalid-argument-type]
+        hesse = complex(self.hesse)
+        systematic = complex(self.systematic)
         return complex(
-            sqrt(self.hesse.real**2 + self.systematic.real**2),
-            sqrt(self.hesse.imag**2 + self.systematic.imag**2),
+            sqrt(hesse.real**2 + systematic.real**2),
+            sqrt(hesse.imag**2 + systematic.imag**2),
         )  # ty:ignore[invalid-return-type]
 
 
 def get_conversion_factor(resonance: Particle) -> Literal[-1, 1]:
     # https://github.com/ComPWA/polarimetry/issues/5#issue-1220525993
     half = sp.Rational(1, 2)
-    assert resonance.parity is not None, "Parity is not defined"  # noqa: S101
+    assert resonance.parity is not None, "Parity is not defined"  # ruff: ignore[assert]
     if resonance.name.startswith("D"):
         return int(-resonance.parity * (-1) ** (resonance.spin - half))  # ty:ignore[invalid-return-type]
     if resonance.name.startswith("K"):
@@ -595,7 +596,7 @@ def get_conversion_factor_ls(
     return get_conversion_factor(resonance) * cg_flip_factor  # ty:ignore[invalid-return-type]
 
 
-def parameter_key_to_symbol(  # noqa: C901, PLR0911, PLR0912
+def parameter_key_to_symbol(  # ruff: ignore[complex-structure, too-many-return-statements, too-many-branches]
     key: str,
     particle_definitions: dict[str, Particle],
     min_ls: bool = True,
