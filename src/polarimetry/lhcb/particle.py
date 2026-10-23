@@ -78,7 +78,7 @@ class ResonanceJSON(TypedDict):
 
 
 def __particle_to_state(particle: Particle, index: int) -> State:
-    return State(*astuple(particle), index)  # ty:ignore[too-many-positional-arguments]
+    return State(*astuple(particle), index)  # ty:ignore[invalid-argument-type]
 
 
 __PARTICLE_DATABASE = load_particles(
