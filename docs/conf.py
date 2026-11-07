@@ -471,7 +471,9 @@ linkcheck_ignore = [
     "https://www.bookfinder.com",
     "https://zenodo.org",  # 403
 ]
+myst_colon_fence_exact_match = True
 myst_enable_extensions = [
+    "alert",
     "colon_fence",
     "dollarmath",
     "fieldlist",
