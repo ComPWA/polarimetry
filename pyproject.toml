@@ -49,6 +49,7 @@ dev = [
     "nbmake",
     "ruff",
     "sphinx-autobuild",
+    "ty",
     { include-group = "doc" },
     { include-group = "jupyter" },
     { include-group = "style" },
@@ -97,7 +98,6 @@ notebooks = [
     "uproot",
 ]
 style = [
-    "ty",
     { include-group = "notebooks" },
     { include-group = "types" },
 ]
@@ -130,6 +130,10 @@ no-github-actions = true
 
 [tool.compwa.policy.python]
 type-checker = ["ty"]
+
+[tool.docstrfmt]
+docstring-trailing-line = false
+format-python-code-blocks = false
 
 [tool.lychee]
 cache = true
@@ -384,7 +388,7 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/0.10.3/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.10.4/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [[tool.ty.overrides]]
