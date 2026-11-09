@@ -7,18 +7,14 @@ concurrency:
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, labeled]
     branches:
       - main
       - epic/*
-    paths:
-      - .pre-commit-config.yaml
-      - Manifest.toml
-      - pixi.lock
-      - uv.lock
   workflow_dispatch:
 
 jobs:
   lock:
-    uses: ComPWA/actions/.github/workflows/lock.yml@313866498eb92c341d7e6b905e09f33a5979dffb # v4.1.4
+    uses: ComPWA/actions/.github/workflows/lock.yml@d042c483a3a7fd3203810bbd4f778fe6ce16df02 # shared-autofix
     secrets:
       token: ${{ secrets.PAT }}
