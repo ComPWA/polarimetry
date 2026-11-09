@@ -5,8 +5,8 @@ uv = "*"
 [tasks.all]
 depends-on = [
     "style",
-    "test-all",
     "linkcheck",
+    "test-all",
     "pdfnb-pluto",
     "docnb",
 ]
