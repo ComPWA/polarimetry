@@ -1,0 +1,17 @@
+name: Test lock
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled]
+    branches:
+      - main
+
+jobs:
+  lock:
+    uses: ComPWA/actions/.github/workflows/lock.yml@d042c483a3a7fd3203810bbd4f778fe6ce16df02 # shared-autofix
+    secrets:
+      token: ${{ secrets.PAT }}
