@@ -7,10 +7,14 @@ concurrency:
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize, labeled]
     branches:
       - main
       - epic/*
+    paths:
+      - .pre-commit-config.yaml
+      - Manifest.toml
+      - pixi.lock
+      - uv.lock
   workflow_dispatch:
 
 jobs:
