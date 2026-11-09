@@ -101,17 +101,8 @@ uv run \
 description = "Launch Jupyter Lab"
 
 [tasks.linkcheck]
-cmd = """
-uv run \
-    --group doc \
-    --no-dev \
-    sphinx-build \
-        --builder=linkcheck \
-        --show-traceback \
-        docs/ \
-        docs/_build/linkcheck/
-"""
-description = "Check external links in the documentation (requires internet connection)"
+cmd = "uvx --from lychee-bin lychee . --quiet"
+description = "Check links and fragments in repository sources (requires internet connection)"
 
 [tasks.nb]
 args = [{ "arg" = "paths", "default" = "docs" }]
