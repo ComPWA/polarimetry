@@ -397,7 +397,7 @@ include = ["pyproject.toml"]
 [[tool.ty.overrides]]
 include = ["docs/amplitude-model.ipynb"]
 rules.invalid-argument-type = "ignore"
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 rules.unsupported-operator = "ignore"
 
 [[tool.ty.overrides]]
@@ -414,7 +414,7 @@ include = ["docs/cross-check.ipynb"]
 rules.call-non-callable = "ignore"
 rules.invalid-argument-type = "ignore"
 rules.possibly-missing-attribute = "ignore"
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/appendix/dynamics.ipynb"]
@@ -423,12 +423,12 @@ rules.invalid-argument-type = "ignore"
 [[tool.ty.overrides]]
 include = ["docs/appendix/ls-model.ipynb"]
 rules.invalid-argument-type = "ignore"
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/appendix/model-serialization.ipynb"]
 rules.invalid-argument-type = "ignore"
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 rules.unresolved-reference = "ignore"
 
 [[tool.ty.overrides]]
@@ -441,24 +441,24 @@ rules.invalid-argument-type = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/index.ipynb"]
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/appendix/widget.ipynb"]
 rules.no-matching-overload = "ignore"
 rules.possibly-unresolved-reference = "ignore"
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/intensity.ipynb"]
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/uncertainties.ipynb"]
 rules.invalid-argument-type = "ignore"
 rules.invalid-return-type = "ignore"
 rules.possibly-unresolved-reference = "ignore"
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 rules.unsupported-operator = "ignore"
 
 [[tool.ty.overrides]]
