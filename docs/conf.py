@@ -315,6 +315,9 @@ default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
     "**.virtual_documents",
+    "**AGENTS.md",
+    "**CLAUDE.md",
+    "**GEMINI.md",
     ".DS_Store",
     "Thumbs.db",
     "_build",
