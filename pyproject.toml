@@ -414,8 +414,8 @@ rules.unresolved-reference = "ignore"
 include = ["docs/cross-check.ipynb"]
 rules.call-non-callable = "ignore"
 rules.invalid-argument-type = "ignore"
-rules.possibly-missing-attribute = "ignore"
 rules.missing-attribute = "ignore"
+rules.possibly-missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/appendix/dynamics.ipynb"]
@@ -446,9 +446,9 @@ rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/appendix/widget.ipynb"]
+rules.missing-attribute = "ignore"
 rules.no-matching-overload = "ignore"
 rules.possibly-unresolved-reference = "ignore"
-rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/intensity.ipynb"]
@@ -458,8 +458,8 @@ rules.missing-attribute = "ignore"
 include = ["docs/uncertainties.ipynb"]
 rules.invalid-argument-type = "ignore"
 rules.invalid-return-type = "ignore"
-rules.possibly-unresolved-reference = "ignore"
 rules.missing-attribute = "ignore"
+rules.possibly-unresolved-reference = "ignore"
 rules.unsupported-operator = "ignore"
 
 [[tool.ty.overrides]]
