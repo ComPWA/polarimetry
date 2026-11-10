@@ -126,6 +126,7 @@ repo-name = "polarimetry"
 no-cspell-update = true
 
 [tool.compwa.policy.github]
+dependabot-assignees = ["redeboer"]
 no-github-actions = true
 
 [tool.compwa.policy.python]
