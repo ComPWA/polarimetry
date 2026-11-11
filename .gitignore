@@ -45,5 +45,7 @@ julia/plots
 .agents/
 .claude/
 .codex/
+.gemini/
 AGENTS.md
 CLAUDE.md
+GEMINI.md
