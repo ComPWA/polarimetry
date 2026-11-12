@@ -524,6 +524,7 @@ nitpick_ignore_regex = [
     ("py:class", "KeyType"),
     ("py:class", "NewValueType"),
     ("py:class", "OldValueType"),
+    ("py:class", "sympy.core.symbol.Str"),
 ]
 numfig = True
 primary_domain = "py"
