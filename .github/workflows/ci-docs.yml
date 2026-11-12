@@ -97,22 +97,15 @@ jobs:
             jax
           path: ${{ env.JAX_COMPILATION_CACHE_DIR }}
       - uses: ComPWA/actions/cache-sympy@eadda724984c78a55a6acb4dcdbb2167fb5eba03 # v4.2.1
-      - name: Fetch Jupyter cache
+      - name: Fetch notebook outputs
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          key: jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
+          key: notebook-outputs-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           restore-keys: |
-            jupyter-cache-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
-            jupyter-cache
-          path: docs/_build/.jupyter_cache
-      - name: Fetch output files
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
-          restore-keys: |
-            output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
-            output-files
+            notebook-outputs-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}
+            notebook-outputs
           path: |
+            ./docs/_build/.jupyter_cache
             ./docs/_images
             ./docs/_static/export
             ./docs/_static/images
@@ -128,8 +121,9 @@ jobs:
       - uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         if: failure()
         with:
-          key: output-files-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
+          key: notebook-outputs-${{hashFiles('uv.lock', 'data/*.json', 'data/*.yaml', 'src/**/*.py')}}-${{hashFiles('docs/**/*.ipynb')}}
           path: |
+            ./docs/_build/.jupyter_cache
             ./docs/_images
             ./docs/_static/export
             ./docs/_static/images
