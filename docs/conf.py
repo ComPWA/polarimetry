@@ -315,6 +315,9 @@ default_role = "py:obj"
 exclude_patterns = [
     "**.ipynb_checkpoints",
     "**.virtual_documents",
+    "**AGENTS.md",
+    "**CLAUDE.md",
+    "**GEMINI.md",
     ".DS_Store",
     "Thumbs.db",
     "_build",
@@ -456,22 +459,9 @@ latex_elements = {
 }
 latex_engine = "xelatex"  # https://tex.stackexchange.com/a/570691
 latex_show_pagerefs = True
-linkcheck_anchors_ignore_for_url = [
-    "https://github.com/ComPWA/polarimetry/issues",
-]
-linkcheck_ignore = [
-    "https://arxiv.org/pdf/2208.03262.pdf",
-    "https://arxiv.org/pdf/hep-ex/0510019.pdf",
-    "https://doi.org/10.1103/PhysRevD.101.034033",
-    "https://doi.org/10.5281/zenodo",  # 403 for zenodo.org
-    "https://indico.cern.ch/event/1187317",
-    "https://indico.cern.ch/event/1242323",
-    "https://journals.aps.org/prd/pdf/10.1103/PhysRevD.101.034033",
-    "https://twiki.cern.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi",
-    "https://www.bookfinder.com",
-    "https://zenodo.org",  # 403
-]
+myst_colon_fence_exact_match = True
 myst_enable_extensions = [
+    "alert",
     "colon_fence",
     "dollarmath",
     "fieldlist",
@@ -534,6 +524,7 @@ nitpick_ignore_regex = [
     ("py:class", "KeyType"),
     ("py:class", "NewValueType"),
     ("py:class", "OldValueType"),
+    ("py:class", "sympy.core.symbol.Str"),
 ]
 numfig = True
 primary_domain = "py"

@@ -1,8 +1,13 @@
 ### A Pluto.jl notebook ###
-# v0.20.28
+# v1.1.0
 
 using Markdown
 using InteractiveUtils
+
+# ╔═╡ 049886e5-0839-4dce-9621-32cce58132f5
+md"""
+# Studies of the polarization angles
+"""
 
 # ╔═╡ b56fc9a7-fa03-47d6-b22e-0097be7155d3
 # ╠═╡ show_logs = false
@@ -22,11 +27,6 @@ begin
     using ThreeBodyDecay
     using Lc2ppiKSemileptonicModelLHCb
 end
-
-# ╔═╡ 049886e5-0839-4dce-9621-32cce58132f5
-md"""
-# Studies of the polarization angles
-"""
 
 # ╔═╡ 814a7e2b-60f5-4775-bed5-8ef54f02252e
 theme(:wong2, frame=:box, grid=false, minorticks=true,

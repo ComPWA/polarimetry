@@ -21,6 +21,7 @@ version.py
 .coverage
 .coverage.*
 .ipynb_checkpoints/
+.lycheecache
 .pytest_cache/
 .sympy-cache*/
 .virtual_documents/
@@ -44,5 +45,7 @@ julia/plots
 .agents/
 .claude/
 .codex/
+.gemini/
 AGENTS.md
 CLAUDE.md
+GEMINI.md

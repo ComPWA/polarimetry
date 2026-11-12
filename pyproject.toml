@@ -49,6 +49,7 @@ dev = [
     "nbmake",
     "ruff",
     "sphinx-autobuild",
+    "ty",
     { include-group = "doc" },
     { include-group = "jupyter" },
     { include-group = "style" },
@@ -97,7 +98,6 @@ notebooks = [
     "uproot",
 ]
 style = [
-    "ty",
     { include-group = "notebooks" },
     { include-group = "types" },
 ]
@@ -126,10 +126,52 @@ repo-name = "polarimetry"
 no-cspell-update = true
 
 [tool.compwa.policy.github]
+dependabot-assignees = ["redeboer"]
 no-github-actions = true
 
 [tool.compwa.policy.python]
 type-checker = ["ty"]
+
+[tool.docstrfmt]
+docstring-trailing-line = false
+format-python-code-blocks = false
+
+[tool.lychee]
+cache = true
+cache_exclude_status = "400.."
+# [:] keeps Lychee from extracting regex patterns as URLs.
+exclude = [
+    '^https[:]//journals\.aps\.org/prd/abstract/10\.1103/PhysRevD\.101\.034033$',  # APS rejects automated requests from GitHub Actions
+    '^https[:]//journals\.aps\.org/prd/pdf/10\.1103/PhysRevD\.101\.034033#page=(?:9|10|11)$',  # APS rejects automated requests from GitHub Actions
+    '^https[:]//cds\.cern\.ch/record/2824328/files$',  # CERN Document Server presents a browser challenge
+    '^https[:]//twiki\.cern\.ch/twiki/bin/viewauth/LHCbPhysics/PolarimetryLc2pKpi$',  # Requires CERN authentication
+    "%7B[^/]*%7D",  # URL templates are completed at build or runtime
+    "^https[:]//x-access-token/$",  # Token-authenticated Git remote placeholder
+    '\$(?:NEXT_[A-Z_]+|PREVIOUS_TAG)',  # Release Drafter substitutes these placeholders at runtime
+    '^https[:]//github\.com/ComPWA/polarimetry/pull/\$$',  # The workflow supplies the pull request number at runtime
+    '^https[:]//github\.com/(?:user-attachments/assets|[^/]+/[^/]+/assets)/',  # Asset links redirect to expiring signed downloads
+    '^https[:]//tex\.stackexchange\.com/a/570691$',  # Rejects automated requests with 403
+    '^https[:]//doi\.org/10\.1007/JHEP07\(2023\)228$',  # Publisher redirects automated requests through a cookie challenge
+    '^https[:]//indico\.cern\.ch/event/1213570$',  # Requires authentication
+    '^https[:]//stackoverflow\.com/a/44727682$',  # Rejects automated requests with 403
+    '^https[:]//gist\.github\.com/taxus-d/aa69e43c3d8b804864ede4a8c056e9cd$',  # The historical covariance notebook gist is no longer available
+]
+exclude_path = ["tests"]  # Test fixtures contain dummy URLs
+extensions = ["bib", "css", "ipynb", "json", "md", "py", "toml", "yaml", "yml"]
+hidden = true  # Include the workflows under .github/
+include_fragments = "anchor-only"
+include_verbatim = true
+max_cache_age = "7d"
+remap = [
+    '^https[:]//compwa\.github\.io/report/017/n$ https://compwa.github.io/report/017/',
+    '^git\+(https[:]//[^@]+)(@.*)?$ $1',
+    "^(.+)/n$ $1",
+    '^(https[:]//github\.com/ComPWA/polarimetry/compare)/\$PREVIOUS_TAG.*$ $1',
+    '^https[:]//pypi\.org/p/\$$ https://pypi.org/project/polarimetry-lc2pkpi/',
+    '^https[:]//repo\.prefix\.dev/julia-forge$ https://prefix.dev/channels/julia-forge',  # The channel endpoint serves package metadata, not a web page
+    '^https[:]//github\.com/ComPWA/polarimetry/issues/5#issue-1220525993$ https://github.com/ComPWA/polarimetry/issues/5',  # GitHub renders comment anchors dynamically
+    '^https[:]//github\.com/ComPWA/polarimetry/pull/11#issuecomment-1128784376$ https://github.com/ComPWA/polarimetry/pull/11',  # GitHub renders comment anchors dynamically
+]
 
 [tool.pytest]
 addopts = [
@@ -348,13 +390,13 @@ key-empty = "off"
 
 [[tool.tombi.schemas]]
 root = "tool.compwa.policy"
-path = "https://raw.githubusercontent.com/ComPWA/policy/0.10.2/compwa-policy.schema.json"
+path = "https://raw.githubusercontent.com/ComPWA/policy/0.10.7/compwa-policy.schema.json"
 include = ["pyproject.toml"]
 
 [[tool.ty.overrides]]
 include = ["docs/amplitude-model.ipynb"]
 rules.invalid-argument-type = "ignore"
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 rules.unsupported-operator = "ignore"
 
 [[tool.ty.overrides]]
@@ -370,8 +412,8 @@ rules.unresolved-reference = "ignore"
 include = ["docs/cross-check.ipynb"]
 rules.call-non-callable = "ignore"
 rules.invalid-argument-type = "ignore"
+rules.missing-attribute = "ignore"
 rules.possibly-missing-attribute = "ignore"
-rules.unresolved-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/appendix/dynamics.ipynb"]
@@ -380,12 +422,12 @@ rules.invalid-argument-type = "ignore"
 [[tool.ty.overrides]]
 include = ["docs/appendix/ls-model.ipynb"]
 rules.invalid-argument-type = "ignore"
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/appendix/model-serialization.ipynb"]
 rules.invalid-argument-type = "ignore"
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 rules.unresolved-reference = "ignore"
 
 [[tool.ty.overrides]]
@@ -398,24 +440,24 @@ rules.invalid-argument-type = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/index.ipynb"]
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/appendix/widget.ipynb"]
+rules.missing-attribute = "ignore"
 rules.no-matching-overload = "ignore"
 rules.possibly-unresolved-reference = "ignore"
-rules.unresolved-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/intensity.ipynb"]
-rules.unresolved-attribute = "ignore"
+rules.missing-attribute = "ignore"
 
 [[tool.ty.overrides]]
 include = ["docs/uncertainties.ipynb"]
 rules.invalid-argument-type = "ignore"
 rules.invalid-return-type = "ignore"
+rules.missing-attribute = "ignore"
 rules.possibly-unresolved-reference = "ignore"
-rules.unresolved-attribute = "ignore"
 rules.unsupported-operator = "ignore"
 
 [[tool.ty.overrides]]

@@ -1,8 +1,13 @@
 ### A Pluto.jl notebook ###
-# v0.20.28
+# v1.1.0
 
 using Markdown
 using InteractiveUtils
+
+# ╔═╡ d3cb114e-ee0c-4cd5-87fb-82289849aceb
+md"""
+# LHCb model for $\Lambda_c^+ \to p K^- \pi^+$ decays
+"""
 
 # ╔═╡ dea88954-c7b2-11ec-1a3d-717739cfd08b
 # ╠═╡ show_logs = false
@@ -30,11 +35,6 @@ begin
 
     using Lc2ppiKSemileptonicModelLHCb
 end
-
-# ╔═╡ d3cb114e-ee0c-4cd5-87fb-82289849aceb
-md"""
-# LHCb model for $\Lambda_c^+ \to p K^- \pi^+$ decays
-"""
 
 # ╔═╡ e04157cc-7697-41e5-8e4e-3556332929ef
 theme(:wong2, frame=:box, grid=false, minorticks=true,
