@@ -203,6 +203,7 @@ depends-on = [
     "_upgrade-precommit",
     "_upgrade-uv",
     "_upgrade-julia",
+    "_upgrade-pluto",
 ]
 description = "Upgrade all lock files"
 
@@ -217,6 +218,22 @@ cmd = "prek autoupdate"
 
 [tasks._upgrade-uv]
 cmd = "uv lock --upgrade"
+
+[tasks._upgrade-pluto]
+cmd = """
+julia --eval='
+using Pkg
+Pkg.activate(temp=true)
+Pkg.add("Pluto")
+using Pluto
+
+files = readlines(`git ls-files -- "*.jl"`)
+for file in files
+    startswith(readline(file), "### A Pluto.jl notebook ###") || continue
+    Pluto.update_notebook_environment(file; backup=false)
+end
+'
+"""
 
 [workspace]
 channels = [

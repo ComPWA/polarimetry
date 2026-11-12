@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.28
+# v1.1.0
 
 using Markdown
 using InteractiveUtils
@@ -23,6 +23,9 @@ end
 # ╔═╡ fd9ea193-f54b-4ef4-98a5-e00279f48002
 const ms = ThreeBodyMasses(0.938, 0.140, 0.493, m0=2.28)
 
+# ╔═╡ 2795ab21-7c3a-44a5-8a34-eb8b04d0c98c
+const ms² = ms^2
+
 # ╔═╡ fcc14f24-d230-4f79-92bb-85a783ea75c5
 begin
     struct minusone end
@@ -32,9 +35,6 @@ begin
         minusone()
     end
 end
-
-# ╔═╡ 2795ab21-7c3a-44a5-8a34-eb8b04d0c98c
-const ms² = ms^2
 
 # ╔═╡ 98515517-7963-45bd-ad45-c824591c283f
 const two_jΛ = 1
